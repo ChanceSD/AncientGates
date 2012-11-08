@@ -87,11 +87,9 @@ public class BaseCommand {
 			return false;
 		}
                 
-                if (!(sender.isOp()) && (!(sender.hasPermission("ancientgates.admin"))) && (sender instanceof Player))
-                {
-                    sendMessage("You must be an operator or have the permissions to do that.");
-                    return false;
-                }
+
+                
+
                 
 /*		if( ! hasPermission(sender)) {
 			sendMessage("You lack the permissions to "+this.helpDescription.toLowerCase()+".");
@@ -103,7 +101,8 @@ public class BaseCommand {
 			return false;
 		}
 		
-		if (this.hasGateParam) {
+		if (this.hasGateParam) 
+                {
 			String id = parameters.get(0);
 			if ( ! Gate.exists(id)) {
 				sendMessage("There exists no gate with id "+id);
@@ -111,8 +110,22 @@ public class BaseCommand {
 			}
 			gate = Gate.get(id);
 		}
-  
-		return true;
+                
+
+                if (!(sender.isOp()) && (sender instanceof Player))
+                {
+                    if (!sender.hasPermission("ancientgates.admin"))
+                    {
+                        sendMessage("[AG] You must be an operator or have the permission to do that.");
+                        return false;
+                    }
+                }
+                
+                    return true;
+                
+                    
+                    
+                
             
             
            

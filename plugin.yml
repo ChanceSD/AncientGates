@@ -1,5 +1,5 @@
 name: AncientGates
-version: 1.3
+version: 1.4.1
 main: org.mcteam.ancientgates.Plugin
 commands:
   gate:
