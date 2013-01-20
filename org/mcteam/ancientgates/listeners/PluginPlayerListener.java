@@ -10,6 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
@@ -25,6 +26,52 @@ public class PluginPlayerListener implements Listener {
     {
         this.plugin = plugin;
     }
+    
+    	@EventHandler
+	public void onPlayerPortal(PlayerPortalEvent event) {
+		if (event.isCancelled()) {
+			return;
+		}
+		
+		//Commented out now due to Minecraft instant nether
+		//Block blockTo = event.getTo().getBlock();
+		//Block blockToUp = blockTo.getRelative(BlockFace.UP);
+
+		//if (blockTo.getType() != Material.PORTAL && blockToUp.getType() != Material.PORTAL) {
+		//	return;
+		//}
+		
+		// Ok so a player walks into a portal block
+		// Find the nearest gate!
+		Gate nearestGate = null;
+		Location playerLocation = event.getPlayer().getLocation();
+		double shortestDistance = -1;
+		
+		for (Gate gate : Gate.getAll()) {
+			if ( gate.getFrom() == null || gate.getTo() == null) {
+				continue;
+			}
+			
+			if ( ! gate.getFrom().getWorld().equals(playerLocation.getWorld())) {
+				continue; // We can only be close to gates in the same world
+			}
+			
+			double distance = GeometryUtil.distanceBetweenLocations(playerLocation, gate.getFrom());
+			
+			if (distance > Conf.getGateSearchRadius()) {
+				continue;
+			}
+			
+			if (shortestDistance == -1 || shortestDistance > distance) {
+				nearestGate = gate;
+				shortestDistance = distance;
+			}
+		}
+		
+		if (nearestGate != null) {
+			event.setCancelled(true);
+		}
+	}
     
         @EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
