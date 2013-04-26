@@ -1,135 +1,129 @@
 package org.mcteam.ancientgates.listeners;
 
-import java.util.logging.Level;
+import java.util.HashMap;
 
-import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.util.GeometryUtil;
-
+import org.mcteam.ancientgates.util.GateUtil;
+import org.mcteam.ancientgates.util.TeleportUtil;
 
 public class PluginPlayerListener implements Listener {
 	
     public Plugin plugin;
     
-    public PluginPlayerListener(Plugin plugin)
-    {
+    private HashMap<Player, Location> playerLocationAtEvent = new HashMap<Player, Location>();
+    
+    public PluginPlayerListener(Plugin plugin) {
         this.plugin = plugin;
     }
     
-    	@EventHandler
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		if (!Conf.bungeeCordSupport) {
+			return;
+		}
+
+		// Ok so a player joins the server
+		// If it's a BungeeCord teleport, block the join message
+		if (Plugin.bungeeCordBlockJoinQueue.remove(event.getPlayer().getName().toLowerCase())) {
+			event.setJoinMessage(null);
+		}
+		
+		// Find if they're in the BungeeCord in-bound teleport queue
+		String destination = Plugin.bungeeCordPlayerInQueue.remove(event.getPlayer().getName().toLowerCase());
+		if (destination == null) {
+			return;
+		}
+
+		// Teleport incoming BungeeCord player
+		Location location = TeleportUtil.stringToLocation(destination);
+		TeleportUtil.teleportPlayer(event.getPlayer(), location);
+	}
+	
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		if (!Conf.bungeeCordSupport) {
+			return;
+		}
+
+		// Ok so a player quits the server
+		// If it's a BungeeCord teleport, block the quit message
+		if (!Plugin.bungeeCordBlockQuitQueue.remove(event.getPlayer().getName().toLowerCase())) {
+			return;
+		}
+		
+		// Block BungeeCord player quit message
+		event.setQuitMessage(null);
+	}
+    
+    @EventHandler
 	public void onPlayerPortal(PlayerPortalEvent event) {
 		if (event.isCancelled()) {
 			return;
 		}
 		
-		//Commented out now due to Minecraft instant nether
-		//Block blockTo = event.getTo().getBlock();
-		//Block blockToUp = blockTo.getRelative(BlockFace.UP);
-
-		//if (blockTo.getType() != Material.PORTAL && blockToUp.getType() != Material.PORTAL) {
-		//	return;
-		//}
-		
-		// Ok so a player walks into a portal block
+		// Ok so a player portal event begins
 		// Find the nearest gate!
-		Gate nearestGate = null;
-		Location playerLocation = event.getPlayer().getLocation();
-		double shortestDistance = -1;
-		
-		for (Gate gate : Gate.getAll()) {
-			if ( gate.getFrom() == null || gate.getTo() == null) {
-				continue;
-			}
-			
-			if ( ! gate.getFrom().getWorld().equals(playerLocation.getWorld())) {
-				continue; // We can only be close to gates in the same world
-			}
-			
-			double distance = GeometryUtil.distanceBetweenLocations(playerLocation, gate.getFrom());
-			
-			if (distance > Conf.getGateSearchRadius()) {
-				continue;
-			}
-			
-			if (shortestDistance == -1 || shortestDistance > distance) {
-				nearestGate = gate;
-				shortestDistance = distance;
-			}
-		}
+		Location playerLocation = this.playerLocationAtEvent.get(event.getPlayer());
+		Gate nearestGate = GateUtil.nearestGate(playerLocation, false);
 		
 		if (nearestGate != null) {
 			event.setCancelled(true);
+			
+			// Check player has permission to enter the gate.
+			if (!Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId()) && !Plugin.hasPermManage(event.getPlayer(), "ancientgates.use.*")) {
+				event.getPlayer().sendMessage("You lack the permissions to enter this gate.");
+				return;
+			}
+			
+			// Handle economy (check player has funds to use gate)
+			if (!Plugin.handleEconManage(event.getPlayer(), nearestGate.getCost())) {
+				event.getPlayer().sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
+				return;
+			}
+			
+			// Handle BungeeCord gates (BungeeCord support disabled)
+			if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
+				event.getPlayer().sendMessage(String.format("BungeeCord support not enabled."));
+				return;
+			}
+			
+			// Check teleportation method
+			if (Conf.useInstantNether) {
+				return;
+			}
+			
+			// Teleport the player (Nether method)
+			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
+				event.getPlayer().sendMessage(String.format("This gate does not point anywhere :P"));
+			} else if (nearestGate.getBungeeTo() == null)  {
+				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getTo());
+			} else {
+				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getBungeeTo());
+			}
 		}
 	}
     
-        @EventHandler
-	public void onPlayerMove(PlayerMoveEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
-		
-		Block blockTo = event.getTo().getBlock();
-		Block blockToUp = blockTo.getRelative(BlockFace.UP);
-		
-		if (blockTo.getType() != Material.PORTAL && blockToUp.getType() != Material.PORTAL) {
-			return;
-		}
-		
-		// Ok so a player walks into a portal block
-		// Find the nearest gate!
-		Gate nearestGate = null;
-		Location playerLocation = event.getPlayer().getLocation();
-		double shortestDistance = -1;
-		
-		for (Gate gate : Gate.getAll()) {
-			if ( gate.getFrom() == null || gate.getTo() == null) {
-				continue;
-			}
-			
-			if ( ! gate.getFrom().getWorld().equals(playerLocation.getWorld())) {
-				continue; // We can only be close to gates in the same world
-			}
-			
-			double distance = GeometryUtil.distanceBetweenLocations(playerLocation, gate.getFrom());
-			
-			if (distance > Conf.getGateSearchRadius()) {
-				continue;
-			}
-			
-			if (shortestDistance == -1 || shortestDistance > distance) {
-				nearestGate = gate;
-				shortestDistance = distance;
-			}
-		}
-		
-		if (nearestGate != null) {
-			checkChunkLoad(nearestGate.getTo().getBlock());
-			event.getPlayer().teleport(nearestGate.getTo());
-			event.setTo(nearestGate.getTo());
-		}
-	}
-	
-        
-	private void checkChunkLoad(Block b) 
-	{
-		World w = b.getWorld();
-		Chunk c = b.getChunk();
-		
-		if ( ! w.isChunkLoaded(c) )
-		{
-		    Plugin.log(Level.FINE, "Loading chunk: " + c.toString() + " on: " + w.toString());
-			w.loadChunk(c);
-		}
-	}
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onEntityPortalEnterEvent(EntityPortalEnterEvent event) {
+    	if (event.getEntity() instanceof Player) {
+    		Player player = (Player)event.getEntity();
+    		
+    		// Ok so a player enters a portal
+    		// Immediately record their location
+    	    Location playerLocation = event.getLocation();
+    	    this.playerLocationAtEvent.put(player, playerLocation);
+    	}
+    }
+    
 }

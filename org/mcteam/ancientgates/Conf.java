@@ -6,42 +6,45 @@ import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.mcteam.ancientgates.util.DiscUtil;
 
-
 public class Conf {
+	
 	public static transient File file = new File(Plugin.instance.getDataFolder(), "conf.json");
 	
 	// Colors
-	public static ChatColor colorMember = ChatColor.GREEN;
 	public static ChatColor colorAlly = ChatColor.LIGHT_PURPLE;
-	public static ChatColor colorNeutral = ChatColor.WHITE;
-	public static ChatColor colorEnemy = ChatColor.RED;
-	
 	public static ChatColor colorSystem = ChatColor.YELLOW;
 	public static ChatColor colorChrome = ChatColor.GOLD;
 	public static ChatColor colorCommand = ChatColor.AQUA;
 	public static ChatColor colorParameter = ChatColor.DARK_AQUA;
 	
-	private static double gateSearchRadius = 7.0;
+	// Flags
+	public static boolean useEconomy = false;
+	public static boolean teleportEntitiesDefault = true;
+	public static boolean useInstantNether = true;
 	
-	static {
-		
-	}
+	// Maximum gate fill area
+	private static int gateMaxArea = 100;
 	
-	public static double getGateSearchRadius() {
-		return gateSearchRadius;
-	}
+	// BungeeCord settings
+	public static boolean bungeeCordSupport = false;
+	public static String bungeeServerName = "";
 	
+	// Socket comms settings
+	public static boolean useSocketComms = false;
+	public static int socketCommsPort = 18001;
+	public static String socketCommsPass = "agserver1";
+	
+	// Enable debug msgs
+	public static boolean debug = false; 
+
 	public static int getGateMaxArea() {
-		return (int)gateSearchRadius*10;
+		return gateMaxArea*10;
 	}
 	
 	// -------------------------------------------- //
 	// Persistance
 	// -------------------------------------------- //
-	
 	public static boolean save() {
-		//Factions.log("Saving config to disk.");
-		
 		try {
 			DiscUtil.write(file, Plugin.gson.toJson(new Conf()));
 		} catch (IOException e) {
@@ -69,7 +72,10 @@ public class Conf {
 			return false;
 		}
 		
+		save();
+		
 		return true;
 	}
+	
 }
 

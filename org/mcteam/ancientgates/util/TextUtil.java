@@ -1,10 +1,12 @@
 package org.mcteam.ancientgates.util;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 
 public class TextUtil {
+	
 	public static String titleize(String str) {
 		String line = Conf.colorChrome+repeat("_", 60);
 		String center = ".[ " + Conf.colorSystem + str + Conf.colorChrome + " ].";
@@ -23,6 +25,17 @@ public class TextUtil {
 		return new ArrayList<String>(Arrays.asList(str.trim().split("\\s+")));
 	}
 	
+	public static String implode(List<String> list1, List<String> list2, String glue) {
+	    String ret = "";
+	    for (int i=0; i<list1.size(); i++) {
+	        if (i!=0) {
+	        	ret += glue;
+	        }
+	        ret += list1.get(i)+" ("+list2.get(i)+")";
+	    }
+	    return ret;
+	}
+	
 	public static String implode(List<String> list, String glue) {
 	    String ret = "";
 	    for (int i=0; i<list.size(); i++) {
@@ -33,16 +46,26 @@ public class TextUtil {
 	    }
 	    return ret;
 	}
+	
 	public static String implode(List<String> list) {
 		return implode(list, " ");
 	}
 	
-	public static String getMaterialName(Material material) {
-		String ret = material.toString();
-		ret = ret.replace('_', ' ');
-		ret = ret.toLowerCase();
-		return ret.substring(0, 1).toUpperCase()+ret.substring(1);
+	public static String md5(String md5) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] array = md.digest(md5.getBytes());
+			StringBuffer sb = new StringBuffer();
+			for (int i = 0; i < array.length; i++) {
+				sb.append(Integer.toHexString(array[i] & 0xFF | 0x100).substring(1, 3));
+			}
+			return sb.toString();
+		} catch (NoSuchAlgorithmException e) {
+			// Ignore, will return null
+		}
+		return null;
 	}
+	
 }
 
 

@@ -8,30 +8,37 @@ import org.bukkit.entity.Player;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Conf;
+import org.mcteam.ancientgates.Server;
 import org.mcteam.ancientgates.util.TextUtil;
 
 public class BaseCommand {
+	
 	public List<String> aliases;
 	public List<String> requiredParameters;
 	public List<String> optionalParameters;
 	
+	public String requiredPermission;
 	public String helpDescription;
 	
 	public CommandSender sender;
 	public boolean senderMustBePlayer;
+	public boolean hasServerParam;
 	public boolean hasGateParam;
 	public Player player;
+	public Server server;
 	public Gate gate;
 	
 	public List<String> parameters;
-	
 	
 	public BaseCommand() {
 		aliases = new ArrayList<String>();
 		requiredParameters = new ArrayList<String>();
 		optionalParameters = new ArrayList<String>();
 		
+		requiredPermission = "ancientgates.admin";
+		
 		senderMustBePlayer = true;
+		hasServerParam = false;
 		hasGateParam = true;
 		
 		helpDescription = "no description";
@@ -40,10 +47,8 @@ public class BaseCommand {
 	public List<String> getAliases() {
 		return aliases;
 	}
-	
         
 	public void execute(CommandSender sender, List<String> parameters) {
-          
 		this.sender = sender;
 		this.parameters = parameters;
 		
@@ -54,17 +59,11 @@ public class BaseCommand {
 		if (this.senderMustBePlayer) {
 			this.player = (Player)sender;
 		}
-		
-
-                 
-                
-		perform();
-            
-          }
+     
+		perform();       
+	}
 	
-	public void perform() {
-            
-            		
+	public void perform() {      		
 	}
 	
 	public void sendMessage(String message) {
@@ -77,65 +76,54 @@ public class BaseCommand {
 		}
 	}
 	
-	public boolean validateCall() {
-               
-
-     
-                
+	public boolean validateCall() {   
 		if ( this.senderMustBePlayer && ! (sender instanceof Player)) {
 			sendMessage("This command can only be used by ingame players.");
 			return false;
 		}
-                
-
-                
-
-                
-/*		if( ! hasPermission(sender)) {
+          
+		if( !hasPermission(sender)) {
+			// Ignore permissions for "setto" on external BungeeCord gates
+			if (Conf.bungeeCordSupport && aliases.contains("setto") && parameters.size() > 1) return true;
+			
 			sendMessage("You lack the permissions to "+this.helpDescription.toLowerCase()+".");
 			return false;
 		}
-*/
+
 		if (parameters.size() < requiredParameters.size()) {
 			sendMessage("Usage: "+this.getUseageTemplate(true));
 			return false;
 		}
 		
-		if (this.hasGateParam) 
-                {
+		if (this.hasGateParam) {
 			String id = parameters.get(0);
-			if ( ! Gate.exists(id)) {
+			if (!Gate.exists(id)) {
+				// Ignore id for "setto" on external BungeeCord gates
+				if (Conf.bungeeCordSupport && aliases.contains("setto") && parameters.size() > 1) return true;
+		
 				sendMessage("There exists no gate with id "+id);
 				return false;
 			}
 			gate = Gate.get(id);
 		}
+		
+		if (this.hasServerParam) {
+			String name = parameters.get(0);
+			if (!Server.exists(name)) {
+				sendMessage("There exists no server with name "+name);
+				return false;
+			}
+			server = Server.get(name);
+		}
                 
-
-                if (!(sender.isOp()) && (sender instanceof Player))
-                {
-                    if (!sender.hasPermission("ancientgates.admin"))
-                    {
-                        sendMessage("[AG] You must be an operator or have the permission to do that.");
-                        return false;
-                    }
-                }
-                
-                    return true;
-                
-                    
-                    
-                
-            
-            
+        return true;   
            
 	}
-/*	
-	public boolean hasPermission(CommandSender sender) {
-            
-            return Plugin.hasPermManage(sender);
+	
+	public boolean hasPermission(CommandSender sender) {		
+		return Plugin.hasPermManage(sender, requiredPermission);
 	}
-*/	
+	
 	// -------------------------------------------- //
 	// Help and usage description
 	// -------------------------------------------- //
@@ -177,4 +165,5 @@ public class BaseCommand {
 	public String getUseageTemplate() {
 		return getUseageTemplate(true);
 	}
+	
 }

@@ -2,7 +2,8 @@ package org.mcteam.ancientgates.commands;
 
 import java.util.ArrayList;
 
-import org.bukkit.command.CommandSender;
+import org.mcteam.ancientgates.Conf;
+//import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.util.TextUtil;
 
 public class CommandHelp extends BaseCommand {
@@ -12,17 +13,14 @@ public class CommandHelp extends BaseCommand {
 		aliases.add("h");
 		aliases.add("?");
 		
+		requiredPermission = "ancientgates.help";
+		
 		optionalParameters.add("page");
 		hasGateParam = false;
 		
 		helpDescription = "Display a help page";
 	}
 	
-/*	
-	public boolean hasPermission(CommandSender sender) {
-		return true;
-	}
-*/	
 	public void perform() {
 		int page = 1;
 		if (parameters.size() > 0) {
@@ -44,7 +42,6 @@ public class CommandHelp extends BaseCommand {
 	//----------------------------------------------//
 	// Build the help pages
 	//----------------------------------------------//
-	
 	public static ArrayList<ArrayList<String>> helpPages;
 	
 	static {
@@ -59,7 +56,20 @@ public class CommandHelp extends BaseCommand {
 		pageLines.add( new CommandSetTo().getUseageTemplate(true, true) );
 		pageLines.add( new CommandOpen().getUseageTemplate(true, true) );
 		pageLines.add( new CommandClose().getUseageTemplate(true, true) );
+		pageLines.add( new CommandRename().getUseageTemplate(true, true) );
+		if (Conf.useEconomy) {
+			pageLines.add( new CommandSetCost().getUseageTemplate(true, true) );
+		}
+		pageLines.add( new CommandSetEntities().getUseageTemplate(true, true) );
+		pageLines.add( new CommandAddFrom().getUseageTemplate(true, true) );
+		pageLines.add( new CommandRemFrom().getUseageTemplate(true, true) );
+		pageLines.add( new CommandInfo().getUseageTemplate(true, true) );
 		pageLines.add( new CommandList().getUseageTemplate(true, true) );
+		if (Conf.useSocketComms) {
+			pageLines.add( new CommandAddServer().getUseageTemplate(true, true) );
+			pageLines.add( new CommandRemServer().getUseageTemplate(true, true) );
+			pageLines.add( new CommandServerList().getUseageTemplate(true, true) );
+		}
 		helpPages.add(pageLines);
 	}
 	

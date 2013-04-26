@@ -9,6 +9,7 @@ import org.bukkit.block.BlockFace;
 import org.mcteam.ancientgates.Conf;
 
 public class FloodUtil {
+	
 	private static final Set<BlockFace> exp1 = new HashSet<BlockFace>();
 	private static final Set<BlockFace> exp2 = new HashSet<BlockFace>();
 	
@@ -23,7 +24,6 @@ public class FloodUtil {
 		exp2.add(BlockFace.NORTH);
 		exp2.add(BlockFace.SOUTH);
 	}
-	
 	
 	// For the same frame and location this set of blocks is deterministic
 	public static Set<Block> getGateFrameBlocks(Block block) {
