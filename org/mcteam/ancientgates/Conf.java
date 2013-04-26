@@ -34,6 +34,9 @@ public class Conf {
 	public static int socketCommsPort = 18001;
 	public static String socketCommsPass = "agserver1";
 	
+	// Enable auto-update
+	public static boolean autoUpdate = true;
+	
 	// Enable debug msgs
 	public static boolean debug = false; 
 

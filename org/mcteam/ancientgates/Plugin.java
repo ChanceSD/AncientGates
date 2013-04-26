@@ -94,6 +94,11 @@ public class Plugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		//Check for updates
+		if (Conf.autoUpdate) {
+			new Updater(this, "ancient-gates-reloaded", this.getFile(), Updater.UpdateType.DEFAULT, false);
+		}
+		
 		//Enable permissions and economy
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {
 			if (!setupPermissions()) {
@@ -223,8 +228,12 @@ public class Plugin extends JavaPlugin {
 	// Check rights (bungeeCord player)
 	// -------------------------------------------- //
 	public static boolean hasPermManage(String player, String requiredPermission) {
-		return perms.playerHas(Bukkit.getWorlds().get(0), player, requiredPermission) |
-			   Bukkit.getServer().getOfflinePlayer(player).isOp();
+		if (perms == null) {
+			return Bukkit.getServer().getOfflinePlayer(player).isOp();
+		} else {
+			return perms.playerHas(Bukkit.getWorlds().get(0), player, requiredPermission) |
+					   Bukkit.getServer().getOfflinePlayer(player).isOp();
+		}
 	}
 	
 	// -------------------------------------------- //
