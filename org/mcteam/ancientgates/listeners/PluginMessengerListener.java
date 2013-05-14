@@ -11,6 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.util.Vector;
@@ -156,6 +157,9 @@ public class PluginMessengerListener implements PluginMessageListener {
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
 					StorageMinecart smc = (StorageMinecart)mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
+				} else if (mc instanceof HopperMinecart && entityItemStack != null) {
+					HopperMinecart hmc = (HopperMinecart)mc;
+					hmc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				}
 				mc.setVelocity(newVelocity);
 			}

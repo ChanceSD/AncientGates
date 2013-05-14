@@ -73,7 +73,7 @@ public class ItemStackUtil {
                     is.addEnchantment(Enchantment.getById(Integer.valueOf(itemAttribute[1])), Integer.valueOf(itemAttribute[2]));
                 }
             }
-            deserializedItemStack[i] = new ItemStack(is);
+            deserializedItemStack[i-1] = new ItemStack(is);
         }
         return deserializedItemStack;
         

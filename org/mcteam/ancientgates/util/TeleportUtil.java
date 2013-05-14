@@ -19,6 +19,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.util.Vector;
@@ -237,6 +238,9 @@ public class TeleportUtil {
 			if (mc instanceof StorageMinecart && teleportEntities) {
 				StorageMinecart smc = (StorageMinecart)mc;
 				smc.getInventory().setContents(((StorageMinecart)vehicle).getInventory().getContents());
+			} else if (mc instanceof HopperMinecart && teleportEntities) {
+				HopperMinecart hmc = (HopperMinecart)mc;
+				hmc.getInventory().setContents(((HopperMinecart)vehicle).getInventory().getContents());
 			}
 			mc.setVelocity(newVelocity);
 			vehicle.remove();
@@ -322,6 +326,8 @@ public class TeleportUtil {
 						// Append vehicle contents
 						} else if (vehicle instanceof StorageMinecart && teleportEntities) {
 							msg = msg + "#@#" + ItemStackUtil.itemStackToString(((StorageMinecart)vehicle).getInventory().getContents());	
+						} else if (vehicle instanceof HopperMinecart && teleportEntities) {
+							msg = msg + "#@#" + ItemStackUtil.itemStackToString(((HopperMinecart)vehicle).getInventory().getContents());	
 						}
 						// Build the message data, sent over the AGBungeeTele BungeeCord channel
 						ByteArrayOutputStream b = new ByteArrayOutputStream();
@@ -362,6 +368,8 @@ public class TeleportUtil {
 					// Append vehicle contents
 					} else if (vehicle instanceof StorageMinecart && teleportEntities) {
 						packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), ItemStackUtil.itemStackToString(((StorageMinecart)vehicle).getInventory().getContents())};
+					} else if (vehicle instanceof HopperMinecart && teleportEntities) {
+						packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), ItemStackUtil.itemStackToString(((HopperMinecart)vehicle).getInventory().getContents())};
 					}
 					// Setup socket client and listener
 					SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
@@ -485,6 +493,9 @@ public class TeleportUtil {
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
 					StorageMinecart smc = (StorageMinecart)mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
+				} else if (mc instanceof HopperMinecart && entityItemStack != null) {
+					HopperMinecart hmc = (HopperMinecart)mc;
+					hmc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				}
 				mc.setVelocity(newVelocity);
 			}

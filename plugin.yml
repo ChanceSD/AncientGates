@@ -1,5 +1,5 @@
 name: AncientGates
-version: 1.6.3
+version: 1.6.4
 description: Easily create portals with any custom design.
 main: org.mcteam.ancientgates.Plugin
 author: peewi96
@@ -27,6 +27,7 @@ permissions:
       ancientgates.rename: true
       ancientgates.setcost: true
       ancientgates.setentities: true
+      ancientgates.setvehicles: true
       ancientgates.setfrom: true
       ancientgates.setto.*: true
       ancientgates.use.*: true
@@ -60,6 +61,9 @@ permissions:
     default: op
   ancientgates.setentities:
     description: Allows the use of Ancient Gates setentities command.
+    default: op
+  ancientgates.setvehicles:
+    description: Allows the use of Ancient Gates setvehicles command.
     default: op
   ancientgates.setfrom:
     description: Allows the use of Ancient Gates setfrom command.
