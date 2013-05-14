@@ -44,11 +44,12 @@ import org.mcteam.ancientgates.commands.CommandSetEntities;
 import org.mcteam.ancientgates.commands.CommandAddFrom;
 import org.mcteam.ancientgates.commands.CommandSetFrom;
 import org.mcteam.ancientgates.commands.CommandSetTo;
+import org.mcteam.ancientgates.commands.CommandSetVehicles;
 import org.mcteam.ancientgates.listeners.PluginBlockListener;
 import org.mcteam.ancientgates.listeners.PluginEntityListener;
 import org.mcteam.ancientgates.listeners.PluginMessengerListener;
 import org.mcteam.ancientgates.listeners.PluginPlayerListener;
-import org.mcteam.ancientgates.listeners.PluginPlayerMoveListener;
+import org.mcteam.ancientgates.listeners.PluginMovementListener;
 import org.mcteam.ancientgates.listeners.PluginSocketListener;
 import org.mcteam.ancientgates.metrics.MetricsStarter;
 import org.mcteam.ancientgates.sockets.SocketServer;
@@ -71,10 +72,13 @@ public class Plugin extends JavaPlugin {
 	.registerTypeAdapter(Location.class, new LocationTypeAdapter())
 	.create();
 	
-	// HashMap of incoming BungeeCord players
+	// HashMap of incoming BungeeCord players & passengers
 	public static Map<String, String> bungeeCordPlayerInQueue = new HashMap<String, String>();
-	// HashMap of incoming BungeeCord entities
+	public static Map<String, String> bungeeCordPassengerInQueue = new HashMap<String, String>();
+	
+	// ArrayList of incoming BungeeCord entities & entity passengers
 	public static ArrayList<String>  bungeeCordEntityInQueue = new ArrayList<String>();
+	public static ArrayList<String>  bungeeCordPassEntInQueue = new ArrayList<String>();
 	
 	// Array of BungeeCord players to block join/quit message
 	public static ArrayList<String> bungeeCordBlockJoinQueue = new ArrayList<String>();
@@ -135,6 +139,9 @@ public class Plugin extends JavaPlugin {
 			commands.add(new CommandSetCost());
 		}
 		commands.add(new CommandSetEntities());
+		if (Conf.useInstantNether) {
+			commands.add(new CommandSetVehicles());
+		}
 		commands.add(new CommandAddFrom());
 		commands.add(new CommandRemFrom());
 		commands.add(new CommandInfo());
@@ -151,7 +158,7 @@ public class Plugin extends JavaPlugin {
 		pm.registerEvents(new PluginEntityListener(this), this);
 		pm.registerEvents(new PluginPlayerListener(this), this);
 		if (Conf.useInstantNether) {
-			pm.registerEvents(new PluginPlayerMoveListener(this), this);
+			pm.registerEvents(new PluginMovementListener(this), this);
 		}
 		
 		//Submit Stats

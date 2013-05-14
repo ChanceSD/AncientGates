@@ -61,6 +61,9 @@ public class CommandHelp extends BaseCommand {
 			pageLines.add( new CommandSetCost().getUseageTemplate(true, true) );
 		}
 		pageLines.add( new CommandSetEntities().getUseageTemplate(true, true) );
+		if (Conf.useInstantNether) {
+			pageLines.add( new CommandSetVehicles().getUseageTemplate(true, true) );
+		}
 		pageLines.add( new CommandAddFrom().getUseageTemplate(true, true) );
 		pageLines.add( new CommandRemFrom().getUseageTemplate(true, true) );
 		pageLines.add( new CommandInfo().getUseageTemplate(true, true) );

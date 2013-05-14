@@ -39,15 +39,30 @@ public class PluginPlayerListener implements Listener {
 			event.setJoinMessage(null);
 		}
 		
-		// Find if they're in the BungeeCord in-bound teleport queue
+		// Find if they're in the BungeeCord in-bound player teleport queue
 		String destination = Plugin.bungeeCordPlayerInQueue.remove(event.getPlayer().getName().toLowerCase());
-		if (destination == null) {
+		if (destination != null) {
+			// Teleport incoming BungeeCord player
+			Location location = TeleportUtil.stringToLocation(destination);
+			TeleportUtil.teleportPlayer(event.getPlayer(), location);
+			return;
+		}
+		
+		// Find if they're in the BungeeCord in-bound passenger teleport queue
+		String msg = Plugin.bungeeCordPassengerInQueue.remove(event.getPlayer().getName().toLowerCase());
+		if (msg != null) {
+			// Extract message parts
+			String[] parts = msg.split("#@#");
+			int vehicleTypeId = Integer.parseInt(parts[0]);
+			double velocity = Double.parseDouble(parts[1]);
+			String dest = parts[2];
+			
+			// Teleport incoming BungeeCord passenger
+			Location location = TeleportUtil.stringToLocation(dest);
+			TeleportUtil.teleportVehicle(event.getPlayer(), vehicleTypeId, velocity, location);
 			return;
 		}
 
-		// Teleport incoming BungeeCord player
-		Location location = TeleportUtil.stringToLocation(destination);
-		TeleportUtil.teleportPlayer(event.getPlayer(), location);
 	}
 	
 	@EventHandler

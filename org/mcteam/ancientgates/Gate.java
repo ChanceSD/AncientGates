@@ -37,6 +37,7 @@ public class Gate {
 	private Location to;
 	private Map<String, String> bungeeto;
 	private Boolean entities = Conf.teleportEntitiesDefault;
+	private Boolean vehicles = Conf.teleportVehiclesDefault;
 	private double cost = 0.0;
 
 	public Gate() {	
@@ -114,6 +115,14 @@ public class Gate {
 	
 	public Boolean getTeleportEntities() {
 		return entities;
+	}
+	
+	public void setTeleportVehicles(Boolean teleportVehicles) {
+		this.vehicles = teleportVehicles;
+	}
+	
+	public Boolean getTeleportVehicles() {
+		return vehicles;
 	}
 	
 	public void rename(String id, String newid) {

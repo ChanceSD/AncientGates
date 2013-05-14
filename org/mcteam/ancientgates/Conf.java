@@ -19,11 +19,12 @@ public class Conf {
 	
 	// Flags
 	public static boolean useEconomy = false;
-	public static boolean teleportEntitiesDefault = true;
 	public static boolean useInstantNether = true;
+	public static boolean teleportEntitiesDefault = true;
+	public static boolean teleportVehiclesDefault = false;
 	
 	// Maximum gate fill area
-	private static int gateMaxArea = 100;
+	private static int gateMaxArea = 70;
 	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;

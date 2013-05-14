@@ -84,6 +84,59 @@ public class PluginSocketListener implements SocketServerEventListener {
 				// Send entity removal command back to client
 				Plugin.serv.sendToClient(event.getID(), packet);
 			}
+		// Parse "spawnvehicle" command
+		} else if (command.toLowerCase().equals("spawnvehicle")) {
+			// Data should be vehicle id, vehicle world, vehicletype id, velocity and destination location
+			// [additionally entity id, entitytype id and entitytype data]
+			String[] parts = event.getArguments();	
+			String vehicleId = parts[0];
+			String vehicleWorld = parts[1];
+			int vehicleTypeId = Integer.parseInt(parts[2]);
+			double velocity = Double.parseDouble(parts[3]);
+			String destination = parts[4];
+			
+			// Build spawn queue msg
+			String msg = String.valueOf(vehicleTypeId)+"#@#"+String.valueOf(velocity)+"#@#"+destination;
+			
+			// Parse passenger info
+			String[] args = null;
+			if(parts.length > 6) {
+				String entityId = parts[5];
+				int entityTypeId = Integer.parseInt(parts[6]);
+				String entityTypeData = parts[7];
+				
+				// Append passenger info to queue msg
+				msg = msg + "#@#"+String.valueOf(entityTypeId)+"#@#"+entityTypeData;
+				
+				// Build the packet, format is <message>
+				args = new String[] {vehicleWorld, vehicleId, entityId};
+			// Parse contents info	
+			} else if(parts.length > 5) {
+				String entityItemStack = parts[5];
+					
+				// Append contents info to queue msg
+				msg = msg + "#@#"+entityItemStack;
+					
+				// Build the packet, format is <message>
+				args = new String[] {vehicleWorld, vehicleId};
+			} else {
+				// Build the packet, format is <message>
+				args = new String[] {vehicleWorld, vehicleId};
+			}
+			Packet packet = new Packet("removevehicle", "spawnvehicle", args);
+
+			// Add entity to spawn queue
+			Plugin.bungeeCordPassEntInQueue.add(msg);
+				
+			// Schedule synchronous task to process spawn queue
+			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				public void run() {
+					TeleportUtil.teleportVehicle();
+				}
+			});
+				
+			// Send entity removal command back to client
+			Plugin.serv.sendToClient(event.getID(), packet);
 		}
 	}
 

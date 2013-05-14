@@ -3,11 +3,13 @@ package org.mcteam.ancientgates.listeners;
 import org.bukkit.Location;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.GateUtil;
@@ -36,8 +38,13 @@ public class PluginEntityListener implements Listener {
 			if (nearestGate != null) {
 				event.setCancelled(true);
 				
-				if (nearestGate.getTeleportEntities()) {
-					if (nearestGate.getBungeeTo() == null)  {
+				if (Conf.useInstantNether ^ !(event.getEntity() instanceof Vehicle)) {
+					return;
+				}
+				
+				if ((nearestGate.getTeleportVehicles() ^ !(event.getEntity() instanceof Vehicle))
+						|| (nearestGate.getTeleportEntities() ^ (event.getEntity() instanceof Vehicle))) {
+					if (nearestGate.getBungeeTo() == null) {
 						TeleportUtil.teleportEntity(event, nearestGate.getTo());
 					} else {
 						TeleportUtil.teleportEntity(event, nearestGate.getBungeeTo());

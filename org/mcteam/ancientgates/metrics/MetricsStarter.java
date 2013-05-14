@@ -23,10 +23,14 @@ public class MetricsStarter {
 			
 			// Plot number of gates
 			Graph gatesGraph = metrics.createGraph("Number of Gates");
-			gatesGraph.addPlotter(new Metrics.Plotter("Total") {
+			gatesGraph.addPlotter(new Metrics.Plotter("Bungee Gates") {
 				@Override
 				public int getValue() {
-					return Gate.getAll().size();
+					int i = 0;
+					for (Gate gate : Gate.getAll()) {
+						if (gate.getBungeeTo() != null) i++;
+					}
+					return i;
 				}
 			});
 			gatesGraph.addPlotter(new Metrics.Plotter("Normal Gates") {
@@ -39,29 +43,15 @@ public class MetricsStarter {
 					return i;
 				}
 			});
-			gatesGraph.addPlotter(new Metrics.Plotter("Bungee Gates") {
+			gatesGraph.addPlotter(new Metrics.Plotter("Total") {
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (Gate gate : Gate.getAll()) {
-						if (gate.getBungeeTo() != null) i++;
-					}
-					return i;
+					return Gate.getAll().size();
 				}
 			});
 			
 			// Plot gate entity access
 			Graph accessGraph = metrics.createGraph("Gate Access");
-			accessGraph.addPlotter(new Metrics.Plotter("Entities and Players") {
-				@Override
-				public int getValue() {
-					int i = 0;
-					for (Gate gate: Gate.getAll()) {
-						if (gate.getTeleportEntities()) i++;
-					}
-					return i;
-				}
-			});
 			accessGraph.addPlotter(new Metrics.Plotter("Players") {
 				@Override
 				public int getValue() {
@@ -72,13 +62,23 @@ public class MetricsStarter {
 					return i;
 				}
 			});
+			accessGraph.addPlotter(new Metrics.Plotter("Entities and Players") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getTeleportEntities()) i++;
+					}
+					return i;
+				}
+			});
 			
 			// Plot number of servers
 			Graph serverGraph = metrics.createGraph("Number of Servers");
-			serverGraph.addPlotter(new Metrics.Plotter("Total") {
+			serverGraph.addPlotter(new Metrics.Plotter("Bungee Servers") {
 				@Override
 				public int getValue() {
-					return 1;
+					return (Conf.bungeeCordSupport)?1:0;
 				}
 			});
 			serverGraph.addPlotter(new Metrics.Plotter("Normal Servers") {
@@ -87,10 +87,10 @@ public class MetricsStarter {
 					return (Conf.bungeeCordSupport)?0:1;
 				}
 			});
-			serverGraph.addPlotter(new Metrics.Plotter("Bungee Servers") {
+			serverGraph.addPlotter(new Metrics.Plotter("Total") {
 				@Override
 				public int getValue() {
-					return (Conf.bungeeCordSupport)?1:0;
+					return 1;
 				}
 			});
 			
@@ -108,6 +108,12 @@ public class MetricsStarter {
 					return (Conf.useSocketComms)?1:0;
 				}
 			});
+			featureGraph.addPlotter(new Metrics.Plotter("Auto-update Enabled") {
+				@Override
+				public int getValue() {
+					return (Conf.autoUpdate)?1:0;
+				}
+			});
 			featureGraph.addPlotter(new Metrics.Plotter("Economy Enabled") {
 				@Override
 				public int getValue() {
@@ -117,16 +123,16 @@ public class MetricsStarter {
 			
 			// Plot teleportation method
 			Graph methodGraph = metrics.createGraph("Teleportation method");
-			methodGraph.addPlotter(new Metrics.Plotter("Instant Nether") {
-				@Override
-				public int getValue() {
-					return (Conf.useInstantNether)?1:0;
-				}
-			});
 			methodGraph.addPlotter(new Metrics.Plotter("Normal Nether") {
 				@Override
 				public int getValue() {
 					return (Conf.useInstantNether)?0:1;
+				}
+			});
+			methodGraph.addPlotter(new Metrics.Plotter("Instant Nether") {
+				@Override
+				public int getValue() {
+					return (Conf.useInstantNether)?1:0;
 				}
 			});
 

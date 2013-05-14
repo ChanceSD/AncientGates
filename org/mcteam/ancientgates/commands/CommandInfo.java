@@ -98,6 +98,13 @@ public class CommandInfo extends BaseCommand {
 		} else {
 			sendMessage(Conf.colorSystem + "entities" + Conf.colorAlly + " not allowed");
 		}
+		if (Conf.useInstantNether) {
+			if (gate.getTeleportVehicles()) {
+				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorAlly + " allowed");
+			} else {
+				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorAlly + " not allowed");
+			}
+		}
 		if (Conf.useEconomy) {
 			sendMessage(Conf.colorSystem + "cost" + Conf.colorAlly + " " + String.valueOf(gate.getCost()));
 		}	

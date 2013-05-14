@@ -18,7 +18,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.util.Vector;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Server;
@@ -37,13 +40,13 @@ public class TeleportUtil {
 	private static final String YAW = "yaw";
 	private static final String PITCH = "pitch";
 	
-	// Normal teleport & BungeeCord teleport in
+	// Normal player teleport & BungeeCord player teleport in
 	public static void teleportPlayer(Player player, Location location) {
 		checkChunkLoad(location.getBlock());
 		player.teleport(location);
 	}
 	
-	// BungeeCord teleport out
+	// BungeeCord player teleport out
 	public static void teleportPlayer(Player player, Map<String, String> location) {
 		if (Conf.bungeeCordSupport) {
 		
@@ -98,6 +101,7 @@ public class TeleportUtil {
 	
 	// Entity teleport
 	public static void teleportEntity(EntityPortalEvent event, Location location) {
+		checkChunkLoad(location.getBlock());
 		event.getEntity().teleport(location);
 	}
 	
@@ -191,6 +195,7 @@ public class TeleportUtil {
 			// Spawn incoming BungeeCord entity
 			Location location = TeleportUtil.stringToLocation(destination);
 			World world = TeleportUtil.stringToWorld(destination);
+			checkChunkLoad(location.getBlock());
 			
 			if (EntityType.fromId(entityTypeId).isSpawnable()) {
 				Entity entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
@@ -202,7 +207,293 @@ public class TeleportUtil {
 			it.remove();
 		}
 	}
+
+	// Normal vehicle teleport
+	public static void teleportVehicle(final Vehicle vehicle, Location location, Boolean teleportEntities) {
+		double velocity = vehicle.getVelocity().length();
+		checkChunkLoad(location.getBlock());
+
+		// Stop and teleport
+		vehicle.setVelocity(new Vector());
+
+		// Get new velocity
+		final Vector newVelocity = location.getDirection();
+		newVelocity.multiply(velocity);
+
+		final Entity passenger = vehicle.getPassenger();
+		if (passenger != null) {
+			final Vehicle v = location.getWorld().spawn(location, vehicle.getClass());
+			vehicle.eject();
+			vehicle.remove();
+			passenger.teleport(location);
+			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				public void run() {
+					v.setPassenger(passenger);
+					v.setVelocity(newVelocity);
+				}
+			}, 2);
+		} else {
+			Vehicle mc = location.getWorld().spawn(location, vehicle.getClass());
+			if (mc instanceof StorageMinecart && teleportEntities) {
+				StorageMinecart smc = (StorageMinecart)mc;
+				smc.getInventory().setContents(((StorageMinecart)vehicle).getInventory().getContents());
+			}
+			mc.setVelocity(newVelocity);
+			vehicle.remove();
+		}
+	}
 	
+	// BungeeCord vehicle teleport out
+	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, Boolean teleportEntities) {		
+		if (Conf.bungeeCordSupport) {			
+			double velocity = vehicle.getVelocity().length();
+			final Entity passenger = vehicle.getPassenger();
+			
+			// Player vehicle teleport
+			if (passenger instanceof Player) {
+				Player player = (Player)passenger;
+
+				// Imitate teleport by stopping and ejecting
+				vehicle.setVelocity(new Vector());
+				vehicle.eject();
+				vehicle.remove();
+				// and spinning player 180 deg
+				Location position = player.getLocation();
+				float yaw = position.getYaw();
+				if ((yaw += 180) > 360) {
+					yaw -= 360;
+				}
+				position.setYaw(yaw);
+				player.teleport(position);
+				
+				// Send AGBungeeVehicleTele packet first
+				try {
+					// Build the message, format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>
+					String msg = player.getName() + "#@#" + String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location);
+					// Build the message data, sent over the AGBungeeVehicleTele BungeeCord channel
+					ByteArrayOutputStream b = new ByteArrayOutputStream();
+					DataOutputStream out = new DataOutputStream(b);
+					out.writeUTF("Forward");
+					out.writeUTF(location.get(SERVER));		// Server
+					out.writeUTF("AGBungeeVehicleTele");	// Channel
+					out.writeShort(msg.length()); 			// Data Length
+					out.writeBytes(msg); 					// Data
+					player.sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
+				} catch (IOException ex) {
+					Plugin.log.severe("Error sending BungeeCord vehicle teleport packet");
+					ex.printStackTrace();
+					return;
+				}
+				
+				// Ensure quit message is blocked
+				Plugin.bungeeCordBlockQuitQueue.add(player.getName());
+				
+				// Connect player to new server
+				try {
+					ByteArrayOutputStream b = new ByteArrayOutputStream();
+					DataOutputStream out = new DataOutputStream(b);
+					out.writeUTF("Connect");
+					out.writeUTF(location.get(SERVER));
+					
+					player.sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
+					b.reset();
+				} catch (IOException ex) {
+					Plugin.log.severe("Error sending BungeeCord connect packet");
+					ex.printStackTrace();
+					return;
+				}
+
+			// Entity vehicle teleport
+			} else {
+				// Imitate teleport by stopping
+				vehicle.setVelocity(new Vector());
+				
+				// Send vehicle spawn command packet via BungeeCord
+				if (!Conf.useSocketComms || Plugin.serv == null) {
+					// Send AGBungeeVehicleSpawn packet
+					try {
+						// Build the message, format is <vehicleTypeId>#@#<velocity>#@#<destination>[#@#<entityTypeId>#@#<entityTypeData>]
+						String msg = String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location);
+						// Append passenger info
+						if (passenger != null) {
+							if (passenger.getType().isSpawnable()) {
+								msg = msg + "#@#" + String.valueOf(passenger.getType().getTypeId()) + "#@#" + EntityUtil.getEntityTypeData(passenger);
+							}
+						// Append vehicle contents
+						} else if (vehicle instanceof StorageMinecart && teleportEntities) {
+							msg = msg + "#@#" + ItemStackUtil.itemStackToString(((StorageMinecart)vehicle).getInventory().getContents());	
+						}
+						// Build the message data, sent over the AGBungeeTele BungeeCord channel
+						ByteArrayOutputStream b = new ByteArrayOutputStream();
+						DataOutputStream out = new DataOutputStream(b);
+						out.writeUTF("Forward");
+						out.writeUTF(location.get(SERVER));		// Server
+						out.writeUTF("AGBungeeVehicleSpawn");	// Channel
+						out.writeShort(msg.length()); 			// Data Length
+						out.writeBytes(msg); 					// Data
+						if (Plugin.instance.getServer().getOnlinePlayers().length > 0) {
+							// Use any player to send the plugin message
+							Plugin.instance.getServer().getOnlinePlayers()[0].sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
+							// Imitate teleport by removing entity and vehicle
+							vehicle.eject();
+							vehicle.remove();
+							if (passenger != null) {
+								passenger.remove();
+							}
+						}
+					} catch (IOException ex) {
+						Plugin.log.severe("Error sending BungeeCord vehicle spawn packet");
+						ex.printStackTrace();
+						return;
+					}
+				// Send vehicle spawn command packet via client socket
+				} else {
+					// Get server
+					Server server = Server.get(location.get(SERVER));
+					// Build the packet, format is <vehicleId>,<vehicleWorld>,<vehicleTypeId>,<velocity>,<location>[,<entityId>,<entityTypeId>,<entityTypeData>]
+					Packet packet = new Packet();
+					packet.command = "spawnvehicle";
+					packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location)};
+					// Append passenger info
+					if (passenger != null) {
+						if (passenger.getType().isSpawnable()) {
+							packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), String.valueOf(passenger.getEntityId()), String.valueOf(passenger.getType().getTypeId()), EntityUtil.getEntityTypeData(passenger)};
+						}
+					// Append vehicle contents
+					} else if (vehicle instanceof StorageMinecart && teleportEntities) {
+						packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), ItemStackUtil.itemStackToString(((StorageMinecart)vehicle).getInventory().getContents())};
+					}
+					// Setup socket client and listener
+					SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
+					client.setListener(new SocketClientEventListener() {
+						public void onServerMessageRecieve(SocketClient client, Packets packets) {
+							for (Packet packet : packets.packets) {
+								if (packet.command.toLowerCase().equals("removevehicle")) {
+									// Extract receiving packet arguments
+									String world = String.valueOf(packet.args[0]);
+									int vehicleId = Integer.parseInt(packet.args[1]);
+									// Iterate and remove teleported vehicle
+									List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
+									Iterator<Entity> it = entities.iterator();
+									while (it.hasNext()) {
+										Entity vehicle = it.next();
+										if (vehicle.getEntityId() == vehicleId) {
+											vehicle.eject();
+											vehicle.remove();
+											break;
+										}
+									}
+									// Iterate and remove teleported passenger
+									if (packet.args.length > 2) {
+										int entityId = Integer.parseInt(packet.args[2]);
+										while (it.hasNext()) {
+											Entity entity = it.next();
+											if (entity.getEntityId() == entityId) {
+												entity.remove();
+												break;
+											}
+										}
+									}
+								}
+							}
+							client.close();
+						}
+					});
+					// Connect and send packet
+					try {
+						client.connect();
+						client.send(packet);
+					} catch (Exception e) {
+						Plugin.log.severe("Error sending vehicle spawn packet to the server.");
+					}
+				}
+			}
+			
+		}
+		
+	}
+	
+	// Bungee vehicle teleport in
+	public static void teleportVehicle(final Player player, int vehicleTypeId, double velocity, Location location) {
+		checkChunkLoad(location.getBlock());
+
+		// Crete new velocity
+		final Vector newVelocity = location.getDirection();
+		newVelocity.multiply(velocity);
+
+		final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+		player.teleport(location);
+		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+			public void run() {
+				v.setPassenger(player);
+				v.setVelocity(newVelocity);
+			}
+		}, 2);
+	}
+	
+	// BungeeCord vehicle spawn in
+	public static void teleportVehicle() {
+    	List<String> vehicleQueue = Plugin.bungeeCordPassEntInQueue;
+    	Iterator<String> it = vehicleQueue.iterator();
+        
+        while (it.hasNext()) {
+            String vehicleData = it.next();
+			// Data should be entityTypeId, entityTypeData and destination location
+    		String[] parts = vehicleData.split("#@#");
+			int vehicleTypeId = Integer.parseInt(parts[0]);
+			double velocity = Double.parseDouble(parts[1]);
+			String destination = parts[2];
+
+			// Spawn incoming BungeeCord vehicle
+			Location location = TeleportUtil.stringToLocation(destination);
+			World world = TeleportUtil.stringToWorld(destination);
+			checkChunkLoad(location.getBlock());
+			
+			Entity entity = null;
+			String entityItemStack = null;
+			
+			// Parse passenger info
+			if (parts.length > 4) {
+				int entityTypeId = Integer.parseInt(parts[3]);
+				String entityTypeData = parts[4];
+				
+				if (EntityType.fromId(entityTypeId).isSpawnable()) {
+					entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
+					EntityUtil.setEntityTypeData(entity, entityTypeData);
+					entity.teleport(location);
+				}
+			// Parse vehicle contents
+			} else if  (parts.length > 3) {
+				entityItemStack = parts[3];
+			}
+			final Entity passenger = entity;
+			
+			// Create new velocity
+			final Vector newVelocity = location.getDirection();
+			newVelocity.multiply(velocity);
+
+			if (passenger != null) {
+				final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+					public void run() {
+						v.setPassenger(passenger);
+						v.setVelocity(newVelocity);
+					}
+				}, 2);
+			} else {
+				Vehicle mc = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+				if (mc instanceof StorageMinecart) {
+					StorageMinecart smc = (StorageMinecart)mc;
+					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
+				}
+				mc.setVelocity(newVelocity);
+			}
+			
+			// Remove from queue
+			it.remove();
+		}
+	}
+
 	private static void checkChunkLoad(Block b) {
 		World w = b.getWorld();
 		Chunk c = b.getChunk();
