@@ -153,7 +153,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				}, 2);
 			} else {
 				Vehicle mc = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
-				if (mc instanceof StorageMinecart) {
+				if (mc instanceof StorageMinecart && entityItemStack != null) {
 					StorageMinecart smc = (StorageMinecart)mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				}
