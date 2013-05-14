@@ -27,7 +27,7 @@ public class PluginPlayerListener implements Listener {
         this.plugin = plugin;
     }
     
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		if (!Conf.bungeeCordSupport) {
 			return;
