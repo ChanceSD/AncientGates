@@ -81,7 +81,7 @@ public class PluginPlayerListener implements Listener {
 		event.setQuitMessage(null);
 	}
     
-    @EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerPortal(PlayerPortalEvent event) {
 		if (event.isCancelled()) {
 			return;
