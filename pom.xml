@@ -11,7 +11,7 @@
     </issueManagement>
     <build>
         <finalName>AncientGates</finalName>
-        <sourceDirectory>${basedir}/src</sourceDirectory>
+        <sourceDirectory>${basedir}</sourceDirectory>
         <resources>
             <resource>
                 <targetPath>.</targetPath>
