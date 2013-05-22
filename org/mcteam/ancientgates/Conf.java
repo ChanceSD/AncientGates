@@ -18,6 +18,7 @@ public class Conf {
 	public static ChatColor colorParameter = ChatColor.DARK_AQUA;
 	
 	// Flags
+	public static boolean enforceAccess = false;
 	public static boolean useEconomy = false;
 	public static boolean useInstantNether = true;
 	public static boolean teleportEntitiesDefault = true;

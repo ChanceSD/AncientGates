@@ -96,7 +96,7 @@ public class PluginPlayerListener implements Listener {
 			event.setCancelled(true);
 			
 			// Check player has permission to enter the gate.
-			if (!Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId()) && !Plugin.hasPermManage(event.getPlayer(), "ancientgates.use.*")) {
+			if ((!Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId())) && Conf.enforceAccess) {
 				event.getPlayer().sendMessage("You lack the permissions to enter this gate.");
 				return;
 			}

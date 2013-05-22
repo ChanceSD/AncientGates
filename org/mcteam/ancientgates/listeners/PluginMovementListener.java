@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 
+import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.GateUtil;
@@ -45,7 +46,7 @@ public class PluginMovementListener implements Listener {
 		
 		if (nearestGate != null) {
 			// Check player has permission to enter the gate.
-			if (Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId()) || Plugin.hasPermManage(event.getPlayer(), "ancientgates.use.*")) {
+			if (Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId()) || (!Conf.enforceAccess)) {
 				// Handle economy (check player has funds to use gate)
 				if (!Plugin.handleEconManage(event.getPlayer(), nearestGate.getCost())) {
 					return;
@@ -81,7 +82,7 @@ public class PluginMovementListener implements Listener {
 			if (passenger instanceof Player) {
 				Player player = (Player)passenger;
 				// Check player has permission to enter the gate.
-				if (!(Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId()) || Plugin.hasPermManage(player, "ancientgates.use.*"))) {
+				if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())) && Conf.enforceAccess) {
 					return;
 				}
 				// Handle economy (check player has funds to use gate)
