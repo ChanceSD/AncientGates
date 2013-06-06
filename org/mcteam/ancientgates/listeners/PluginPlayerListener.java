@@ -96,6 +96,11 @@ public class PluginPlayerListener implements Listener {
 		if (nearestGate != null) {
 			event.setCancelled(true);
 			
+			// Check teleportation method
+			if (!Conf.useVanillaPortals) {
+				return;
+			}
+			
 			// Check player has permission to enter the gate.
 			if ((!Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId())) && Conf.enforceAccess) {
 				event.getPlayer().sendMessage("You lack the permissions to enter this gate.");
@@ -111,11 +116,6 @@ public class PluginPlayerListener implements Listener {
 			// Handle BungeeCord gates (BungeeCord support disabled)
 			if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
 				event.getPlayer().sendMessage(String.format("BungeeCord support not enabled."));
-				return;
-			}
-			
-			// Check teleportation method
-			if (!Conf.useVanillaPortals) {
 				return;
 			}
 			
