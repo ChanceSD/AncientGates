@@ -6,7 +6,7 @@
 	</formats>
 	<files>
 		<file>
-			<source>${project.build.directory}/${artifactId}.jar</source>
+			<source>${project.build.directory}/Ancient_Gates.jar</source>
 			<outputDirectory>/</outputDirectory>
 			<destName>Ancient_Gates.jar</destName>
 		</file>
