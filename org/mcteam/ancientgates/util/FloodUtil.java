@@ -1,79 +1,111 @@
 package org.mcteam.ancientgates.util;
 
+import java.util.Collection;
+import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+
 import org.mcteam.ancientgates.Conf;
+import org.mcteam.ancientgates.types.FloodOrientation;
 
 public class FloodUtil {
 	
-	private static final Set<BlockFace> exp1 = new HashSet<BlockFace>();
-	private static final Set<BlockFace> exp2 = new HashSet<BlockFace>();
-	
-	static {
-		exp1.add(BlockFace.UP);
-		exp1.add(BlockFace.DOWN);
-		exp1.add(BlockFace.EAST);
-		exp1.add(BlockFace.WEST);
+	// Base air flood block algorithm
+	public static Set<Block> getFloodBlocks(Block startBlock, Set<Block> foundBlocks, Set<BlockFace> expandFaces, int limit) {
+		if (foundBlocks == null) return null;
+		if (foundBlocks.size() > limit) return null;
+		if (foundBlocks.contains(startBlock)) return foundBlocks;
 		
-		exp2.add(BlockFace.UP);
-		exp2.add(BlockFace.DOWN);
-		exp2.add(BlockFace.NORTH);
-		exp2.add(BlockFace.SOUTH);
-	}
-	
-	// For the same frame and location this set of blocks is deterministic
-	public static Set<Block> getGateFrameBlocks(Block block) {
-		Set<Block> blocks1 = getAirFloodBlocks(block, new HashSet<Block>(), exp1, Conf.getGateMaxArea());
-		Set<Block> blocks2 = getAirFloodBlocks(block, new HashSet<Block>(), exp2, Conf.getGateMaxArea());
-		
-		if (blocks1 == null && blocks2 == null) {
-			return null;
-		}
-		
-		if (blocks1 == null) {
-			return blocks2;
-		}
-		
-		if (blocks2 == null) {
-			return blocks1;
-		}
-		
-		if (blocks1.size() > blocks2.size()) {
-			return blocks2;
-		}
-		
-		return blocks1;
-	}
-	
-	public static Set<Block> getAirFloodBlocks(Block startBlock, Set<Block> foundBlocks, Set<BlockFace> expandFaces, int limit) {
-		if (foundBlocks == null) {
-			return null;
-		}
-		
-		if  (foundBlocks.size() > limit) {
-			return null;
-		}
-		
-		if (foundBlocks.contains(startBlock)) {
-			return foundBlocks;
-		}
-		
-		if (startBlock.getType() == Material.AIR || startBlock.getType() == Material.PORTAL) {
-			// ... We found a block :D ...
+		if (BlockUtil.isStandableMaterial(startBlock.getType())) {
+			// Found a block
 			foundBlocks.add(startBlock);
 			
-			// ... And flood away !
+			// Flood away
 			for (BlockFace face : expandFaces) {
 				Block potentialBlock = startBlock.getRelative(face);
-				foundBlocks = getAirFloodBlocks(potentialBlock, foundBlocks, expandFaces, limit);
+				foundBlocks = getFloodBlocks(potentialBlock, foundBlocks, expandFaces, limit);
 			}
 		}
-		
-		return foundBlocks;
+		return foundBlocks;	
+	}
+
+	// Multi-flood all orientations
+	public static Map<FloodOrientation, Set<Block>> getAllAirFloods(Block startBlock, Collection<FloodOrientation> orientations, int limit) {
+		Map<FloodOrientation, Set<Block>> ret = new HashMap<FloodOrientation, Set<Block>>();
+		for (FloodOrientation orientation : orientations) {
+			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), orientation.getDirections(), limit));
+		}
+		return ret;	
 	}
 	
+	 // Multi-flood best orientation
+	public static Entry<FloodOrientation, Set<Block>> getBestAirFlood(Block startBlock, Collection<FloodOrientation> orientations) {
+		Map<FloodOrientation, Set<Block>> floods = getAllAirFloods(startBlock, orientations, Conf.getGateMaxArea());
+		Entry<FloodOrientation, Set<Block>> ret = null;
+		Integer bestSize = null;
+		for (Entry<FloodOrientation, Set<Block>> entry : floods.entrySet()) {
+			if (entry.getValue() == null) continue;
+			int size = entry.getValue().size();
+			if (bestSize == null || size < bestSize) {
+				ret = entry;
+				bestSize = size;
+			}
+		}
+		return ret;	
+	}
+
+	// Get gate portal blocks
+	public static Set<Block> getPortalBlocks(Block block, FloodOrientation orientation) {
+		Set<Block> blocks = getFloodBlocks(block, new HashSet<Block>(), orientation.getDirections(), Conf.getGateMaxArea());
+		return blocks;	
+	}
+	public static Set<Block> getPortalBlocks(Block block) {
+		Entry<FloodOrientation, Set<Block>> flood = getBestAirFlood(block, EnumSet.allOf(FloodOrientation.class));
+		if (flood == null) return null;
+
+		FloodOrientation orientation = flood.getKey();
+		Set<Block> blocks = getPortalBlocks(block, orientation);
+		return blocks;	
+	}
+	
+	// Get gate frame blocks
+	public static Set<Block> getFrameBlocks(Set<Block> portalBlocks, FloodOrientation orientation) {
+		Set<Block> frame = new HashSet<Block>();
+		for (Block currentBlock : portalBlocks) {
+			for (BlockFace face : orientation.getDirections()) {
+				Block potentialBlock = currentBlock.getRelative(face);
+				// Found a block
+				if (!portalBlocks.contains(potentialBlock)) {
+					frame.add(potentialBlock);
+				}
+			}
+		}
+		return frame;
+	}
+	
+	// Get surrounding blocks
+	public static Set<Block> getSurroundingBlocks(Set<Block> blocks, Set<Block> remainingBlocks, FloodOrientation orientation) {
+		Set<Block> allBlocks = new HashSet<Block>();
+		blocks.addAll(blocks);
+		blocks.addAll(remainingBlocks);
+	
+		Set<Block> surrounding = new HashSet<Block>();
+		for (Block currentBlock : blocks) {
+			for (BlockFace face : orientation.getAllDirections()) {
+				Block potentialBlock = currentBlock.getRelative(face);
+				// Found a block
+				if (!allBlocks.contains(potentialBlock)) {
+					surrounding.add(potentialBlock);
+				}
+			}
+		}
+		return surrounding;
+	}
+
 }

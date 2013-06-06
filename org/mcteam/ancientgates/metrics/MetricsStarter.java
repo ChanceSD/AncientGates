@@ -2,6 +2,8 @@ package org.mcteam.ancientgates.metrics;
 
 import java.io.IOException;
 
+import org.bukkit.Material;
+
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
@@ -43,6 +45,16 @@ public class MetricsStarter {
 					return i;
 				}
 			});
+			gatesGraph.addPlotter(new Metrics.Plotter("Undefined Gates") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate : Gate.getAll()) {
+						if (gate.getTo() == null) i++;
+					}
+					return i;
+				}
+			});
 			gatesGraph.addPlotter(new Metrics.Plotter("Total") {
 				@Override
 				public int getValue() {
@@ -62,7 +74,7 @@ public class MetricsStarter {
 					return i;
 				}
 			});
-			accessGraph.addPlotter(new Metrics.Plotter("Entities and Players") {
+			accessGraph.addPlotter(new Metrics.Plotter("Entities") {
 				@Override
 				public int getValue() {
 					int i = 0;
@@ -70,6 +82,22 @@ public class MetricsStarter {
 						if (gate.getTeleportEntities()) i++;
 					}
 					return i;
+				}
+			});
+			accessGraph.addPlotter(new Metrics.Plotter("Vehicles") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getTeleportVehicles()) i++;
+					}
+					return i;
+				}
+			});
+			gatesGraph.addPlotter(new Metrics.Plotter("Total") {
+				@Override
+				public int getValue() {
+					return Gate.getAll().size();
 				}
 			});
 			
@@ -120,21 +148,81 @@ public class MetricsStarter {
 					return (Conf.useEconomy)?1:0;
 				}
 			});
+			featureGraph.addPlotter(new Metrics.Plotter("Enforce Access Enabled") {
+				@Override
+				public int getValue() {
+					return (Conf.enforceAccess)?1:0;
+				}
+			});
 			
 			// Plot teleportation method
 			Graph methodGraph = metrics.createGraph("Teleportation method");
-			methodGraph.addPlotter(new Metrics.Plotter("Normal Nether") {
+			methodGraph.addPlotter(new Metrics.Plotter("Movement Hook") {
 				@Override
 				public int getValue() {
-					return (Conf.useInstantNether)?0:1;
+					return (Conf.useVanillaNether)?0:1;
 				}
 			});
-			methodGraph.addPlotter(new Metrics.Plotter("Instant Nether") {
+			methodGraph.addPlotter(new Metrics.Plotter("Vanilla Nether") {
 				@Override
 				public int getValue() {
-					return (Conf.useInstantNether)?1:0;
+					return (Conf.useVanillaNether)?1:0;
 				}
 			});
+			
+			// Plot gate portal materials
+			Graph materialsGraph = metrics.createGraph("Gate Materials");
+			materialsGraph.addPlotter(new Metrics.Plotter("Web") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.WEB) i++;
+					}
+					return i;
+				}
+			});
+			materialsGraph.addPlotter(new Metrics.Plotter("Water") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.STATIONARY_WATER) i++;
+					}
+					return i;
+				}
+			});
+			materialsGraph.addPlotter(new Metrics.Plotter("Portal") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.PORTAL) i++;
+					}
+					return i;
+				}
+			});
+			materialsGraph.addPlotter(new Metrics.Plotter("Lava") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.STATIONARY_LAVA) i++;
+					}
+					return i;
+				}
+			});
+			materialsGraph.addPlotter(new Metrics.Plotter("End Portal") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.ENDER_PORTAL) i++;
+					}
+					return i;
+				}
+			});
+
 
 			// Submit metrics
 			metrics.start();

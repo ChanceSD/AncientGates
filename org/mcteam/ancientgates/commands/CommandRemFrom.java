@@ -2,6 +2,7 @@ package org.mcteam.ancientgates.commands;
 
 import org.bukkit.Location;
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
@@ -39,9 +40,9 @@ public class CommandRemFrom extends BaseCommand {
 			return;
 		}
 		
-		gate.close();
+		Gates.close(gate);
 		gate.delFrom(TeleportUtil.stringToLocation(nearestFrom));
-		gate.open();
+		Gates.open(gate);
 		
 		sendMessage("Nearest \"from\" location for gate \""+gate.getId()+"\" is removed.");
 		Gate.save();

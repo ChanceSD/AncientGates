@@ -2,6 +2,8 @@ package org.mcteam.ancientgates.commands;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.util.BlockUtil;
 
 public class CommandOpen extends BaseCommand {
 	
@@ -30,13 +32,13 @@ public class CommandOpen extends BaseCommand {
 		}
 		
 		for (Location from : gate.getFroms()) {
-			if (from.getBlock().getType() != Material.AIR && from.getBlock().getType() != Material.PORTAL) {
+			if (from.getBlock().getType() != Material.AIR && !BlockUtil.isStandableGateMaterial(from.getBlock().getType())) {
 				sendMessage("The gate could not open. The from location is not air.");
 				return;
 			}
 		}
 		
-		if (gate.open()) {
+		if (Gates.open(gate)) {
 			sendMessage("The gate was opened.");
 		} else {
 			sendMessage("Failed to open the gate. Have you built a frame?");

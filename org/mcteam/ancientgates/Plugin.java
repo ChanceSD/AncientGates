@@ -43,6 +43,7 @@ import org.mcteam.ancientgates.commands.CommandSetCost;
 import org.mcteam.ancientgates.commands.CommandSetEntities;
 import org.mcteam.ancientgates.commands.CommandAddFrom;
 import org.mcteam.ancientgates.commands.CommandSetFrom;
+import org.mcteam.ancientgates.commands.CommandSetMaterial;
 import org.mcteam.ancientgates.commands.CommandSetTo;
 import org.mcteam.ancientgates.commands.CommandSetVehicles;
 import org.mcteam.ancientgates.listeners.PluginBlockListener;
@@ -120,7 +121,7 @@ public class Plugin extends JavaPlugin {
 		
 		// Load from disc
 		Conf.load();
-		Gate.load();
+		Gates.load();
 		
 		// Setup BungeeCord support
 		if (Conf.useSocketComms) Server.load();
@@ -139,8 +140,9 @@ public class Plugin extends JavaPlugin {
 			commands.add(new CommandSetCost());
 		}
 		commands.add(new CommandSetEntities());
-		if (Conf.useInstantNether) {
+		if (!Conf.useVanillaNether) {
 			commands.add(new CommandSetVehicles());
+			commands.add(new CommandSetMaterial());
 		}
 		commands.add(new CommandAddFrom());
 		commands.add(new CommandRemFrom());
@@ -157,7 +159,7 @@ public class Plugin extends JavaPlugin {
 		pm.registerEvents(new PluginBlockListener(this), this);
 		pm.registerEvents(new PluginEntityListener(this), this);
 		pm.registerEvents(new PluginPlayerListener(this), this);
-		if (Conf.useInstantNether) {
+		if (!Conf.useVanillaNether) {
 			pm.registerEvents(new PluginMovementListener(this), this);
 		}
 		

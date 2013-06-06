@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates.commands;
 
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
 
 public class CommandDelete extends BaseCommand {
 	public CommandDelete() {
@@ -17,7 +18,7 @@ public class CommandDelete extends BaseCommand {
 	}
 	
 	public void perform() { 
-		if (gate.getFroms() != null) gate.close();
+		if (gate.getFroms() != null) Gates.close(gate);
 		
 		sendMessage("Gate with id \"" + gate.getId() + "\" was deleted.");
 		Gate.delete(gate.getId());

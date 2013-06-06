@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.com.google.gson.reflect.TypeToken;
+import org.mcteam.ancientgates.types.FloodOrientation;
+import org.mcteam.ancientgates.types.WorldCoord;
+import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.DiscUtil;
 import org.mcteam.ancientgates.util.FloodUtil;
 
@@ -31,14 +36,23 @@ public class Gate {
 	private static transient String YAW = "yaw";
 	private static transient String PITCH = "pitch";
 	
+	// Gates
 	private transient String id;
 	private List<Location> froms;
-	private Location from;
 	private Location to;
 	private Map<String, String> bungeeto;
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
+	private String material = Conf.gateMaterialDefault;
 	private double cost = 0.0;
+	
+	// Legacy entries
+	private Location from;
+	
+	private transient Set<WorldCoord> frameBlockCoords;
+	private transient Set<WorldCoord> surroundingFrameBlockCoords;
+	private transient Set<WorldCoord> portalBlockCoords;
+	private transient Set<WorldCoord> surroundingPortalBlockCoords;
 
 	public Gate() {	
 	}
@@ -125,47 +139,38 @@ public class Gate {
 		return vehicles;
 	}
 	
+	public void setMaterial(String material) {
+		this.material = material.toUpperCase();
+	}
+	
+	public Material getMaterial() {
+		return BlockUtil.asSpawnableGateMaterial(material.toUpperCase());
+	}
+	
+	public String getMaterialStr() {
+		return material.toUpperCase();
+	}
+	
 	public void rename(String id, String newid) {
 		Gate gate = instances.remove(id);
 		instances.put(newid, gate);
 		this.id = newid;
 	}
 	
-	//----------------------------------------------//
-	// The Open And Close Methods
-	//----------------------------------------------//
-	public boolean open() {
-		for (Location from : froms) {
-			Set<Block> blocks = FloodUtil.getGateFrameBlocks(from.getBlock());
-		
-			if (blocks == null) {
-				return false;
-			}
-		
-			// This is not to do an effect
-			// It is to stop portalblocks from destroyingthemself as they can't rely on non created blocks
-			for (Block block : blocks) {
-				block.setType(Material.GLOWSTONE);
-			}
-		
-			for (Block block : blocks) {
-				block.setType(Material.PORTAL);
-			}
-		}
-		
-		return true;
+	public Set<WorldCoord> getFrameBlocks() {
+		return frameBlockCoords;
 	}
 	
-	public void close() {
-		for (Location from : froms) {
-			Set<Block> blocks = FloodUtil.getGateFrameBlocks(from.getBlock());
-		
-			if (blocks != null) {
-				for (Block block : blocks) {
-					block.setType(Material.AIR);
-				}
-			}
-		}
+	public Set<WorldCoord> getSurroundingFrameBlocks() {
+		return surroundingFrameBlockCoords;
+	}
+	
+	public Set<WorldCoord> getPortalBlocks() {
+		return portalBlockCoords;
+	}
+	
+	public Set<WorldCoord> getSurroundingPortalBlocks() {
+		return surroundingPortalBlockCoords;
 	}
 	
 	//----------------------------------------------//
@@ -249,6 +254,60 @@ public class Gate {
 		for(Entry<String, Gate> entry : instances.entrySet()) {
 			entry.getValue().setId(entry.getKey());
 		}
+	}
+	
+	//----------------------------------------------//
+	// The Block data management
+	//----------------------------------------------//
+	public boolean dataPopulate() {
+		// Clear previous data
+		dataClear();
+		
+		// Loop through all from locations
+		for (Location from : froms) {
+			Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), EnumSet.allOf(FloodOrientation.class));
+			if (flood == null) return false;
+			
+			// Force vertical PORTALs and horizontal ENDER_PORTALs
+			FloodOrientation orientation = flood.getKey();
+			if (orientation == FloodOrientation.HORIZONTAL && BlockUtil.asSpawnableGateMaterial(material) == Material.PORTAL) {
+				material = "ENDPORTAL";
+			} else if (orientation != FloodOrientation.HORIZONTAL && BlockUtil.asSpawnableGateMaterial(material) == Material.ENDER_PORTAL) {
+				material = "PORTAL";
+			}
+
+			// Now we add the portal blocks as world coords to the lookup maps.
+			Set<Block> portalBlocks = FloodUtil.getPortalBlocks(from.getBlock(), orientation);
+			if (portalBlocks == null) return false;
+			
+			for (Block portalBlock : portalBlocks) {
+				portalBlockCoords.add(new WorldCoord(portalBlock));
+			}
+			
+			// Now we add the frame blocks as world coords to the lookup maps.
+			Set<Block> frameBlocks = FloodUtil.getFrameBlocks(portalBlocks, orientation);
+			for (Block frameBlock : frameBlocks) {
+				frameBlockCoords.add(new WorldCoord(frameBlock));
+			}
+			
+			// Now we add the surrounding blocks as world coords to the lookup maps.
+			Set<Block> surroundingBlocks = FloodUtil.getSurroundingBlocks(portalBlocks, frameBlocks, orientation);
+			for (Block surroundingBlock : surroundingBlocks) {
+				surroundingPortalBlockCoords.add(new WorldCoord(surroundingBlock));
+			}
+			surroundingBlocks = FloodUtil.getSurroundingBlocks(frameBlocks, portalBlocks, orientation);
+			for (Block surroundingBlock : surroundingBlocks) {
+				surroundingFrameBlockCoords.add(new WorldCoord(surroundingBlock));
+			}
+		}
+		return true;
+	}
+
+	public void dataClear() {
+		portalBlockCoords = new HashSet<WorldCoord>();
+		frameBlockCoords = new HashSet<WorldCoord>();
+		surroundingPortalBlockCoords = new HashSet<WorldCoord>();
+		surroundingFrameBlockCoords = new HashSet<WorldCoord>();
 	}
 	
 }

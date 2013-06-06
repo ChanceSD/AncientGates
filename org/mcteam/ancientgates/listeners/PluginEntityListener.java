@@ -1,6 +1,5 @@
 package org.mcteam.ancientgates.listeners;
 
-import org.bukkit.Location;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -8,10 +7,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
@@ -32,13 +33,13 @@ public class PluginEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Player)) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
-			Location entityLocation = event.getEntity().getLocation();
-			Gate nearestGate = GateUtil.nearestGate(entityLocation, true, 2.0);
+			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			Gate nearestGate = GateUtil.nearestGate(entityCoord, true);
 		
 			if (nearestGate != null) {
 				event.setCancelled(true);
 				
-				if (Conf.useInstantNether ^ !(event.getEntity() instanceof Vehicle)) {
+				if (!Conf.useVanillaNether ^ !(event.getEntity() instanceof Vehicle)) {
 					return;
 				}
 				
@@ -60,13 +61,26 @@ public class PluginEntityListener implements Listener {
 		if (event.getEntity() instanceof PigZombie) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
-			Location entityLocation = event.getEntity().getLocation();
-			Gate nearestGate = GateUtil.nearestGate(entityLocation, false, 2.0);
+			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
 		
 			if (nearestGate != null) {
 				event.setCancelled(true);
 			}
 		}
 	}
+    
+    @EventHandler
+    public void onEntityDamage(EntityDamageEvent event) {
+		// Ok so an entity damage event begins
+		// Find the nearest gate!
+		WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+		Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
+	
+		if (nearestGate != null) {
+			event.setCancelled(true);
+			event.getEntity().setFireTicks(0);
+		}
+    }
 
 }

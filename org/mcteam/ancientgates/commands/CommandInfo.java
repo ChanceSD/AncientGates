@@ -1,9 +1,10 @@
 package org.mcteam.ancientgates.commands;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.GeometryUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
@@ -40,9 +41,9 @@ public class CommandInfo extends BaseCommand {
 		// Info based on sight
 		if (id == null) {
 			// Find gate based on the player's line of sight
-			Location playerTargetLocation = player.getTargetBlock(null, 20).getLocation();
-			gate = GateUtil.nearestGate(playerTargetLocation, false);
-			String from = GateUtil.nearestFrom(playerTargetLocation);
+			WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock(null, 20));
+			gate = GateUtil.nearestGate(playerTargetCoord, false);
+			String from = GateUtil.nearestFrom(playerTargetCoord);
 			
 			if (gate == null || from.isEmpty()) {
 				sendMessage("No gate in sight. Ensure you are looking at a gate, or use:");
@@ -66,7 +67,7 @@ public class CommandInfo extends BaseCommand {
 		
 		// Display gate info
 		sendMessage(TextUtil.titleize("Gate: "+ Conf.colorParameter + gate.getId() + Conf.colorSystem + ""));
-		if (gate.getFroms().get(0).getBlock().getType() == Material.PORTAL) {
+		if (Gates.isOpen(gate)) {
 			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorAlly + " open");
 		} else {
 			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorAlly + " closed");
@@ -98,12 +99,13 @@ public class CommandInfo extends BaseCommand {
 		} else {
 			sendMessage(Conf.colorSystem + "entities" + Conf.colorAlly + " not allowed");
 		}
-		if (Conf.useInstantNether) {
+		if (!Conf.useVanillaNether) {
 			if (gate.getTeleportVehicles()) {
 				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorAlly + " allowed");
 			} else {
 				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorAlly + " not allowed");
 			}
+			sendMessage(Conf.colorSystem + "material" + Conf.colorAlly + " " + gate.getMaterialStr());
 		}
 		if (Conf.useEconomy) {
 			sendMessage(Conf.colorSystem + "cost" + Conf.colorAlly + " " + String.valueOf(gate.getCost()));

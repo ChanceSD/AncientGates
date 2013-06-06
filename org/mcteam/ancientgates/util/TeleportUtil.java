@@ -45,6 +45,7 @@ public class TeleportUtil {
 	public static void teleportPlayer(Player player, Location location) {
 		checkChunkLoad(location.getBlock());
 		player.teleport(location);
+		player.setFireTicks(0); // Cancel lava fire
 	}
 	
 	// BungeeCord player teleport out
@@ -59,6 +60,7 @@ public class TeleportUtil {
 			}
 			position.setYaw(yaw);
 			player.teleport(position);
+			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
 			try {
@@ -104,6 +106,7 @@ public class TeleportUtil {
 	public static void teleportEntity(EntityPortalEvent event, Location location) {
 		checkChunkLoad(location.getBlock());
 		event.getEntity().teleport(location);
+		event.getEntity().setFireTicks(0); // Cancel lava fire
 	}
 	
 	// BungeeCord entity spawn out
@@ -227,6 +230,7 @@ public class TeleportUtil {
 			vehicle.eject();
 			vehicle.remove();
 			passenger.teleport(location);
+			passenger.setFireTicks(0); // Cancel lava fire
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				public void run() {
 					v.setPassenger(passenger);
@@ -269,6 +273,7 @@ public class TeleportUtil {
 				}
 				position.setYaw(yaw);
 				player.teleport(position);
+				player.setFireTicks(0); // Cancel lava fire
 				
 				// Send AGBungeeVehicleTele packet first
 				try {
@@ -505,6 +510,7 @@ public class TeleportUtil {
 		}
 	}
 
+	// Pre-load chuck before teleport/spawn
 	private static void checkChunkLoad(Block b) {
 		World w = b.getWorld();
 		Chunk c = b.getChunk();

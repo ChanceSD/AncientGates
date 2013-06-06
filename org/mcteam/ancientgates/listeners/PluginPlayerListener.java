@@ -13,8 +13,9 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.util.GateUtil;
+import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
 public class PluginPlayerListener implements Listener {
@@ -89,8 +90,8 @@ public class PluginPlayerListener implements Listener {
 		
 		// Ok so a player portal event begins
 		// Find the nearest gate!
-		Location playerLocation = this.playerLocationAtEvent.get(event.getPlayer());
-		Gate nearestGate = GateUtil.nearestGate(playerLocation, false);
+		WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(event.getPlayer()));
+		Gate nearestGate = Gates.gateFromPortal(playerCoord);
 		
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -114,7 +115,7 @@ public class PluginPlayerListener implements Listener {
 			}
 			
 			// Check teleportation method
-			if (Conf.useInstantNether) {
+			if (!Conf.useVanillaNether) {
 				return;
 			}
 			

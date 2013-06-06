@@ -20,12 +20,15 @@ public class Conf {
 	// Flags
 	public static boolean enforceAccess = false;
 	public static boolean useEconomy = false;
-	public static boolean useInstantNether = true;
+	public static boolean useVanillaNether = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;
 	
 	// Maximum gate fill area
 	private static int gateMaxArea = 70;
+	
+	// Default gate material
+	public static String gateMaterialDefault = "PORTAL";
 	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
@@ -41,6 +44,9 @@ public class Conf {
 	
 	// Enable debug msgs
 	public static boolean debug = false; 
+	
+	// Legacy entries
+	private static Boolean useInstantNether = null;
 
 	public static int getGateMaxArea() {
 		return gateMaxArea*10;
@@ -75,6 +81,12 @@ public class Conf {
 			e.printStackTrace();
 			Plugin.log("Failed to load the config from disk.");
 			return false;
+		}
+		
+		// Migrate old format
+		if (useInstantNether != null) {
+			useVanillaNether = !useInstantNether;
+			useInstantNether = null;
 		}
 		
 		save();

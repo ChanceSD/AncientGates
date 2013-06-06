@@ -1,9 +1,7 @@
 package org.mcteam.ancientgates.listeners;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -15,6 +13,8 @@ import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.types.WorldCoord;
+import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
@@ -32,17 +32,16 @@ public class PluginMovementListener implements Listener {
 			return;
 		}
 		
-		Block blockTo = event.getTo().getBlock();
-		Block blockToUp = blockTo.getRelative(BlockFace.UP);
+		Location from = event.getFrom();
+		Location to = event.getTo();
+		Block blockTo = to.getBlock();
 		
-		if (blockTo.getType() != Material.PORTAL && blockToUp.getType() != Material.PORTAL) {
-			return;
-		}
+		if (!BlockUtil.canPlayerStandInGateBlock(blockTo, from.getBlockY() == to.getBlockY())) return;
 		
 		// Ok so a player walks into a portal block
 		// Find the nearest gate!
-		Location playerLocation = event.getPlayer().getLocation();
-		Gate nearestGate = GateUtil.nearestGate(playerLocation, true, 2.0);
+		WorldCoord playerCoord = new WorldCoord(event.getPlayer().getLocation());
+		Gate nearestGate = GateUtil.nearestGate(playerCoord, true);
 		
 		if (nearestGate != null) {
 			// Check player has permission to enter the gate.
@@ -63,20 +62,19 @@ public class PluginMovementListener implements Listener {
 
     @EventHandler
 	public void onVehicleMove(VehicleMoveEvent event) {
-		Block blockTo = event.getTo().getBlock();
-		Block blockToUp = blockTo.getRelative(BlockFace.UP);
+		Location from = event.getFrom();
+		Location to = event.getTo();
+		Block blockTo = to.getBlock();
 		
-		if (blockTo.getType() != Material.PORTAL && blockToUp.getType() != Material.PORTAL) {
-			return;
-		}
+		if (!BlockUtil.canPlayerStandInGateBlock(blockTo, from.getBlockY() == to.getBlockY())) return;
 		
 		Vehicle vehicle = event.getVehicle();
 		Entity passenger = vehicle.getPassenger();
 		
 		// Ok so a vehicle drives into a portal block
 		// Find the nearest gate!
-    	Location toLocation = event.getTo();
-		Gate nearestGate = GateUtil.nearestGate(toLocation, true, 2.0);
+    	WorldCoord toCoord = new WorldCoord(event.getTo());
+		Gate nearestGate = GateUtil.nearestGate(toCoord, true);
 
 		if (nearestGate != null) {		
 			if (passenger instanceof Player) {

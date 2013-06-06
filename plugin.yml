@@ -1,7 +1,8 @@
 name: AncientGates
-version: 1.6.5
+version: 1.6.6
 description: Easily create portals with any custom design.
 main: org.mcteam.ancientgates.Plugin
+load: postworld
 author: peewi96
 softdepend: [Vault]
 commands:
@@ -27,8 +28,9 @@ permissions:
       ancientgates.rename: true
       ancientgates.setcost: true
       ancientgates.setentities: true
-      ancientgates.setvehicles: true
       ancientgates.setfrom: true
+      ancientgates.setmaterial: true
+      ancientgates.setvehicles: true
       ancientgates.setto.*: true
       ancientgates.use.*: true
       ancientgates.econbypass: true
@@ -62,11 +64,14 @@ permissions:
   ancientgates.setentities:
     description: Allows the use of Ancient Gates setentities command.
     default: op
-  ancientgates.setvehicles:
-    description: Allows the use of Ancient Gates setvehicles command.
-    default: op
   ancientgates.setfrom:
     description: Allows the use of Ancient Gates setfrom command.
+    default: op
+  ancientgates.setmaterial:
+    description: Allows the use of Ancient Gates setmaterial command.
+    default: op
+  ancientgates.setvehicles:
+    description: Allows the use of Ancient Gates setvehicles command.
     default: op
   ancientgates.addfrom:
     description: Allows the use of Ancient Gates addfrom command.

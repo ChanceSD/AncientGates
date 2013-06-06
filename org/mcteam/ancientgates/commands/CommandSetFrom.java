@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
 
 public class CommandSetFrom extends BaseCommand {
 	
@@ -24,7 +25,7 @@ public class CommandSetFrom extends BaseCommand {
 				sendMessage(new CommandRemFrom().getUseageTemplate(true, true));
 				return;
 			}
-			gate.close();
+			Gates.close(gate);
 		}
             
 		// The player might stand in a half-block or a sign or whatever

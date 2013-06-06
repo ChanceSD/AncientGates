@@ -3,57 +3,54 @@ package org.mcteam.ancientgates.util;
 import java.util.Set;
 
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.types.WorldCoord;
 
 public class GateUtil {
 	
-	//Nearest Ancient Gate
-	public static Gate nearestGate(Location location, Boolean teleport, Double radius) {
+	// Nearest Ancient Gate - Geometry radius comparison (slow)
+	public static Gate nearestGate(WorldCoord coord, Boolean teleport, Double radius) {
 		Gate nearestGate = null;
 		double shortestDistance = -1;
-		
+
 		for (Gate gate : Gate.getAll()) {
-			if ( gate.getFroms() == null || (gate.getTo() == null && gate.getBungeeTo() == null && teleport == true)) {
-				continue;
-			}
-			
-			for (Location from : gate.getFroms()) {
-				if ( ! from.getWorld().equals(location.getWorld())) {
-					continue; // We can only be close to gates in the same world
-				}	
-			
-				// Check the distance between the location and all portal blocks within the gate
-				Set<Block> blocks = FloodUtil.getGateFrameBlocks(from.getBlock());
-				if (blocks == null) {
-					continue;
-				}
-			
-				for (Block block : blocks) {
-					double distance = GeometryUtil.distanceBetweenLocations(location, block.getLocation());
+			if (gate.getFroms() == null || (gate.getTo() == null && gate.getBungeeTo() == null && teleport == true)) continue;
+
+			// Check the distance between the location and all portal blocks within the gate
+			Set<WorldCoord> portalBlockCoords = gate.getPortalBlocks();
+			if (portalBlockCoords == null) continue;
+
+			for (WorldCoord blockCoord : portalBlockCoords) {
+				if ( ! blockCoord.getWorld().equals(coord.getWorld())) continue; // We can only be close to gates in the same world
 				
-					if (distance > radius) {
-						continue;
-					}
-				
-					if (shortestDistance == -1 || shortestDistance > distance) {
-						nearestGate = gate;
-						shortestDistance = distance;
-					}
+				double distance = GeometryUtil.distanceBetweenLocations(coord.getLocation(), blockCoord.getLocation());
+
+				if (distance > radius) continue;
+
+				if (shortestDistance == -1 || shortestDistance > distance) {
+					nearestGate = gate;
+					shortestDistance = distance;
 				}
 			}
 		}
-		
+
 		return nearestGate;
 	}
 	
-	// Nearest Ancient Gate (without radius)
-	public static Gate nearestGate(Location location, Boolean teleport) {
-		return nearestGate(location, teleport, 1.0);
+	// Nearest Ancient Gate - HashSet fast comparison
+	public static Gate nearestGate(WorldCoord coord, Boolean teleport) {
+		Gate nearestGate = Gates.gateFromAll(coord);
+
+		if (nearestGate != null) {
+			if (nearestGate.getFroms() == null || (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && teleport == true)) return null;
+		}
+
+		return nearestGate;
 	}
 	
-	//Nearest Ancient Gate from location
-	public static String nearestFrom(Location location) {
+	// Nearest Ancient Gate 'from' location (coordinate)
+	public static String nearestFrom(WorldCoord coord) {
 		String nearestFrom = "";
 		double shortestDistance = -1;
 		
@@ -63,11 +60,11 @@ public class GateUtil {
 			}
 			
 			for (Location from : gate.getFroms()) {
-				if ( ! from.getWorld().equals(location.getWorld())) {
+				if ( ! from.getWorld().equals(coord.getWorld())) {
 					continue; // We can only be close to gates in the same world
 				}	
 				
-				double distance = GeometryUtil.distanceBetweenLocations(location, from);
+				double distance = GeometryUtil.distanceBetweenLocations(coord.getLocation(), from);
 
 				if (distance > 10.0) {
 					continue;
@@ -81,6 +78,11 @@ public class GateUtil {
 		}
 		
 		return nearestFrom;
+	}
+	
+	// Nearest Ancient Gate 'from' location (location)
+	public static String nearestFrom(Location location) {
+		return nearestFrom(new WorldCoord(location));
 	}
 	
 }

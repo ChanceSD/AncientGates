@@ -3,6 +3,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
+import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 
 public class TextUtil {
@@ -49,6 +50,17 @@ public class TextUtil {
 	
 	public static String implode(List<String> list) {
 		return implode(list, " ");
+	}
+	
+	public static String implode(Map<String, Material> list, String glue) {
+	    String ret = "";
+	    for (int i=0; i<list.size(); i++) {
+	        if (i!=0) {
+	        	ret += glue;
+	        }
+	        ret += list.get(i);
+	    }
+	    return ret;
 	}
 	
 	public static String md5(String md5) {
