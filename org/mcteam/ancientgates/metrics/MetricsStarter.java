@@ -160,13 +160,13 @@ public class MetricsStarter {
 			methodGraph.addPlotter(new Metrics.Plotter("Movement Hook") {
 				@Override
 				public int getValue() {
-					return (Conf.useVanillaNether)?0:1;
+					return (Conf.useVanillaPortals)?0:1;
 				}
 			});
-			methodGraph.addPlotter(new Metrics.Plotter("Vanilla Nether") {
+			methodGraph.addPlotter(new Metrics.Plotter("Vanilla Portal") {
 				@Override
 				public int getValue() {
-					return (Conf.useVanillaNether)?1:0;
+					return (Conf.useVanillaPortals)?1:0;
 				}
 			});
 			

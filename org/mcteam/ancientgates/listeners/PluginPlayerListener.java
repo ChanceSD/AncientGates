@@ -115,7 +115,7 @@ public class PluginPlayerListener implements Listener {
 			}
 			
 			// Check teleportation method
-			if (!Conf.useVanillaNether) {
+			if (!Conf.useVanillaPortals) {
 				return;
 			}
 			

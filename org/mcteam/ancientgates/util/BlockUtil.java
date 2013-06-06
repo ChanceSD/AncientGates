@@ -19,6 +19,7 @@ public class BlockUtil {
 		spawnableGateMaterials.put("ENDPORTAL", Material.ENDER_PORTAL);
 		spawnableGateMaterials.put("LAVA", Material.STATIONARY_LAVA);
 		spawnableGateMaterials.put("PORTAL", Material.PORTAL);
+		spawnableGateMaterials.put("SUGARCANE", Material.SUGAR_CANE_BLOCK);
 		spawnableGateMaterials.put("WATER", Material.STATIONARY_WATER);
 		spawnableGateMaterials.put("WEB", Material.WEB);
 	}
@@ -30,6 +31,7 @@ public class BlockUtil {
 		standableGateMaterials.add(Material.PORTAL);
 		standableGateMaterials.add(Material.STATIONARY_LAVA);
 		standableGateMaterials.add(Material.STATIONARY_WATER);
+		standableGateMaterials.add(Material.SUGAR_CANE_BLOCK);
 		standableGateMaterials.add(Material.WATER);
 		standableGateMaterials.add(Material.WEB);
 	}

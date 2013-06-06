@@ -99,7 +99,7 @@ public class CommandInfo extends BaseCommand {
 		} else {
 			sendMessage(Conf.colorSystem + "entities" + Conf.colorAlly + " not allowed");
 		}
-		if (!Conf.useVanillaNether) {
+		if (!Conf.useVanillaPortals) {
 			if (gate.getTeleportVehicles()) {
 				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorAlly + " allowed");
 			} else {

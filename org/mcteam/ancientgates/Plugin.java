@@ -140,7 +140,7 @@ public class Plugin extends JavaPlugin {
 			commands.add(new CommandSetCost());
 		}
 		commands.add(new CommandSetEntities());
-		if (!Conf.useVanillaNether) {
+		if (!Conf.useVanillaPortals) {
 			commands.add(new CommandSetVehicles());
 			commands.add(new CommandSetMaterial());
 		}
@@ -159,7 +159,7 @@ public class Plugin extends JavaPlugin {
 		pm.registerEvents(new PluginBlockListener(this), this);
 		pm.registerEvents(new PluginEntityListener(this), this);
 		pm.registerEvents(new PluginPlayerListener(this), this);
-		if (!Conf.useVanillaNether) {
+		if (!Conf.useVanillaPortals) {
 			pm.registerEvents(new PluginMovementListener(this), this);
 		}
 		

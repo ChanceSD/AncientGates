@@ -20,7 +20,7 @@ public class Conf {
 	// Flags
 	public static boolean enforceAccess = false;
 	public static boolean useEconomy = false;
-	public static boolean useVanillaNether = false;
+	public static boolean useVanillaPortals = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;
 	
@@ -85,7 +85,7 @@ public class Conf {
 		
 		// Migrate old format
 		if (useInstantNether != null) {
-			useVanillaNether = !useInstantNether;
+			useVanillaPortals = !useInstantNether;
 			useInstantNether = null;
 		}
 		

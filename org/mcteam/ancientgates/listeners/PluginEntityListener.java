@@ -39,7 +39,7 @@ public class PluginEntityListener implements Listener {
 			if (nearestGate != null) {
 				event.setCancelled(true);
 				
-				if (!Conf.useVanillaNether ^ !(event.getEntity() instanceof Vehicle)) {
+				if (!Conf.useVanillaPortals ^ !(event.getEntity() instanceof Vehicle)) {
 					return;
 				}
 				
