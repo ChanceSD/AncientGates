@@ -13,6 +13,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPhysicsEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -258,6 +259,19 @@ public class PluginBlockListener implements Listener {
 		Gate nearestGate = Gates.gateFromPortal(blockCoord);
 		
 		if (nearestGate != null) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onBlockGrow(BlockGrowEvent event) {
+		if (event.isCancelled()) return;
+		
+		Block block = event.getBlock();
+		WorldCoord coord = new WorldCoord(block);
+		
+		// Stop sugarcane blocks from growing
+		if (BlockUtil.isStandableGateMaterial(block.getType()) && Gates.gateFromPortal(coord) != null) {
 			event.setCancelled(true);
 		}
 	}
