@@ -8,6 +8,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
@@ -72,14 +73,19 @@ public class PluginEntityListener implements Listener {
     
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
-		// Ok so an entity damage event begins
-		// Find the nearest gate!
-		WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
-		Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
-	
-		if (nearestGate != null) {
-			event.setCancelled(true);
-			event.getEntity().setFireTicks(0);
+    	
+		if (event.getCause() == DamageCause.DROWNING || event.getCause() == DamageCause.FIRE
+				|| event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.LAVA) {
+    	
+			// Ok so an entity damage event begins
+			// Find the nearest gate!
+			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
+		
+			if (nearestGate != null) {
+				event.setCancelled(true);
+				event.getEntity().setFireTicks(0);
+			}
 		}
     }
 

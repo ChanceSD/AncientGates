@@ -267,11 +267,11 @@ public class PluginBlockListener implements Listener {
 	public void onBlockGrow(BlockGrowEvent event) {
 		if (event.isCancelled()) return;
 		
-		Block block = event.getBlock();
+		Block block = event.getNewState().getBlock();
 		WorldCoord coord = new WorldCoord(block);
 		
 		// Stop sugarcane blocks from growing
-		if (BlockUtil.isStandableGateMaterial(block.getType()) && Gates.gateFromPortal(coord) != null) {
+		if (BlockUtil.isStandableGateMaterial(event.getNewState().getType()) && Gates.gateFromPortalSurround(coord) != null) {
 			event.setCancelled(true);
 		}
 	}

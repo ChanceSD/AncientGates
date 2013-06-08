@@ -49,17 +49,19 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location) {
+	public static void teleportPlayer(Player player, Map<String, String> location, Boolean fullHeight) {
 		if (Conf.bungeeCordSupport) {
 		
 			// Imitate teleport by spinning player 180 deg
-			Location position = player.getLocation();
-			float yaw = position.getYaw();
-			if ((yaw += 180) > 360) {
-				yaw -= 360;
+			if (fullHeight) {
+				Location position = player.getLocation();
+				float yaw = position.getYaw();
+				if ((yaw += 180) > 360) {
+					yaw -= 360;
+				}
+				position.setYaw(yaw);
+				player.teleport(position);
 			}
-			position.setYaw(yaw);
-			player.teleport(position);
 			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
@@ -252,7 +254,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, Boolean teleportEntities) {		
+	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, Boolean teleportEntities, Boolean fullHeight) {		
 		if (Conf.bungeeCordSupport) {			
 			double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();
@@ -266,13 +268,15 @@ public class TeleportUtil {
 				vehicle.eject();
 				vehicle.remove();
 				// and spinning player 180 deg
-				Location position = player.getLocation();
-				float yaw = position.getYaw();
-				if ((yaw += 180) > 360) {
-					yaw -= 360;
+				if (fullHeight) {
+					Location position = player.getLocation();
+					float yaw = position.getYaw();
+					if ((yaw += 180) > 360) {
+						yaw -= 360;
+					}
+					position.setYaw(yaw);
+					player.teleport(position);
 				}
-				position.setYaw(yaw);
-				player.teleport(position);
 				player.setFireTicks(0); // Cancel lava fire
 				
 				// Send AGBungeeVehicleTele packet first

@@ -125,7 +125,7 @@ public class PluginPlayerListener implements Listener {
 			} else if (nearestGate.getBungeeTo() == null)  {
 				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getTo());
 			} else {
-				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getBungeeTo());
+				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getBungeeTo(), event.getFrom().getBlockY() == event.getTo().getBlockY());
 			}
 		}
 	}

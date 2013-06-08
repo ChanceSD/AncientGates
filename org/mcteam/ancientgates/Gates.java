@@ -63,8 +63,6 @@ public class Gates {
 		clearIndexFor(gate);
 		buildIndexFor(gate);
 		
-		Gate.save();
-		
 		// This is not to do an effect
 		// It is to stop portalblocks from destroyingthemself as they can't rely on non created blocks
 		if (BlockUtil.isPortalGateMaterial(gate.getMaterialStr())) {
@@ -85,14 +83,14 @@ public class Gates {
 	}
 	
 	public static void close(Gate gate) {
-		// Clear data
-		clearIndexFor(gate);
-		
-		Gate.save();
+		if (!isOpen(gate)) return;
 		
 		for (WorldCoord coord :  gate.getPortalBlocks()) {
 			coord.getBlock().setType(Material.AIR);
-		}
+		}	
+	
+		// Clear data
+		clearIndexFor(gate);
 	}
 	
 	public static boolean isOpen(Gate gate) {
