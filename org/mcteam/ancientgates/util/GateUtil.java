@@ -18,7 +18,7 @@ public class GateUtil {
 			if (gate.getFroms() == null || (gate.getTo() == null && gate.getBungeeTo() == null && teleport == true)) continue;
 
 			// Check the distance between the location and all portal blocks within the gate
-			Set<WorldCoord> portalBlockCoords = gate.getPortalBlocks();
+			Set<WorldCoord> portalBlockCoords = gate.getPortalBlocks().keySet();
 			if (portalBlockCoords == null) continue;
 
 			for (WorldCoord blockCoord : portalBlockCoords) {

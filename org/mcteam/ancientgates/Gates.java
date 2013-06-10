@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.mcteam.ancientgates.types.FloodOrientation;
 import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.BlockUtil;
 
@@ -66,13 +67,24 @@ public class Gates {
 		// This is not to do an effect
 		// It is to stop portalblocks from destroyingthemself as they can't rely on non created blocks
 		if (BlockUtil.isPortalGateMaterial(gate.getMaterialStr())) {
-			for (WorldCoord coord : gate.getPortalBlocks()) {
+			for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
 				coord.getBlock().setType(Material.GLOWSTONE);
 			}
 		}
 		
-		for (WorldCoord coord : gate.getPortalBlocks()) {
-			coord.getBlock().setType(gate.getMaterial());
+		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+			Material material = gate.getMaterial();
+			
+			// Force vertical PORTALs and horizontal ENDER_PORTALs
+			FloodOrientation orientation = gate.getPortalBlocks().get(coord);
+			if (orientation == FloodOrientation.HORIZONTAL && material == Material.PORTAL) {
+				material = Material.ENDER_PORTAL;
+			} else if (orientation != FloodOrientation.HORIZONTAL && material == Material.ENDER_PORTAL) {
+				material = Material.PORTAL;
+			}
+			
+			coord.getBlock().setType(material);
+			
 			// Stop ice forming based on biome
 			if (gate.getMaterial() == Material.STATIONARY_WATER) {
 				coord.getBlock().setBiome(Biome.FOREST);
@@ -85,7 +97,7 @@ public class Gates {
 	public static void close(Gate gate) {
 		if (!isOpen(gate)) return;
 		
-		for (WorldCoord coord :  gate.getPortalBlocks()) {
+		for (WorldCoord coord :  gate.getPortalBlocks().keySet()) {
 			coord.getBlock().setType(Material.AIR);
 		}	
 	
@@ -94,6 +106,7 @@ public class Gates {
 	}
 	
 	public static boolean isOpen(Gate gate) {
+		if (gate.getFroms() == null) return false;
 		return BlockUtil.isStandableGateMaterial(gate.getFroms().get(0).getBlock().getType());
 	}
 	
@@ -117,7 +130,7 @@ public class Gates {
 	}
 	
 	public static void clearIndexFor(Gate gate) {
-		for (WorldCoord coord : gate.getPortalBlocks()) {
+		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			portalBlockToGate.remove(coord);
 		}
 		for (WorldCoord coord : gate.getSurroundingPortalBlocks()) {
@@ -132,7 +145,7 @@ public class Gates {
 	}
 	
 	public static void buildIndexFor(Gate gate) {
-		for (WorldCoord coord : gate.getPortalBlocks()) {
+		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			portalBlockToGate.put(coord, gate);
 		}
 		for (WorldCoord coord : gate.getSurroundingPortalBlocks()) {

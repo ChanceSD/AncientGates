@@ -51,7 +51,7 @@ public class Gate {
 	
 	private transient Set<WorldCoord> frameBlockCoords;
 	private transient Set<WorldCoord> surroundingFrameBlockCoords;
-	private transient Set<WorldCoord> portalBlockCoords;
+	private transient Map<WorldCoord, FloodOrientation> portalBlockCoords;
 	private transient Set<WorldCoord> surroundingPortalBlockCoords;
 
 	public Gate() {	
@@ -165,7 +165,7 @@ public class Gate {
 		return surroundingFrameBlockCoords;
 	}
 	
-	public Set<WorldCoord> getPortalBlocks() {
+	public Map<WorldCoord, FloodOrientation> getPortalBlocks() {
 		return portalBlockCoords;
 	}
 	
@@ -263,29 +263,22 @@ public class Gate {
 		// Clear previous data
 		dataClear();
 		
-		if (froms == null) return false; //Quick fix (1.6.6 NPE)
+		if (froms == null) return false;
 		
 		// Loop through all from locations
 		for (Location from : froms) {
-			if (from == null) continue; //Quick fix (1.6.6 NPE)
-			
 			Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), EnumSet.allOf(FloodOrientation.class));
 			if (flood == null) return false;
 			
 			// Force vertical PORTALs and horizontal ENDER_PORTALs
 			FloodOrientation orientation = flood.getKey();
-			if (orientation == FloodOrientation.HORIZONTAL && BlockUtil.asSpawnableGateMaterial(material) == Material.PORTAL) {
-				material = "ENDPORTAL";
-			} else if (orientation != FloodOrientation.HORIZONTAL && BlockUtil.asSpawnableGateMaterial(material) == Material.ENDER_PORTAL) {
-				material = "PORTAL";
-			}
 
 			// Now we add the portal blocks as world coords to the lookup maps.
 			Set<Block> portalBlocks = FloodUtil.getPortalBlocks(from.getBlock(), orientation);
 			if (portalBlocks == null) return false;
 			
 			for (Block portalBlock : portalBlocks) {
-				portalBlockCoords.add(new WorldCoord(portalBlock));
+				portalBlockCoords.put(new WorldCoord(portalBlock), orientation);
 			}
 			
 			// Now we add the frame blocks as world coords to the lookup maps.
@@ -308,7 +301,7 @@ public class Gate {
 	}
 
 	public void dataClear() {
-		portalBlockCoords = new HashSet<WorldCoord>();
+		portalBlockCoords = new HashMap<WorldCoord, FloodOrientation>();
 		frameBlockCoords = new HashSet<WorldCoord>();
 		surroundingPortalBlockCoords = new HashSet<WorldCoord>();
 		surroundingFrameBlockCoords = new HashSet<WorldCoord>();
