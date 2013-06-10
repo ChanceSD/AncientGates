@@ -263,8 +263,12 @@ public class Gate {
 		// Clear previous data
 		dataClear();
 		
+		if (froms == null) return false; //Quick fix (1.6.6 NPE)
+		
 		// Loop through all from locations
 		for (Location from : froms) {
+			if (from == null) continue; //Quick fix (1.6.6 NPE)
+			
 			Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), EnumSet.allOf(FloodOrientation.class));
 			if (flood == null) return false;
 			
