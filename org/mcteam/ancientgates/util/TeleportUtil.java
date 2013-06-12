@@ -66,8 +66,8 @@ public class TeleportUtil {
 			
 			// Send AGBungeeTele packet first
 			try {
-				// Build the message, format is <player>#@#<destination>
-				String msg = player.getName() + "#@#" + locationToString(location);
+				// Build the message, format is <player>#@#<destination>#@#<fromServerName>
+				String msg = player.getName() + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName;
 				// Build the message data, sent over the AGBungeeTele BungeeCord channel
 				ByteArrayOutputStream b = new ByteArrayOutputStream();
 				DataOutputStream out = new DataOutputStream(b);
@@ -83,8 +83,8 @@ public class TeleportUtil {
 				return;
 			}
 			
-			// Ensure quit message is blocked
-			Plugin.bungeeCordBlockQuitQueue.add(player.getName());
+			// Ensure vanilla quit message is blocked
+			Plugin.bungeeCordBlockQuitQueue.put(player.getName(), location.get(SERVER));
 			
 			// Connect player to new server
 			try {
@@ -281,8 +281,8 @@ public class TeleportUtil {
 				
 				// Send AGBungeeVehicleTele packet first
 				try {
-					// Build the message, format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>
-					String msg = player.getName() + "#@#" + String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location);
+					// Build the message, format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>#@#<fromServerName>
+					String msg = player.getName() + "#@#" + String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName;
 					// Build the message data, sent over the AGBungeeVehicleTele BungeeCord channel
 					ByteArrayOutputStream b = new ByteArrayOutputStream();
 					DataOutputStream out = new DataOutputStream(b);
@@ -298,8 +298,8 @@ public class TeleportUtil {
 					return;
 				}
 				
-				// Ensure quit message is blocked
-				Plugin.bungeeCordBlockQuitQueue.add(player.getName());
+				// Ensure vanilla quit message is blocked
+				Plugin.bungeeCordBlockQuitQueue.put(player.getName(), location.get(SERVER));
 				
 				// Connect player to new server
 				try {

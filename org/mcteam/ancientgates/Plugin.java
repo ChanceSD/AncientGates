@@ -44,6 +44,7 @@ import org.mcteam.ancientgates.commands.CommandSetEntities;
 import org.mcteam.ancientgates.commands.CommandAddFrom;
 import org.mcteam.ancientgates.commands.CommandSetFrom;
 import org.mcteam.ancientgates.commands.CommandSetMaterial;
+import org.mcteam.ancientgates.commands.CommandSetMessage;
 import org.mcteam.ancientgates.commands.CommandSetTo;
 import org.mcteam.ancientgates.commands.CommandSetVehicles;
 import org.mcteam.ancientgates.listeners.PluginBlockListener;
@@ -81,9 +82,9 @@ public class Plugin extends JavaPlugin {
 	public static ArrayList<String>  bungeeCordEntityInQueue = new ArrayList<String>();
 	public static ArrayList<String>  bungeeCordPassEntInQueue = new ArrayList<String>();
 	
-	// Array of BungeeCord players to block join/quit message
-	public static ArrayList<String> bungeeCordBlockJoinQueue = new ArrayList<String>();
-	public static ArrayList<String> bungeeCordBlockQuitQueue = new ArrayList<String>();
+	// HashMap of BungeeCord players to joining/quiting
+	public static Map<String, String> bungeeCordBlockJoinQueue = new HashMap<String, String>();
+	public static Map<String, String> bungeeCordBlockQuitQueue = new HashMap<String, String>();
 	
 	// Commands
 	public List<BaseCommand> commands = new ArrayList<BaseCommand>();
@@ -136,6 +137,7 @@ public class Plugin extends JavaPlugin {
 		commands.add(new CommandOpen());
 		commands.add(new CommandClose());
 		commands.add(new CommandRename());
+		commands.add(new CommandSetMessage());
 		if (econ != null) {
 			commands.add(new CommandSetCost());
 		}

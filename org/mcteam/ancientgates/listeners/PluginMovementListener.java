@@ -37,6 +37,7 @@ public class PluginMovementListener implements Listener {
 			return;
 		}
 		
+		Player player = event.getPlayer();
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		Block blockTo = to.getBlock();
@@ -45,7 +46,7 @@ public class PluginMovementListener implements Listener {
 		
 		// Ok so a player walks into a portal block
 		// Find the nearest gate!
-		WorldCoord playerCoord = new WorldCoord(event.getPlayer().getLocation());
+		WorldCoord playerCoord = new WorldCoord(player.getLocation());
 		Gate nearestGate = Gates.gateFromAll(playerCoord);
 		
 		if (nearestGate != null) {
@@ -54,46 +55,49 @@ public class PluginMovementListener implements Listener {
 	        Long now = Calendar.getInstance().getTimeInMillis();
 			
 			// Check player has permission to enter the gate.
-			if ((!Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId())) && Conf.enforceAccess) {
-				if (!this.lastMessageTime.containsKey(event.getPlayer().getName()) || this.lastMessageTime.get(event.getPlayer().getName()) < now - 10000L) {
-					event.getPlayer().sendMessage("You lack the permissions to enter this gate.");
-					this.lastMessageTime.put(event.getPlayer().getName(), now);
+			if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
+					&& !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
+				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					player.sendMessage("You lack the permissions to enter this gate.");
+					this.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 			
 			// Handle economy (check player has funds to use gate)
-			if (!Plugin.handleEconManage(event.getPlayer(), nearestGate.getCost())) {
-				if (!this.lastMessageTime.containsKey(event.getPlayer().getName()) || this.lastMessageTime.get(event.getPlayer().getName()) < now - 10000L) {
-					event.getPlayer().sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
-					this.lastMessageTime.put(event.getPlayer().getName(), now);
+			if (!Plugin.handleEconManage(player, nearestGate.getCost())) {
+				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					player.sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
+					this.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 			
 			// Handle BungeeCord gates (BungeeCord support disabled)
 			if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
-				if (!this.lastMessageTime.containsKey(event.getPlayer().getName()) || this.lastMessageTime.get(event.getPlayer().getName()) < now - 10000L) {
-					event.getPlayer().sendMessage(String.format("BungeeCord support not enabled."));
-					this.lastMessageTime.put(event.getPlayer().getName(), now);
+				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					player.sendMessage(String.format("BungeeCord support not enabled."));
+					this.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 			
 			// Handle gates that do not point anywhere
 			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
-				if (!this.lastMessageTime.containsKey(event.getPlayer().getName()) || this.lastMessageTime.get(event.getPlayer().getName()) < now - 10000L) {
-					event.getPlayer().sendMessage(String.format("This gate does not point anywhere :P"));
-					this.lastMessageTime.put(event.getPlayer().getName(), now);
+				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					player.sendMessage(String.format("This gate does not point anywhere :P"));
+					this.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 
 			// Teleport the player (Instant method)
 			if (nearestGate.getBungeeTo() == null)  {
-				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getTo());
+				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
+				
+				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
-				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getBungeeTo(), from.getBlockY() == to.getBlockY());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), from.getBlockY() == to.getBlockY());
 			}
 		}
 	}
@@ -122,7 +126,8 @@ public class PluginMovementListener implements Listener {
 		        Long now = Calendar.getInstance().getTimeInMillis();
 				
 				// Check player has permission to enter the gate.
-				if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())) && Conf.enforceAccess) {
+				if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
+						&& !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
 					if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage("You lack the permissions to enter this gate.");
 						this.lastMessageTime.put(player.getName(), now);
@@ -166,6 +171,8 @@ public class PluginMovementListener implements Listener {
 			if (nearestGate.getTeleportVehicles()) {
 				if (nearestGate.getBungeeTo() == null)  {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getTo(), nearestGate.getTeleportEntities());
+					
+					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
 				} else {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY());
 				}

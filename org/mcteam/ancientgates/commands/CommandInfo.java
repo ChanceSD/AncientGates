@@ -94,6 +94,11 @@ public class CommandInfo extends BaseCommand {
 		} else {
 			sendMessage(Conf.colorSystem + "NOTE: this gate has no 'to' location");
 		}
+		if (gate.getMessage() != null) {
+			sendMessage(Conf.colorSystem + "message: " + Conf.colorAlly + gate.getMessage());
+		} else {
+			sendMessage(Conf.colorSystem + "NOTE: this gate has no teleport message");
+		}
 		if (gate.getTeleportEntities()) {
 			sendMessage(Conf.colorSystem + "entities" + Conf.colorAlly + " allowed");
 		} else {

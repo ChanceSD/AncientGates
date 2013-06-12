@@ -44,6 +44,7 @@ public class Gate {
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
 	private String material = Conf.gateMaterialDefault;
+	private String msg;
 	private double cost = 0.0;
 	
 	// Legacy entries
@@ -113,6 +114,14 @@ public class Gate {
 	
 	public Map<String, String> getBungeeTo() {
 		return bungeeto;
+	}
+	
+	public void setMessage(String msg) {
+		this.msg = msg;
+	}
+	
+	public String getMessage() {
+		return msg;
 	}
 	
 	public void setCost(Double cost) {

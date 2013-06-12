@@ -34,12 +34,15 @@ public class PluginPlayerListener implements Listener {
 			return;
 		}
 
+		String playerName = event.getPlayer().getName();
+
 		// Ok so a player joins the server
-		// If it's a BungeeCord teleport, block the join message
-		if (Plugin.bungeeCordBlockJoinQueue.remove(event.getPlayer().getName().toLowerCase())) {
-			event.setJoinMessage(null);
+		// If it's a BungeeCord teleport, display a custom join message
+		String server = Plugin.bungeeCordBlockJoinQueue.remove(playerName.toLowerCase());
+		if (server != null) {
+			event.setJoinMessage(playerName + " came from " + server + " server");
 		}
-		
+			
 		// Find if they're in the BungeeCord in-bound player teleport queue
 		String destination = Plugin.bungeeCordPlayerInQueue.remove(event.getPlayer().getName().toLowerCase());
 		if (destination != null) {
@@ -71,15 +74,16 @@ public class PluginPlayerListener implements Listener {
 		if (!Conf.bungeeCordSupport) {
 			return;
 		}
+		
+		String playerName = event.getPlayer().getName();
 
 		// Ok so a player quits the server
-		// If it's a BungeeCord teleport, block the quit message
-		if (!Plugin.bungeeCordBlockQuitQueue.remove(event.getPlayer().getName().toLowerCase())) {
-			return;
+		// If it's a BungeeCord teleport, display a custom quit message
+		String server = Plugin.bungeeCordBlockQuitQueue.remove(playerName.toLowerCase());
+		if (server != null) {
+			event.setQuitMessage(playerName + " went to " + server + " server");
 		}
 		
-		// Block BungeeCord player quit message
-		event.setQuitMessage(null);
 	}
     
 	@EventHandler(priority = EventPriority.HIGH)
@@ -88,9 +92,11 @@ public class PluginPlayerListener implements Listener {
 			return;
 		}
 		
+		Player player = event.getPlayer();
+		
 		// Ok so a player portal event begins
 		// Find the nearest gate!
-		WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(event.getPlayer()));
+		WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(player));
 		Gate nearestGate = Gates.gateFromPortal(playerCoord);
 		
 		if (nearestGate != null) {
@@ -100,32 +106,35 @@ public class PluginPlayerListener implements Listener {
 			if (!Conf.useVanillaPortals) {
 				return;
 			}
-			
+
 			// Check player has permission to enter the gate.
-			if ((!Plugin.hasPermManage(event.getPlayer(), "ancientgates.use."+nearestGate.getId())) && Conf.enforceAccess) {
-				event.getPlayer().sendMessage("You lack the permissions to enter this gate.");
+			if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
+					&& !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
+				player.sendMessage("You lack the permissions to enter this gate.");
 				return;
 			}
 			
 			// Handle economy (check player has funds to use gate)
-			if (!Plugin.handleEconManage(event.getPlayer(), nearestGate.getCost())) {
-				event.getPlayer().sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
+			if (!Plugin.handleEconManage(player, nearestGate.getCost())) {
+				player.sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
 				return;
 			}
 			
 			// Handle BungeeCord gates (BungeeCord support disabled)
 			if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
-				event.getPlayer().sendMessage(String.format("BungeeCord support not enabled."));
+				player.sendMessage(String.format("BungeeCord support not enabled."));
 				return;
 			}
 			
 			// Teleport the player (Nether method)
 			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
-				event.getPlayer().sendMessage(String.format("This gate does not point anywhere :P"));
+				player.sendMessage(String.format("This gate does not point anywhere :P"));
 			} else if (nearestGate.getBungeeTo() == null)  {
-				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getTo());
+				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
+				
+				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
-				TeleportUtil.teleportPlayer(event.getPlayer(), nearestGate.getBungeeTo(), event.getFrom().getBlockY() == event.getTo().getBlockY());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), event.getFrom().getBlockY() == event.getTo().getBlockY());
 			}
 		}
 	}

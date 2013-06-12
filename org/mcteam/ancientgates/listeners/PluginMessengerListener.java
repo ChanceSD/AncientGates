@@ -53,13 +53,14 @@ public class PluginMessengerListener implements PluginMessageListener {
 			
 			String playerName = parts[0];
 			String destination = parts[1];
+			String fromServerName = parts[2];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
 				Plugin.bungeeCordPlayerInQueue.put(playerName.toLowerCase(), destination);
 				// Block join message if queued
-				Plugin.bungeeCordBlockJoinQueue.add(playerName.toLowerCase());
+				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName);
 			} else {
 				// Teleport incoming BungeeCord player
 				Location location = TeleportUtil.stringToLocation(destination);
@@ -75,13 +76,14 @@ public class PluginMessengerListener implements PluginMessageListener {
 			int vehicleTypeId = Integer.parseInt(parts[1]);
 			double velocity = Double.parseDouble(parts[2]);
 			String destination = parts[3];
+			String fromServerName = parts[4];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
 				Plugin.bungeeCordPassengerInQueue.put(playerName.toLowerCase(), String.valueOf(vehicleTypeId)+"#@#"+String.valueOf(velocity)+"#@#"+destination);
 				// Block join message if queued
-				Plugin.bungeeCordBlockJoinQueue.add(playerName.toLowerCase());
+				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName);
 			} else {
 				// Teleport incoming BungeeCord player
 				Location location = TeleportUtil.stringToLocation(destination);
