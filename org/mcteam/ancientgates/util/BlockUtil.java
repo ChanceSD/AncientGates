@@ -64,17 +64,28 @@ public class BlockUtil {
 		standableMaterials.add(69); // 69 Lever
 		standableMaterials.add(70); // 70 Stone Pressure Plate
 		standableMaterials.add(72); // 72 Wooden Pressure Plate
-		standableMaterials.add(75); // 75 Redstone Torch ("off" state)
-		standableMaterials.add(76); // 76 Redstone Torch ("on" state)
+		standableMaterials.add(75); // 75 Redstone Torch (Off)
+		standableMaterials.add(76); // 76 Redstone Torch (On)
 		standableMaterials.add(77); // 77 Stone Button
 		standableMaterials.add(78); // 78 Snow
 		standableMaterials.add(83); // 83 Sugar Cane
 		standableMaterials.add(90); // 90 Portal
-		standableMaterials.add(93); // 93 Redstone Repeater ("off" state)
-		standableMaterials.add(94); // 94 Redstone Repeater ("on" state)
+		standableMaterials.add(93); // 93 Redstone Repeater (Off)
+		standableMaterials.add(94); // 94 Redstone Repeater (On)
 		standableMaterials.add(106); // 106 Vines
 		standableMaterials.add(111); // 111 Lily Pad
-		standableMaterials.add(119); // 119 End Portal
+		standableMaterials.add(119); // 119 End Portal	
+		standableMaterials.add(131); // 131 Tripwire Hook
+		standableMaterials.add(132); // 132 Tripwire
+		standableMaterials.add(140); // 140 Flower Pot
+		standableMaterials.add(141); // 141 Carrot
+		standableMaterials.add(142); // 142 Potatoes	
+		standableMaterials.add(147); // 147 Gold Pressure Plate
+		standableMaterials.add(148); // 148 Iron Pressure Plate
+		standableMaterials.add(149); // 149 Redstone Comparator (Off)
+		standableMaterials.add(150); // 150 Redstone Comparator (On)	
+		standableMaterials.add(157); // 157 Activator Rail
+		standableMaterials.add(171); // 171 Carpet
 	}
 	
 	public static Material asSpawnableGateMaterial(String material) {
