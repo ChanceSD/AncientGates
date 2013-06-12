@@ -49,8 +49,9 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location, Boolean fullHeight) {
+	public static void teleportPlayer(Player player, Map<String, String> location, Boolean fullHeight, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
+			tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 		
 			// Imitate teleport by spinning player 180 deg
 			if (fullHeight) {
@@ -66,8 +67,8 @@ public class TeleportUtil {
 			
 			// Send AGBungeeTele packet first
 			try {
-				// Build the message, format is <player>#@#<destination>#@#<fromServerName>
-				String msg = player.getName() + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName;
+				// Build the message, format is <player>#@#<destination>#@#<fromServerName>#@#<message>
+				String msg = player.getName() + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName + "#@#" + tpMsg;
 				// Build the message data, sent over the AGBungeeTele BungeeCord channel
 				ByteArrayOutputStream b = new ByteArrayOutputStream();
 				DataOutputStream out = new DataOutputStream(b);
@@ -254,7 +255,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, Boolean teleportEntities, Boolean fullHeight) {		
+	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, Boolean teleportEntities, Boolean fullHeight, String tpMsg) {		
 		if (Conf.bungeeCordSupport) {			
 			double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();
@@ -262,6 +263,7 @@ public class TeleportUtil {
 			// Player vehicle teleport
 			if (passenger instanceof Player) {
 				Player player = (Player)passenger;
+				tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 
 				// Imitate teleport by stopping and ejecting
 				vehicle.setVelocity(new Vector());
@@ -281,8 +283,8 @@ public class TeleportUtil {
 				
 				// Send AGBungeeVehicleTele packet first
 				try {
-					// Build the message, format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>#@#<fromServerName>
-					String msg = player.getName() + "#@#" + String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName;
+					// Build the message, format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>#@#<fromServerName>#@#<message>
+					String msg = player.getName() + "#@#" + String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName + "#@#" + tpMsg;
 					// Build the message data, sent over the AGBungeeVehicleTele BungeeCord channel
 					ByteArrayOutputStream b = new ByteArrayOutputStream();
 					DataOutputStream out = new DataOutputStream(b);

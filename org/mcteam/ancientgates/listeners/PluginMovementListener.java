@@ -97,7 +97,7 @@ public class PluginMovementListener implements Listener {
 				
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), from.getBlockY() == to.getBlockY());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
 			}
 		}
 	}
@@ -174,7 +174,7 @@ public class PluginMovementListener implements Listener {
 					
 					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
 				} else {
-					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY());
+					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
 				}
 			}
 		}

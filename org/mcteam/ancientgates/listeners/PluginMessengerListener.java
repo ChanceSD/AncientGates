@@ -54,17 +54,20 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String playerName = parts[0];
 			String destination = parts[1];
 			String fromServerName = parts[2];
+			String tpMsg = parts[3];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
 				Plugin.bungeeCordPlayerInQueue.put(playerName.toLowerCase(), destination);
 				// Block join message if queued
-				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName);
+				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName+"#@#"+tpMsg);
 			} else {
 				// Teleport incoming BungeeCord player
 				Location location = TeleportUtil.stringToLocation(destination);
 				TeleportUtil.teleportPlayer(player, location);
+				
+				if (tpMsg != "null") player.sendMessage(tpMsg);
 			}
 		// Parse BungeeCord vehicle teleport packet
 		} else if (inChannel.equals("AGBungeeVehicleTele")) {
@@ -77,17 +80,20 @@ public class PluginMessengerListener implements PluginMessageListener {
 			double velocity = Double.parseDouble(parts[2]);
 			String destination = parts[3];
 			String fromServerName = parts[4];
+			String tpMsg = parts[5];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
 				Plugin.bungeeCordPassengerInQueue.put(playerName.toLowerCase(), String.valueOf(vehicleTypeId)+"#@#"+String.valueOf(velocity)+"#@#"+destination);
 				// Block join message if queued
-				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName);
+				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName+"#@#"+tpMsg);
 			} else {
 				// Teleport incoming BungeeCord player
 				Location location = TeleportUtil.stringToLocation(destination);
 				TeleportUtil.teleportVehicle(player, vehicleTypeId, velocity, location);
+				
+				if (tpMsg != "null") player.sendMessage(tpMsg);
 			}
 		// Parse BungeeCord spawn packet
 		} else if (inChannel.equals("AGBungeeSpawn")) {

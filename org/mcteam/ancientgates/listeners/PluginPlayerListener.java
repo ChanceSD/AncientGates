@@ -38,13 +38,20 @@ public class PluginPlayerListener implements Listener {
 
 		// Ok so a player joins the server
 		// If it's a BungeeCord teleport, display a custom join message
-		String server = Plugin.bungeeCordBlockJoinQueue.remove(playerName.toLowerCase());
-		if (server != null) {
+		String msg = Plugin.bungeeCordBlockJoinQueue.remove(playerName.toLowerCase());
+		if (msg != null) {
+			// Extract message parts
+			String[] parts = msg.split("#@#");
+			String server = parts[0];
+			String message = parts[1];
+			
 			event.setJoinMessage(playerName + " came from " + server + " server");
+			
+			if (message != "null") event.getPlayer().sendMessage(message);
 		}
 			
 		// Find if they're in the BungeeCord in-bound player teleport queue
-		String destination = Plugin.bungeeCordPlayerInQueue.remove(event.getPlayer().getName().toLowerCase());
+		String destination = Plugin.bungeeCordPlayerInQueue.remove(playerName.toLowerCase());
 		if (destination != null) {
 			// Teleport incoming BungeeCord player
 			Location location = TeleportUtil.stringToLocation(destination);
@@ -53,7 +60,7 @@ public class PluginPlayerListener implements Listener {
 		}
 		
 		// Find if they're in the BungeeCord in-bound passenger teleport queue
-		String msg = Plugin.bungeeCordPassengerInQueue.remove(event.getPlayer().getName().toLowerCase());
+		msg = Plugin.bungeeCordPassengerInQueue.remove(playerName.toLowerCase());
 		if (msg != null) {
 			// Extract message parts
 			String[] parts = msg.split("#@#");
@@ -134,7 +141,7 @@ public class PluginPlayerListener implements Listener {
 				
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), event.getFrom().getBlockY() == event.getTo().getBlockY());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());
 			}
 		}
 	}
