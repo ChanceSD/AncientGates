@@ -4,11 +4,11 @@ import org.bukkit.Location;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
-import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.GeometryUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class CommandInfo extends BaseCommand {
 	

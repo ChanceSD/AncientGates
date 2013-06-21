@@ -54,6 +54,7 @@ import org.mcteam.ancientgates.listeners.PluginPlayerListener;
 import org.mcteam.ancientgates.listeners.PluginMovementListener;
 import org.mcteam.ancientgates.listeners.PluginSocketListener;
 import org.mcteam.ancientgates.metrics.MetricsStarter;
+import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.SocketServer;
 
 public class Plugin extends JavaPlugin {
@@ -66,6 +67,8 @@ public class Plugin extends JavaPlugin {
 	public static Permission perms = null;
     public static Economy econ = null;
     
+	public static String bungeeServerName = null;
+    
 	private String baseCommand;
 	
 	public final static Gson gson = new GsonBuilder()
@@ -75,16 +78,14 @@ public class Plugin extends JavaPlugin {
 	.create();
 	
 	// HashMap of incoming BungeeCord players & passengers
-	public static Map<String, String> bungeeCordPlayerInQueue = new HashMap<String, String>();
-	public static Map<String, String> bungeeCordPassengerInQueue = new HashMap<String, String>();
+	public static Map<String, BungeeQueue> bungeeCordInQueue = new HashMap<String, BungeeQueue>();
 	
-	// ArrayList of incoming BungeeCord entities & entity passengers
-	public static ArrayList<String>  bungeeCordEntityInQueue = new ArrayList<String>();
-	public static ArrayList<String>  bungeeCordPassEntInQueue = new ArrayList<String>();
+	// HashMap of outgoing BungeeCord players & passengers
+	public static Map<String, String> bungeeCordOutQueue = new HashMap<String, String>();
 	
-	// HashMap of BungeeCord players to joining/quiting
-	public static Map<String, String> bungeeCordBlockJoinQueue = new HashMap<String, String>();
-	public static Map<String, String> bungeeCordBlockQuitQueue = new HashMap<String, String>();
+	// ArrayList of incoming BungeeCord entities & vehicles
+	public static ArrayList<BungeeQueue> bungeeCordEntityInQueue = new ArrayList<BungeeQueue>();
+	public static ArrayList<BungeeQueue> bungeeCordVehicleInQueue = new ArrayList<BungeeQueue>();
 	
 	// Commands
 	public List<BaseCommand> commands = new ArrayList<BaseCommand>();
@@ -173,14 +174,6 @@ public class Plugin extends JavaPlugin {
 	}
 	
 	private void setupBungeeCord() {	
-		// Check BungeeCord server name specified
-		if (Conf.bungeeServerName.isEmpty()) {
-			log("bungeeServerName not defined. BungeeCord support disabled.");
-            Conf.bungeeCordSupport = false;
-            Conf.save();
-            return;
-		}
-
 		// Enable required plugin channels 
 		Plugin.log("Enabling bungeecord channels");
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
@@ -325,5 +318,5 @@ public class Plugin extends JavaPlugin {
 	public static void log(Level level, String msg) {
 		Logger.getLogger("Minecraft").log(level, "["+instance.getDescription().getFullName()+"] "+msg);
 	}
-
+	
 }

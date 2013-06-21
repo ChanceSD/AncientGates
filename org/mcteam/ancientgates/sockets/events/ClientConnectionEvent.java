@@ -2,7 +2,7 @@ package org.mcteam.ancientgates.sockets.events;
 
 import java.net.Socket;
 
-import org.mcteam.ancientgates.sockets.ConnectionState;
+import org.mcteam.ancientgates.sockets.types.ConnectionState;
 
 public class ClientConnectionEvent {
 	
@@ -10,9 +10,9 @@ public class ClientConnectionEvent {
 	private ConnectionState state;
 	private int ID;
 	
-	public ClientConnectionEvent(Socket _socket, int clientID, ConnectionState _state) {
-		this.socket = _socket;
-		this.state = _state;
+	public ClientConnectionEvent(Socket socket, int clientID, ConnectionState state) {
+		this.socket = socket;
+		this.state = state;
 		this.ID = clientID;
 	}
 	

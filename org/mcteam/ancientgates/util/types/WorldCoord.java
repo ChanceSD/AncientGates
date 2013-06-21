@@ -1,4 +1,4 @@
-package org.mcteam.ancientgates.types;
+package org.mcteam.ancientgates.util.types;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -192,6 +192,16 @@ public class MetricsStarter {
 					return i;
 				}
 			});
+			materialsGraph.addPlotter(new Metrics.Plotter("Sugar Cane") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.SUGAR_CANE_BLOCK) i++;
+					}
+					return i;
+				}
+			});
 			materialsGraph.addPlotter(new Metrics.Plotter("Portal") {
 				@Override
 				public int getValue() {

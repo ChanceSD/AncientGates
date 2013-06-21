@@ -3,7 +3,7 @@ package org.mcteam.ancientgates.sockets.events;
 import java.net.Socket;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
-import org.mcteam.ancientgates.sockets.packets.Packet;
+import org.mcteam.ancientgates.sockets.types.Packet;
 
 public class ClientRecieveEvent {
 	
@@ -11,10 +11,10 @@ public class ClientRecieveEvent {
 	private Socket client;
 	private Packet packetData;
 	
-	public ClientRecieveEvent(int _id, Socket _client, Packet _packet) {
-		this.id = _id;
-		this.client = _client;
-		this.packetData = _packet;
+	public ClientRecieveEvent(int id, Socket client, Packet packet) {
+		this.id = id;
+		this.client = client;
+		this.packetData = packet;
 	}
 	
 	public int getID() {

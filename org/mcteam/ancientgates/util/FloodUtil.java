@@ -12,7 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import org.mcteam.ancientgates.Conf;
-import org.mcteam.ancientgates.types.FloodOrientation;
+import org.mcteam.ancientgates.util.types.FloodOrientation;
 
 public class FloodUtil {
 	

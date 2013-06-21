@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
@@ -53,21 +54,19 @@ public class PluginMessengerListener implements PluginMessageListener {
 			
 			String playerName = parts[0];
 			String destination = parts[1];
-			String fromServerName = parts[2];
+			String fromServer = parts[2];
 			String tpMsg = parts[3];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordPlayerInQueue.put(playerName.toLowerCase(), destination);
-				// Block join message if queued
-				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName+"#@#"+tpMsg);
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(player, fromServer, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				Location location = TeleportUtil.stringToLocation(destination);
 				TeleportUtil.teleportPlayer(player, location);
 				
-				if (tpMsg != "null") player.sendMessage(tpMsg);
+				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
 			}
 		// Parse BungeeCord vehicle teleport packet
 		} else if (inChannel.equals("AGBungeeVehicleTele")) {
@@ -79,21 +78,19 @@ public class PluginMessengerListener implements PluginMessageListener {
 			int vehicleTypeId = Integer.parseInt(parts[1]);
 			double velocity = Double.parseDouble(parts[2]);
 			String destination = parts[3];
-			String fromServerName = parts[4];
+			String fromServer = parts[4];
 			String tpMsg = parts[5];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordPassengerInQueue.put(playerName.toLowerCase(), String.valueOf(vehicleTypeId)+"#@#"+String.valueOf(velocity)+"#@#"+destination);
-				// Block join message if queued
-				Plugin.bungeeCordBlockJoinQueue.put(playerName.toLowerCase(), fromServerName+"#@#"+tpMsg);
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(player, fromServer, vehicleTypeId, velocity, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				Location location = TeleportUtil.stringToLocation(destination);
 				TeleportUtil.teleportVehicle(player, vehicleTypeId, velocity, location);
 				
-				if (tpMsg != "null") player.sendMessage(tpMsg);
+				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
 			}
 		// Parse BungeeCord spawn packet
 		} else if (inChannel.equals("AGBungeeSpawn")) {
@@ -192,6 +189,11 @@ public class PluginMessengerListener implements PluginMessageListener {
 					Gate.save();
 				}
 			}
+		// Parse BungeeCord server name packet
+		} else if (inChannel.equals("GetServer")) {
+			Plugin.log("Getting BungeeCord server name");
+			String server = new String(data);
+			Plugin.bungeeServerName = server;
 		} else {
 			return;
 		}	

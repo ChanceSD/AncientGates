@@ -2,6 +2,7 @@ package org.mcteam.ancientgates;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
 import org.mcteam.ancientgates.util.DiscUtil;
@@ -32,7 +33,6 @@ public class Conf {
 	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
-	public static String bungeeServerName = "";
 	
 	// Socket comms settings
 	public static boolean useSocketComms = false;
@@ -81,6 +81,13 @@ public class Conf {
 			e.printStackTrace();
 			Plugin.log("Failed to load the config from disk.");
 			return false;
+		}
+		
+		// Check gateMaxArea
+		if (gateMaxArea > 100) Plugin.log(Level.WARNING, "\"gateMaxArea\" high! May cause stack overflow.");
+		if (gateMaxArea > 500) {
+			gateMaxArea = 500;
+			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 500.");
 		}
 		
 		// Migrate old format

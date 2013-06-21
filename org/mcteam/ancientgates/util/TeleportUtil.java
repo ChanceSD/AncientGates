@@ -26,10 +26,13 @@ import org.bukkit.util.Vector;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Server;
+import org.mcteam.ancientgates.queue.BungeeQueue;
+import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.sockets.SocketClient;
 import org.mcteam.ancientgates.sockets.events.SocketClientEventListener;
-import org.mcteam.ancientgates.sockets.packets.Packet;
-import org.mcteam.ancientgates.sockets.packets.Packets;
+import org.mcteam.ancientgates.sockets.types.Packet;
+import org.mcteam.ancientgates.sockets.types.Packets;
+import org.mcteam.ancientgates.util.types.PluginMessage;
 
 public class TeleportUtil {
 	
@@ -66,26 +69,12 @@ public class TeleportUtil {
 			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
-			try {
-				// Build the message, format is <player>#@#<destination>#@#<fromServerName>#@#<message>
-				String msg = player.getName() + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName + "#@#" + tpMsg;
-				// Build the message data, sent over the AGBungeeTele BungeeCord channel
-				ByteArrayOutputStream b = new ByteArrayOutputStream();
-				DataOutputStream out = new DataOutputStream(b);
-				out.writeUTF("Forward");
-				out.writeUTF(location.get(SERVER));	// Server
-				out.writeUTF("AGBungeeTele");		// Channel
-				out.writeShort(msg.length()); 		// Data Length
-				out.writeBytes(msg); 				// Data
-				player.sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
-			} catch (IOException ex) {
-				Plugin.log.severe("Error sending BungeeCord teleport packet");
-				ex.printStackTrace();
-				return;
-			}
+			PluginMessage msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpMsg);
+			// Send message over the AGBungeeTele BungeeCord channel
+			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 			
-			// Ensure vanilla quit message is blocked
-			Plugin.bungeeCordBlockQuitQueue.put(player.getName(), location.get(SERVER));
+			// Replace quit message is with BungeeCord teleport message
+			Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
 			
 			// Connect player to new server
 			try {
@@ -119,37 +108,21 @@ public class TeleportUtil {
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Send AGBungeeSpawn packet
-				try {
-					// Build the message, format is <entityTypeId>#@#<entityTypeData>#@#<destination>
-					String msg = String.valueOf(event.getEntityType().getTypeId()) + "#@#" + EntityUtil.getEntityTypeData(event.getEntity()) + "#@#" + locationToString(location);
-					// Build the message data, sent over the AGBungeeTele BungeeCord channel
-					ByteArrayOutputStream b = new ByteArrayOutputStream();
-					DataOutputStream out = new DataOutputStream(b);
-					out.writeUTF("Forward");
-					out.writeUTF(location.get(SERVER));	// Server
-					out.writeUTF("AGBungeeSpawn");		// Channel
-					out.writeShort(msg.length()); 		// Data Length
-					out.writeBytes(msg); 				// Data
-					if (Plugin.instance.getServer().getOnlinePlayers().length > 0) {
-						// Use any player to send the plugin message
-						Plugin.instance.getServer().getOnlinePlayers()[0].sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
-						// Imitate teleport by removing entity
-						event.getEntity().remove();
-					}
-				} catch (IOException ex) {
-					Plugin.log.severe("Error sending BungeeCord spawn packet");
-					ex.printStackTrace();
-					return;
+				PluginMessage msg = new PluginMessage(event.getEntityType(), event.getEntity(), location);
+				// Send over the AGBungeeTele BungeeCord channel
+				if (Plugin.instance.getServer().getOnlinePlayers().length > 0) {
+					// Use any player to send the plugin message
+					Plugin.instance.getServer().getOnlinePlayers()[0].sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
+					// Imitate teleport by removing entity
+					event.getEntity().remove();
 				}
 			
 			// Send spawn command packet via client socket
 			} else {
 				// Get server
 				Server server = Server.get(location.get(SERVER));
-				// Build the packet, format is <entityId>,<entityWorld>,<entityTypeId>,<entityTypeData>,<location>
-				Packet packet = new Packet();
-				packet.command = "spawnentity";
-				packet.args = new String[] {String.valueOf(event.getEntity().getEntityId()), event.getEntity().getWorld().getName(), String.valueOf(event.getEntityType().getTypeId()), EntityUtil.getEntityTypeData(event.getEntity()), locationToString(location)};
+				// Construct spawn entity packet
+				Packet packet = new Packet(event.getEntity(), event.getEntityType(), location);
 				// Setup socket client and listener
 				SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 				client.setListener(new SocketClientEventListener() {
@@ -188,26 +161,21 @@ public class TeleportUtil {
 	
 	// BungeeCord entity spawn in
 	public static void teleportEntity() {
-    	List<String> entityQueue = Plugin.bungeeCordEntityInQueue;
-    	Iterator<String> it = entityQueue.iterator();
+    	List<BungeeQueue> entityQueue = Plugin.bungeeCordEntityInQueue;
+    	Iterator<BungeeQueue> it = entityQueue.iterator();
         
         while (it.hasNext()) {
-            String entityData = it.next();
-			// Data should be entityTypeId, entityTypeData and destination location
-    		String[] parts = entityData.split("#@#");
-			int entityTypeId = Integer.parseInt(parts[0]);
-			String entityTypeData = parts[1];
-			String destination = parts[2];
+        	BungeeQueue queue = it.next();
 
 			// Spawn incoming BungeeCord entity
-			Location location = TeleportUtil.stringToLocation(destination);
-			World world = TeleportUtil.stringToWorld(destination);
-			checkChunkLoad(location.getBlock());
+			Location destination = queue.getDestination();
+			World world = destination.getWorld();
+			checkChunkLoad(destination.getBlock());
 			
-			if (EntityType.fromId(entityTypeId).isSpawnable()) {
-				Entity entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
-				EntityUtil.setEntityTypeData(entity, entityTypeData);
-				entity.teleport(location);
+			if (queue.getEntityType().isSpawnable()) {
+				Entity entity = world.spawnEntity(destination, queue.getEntityType());
+				EntityUtil.setEntityTypeData(entity, queue.getEntityTypeData());
+				entity.teleport(destination);
 			}
 			
 			// Remove from queue
@@ -282,26 +250,12 @@ public class TeleportUtil {
 				player.setFireTicks(0); // Cancel lava fire
 				
 				// Send AGBungeeVehicleTele packet first
-				try {
-					// Build the message, format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>#@#<fromServerName>#@#<message>
-					String msg = player.getName() + "#@#" + String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location) + "#@#" + Conf.bungeeServerName + "#@#" + tpMsg;
-					// Build the message data, sent over the AGBungeeVehicleTele BungeeCord channel
-					ByteArrayOutputStream b = new ByteArrayOutputStream();
-					DataOutputStream out = new DataOutputStream(b);
-					out.writeUTF("Forward");
-					out.writeUTF(location.get(SERVER));		// Server
-					out.writeUTF("AGBungeeVehicleTele");	// Channel
-					out.writeShort(msg.length()); 			// Data Length
-					out.writeBytes(msg); 					// Data
-					player.sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
-				} catch (IOException ex) {
-					Plugin.log.severe("Error sending BungeeCord vehicle teleport packet");
-					ex.printStackTrace();
-					return;
-				}
+				PluginMessage msg = new PluginMessage(player, vehicle.getType(), velocity, location, Plugin.bungeeServerName, tpMsg);
+				// Sent over the AGBungeeVehicleTele BungeeCord channel
+				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 				
-				// Ensure vanilla quit message is blocked
-				Plugin.bungeeCordBlockQuitQueue.put(player.getName(), location.get(SERVER));
+				// Replace quit message is with BungeeCord teleport message
+				Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
 				
 				// Connect player to new server
 				try {
@@ -326,61 +280,47 @@ public class TeleportUtil {
 				// Send vehicle spawn command packet via BungeeCord
 				if (!Conf.useSocketComms || Plugin.serv == null) {
 					// Send AGBungeeVehicleSpawn packet
-					try {
-						// Build the message, format is <vehicleTypeId>#@#<velocity>#@#<destination>[#@#<entityTypeId>#@#<entityTypeData>]
-						String msg = String.valueOf(vehicle.getType().getTypeId()) + "#@#" + String.valueOf(velocity) + "#@#" + locationToString(location);
-						// Append passenger info
+					PluginMessage msg = new PluginMessage(vehicle.getType(), velocity, location);
+						
+					// Append passenger info
+					if (passenger != null) {
+						if (passenger.getType().isSpawnable()) {
+							msg.addEntity(passenger);
+						}
+					// Append vehicle contents
+					} else if (vehicle instanceof StorageMinecart && teleportEntities) {
+						msg.addItemStack(((StorageMinecart)vehicle).getInventory().getContents());	
+					} else if (vehicle instanceof HopperMinecart && teleportEntities) {
+						msg.addItemStack(((HopperMinecart)vehicle).getInventory().getContents());	
+					}	
+						
+					// Build the message data, sent over the AGBungeeTele BungeeCord channel
+					if (Plugin.instance.getServer().getOnlinePlayers().length > 0) {
+						// Use any player to send the plugin message
+						Plugin.instance.getServer().getOnlinePlayers()[0].sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
+						// Imitate teleport by removing entity and vehicle
+						vehicle.eject();
+						vehicle.remove();
 						if (passenger != null) {
-							if (passenger.getType().isSpawnable()) {
-								msg = msg + "#@#" + String.valueOf(passenger.getType().getTypeId()) + "#@#" + EntityUtil.getEntityTypeData(passenger);
-							}
-						// Append vehicle contents
-						} else if (vehicle instanceof StorageMinecart && teleportEntities) {
-							msg = msg + "#@#" + ItemStackUtil.itemStackToString(((StorageMinecart)vehicle).getInventory().getContents());	
-						} else if (vehicle instanceof HopperMinecart && teleportEntities) {
-							msg = msg + "#@#" + ItemStackUtil.itemStackToString(((HopperMinecart)vehicle).getInventory().getContents());	
+							passenger.remove();
 						}
-						// Build the message data, sent over the AGBungeeTele BungeeCord channel
-						ByteArrayOutputStream b = new ByteArrayOutputStream();
-						DataOutputStream out = new DataOutputStream(b);
-						out.writeUTF("Forward");
-						out.writeUTF(location.get(SERVER));		// Server
-						out.writeUTF("AGBungeeVehicleSpawn");	// Channel
-						out.writeShort(msg.length()); 			// Data Length
-						out.writeBytes(msg); 					// Data
-						if (Plugin.instance.getServer().getOnlinePlayers().length > 0) {
-							// Use any player to send the plugin message
-							Plugin.instance.getServer().getOnlinePlayers()[0].sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
-							// Imitate teleport by removing entity and vehicle
-							vehicle.eject();
-							vehicle.remove();
-							if (passenger != null) {
-								passenger.remove();
-							}
-						}
-					} catch (IOException ex) {
-						Plugin.log.severe("Error sending BungeeCord vehicle spawn packet");
-						ex.printStackTrace();
-						return;
 					}
 				// Send vehicle spawn command packet via client socket
 				} else {
 					// Get server
-					Server server = Server.get(location.get(SERVER));
-					// Build the packet, format is <vehicleId>,<vehicleWorld>,<vehicleTypeId>,<velocity>,<location>[,<entityId>,<entityTypeId>,<entityTypeData>]
-					Packet packet = new Packet();
-					packet.command = "spawnvehicle";
-					packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location)};
+					Server server = Server.get(location.get(SERVER));					
+					// Construct spawn vehicle packet
+					Packet packet = new Packet(vehicle, velocity, location);
 					// Append passenger info
 					if (passenger != null) {
 						if (passenger.getType().isSpawnable()) {
-							packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), String.valueOf(passenger.getEntityId()), String.valueOf(passenger.getType().getTypeId()), EntityUtil.getEntityTypeData(passenger)};
+							packet.addPassenger(passenger);
 						}
 					// Append vehicle contents
 					} else if (vehicle instanceof StorageMinecart && teleportEntities) {
-						packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), ItemStackUtil.itemStackToString(((StorageMinecart)vehicle).getInventory().getContents())};
+						packet.addItemStack(((StorageMinecart)vehicle).getInventory().getContents());
 					} else if (vehicle instanceof HopperMinecart && teleportEntities) {
-						packet.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), locationToString(location), ItemStackUtil.itemStackToString(((HopperMinecart)vehicle).getInventory().getContents())};
+						packet.addItemStack(((HopperMinecart)vehicle).getInventory().getContents());
 					}
 					// Setup socket client and listener
 					SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
@@ -452,47 +392,39 @@ public class TeleportUtil {
 	
 	// BungeeCord vehicle spawn in
 	public static void teleportVehicle() {
-    	List<String> vehicleQueue = Plugin.bungeeCordPassEntInQueue;
-    	Iterator<String> it = vehicleQueue.iterator();
+    	List<BungeeQueue> vehicleQueue = Plugin.bungeeCordVehicleInQueue;
+    	Iterator<BungeeQueue> it = vehicleQueue.iterator();
         
         while (it.hasNext()) {
-            String vehicleData = it.next();
-			// Data should be entityTypeId, entityTypeData and destination location
-    		String[] parts = vehicleData.split("#@#");
-			int vehicleTypeId = Integer.parseInt(parts[0]);
-			double velocity = Double.parseDouble(parts[1]);
-			String destination = parts[2];
+        	BungeeQueue queue = it.next();
 
 			// Spawn incoming BungeeCord vehicle
-			Location location = TeleportUtil.stringToLocation(destination);
-			World world = TeleportUtil.stringToWorld(destination);
-			checkChunkLoad(location.getBlock());
+			Location destination = queue.getDestination();
+			World world = destination.getWorld();
+			checkChunkLoad(destination.getBlock());
 			
 			Entity entity = null;
 			String entityItemStack = null;
 			
 			// Parse passenger info
-			if (parts.length > 4) {
-				int entityTypeId = Integer.parseInt(parts[3]);
-				String entityTypeData = parts[4];
-				
-				if (EntityType.fromId(entityTypeId).isSpawnable()) {
-					entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
-					EntityUtil.setEntityTypeData(entity, entityTypeData);
-					entity.teleport(location);
+			if (queue.getQueueType() == BungeeQueueType.PASSENGER) {				
+				if (queue.getEntityType().isSpawnable()) {
+					entity = world.spawnEntity(destination, queue.getEntityType());
+					EntityUtil.setEntityTypeData(entity, queue.getEntityTypeData());
+					entity.teleport(destination);
 				}
 			// Parse vehicle contents
-			} else if  (parts.length > 3) {
-				entityItemStack = parts[3];
+			} else if (queue.getItemStack() != null) {
+				entityItemStack = queue.getItemStack();
 			}
 			final Entity passenger = entity;
 			
 			// Create new velocity
-			final Vector newVelocity = location.getDirection();
-			newVelocity.multiply(velocity);
+			final Vector newVelocity = destination.getDirection();
+			newVelocity.multiply(queue.getVelocity());
 
 			if (passenger != null) {
-				final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+				final Vehicle v = (Vehicle)world.spawnEntity(destination, queue.getVehicleType());
 				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 					public void run() {
 						v.setPassenger(passenger);
@@ -500,7 +432,7 @@ public class TeleportUtil {
 					}
 				}, 2);
 			} else {
-				Vehicle mc = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+				Vehicle mc = (Vehicle)world.spawnEntity(destination, queue.getVehicleType());
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
 					StorageMinecart smc = (StorageMinecart)mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));

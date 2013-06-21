@@ -1,4 +1,4 @@
-package org.mcteam.ancientgates.types;
+package org.mcteam.ancientgates.util.types;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;

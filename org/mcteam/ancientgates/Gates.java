@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
-import org.mcteam.ancientgates.types.FloodOrientation;
-import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.BlockUtil;
+import org.mcteam.ancientgates.util.types.FloodOrientation;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class Gates {
 

@@ -17,9 +17,9 @@ import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginMovementListener implements Listener {
 	

@@ -18,11 +18,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.com.google.gson.reflect.TypeToken;
-import org.mcteam.ancientgates.types.FloodOrientation;
-import org.mcteam.ancientgates.types.WorldCoord;
 import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.DiscUtil;
 import org.mcteam.ancientgates.util.FloodUtil;
+import org.mcteam.ancientgates.util.types.FloodOrientation;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class Gate {
 	
@@ -117,7 +117,7 @@ public class Gate {
 	}
 	
 	public void setMessage(String msg) {
-		this.msg = msg;
+		this.msg = (msg.isEmpty()) ? null : msg;
 	}
 	
 	public String getMessage() {

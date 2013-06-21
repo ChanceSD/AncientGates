@@ -5,7 +5,7 @@ import java.util.Set;
 import org.bukkit.Location;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
-import org.mcteam.ancientgates.types.WorldCoord;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class GateUtil {
 	

@@ -11,12 +11,17 @@ import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.types.WorldCoord;
+import org.mcteam.ancientgates.queue.BungeeQueue;
+import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.PluginMessage;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginPlayerListener implements Listener {
 	
@@ -34,44 +39,42 @@ public class PluginPlayerListener implements Listener {
 			return;
 		}
 
-		String playerName = event.getPlayer().getName();
+		final Player player = event.getPlayer();
+		String playerName = player.getName();
 
 		// Ok so a player joins the server
-		// If it's a BungeeCord teleport, display a custom join message
-		String msg = Plugin.bungeeCordBlockJoinQueue.remove(playerName.toLowerCase());
-		if (msg != null) {
-			// Extract message parts
-			String[] parts = msg.split("#@#");
-			String server = parts[0];
-			String message = parts[1];
-			
+		// Find if they're in the BungeeCord in-bound teleport queue
+		BungeeQueue queue = Plugin.bungeeCordInQueue.remove(playerName.toLowerCase());
+		if (queue != null) {
+			// Display custom join message
+			String server = queue.getServer();
 			event.setJoinMessage(playerName + " came from " + server + " server");
 			
-			if (message != "null") event.getPlayer().sendMessage(message);
-		}
+			// Display teleport message
+			String message = queue.getMessage();
+			if (!message.equals("null")) player.sendMessage(message);
 			
-		// Find if they're in the BungeeCord in-bound player teleport queue
-		String destination = Plugin.bungeeCordPlayerInQueue.remove(playerName.toLowerCase());
-		if (destination != null) {
 			// Teleport incoming BungeeCord player
-			Location location = TeleportUtil.stringToLocation(destination);
-			TeleportUtil.teleportPlayer(event.getPlayer(), location);
-			return;
+			BungeeQueueType queueType = queue.getQueueType();
+			if (queueType == BungeeQueueType.PLAYER) {
+				TeleportUtil.teleportPlayer(player, queue.getDestination());
+				return;
+			// Teleport incoming BungeeCord passenger
+			} else if (queueType == BungeeQueueType.PASSENGER) {
+				TeleportUtil.teleportVehicle(player, queue.getVehicleTypeId(), queue.getVelocity(), queue.getDestination());
+				return;
+			}	
 		}
 		
-		// Find if they're in the BungeeCord in-bound passenger teleport queue
-		msg = Plugin.bungeeCordPassengerInQueue.remove(playerName.toLowerCase());
-		if (msg != null) {
-			// Extract message parts
-			String[] parts = msg.split("#@#");
-			int vehicleTypeId = Integer.parseInt(parts[0]);
-			double velocity = Double.parseDouble(parts[1]);
-			String dest = parts[2];
-			
-			// Teleport incoming BungeeCord passenger
-			Location location = TeleportUtil.stringToLocation(dest);
-			TeleportUtil.teleportVehicle(event.getPlayer(), vehicleTypeId, velocity, location);
-			return;
+		// Ensure bungeeServerName is set
+		if (Plugin.bungeeServerName == null) {
+			// Construct BungeeCord "GetServer" command
+			final PluginMessage msg = new PluginMessage("GetServer");
+
+	        new BukkitRunnable() {	 
+	            @Override
+	            public void run() { player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray()); }
+	        }.runTaskLater(plugin, 40L); // requires 2s delay after join
 		}
 
 	}
@@ -86,7 +89,7 @@ public class PluginPlayerListener implements Listener {
 
 		// Ok so a player quits the server
 		// If it's a BungeeCord teleport, display a custom quit message
-		String server = Plugin.bungeeCordBlockQuitQueue.remove(playerName.toLowerCase());
+		String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
 		if (server != null) {
 			event.setQuitMessage(playerName + " went to " + server + " server");
 		}

@@ -1,4 +1,4 @@
-package org.mcteam.ancientgates.sockets.packets;
+package org.mcteam.ancientgates.sockets.types;
 
 public class Packets
 {
@@ -7,8 +7,8 @@ public class Packets
 	public Packets() {
 	}
 	
-	public Packets(Packet[] _packets) {
-		this.packets = _packets;
+	public Packets(Packet[] packets) {
+		this.packets = packets;
 	}
 	
 	public Packets(Packet packet) {

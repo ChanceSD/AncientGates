@@ -12,8 +12,9 @@ import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.sockets.events.*;
-import org.mcteam.ancientgates.sockets.packets.Packet;
-import org.mcteam.ancientgates.sockets.packets.Packets;
+import org.mcteam.ancientgates.sockets.types.ConnectionState;
+import org.mcteam.ancientgates.sockets.types.Packet;
+import org.mcteam.ancientgates.sockets.types.Packets;
 import org.mcteam.ancientgates.util.TextUtil;
 
 public class SocketServer implements Runnable {

@@ -22,9 +22,9 @@ public class ClientConnectionThread implements Runnable {
 	private Thread thread;
 	private boolean isRunning;
 	
-	public ClientConnectionThread(int id, SocketServer _server, Socket _socket) {
-		this.server = _server;
-		this.clientSocket = _socket;
+	public ClientConnectionThread(int id, SocketServer server, Socket socket) {
+		this.server = server;
+		this.clientSocket = socket;
 		this.ID = id;
 		this.start();
 	}

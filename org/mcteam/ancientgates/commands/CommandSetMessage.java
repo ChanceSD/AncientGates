@@ -9,9 +9,9 @@ public class CommandSetMessage extends BaseCommand {
 		aliases.add("setmsg");
 		
 		requiredParameters.add("id");
-		requiredParameters.add("msg");
-		
 		requiredPermission = "ancientgates.setmessage";
+		
+		optionalParameters.add("msg");
 		
 		senderMustBePlayer = false;
 		
@@ -19,10 +19,19 @@ public class CommandSetMessage extends BaseCommand {
 	}
 	
 	public void perform() {	
-		String msg = parameters.get(1);
+		String msg = "";
+		parameters.remove(0);
+		for(String parameter : parameters) {
+			msg += " " + parameter;
+		}
             
-		gate.setMessage(msg);
-		sendMessage("Teleport msg for gate \""+gate.getId()+"\" is \""+msg+"\".");
+		gate.setMessage(msg.trim());
+		
+		if (!msg.trim().isEmpty()) {
+			sendMessage("Teleport msg for gate \""+gate.getId()+"\" is \""+msg.trim()+"\".");
+		} else {
+			sendMessage("Teleport msg for gate \""+gate.getId()+"\" removed.");
+		}
 		
 		Gate.save();
 	}

@@ -4,10 +4,11 @@ import org.bukkit.entity.EntityType;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.events.ClientConnectionEvent;
 import org.mcteam.ancientgates.sockets.events.ClientRecieveEvent;
 import org.mcteam.ancientgates.sockets.events.SocketServerEventListener;
-import org.mcteam.ancientgates.sockets.packets.Packet;
+import org.mcteam.ancientgates.sockets.types.Packet;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
 public class PluginSocketListener implements SocketServerEventListener {
@@ -29,6 +30,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			String server = parts[1];
 			String gateid = parts[2];
 			String location = parts[3];
+			String fromserver = parts[4];
 						
 			// Message response
 			String response;
@@ -38,14 +40,14 @@ public class PluginSocketListener implements SocketServerEventListener {
 				response = "You lack the permissions to Set \"to\" to your location.";
 			// Check gate exists
 			} else if (!Gate.exists(gateid)) {
-				response = "There exists no gate with id \""+gateid+"\" on server \""+Conf.bungeeServerName+"\"";
+				response = "There exists no gate with id \""+gateid+"\" on server \""+fromserver+"\"";
 							
 			// Set gate location
 			} else {
 				Gate gate = Gate.get(gateid);
 				gate.setTo(null);
 				gate.setBungeeTo(server, location);
-				response = "To location for gate \""+gateid+"\" on server \""+Conf.bungeeServerName+"\" is now where you stand.";
+				response = "To location for gate \""+gateid+"\" on server \""+fromserver+"\" is now where you stand.";
 				Gate.save();
 			}
 
@@ -72,7 +74,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 			if (EntityType.fromId(entityTypeId).isSpawnable()) {
 				// Add entity to spawn queue
-				Plugin.bungeeCordEntityInQueue.add(String.valueOf(entityTypeId)+"#@#"+entityTypeData+"#@#"+destination);
+				Plugin.bungeeCordEntityInQueue.add(new BungeeQueue(entityTypeId, entityTypeData, destination));
 				
 				// Schedule synchronous task to process spawn queue
 				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
@@ -95,38 +97,41 @@ public class PluginSocketListener implements SocketServerEventListener {
 			double velocity = Double.parseDouble(parts[3]);
 			String destination = parts[4];
 			
-			// Build spawn queue msg
-			String msg = String.valueOf(vehicleTypeId)+"#@#"+String.valueOf(velocity)+"#@#"+destination;
+			// Initialise spawn queue
+			BungeeQueue queue;
 			
 			// Parse passenger info
 			String[] args = null;
-			if(parts.length > 6) {
+			if(parts[6] != null) {
 				String entityId = parts[5];
 				int entityTypeId = Integer.parseInt(parts[6]);
 				String entityTypeData = parts[7];
 				
-				// Append passenger info to queue msg
-				msg = msg + "#@#"+String.valueOf(entityTypeId)+"#@#"+entityTypeData;
+				// Build spawn queue (incl. passenger info)
+				queue = new BungeeQueue(vehicleTypeId, velocity, destination, entityTypeId, entityTypeData);
 				
 				// Build the packet, format is <message>
 				args = new String[] {vehicleWorld, vehicleId, entityId};
 			// Parse contents info	
-			} else if(parts.length > 5) {
+			} else if(parts[5] != null) {
 				String entityItemStack = parts[5];
-					
-				// Append contents info to queue msg
-				msg = msg + "#@#"+entityItemStack;
+				
+				// Build spawn queue (incl. contents info)
+				queue = new BungeeQueue(vehicleTypeId, velocity, destination, entityItemStack);
 					
 				// Build the packet, format is <message>
 				args = new String[] {vehicleWorld, vehicleId};
 			} else {
+				// Build spawn queue
+				queue = new BungeeQueue(vehicleTypeId, velocity, destination);
+				
 				// Build the packet, format is <message>
 				args = new String[] {vehicleWorld, vehicleId};
 			}
 			Packet packet = new Packet("removevehicle", "spawnvehicle", args);
 
 			// Add entity to spawn queue
-			Plugin.bungeeCordPassEntInQueue.add(msg);
+			Plugin.bungeeCordVehicleInQueue.add(queue);
 				
 			// Schedule synchronous task to process spawn queue
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
