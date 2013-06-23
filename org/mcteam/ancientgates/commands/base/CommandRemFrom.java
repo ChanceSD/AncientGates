@@ -1,8 +1,9 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.base;
 
 import org.bukkit.Location;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 

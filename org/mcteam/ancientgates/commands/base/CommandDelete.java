@@ -1,7 +1,8 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.base;
 
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.commands.BaseCommand;
 
 public class CommandDelete extends BaseCommand {
 	public CommandDelete() {

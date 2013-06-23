@@ -11,7 +11,6 @@ import org.bukkit.event.entity.EntityPortalEnterEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
@@ -19,8 +18,8 @@ import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
+import org.mcteam.ancientgates.tasks.BungeeServerName;
 import org.mcteam.ancientgates.util.TeleportUtil;
-import org.mcteam.ancientgates.util.types.PluginMessage;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginPlayerListener implements Listener {
@@ -66,16 +65,8 @@ public class PluginPlayerListener implements Listener {
 			}	
 		}
 		
-		// Ensure bungeeServerName is set
-		if (Plugin.bungeeServerName == null) {
-			// Construct BungeeCord "GetServer" command
-			final PluginMessage msg = new PluginMessage("GetServer");
-
-	        new BukkitRunnable() {	 
-	            @Override
-	            public void run() { player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray()); }
-	        }.runTaskLater(plugin, 40L); // requires 2s delay after join
-		}
+		// Schedule task to check bungeeServerName is set
+		if (Plugin.bungeeServerName == null) new BungeeServerName(plugin).runTaskLater(plugin, 20L);
 
 	}
 	

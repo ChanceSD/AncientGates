@@ -1,4 +1,4 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.TextUtil;
 
 public class CommandList extends BaseCommand {

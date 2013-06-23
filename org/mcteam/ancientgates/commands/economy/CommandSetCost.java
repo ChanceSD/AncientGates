@@ -1,6 +1,7 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.economy;
 
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.commands.BaseCommand;
 
 public class CommandSetCost extends BaseCommand {
 	

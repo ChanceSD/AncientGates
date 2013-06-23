@@ -1,8 +1,9 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.base;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.BlockUtil;
 
 public class CommandOpen extends BaseCommand {

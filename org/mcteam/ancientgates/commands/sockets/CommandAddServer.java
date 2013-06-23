@@ -1,6 +1,7 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.sockets;
 
 import org.mcteam.ancientgates.Server;
+import org.mcteam.ancientgates.commands.BaseCommand;
 
 public class CommandAddServer extends BaseCommand {
 	

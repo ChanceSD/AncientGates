@@ -97,6 +97,12 @@ public class PluginMessage {
 		this.command = command;
 	}
 	
+	// BungeeCord command message (with parameters)
+	public PluginMessage(String command, String... parameters) {
+		this.command = command;
+		this.parameters = parameters;
+	}
+	
 	//----------------------------------------------//
 	// Setters
 	//----------------------------------------------//
@@ -139,7 +145,7 @@ public class PluginMessage {
 			} else if (this.channel == BungeeChannel.AGBungeeCom) {
 				// Format is <command>#@#<player>#@#<server>#@#<parameters>
 				msg = this.command + "#@#" + this.playerName + "#@#" + this.fromServer;
-				for (String parameter : parameters) {
+				for (String parameter : this.parameters) {
 					msg += "#@#" + parameter;
 				}
 			}
@@ -166,6 +172,9 @@ public class PluginMessage {
 			DataOutputStream out = new DataOutputStream(b);
 			try {
 				out.writeUTF(this.command);
+				if (this.parameters != null) {
+					for (String parameter : this.parameters) out.writeUTF(parameter);
+				}
 				return b.toByteArray();
 			} catch (IOException ex) {
 				Plugin.log.severe("Error sending BungeeCord " + this.command + " packet");

@@ -1,8 +1,13 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.base;
 
 import java.util.ArrayList;
 
 import org.mcteam.ancientgates.Conf;
+import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.commands.economy.CommandSetCost;
+import org.mcteam.ancientgates.commands.sockets.CommandAddServer;
+import org.mcteam.ancientgates.commands.sockets.CommandRemServer;
+import org.mcteam.ancientgates.commands.sockets.CommandServerList;
 //import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.util.TextUtil;
 
@@ -49,27 +54,28 @@ public class CommandHelp extends BaseCommand {
 		ArrayList<String> pageLines;
 
 		pageLines = new ArrayList<String>();
-		pageLines.add( new CommandHelp().getUseageTemplate(true, true) );
 		pageLines.add( new CommandCreate().getUseageTemplate(true, true) );
-		pageLines.add( new CommandDelete().getUseageTemplate(true, true) );
 		pageLines.add( new CommandSetFrom().getUseageTemplate(true, true) );
 		pageLines.add( new CommandSetTo().getUseageTemplate(true, true) );
+		if (!Conf.useVanillaPortals) pageLines.add( new CommandSetMaterial().getUseageTemplate(true, true) );
 		pageLines.add( new CommandOpen().getUseageTemplate(true, true) );
 		pageLines.add( new CommandClose().getUseageTemplate(true, true) );
+		pageLines.add( new CommandDelete().getUseageTemplate(true, true) );
 		pageLines.add( new CommandRename().getUseageTemplate(true, true) );
+		helpPages.add(pageLines);
+		
+		pageLines = new ArrayList<String>();
 		pageLines.add( new CommandSetMessage().getUseageTemplate(true, true) );
-		if (Conf.useEconomy) {
-			pageLines.add( new CommandSetCost().getUseageTemplate(true, true) );
-		}
 		pageLines.add( new CommandSetEntities().getUseageTemplate(true, true) );
-		if (!Conf.useVanillaPortals) {
-			pageLines.add( new CommandSetVehicles().getUseageTemplate(true, true) );
-			pageLines.add( new CommandSetMaterial().getUseageTemplate(true, true) );
-		}
+		if (!Conf.useVanillaPortals) pageLines.add( new CommandSetVehicles().getUseageTemplate(true, true) );
+		if (Conf.useEconomy) pageLines.add( new CommandSetCost().getUseageTemplate(true, true) );
 		pageLines.add( new CommandAddFrom().getUseageTemplate(true, true) );
 		pageLines.add( new CommandRemFrom().getUseageTemplate(true, true) );
 		pageLines.add( new CommandInfo().getUseageTemplate(true, true) );
 		pageLines.add( new CommandList().getUseageTemplate(true, true) );
+		helpPages.add(pageLines);
+		
+		pageLines = new ArrayList<String>();
 		if (Conf.useSocketComms) {
 			pageLines.add( new CommandAddServer().getUseageTemplate(true, true) );
 			pageLines.add( new CommandRemServer().getUseageTemplate(true, true) );

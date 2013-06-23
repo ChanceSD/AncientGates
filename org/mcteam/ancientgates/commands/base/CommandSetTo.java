@@ -1,9 +1,10 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.base;
 
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Server;
+import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.sockets.SocketClient;
 import org.mcteam.ancientgates.sockets.events.SocketClientEventListener;
 import org.mcteam.ancientgates.sockets.types.Packet;

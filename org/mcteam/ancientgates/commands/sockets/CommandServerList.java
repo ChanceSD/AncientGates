@@ -1,10 +1,11 @@
-package org.mcteam.ancientgates.commands;
+package org.mcteam.ancientgates.commands.sockets;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Server;
+import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.TextUtil;
 
 public class CommandServerList extends BaseCommand {

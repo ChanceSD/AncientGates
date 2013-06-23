@@ -1,8 +1,5 @@
 package org.mcteam.ancientgates.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -23,6 +20,7 @@ import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.util.Vector;
+
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Server;
@@ -77,20 +75,8 @@ public class TeleportUtil {
 			Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
 			
 			// Connect player to new server
-			try {
-				ByteArrayOutputStream b = new ByteArrayOutputStream();
-				DataOutputStream out = new DataOutputStream(b);
-				out.writeUTF("Connect");
-				out.writeUTF(location.get(SERVER));
-				
-				player.sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
-				b.reset();
-			} catch (IOException ex) {
-				Plugin.log.severe("Error sending BungeeCord connect packet");
-				ex.printStackTrace();
-				return;
-			}
-
+			msg = new PluginMessage("Connect", location.get(SERVER));
+			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 		}
 	}
 	
@@ -258,19 +244,8 @@ public class TeleportUtil {
 				Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
 				
 				// Connect player to new server
-				try {
-					ByteArrayOutputStream b = new ByteArrayOutputStream();
-					DataOutputStream out = new DataOutputStream(b);
-					out.writeUTF("Connect");
-					out.writeUTF(location.get(SERVER));
-					
-					player.sendPluginMessage(Plugin.instance, "BungeeCord", b.toByteArray());
-					b.reset();
-				} catch (IOException ex) {
-					Plugin.log.severe("Error sending BungeeCord connect packet");
-					ex.printStackTrace();
-					return;
-				}
+				msg = new PluginMessage("Connect", location.get(SERVER));
+				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 
 			// Entity vehicle teleport
 			} else {
