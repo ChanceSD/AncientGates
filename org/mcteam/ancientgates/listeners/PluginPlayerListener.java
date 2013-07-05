@@ -46,8 +46,12 @@ public class PluginPlayerListener implements Listener {
 		BungeeQueue queue = Plugin.bungeeCordInQueue.remove(playerName.toLowerCase());
 		if (queue != null) {
 			// Display custom join message
-			String server = queue.getServer();
-			event.setJoinMessage(playerName + " came from " + server + " server");
+			String msg = null;
+			if (Conf.customBungeeMessages) {
+				String server = queue.getServer();
+				msg = playerName + " came from " + server + " server";
+			}
+			event.setJoinMessage(msg);
 			
 			// Display teleport message
 			String message = queue.getMessage();
@@ -82,7 +86,9 @@ public class PluginPlayerListener implements Listener {
 		// If it's a BungeeCord teleport, display a custom quit message
 		String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
 		if (server != null) {
-			event.setQuitMessage(playerName + " went to " + server + " server");
+			String msg = null;
+			if (Conf.customBungeeMessages) msg = playerName + " went to " + server + " server";
+			event.setQuitMessage(msg);
 		}
 		
 	}

@@ -67,11 +67,7 @@ public class MetricsStarter {
 			accessGraph.addPlotter(new Metrics.Plotter("Players") {
 				@Override
 				public int getValue() {
-					int i = 0;
-					for (Gate gate: Gate.getAll()) {
-						if (!gate.getTeleportEntities()) i++;
-					}
-					return i;
+					return Gate.getAll().size();
 				}
 			});
 			accessGraph.addPlotter(new Metrics.Plotter("Entities") {

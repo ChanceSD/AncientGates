@@ -26,6 +26,17 @@ public class TextUtil {
 		return new ArrayList<String>(Arrays.asList(str.trim().split("\\s+")));
 	}
 	
+	public static String implode(List<String> list1, List<String> list2, List<String> list3, String glue) {
+	    String ret = "";
+	    for (int i=0; i<list1.size(); i++) {
+	        if (i!=0) {
+	        	ret += glue;
+	        }
+	        ret += list1.get(i)+" ("+list2.get(i)+" - "+list3.get(i)+")";
+	    }
+	    return ret;
+	}
+	
 	public static String implode(List<String> list1, List<String> list2, String glue) {
 	    String ret = "";
 	    for (int i=0; i<list1.size(); i++) {

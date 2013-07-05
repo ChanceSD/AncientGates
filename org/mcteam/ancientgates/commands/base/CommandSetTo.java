@@ -61,6 +61,12 @@ public class CommandSetTo extends BaseCommand {
 					return;
 				}
 				
+				// Check bungeeServerName found
+				if (Plugin.bungeeServerName == null) {
+					sendMessage("Still connecting to BungeeCord. Try again.");
+					return;
+				}
+				
 				// Get server
 				Server server = Server.get(serverName);
 				

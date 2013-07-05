@@ -33,6 +33,7 @@ public class Conf {
 	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
+	public static boolean customBungeeMessages = true;
 	
 	// Socket comms settings
 	public static boolean useSocketComms = false;

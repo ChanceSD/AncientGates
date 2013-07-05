@@ -52,8 +52,13 @@ public class TeleportUtil {
 	// BungeeCord player teleport out
 	public static void teleportPlayer(Player player, Map<String, String> location, Boolean fullHeight, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
-			tpMsg = (tpMsg == null) ? "null" : tpMsg; 
-		
+			// Check bungeeServerName found
+			if (Plugin.bungeeServerName == null) {
+				Plugin.log("Error not yet connected to BungeeCord proxy.");
+				player.sendMessage("Error connecting to server. Try again.");
+				return;
+			}
+
 			// Imitate teleport by spinning player 180 deg
 			if (fullHeight) {
 				Location position = player.getLocation();
@@ -67,6 +72,7 @@ public class TeleportUtil {
 			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
+			tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 			PluginMessage msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpMsg);
 			// Send message over the AGBungeeTele BungeeCord channel
 			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
@@ -217,7 +223,13 @@ public class TeleportUtil {
 			// Player vehicle teleport
 			if (passenger instanceof Player) {
 				Player player = (Player)passenger;
-				tpMsg = (tpMsg == null) ? "null" : tpMsg; 
+				
+				// Check bungeeServerName found
+				if (Plugin.bungeeServerName == null) {
+					Plugin.log("Error not yet connected to BungeeCord proxy.");
+					player.sendMessage("Error connecting to server. Try again.");
+					return;
+				}
 
 				// Imitate teleport by stopping and ejecting
 				vehicle.setVelocity(new Vector());
@@ -236,6 +248,7 @@ public class TeleportUtil {
 				player.setFireTicks(0); // Cancel lava fire
 				
 				// Send AGBungeeVehicleTele packet first
+				tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 				PluginMessage msg = new PluginMessage(player, vehicle.getType(), velocity, location, Plugin.bungeeServerName, tpMsg);
 				// Sent over the AGBungeeVehicleTele BungeeCord channel
 				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());

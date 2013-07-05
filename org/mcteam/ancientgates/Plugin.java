@@ -29,12 +29,14 @@ import org.mcteam.ancientgates.gson.typeadapters.LocationTypeAdapter;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.base.CommandAddFrom;
 import org.mcteam.ancientgates.commands.base.CommandClose;
+import org.mcteam.ancientgates.commands.base.CommandCloseAll;
 import org.mcteam.ancientgates.commands.base.CommandCreate;
 import org.mcteam.ancientgates.commands.base.CommandDelete;
 import org.mcteam.ancientgates.commands.base.CommandHelp;
 import org.mcteam.ancientgates.commands.base.CommandInfo;
 import org.mcteam.ancientgates.commands.base.CommandList;
 import org.mcteam.ancientgates.commands.base.CommandOpen;
+import org.mcteam.ancientgates.commands.base.CommandOpenAll;
 import org.mcteam.ancientgates.commands.base.CommandRemFrom;
 import org.mcteam.ancientgates.commands.base.CommandRename;
 import org.mcteam.ancientgates.commands.base.CommandSetEntities;
@@ -151,6 +153,8 @@ public class Plugin extends JavaPlugin {
 		commands.add(new CommandRemFrom());
 		commands.add(new CommandInfo());
 		commands.add(new CommandList());
+		commands.add(new CommandOpenAll());
+		commands.add(new CommandCloseAll());
 		if (Conf.useSocketComms) {
 			commands.add(new CommandAddServer());
 			commands.add(new CommandRemServer());

@@ -16,6 +16,7 @@ permissions:
       ancientgates.addfrom: true
       ancientgates.addserver: true
       ancientgates.close: true
+      ancientgates.closeall: true
       ancientgates.create: true
       ancientgates.delete: true
       ancientgates.help: true
@@ -23,6 +24,7 @@ permissions:
       ancientgates.list: true
       ancientgates.listserver: true
       ancientgates.open: true
+      ancientgates.openall: true
       ancientgates.remfrom: true
       ancientgates.remserver: true
       ancientgates.rename: true
@@ -37,6 +39,9 @@ permissions:
       ancientgates.econbypass: true
   ancientgates.close:
     description: Allows the use of Ancient Gates close command.
+    default: op
+  ancientgates.closeall:
+    description: Allows the use of Ancient Gates closeall command.
     default: op
   ancientgates.create:
     description: Allows the use of Ancient Gates create command.
@@ -55,6 +60,9 @@ permissions:
     default: op
   ancientgates.open:
     description: Allows the use of Ancient Gates open command.
+    default: op
+  ancientgates.openall:
+    description: Allows the use of Ancient Gates openall command.
     default: op
   ancientgates.rename:
     description: Allows the use of Ancient Gates rename command.

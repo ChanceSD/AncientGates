@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
+import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.TextUtil;
@@ -25,10 +26,12 @@ public class CommandList extends BaseCommand {
 	
 	public void perform() {
 		List<String> ids = new ArrayList<String>();
+		List<String> states = new ArrayList<String>();
 		List<String> costs = new ArrayList<String>();
 		
 		for (Gate gate : Gate.getAll()) {
 			ids.add(Conf.colorAlly + gate.getId());
+			states.add(Conf.colorAlly + (Gates.isOpen(gate) ? "open" : "closed"));
 			if (Plugin.econ != null) {
 				costs.add(Conf.colorAlly + String.valueOf(gate.getCost()));
 			}
@@ -41,9 +44,9 @@ public class CommandList extends BaseCommand {
 		
 		sendMessage("There are currently "+ids.size()+" gates on this server: ");
 		if (Plugin.econ != null) {
-			sendMessage(TextUtil.implode(ids, costs, Conf.colorSystem+", "));
+			sendMessage(TextUtil.implode(ids, states, costs, Conf.colorSystem+", "));
 		} else {
-			sendMessage(TextUtil.implode(ids, Conf.colorSystem+", "));	
+			sendMessage(TextUtil.implode(ids, states, Conf.colorSystem+", "));	
 		}
 	}
 	
