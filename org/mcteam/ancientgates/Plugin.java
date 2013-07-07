@@ -252,7 +252,7 @@ public class Plugin extends JavaPlugin {
 		
 		Player player = (Player) sender;
 		
-		if (econ == null || !Conf.useEconomy || hasPermManage(sender, "ancientgates.econbypass")) {
+		if (econ == null || !Conf.useEconomy || hasPermManage(sender, "ancientgates.econbypass") || requiredCost == 0.00) {
 			return true;
 		} else {
 			Double balance = econ.getBalance(player.getName());
