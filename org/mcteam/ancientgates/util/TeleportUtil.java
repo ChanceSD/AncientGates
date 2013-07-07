@@ -14,6 +14,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -45,8 +46,18 @@ public class TeleportUtil {
 	// Normal player teleport & BungeeCord player teleport in
 	public static void teleportPlayer(Player player, Location location) {
 		checkChunkLoad(location.getBlock());
+		
+		// Handle player riding an entity
+		final Entity e = player.getVehicle();
+		if (player.isInsideVehicle() && e instanceof LivingEntity) {
+			e.eject();
+			e.teleport(location);
+			e.setFireTicks(0); // Cancel lava fire
+		}
+			
 		player.teleport(location);
 		player.setFireTicks(0); // Cancel lava fire
+		if (e != null) e.setPassenger(player);
 	}
 	
 	// BungeeCord player teleport out
