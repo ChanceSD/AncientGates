@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
+import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.DiscUtil;
 
 public class Conf {
@@ -33,6 +34,7 @@ public class Conf {
 	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
+	public static String bungeeTeleportDefault = "LOCATION";
 	public static boolean customBungeeMessages = true;
 	
 	// Socket comms settings
@@ -89,6 +91,16 @@ public class Conf {
 		if (gateMaxArea > 500) {
 			gateMaxArea = 500;
 			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 500.");
+		}
+		
+		// Check string values
+		if (BlockUtil.asSpawnableGateMaterial(gateMaterialDefault) == null) {
+			gateMaterialDefault = "PORTAL";
+			Plugin.log(Level.WARNING, "\"gateMaterialDefault\" is invalid. Setting to PORTAL.");
+		}
+		if (!bungeeTeleportDefault.equals("LOCATION") && !bungeeTeleportDefault.equals("SERVER")) {
+			bungeeTeleportDefault = "LOCATION";
+			Plugin.log(Level.WARNING, "\"bungeeTeleportDefault\" is invalid. Setting to LOCATION.");
 		}
 		
 		// Migrate old format

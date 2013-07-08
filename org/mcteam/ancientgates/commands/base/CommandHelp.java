@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.commands.bungee.CommandSetBungeeType;
 import org.mcteam.ancientgates.commands.economy.CommandSetCost;
 import org.mcteam.ancientgates.commands.sockets.CommandAddServer;
 import org.mcteam.ancientgates.commands.sockets.CommandRemServer;
@@ -78,6 +79,7 @@ public class CommandHelp extends BaseCommand {
 		pageLines = new ArrayList<String>();
 		pageLines.add( new CommandInfo().getUseageTemplate(true, true) );
 		pageLines.add( new CommandList().getUseageTemplate(true, true) );
+		pageLines.add( new CommandSetBungeeType().getUseageTemplate(true, true) );
 		if (Conf.useSocketComms) {
 			pageLines.add( new CommandAddServer().getUseageTemplate(true, true) );
 			pageLines.add( new CommandRemServer().getUseageTemplate(true, true) );

@@ -28,6 +28,7 @@ permissions:
       ancientgates.remfrom: true
       ancientgates.remserver: true
       ancientgates.rename: true
+      ancientgates.setbungeetype: true
       ancientgates.setcost: true
       ancientgates.setentities: true
       ancientgates.setfrom: true
@@ -66,6 +67,9 @@ permissions:
     default: op
   ancientgates.rename:
     description: Allows the use of Ancient Gates rename command.
+    default: op
+  ancientgates.setbungeetype:
+    description: Allows the use of Ancient Gates setbungeetype command.
     default: op
   ancientgates.setcost:
     description: Allows the use of Ancient Gates setcost command.

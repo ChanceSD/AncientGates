@@ -44,11 +44,30 @@ public class PluginMessage {
 	// Constructor
 	//----------------------------------------------//
 	// Player teleport message
-	public PluginMessage(Player player, Map<String, String> destination, String fromServer, String message) {
+	public PluginMessage(Player player, String toServer, String fromServer, String message) {
 		this.channel = BungeeChannel.AGBungeeTele;
+		this.toServer = toServer;
+		this.destination = "null";
+		this.playerName = player.getName();
+		this.fromServer = fromServer;
+		this.message = message;
+		
+	}
+	
+	// Player teleport message (with destination)
+	public PluginMessage(Player player, Map<String, String> destination, String fromServer, String message) {
+		this(player, destination.get(SERVER), fromServer, message);
+		this.destination = TeleportUtil.locationToString(destination);
+	}
+	
+	// Vehicle teleport message
+	public PluginMessage(Player player, EntityType vehicleType, double velocity, Map<String, String> destination, String fromServer, String message) {
+		this.channel = BungeeChannel.AGBungeeVehicleTele;	
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
 		this.playerName = player.getName();
+		this.vehicleTypeId = String.valueOf(vehicleType.getTypeId());
+		this.velocity = String.valueOf(velocity);
 		this.fromServer = fromServer;
 		this.message = message;
 	}
@@ -60,18 +79,6 @@ public class PluginMessage {
 		this.destination = TeleportUtil.locationToString(destination);
 		this.entityTypeId = String.valueOf(entityType.getTypeId());
 		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
-	}
-	
-	// Vehicle teleport message (with player)
-	public PluginMessage(Player player, EntityType vehicleType, double velocity, Map<String, String> destination, String fromServer, String message) {
-		this.channel = BungeeChannel.AGBungeeVehicleTele;	
-		this.toServer = destination.get(SERVER);
-		this.destination = TeleportUtil.locationToString(destination);
-		this.playerName = player.getName();
-		this.vehicleTypeId = String.valueOf(vehicleType.getTypeId());
-		this.velocity = String.valueOf(velocity);
-		this.fromServer = fromServer;
-		this.message = message;
 	}
 	
 	// Vehicle spawn message

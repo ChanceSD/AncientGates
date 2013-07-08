@@ -63,8 +63,10 @@ public class PluginMessengerListener implements PluginMessageListener {
 				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(player, fromServer, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
-				Location location = TeleportUtil.stringToLocation(destination);
-				TeleportUtil.teleportPlayer(player, location);
+				if (!destination.equals("null")) {
+					Location location = TeleportUtil.stringToLocation(destination);
+					TeleportUtil.teleportPlayer(player, location);
+				}
 				
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
 			}
@@ -87,8 +89,10 @@ public class PluginMessengerListener implements PluginMessageListener {
 				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(player, fromServer, vehicleTypeId, velocity, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
-				Location location = TeleportUtil.stringToLocation(destination);
-				TeleportUtil.teleportVehicle(player, vehicleTypeId, velocity, location);
+				if (!destination.equals("null")) {
+					Location location = TeleportUtil.stringToLocation(destination);
+					TeleportUtil.teleportVehicle(player, vehicleTypeId, velocity, location);
+				}
 				
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
 			}

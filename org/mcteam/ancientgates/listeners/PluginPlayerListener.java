@@ -57,16 +57,18 @@ public class PluginPlayerListener implements Listener {
 			String message = queue.getMessage();
 			if (!message.equals("null")) player.sendMessage(message);
 			
-			// Teleport incoming BungeeCord player
-			BungeeQueueType queueType = queue.getQueueType();
-			if (queueType == BungeeQueueType.PLAYER) {
-				TeleportUtil.teleportPlayer(player, queue.getDestination());
-				return;
-			// Teleport incoming BungeeCord passenger
-			} else if (queueType == BungeeQueueType.PASSENGER) {
-				TeleportUtil.teleportVehicle(player, queue.getVehicleTypeId(), queue.getVelocity(), queue.getDestination());
-				return;
-			}	
+			if (queue.getDestination() != null) {
+				// Teleport incoming BungeeCord player
+				BungeeQueueType queueType = queue.getQueueType();
+				if (queueType == BungeeQueueType.PLAYER) {
+					TeleportUtil.teleportPlayer(player, queue.getDestination());
+					return;
+					// Teleport incoming BungeeCord passenger
+				} else if (queueType == BungeeQueueType.PASSENGER) {
+					TeleportUtil.teleportVehicle(player, queue.getVehicleTypeId(), queue.getVelocity(), queue.getDestination());
+					return;
+				}
+			}
 		}
 		
 		// Schedule task to check bungeeServerName is set
@@ -141,7 +143,7 @@ public class PluginPlayerListener implements Listener {
 				
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());
 			}
 		}
 	}

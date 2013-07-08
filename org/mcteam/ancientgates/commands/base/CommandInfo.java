@@ -91,7 +91,11 @@ public class CommandInfo extends BaseCommand {
 		if (gate.getTo() != null) {
 			sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + gate.getTo().getBlockX() + ", " + gate.getTo().getBlockY() + ", " + gate.getTo().getBlockZ() + ") in " + gate.getTo().getWorld().getName());
 		} else if (gate.getBungeeTo() != null) {
-			sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(X)))) + ", " + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(Y)))) + ", " + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(Z)))) + ") in " + gate.getBungeeTo().get(WORLD) + " on " + gate.getBungeeTo().get(SERVER));	
+			if (gate.getBungeeType().equals("LOCATION")) {
+				sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(X)))) + ", " + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(Y)))) + ", " + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(Z)))) + ") in " + gate.getBungeeTo().get(WORLD) + " on " + gate.getBungeeTo().get(SERVER));	
+			} else {
+				sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + gate.getBungeeTo().get(SERVER));	
+			}
 		} else {
 			sendMessage(Conf.colorSystem + "NOTE: this gate has no 'to' location");
 		}

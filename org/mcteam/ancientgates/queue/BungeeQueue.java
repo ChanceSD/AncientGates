@@ -33,7 +33,7 @@ public class BungeeQueue {
 		this.queueType = BungeeQueueType.PLAYER;
 		this.playerName = player.getName();
 		this.server = server;
-		this.destination = destination;
+		if (!destination.equals("null")) this.destination = destination;
 	}
 	
 	// Player queue (with message)
@@ -49,7 +49,7 @@ public class BungeeQueue {
 		this.server = server;
 		this.vehicleTypeId = vehicleTypeId;
 		this.velocity = velocity;
-		this.destination = destination;
+		if (!destination.equals("null")) this.destination = destination;
 	}
 	
 	// Player passenger queue (with message)
@@ -80,7 +80,7 @@ public class BungeeQueue {
 		this.destination = destination;
 	}
 	
-	//  Entity passenger queue
+	// Entity passenger queue
 	public BungeeQueue(int vehicleTypeId, double velocity, String destination, int entityTypeId, String entityTypeData) {
 		this.queueType = BungeeQueueType.PASSENGER;
 		this.vehicleTypeId = vehicleTypeId;

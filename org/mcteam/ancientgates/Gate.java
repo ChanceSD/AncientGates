@@ -41,6 +41,7 @@ public class Gate {
 	private List<Location> froms;
 	private Location to;
 	private Map<String, String> bungeeto;
+	private String bungeetype;
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
 	private String material = Conf.gateMaterialDefault;
@@ -99,6 +100,7 @@ public class Gate {
 	public void setBungeeTo(String server, String to) {
 		if (to==null) {
 			this.bungeeto = null;
+			this.bungeetype = null;
 		} else {
 			String[] parts = to.split(",");
 			this.bungeeto = new HashMap<String, String>();
@@ -109,11 +111,20 @@ public class Gate {
 			this.bungeeto.put(Z, parts[3]);
 			this.bungeeto.put(YAW, parts[4]);
 			this.bungeeto.put(PITCH, parts[5]);
+			if (this.bungeetype==null) this.bungeetype = Conf.bungeeTeleportDefault;
 		}
 	}
 	
 	public Map<String, String> getBungeeTo() {
 		return bungeeto;
+	}
+	
+	public void setBungeeType(String bungeeType) {
+		this.bungeetype = bungeeType.toUpperCase();
+	}
+	
+	public String getBungeeType() {
+		return bungeetype.toUpperCase();
 	}
 	
 	public void setMessage(String msg) {
@@ -247,6 +258,10 @@ public class Gate {
 			if (gate.from != null) {
 				gate.addFrom(gate.from);
 				gate.from = null;
+			}
+			
+			if (gate.bungeeto != null && gate.bungeetype == null) {
+				gate.bungeetype = Conf.bungeeTeleportDefault;
 			}
 		}
 		
