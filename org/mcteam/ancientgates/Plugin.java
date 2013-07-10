@@ -28,6 +28,7 @@ import org.mcteam.ancientgates.gson.typeadapters.LocationTypeAdapter;
 
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.base.CommandAddFrom;
+import org.mcteam.ancientgates.commands.base.CommandAddTo;
 import org.mcteam.ancientgates.commands.base.CommandClose;
 import org.mcteam.ancientgates.commands.base.CommandCloseAll;
 import org.mcteam.ancientgates.commands.base.CommandCreate;
@@ -38,6 +39,7 @@ import org.mcteam.ancientgates.commands.base.CommandList;
 import org.mcteam.ancientgates.commands.base.CommandOpen;
 import org.mcteam.ancientgates.commands.base.CommandOpenAll;
 import org.mcteam.ancientgates.commands.base.CommandRemFrom;
+import org.mcteam.ancientgates.commands.base.CommandRemTo;
 import org.mcteam.ancientgates.commands.base.CommandRename;
 import org.mcteam.ancientgates.commands.base.CommandSetEntities;
 import org.mcteam.ancientgates.commands.base.CommandSetFrom;
@@ -154,6 +156,8 @@ public class Plugin extends JavaPlugin {
 		}
 		commands.add(new CommandAddFrom());
 		commands.add(new CommandRemFrom());
+		commands.add(new CommandAddTo());
+		commands.add(new CommandRemTo());
 		commands.add(new CommandInfo());
 		commands.add(new CommandList());
 		commands.add(new CommandOpenAll());

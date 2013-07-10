@@ -83,8 +83,8 @@ public class BaseCommand {
 		}
           
 		if( !hasPermission(sender)) {
-			// Ignore permissions for "setto" on external BungeeCord gates
-			if (Conf.bungeeCordSupport && aliases.contains("setto") && parameters.size() > 1) return true;
+			// Ignore permissions for "to" on external BungeeCord gates
+			if (Conf.bungeeCordSupport && aliases.contains("to") && parameters.size() > 1) return true;
 			
 			sendMessage("You lack the permissions to "+this.helpDescription.toLowerCase()+".");
 			return false;
@@ -98,8 +98,8 @@ public class BaseCommand {
 		if (this.hasGateParam) {
 			String id = parameters.get(0);
 			if (!Gate.exists(id)) {
-				// Ignore id for "setto" on external BungeeCord gates
-				if (Conf.bungeeCordSupport && aliases.contains("setto") && parameters.size() > 1) return true;
+				// Ignore id for "to" on external BungeeCord gates
+				if (Conf.bungeeCordSupport && aliases.contains("to") && parameters.size() > 1) return true;
 		
 				sendMessage("There exists no gate with id "+id);
 				return false;

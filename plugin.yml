@@ -13,8 +13,8 @@ permissions:
   ancientgates.*:
     description: Gives access to all Ancient Gates and commands.
     children:
-      ancientgates.addfrom: true
       ancientgates.addserver: true
+      ancientgates.addto: true
       ancientgates.close: true
       ancientgates.closeall: true
       ancientgates.create: true
@@ -25,8 +25,8 @@ permissions:
       ancientgates.listserver: true
       ancientgates.open: true
       ancientgates.openall: true
-      ancientgates.remfrom: true
       ancientgates.remserver: true
+      ancientgates.remto: true
       ancientgates.rename: true
       ancientgates.setbungeetype: true
       ancientgates.setcost: true
@@ -35,6 +35,8 @@ permissions:
       ancientgates.setmaterial: true
       ancientgates.setmessage: true
       ancientgates.setvehicles: true
+      ancientgates.addfrom.*: true
+      ancientgates.remfrom.*: true
       ancientgates.setto.*: true
       ancientgates.use.*: true
       ancientgates.econbypass: true
@@ -94,6 +96,28 @@ permissions:
     default: op
   ancientgates.remfrom:
     description: Allows the use of Ancient Gates remfrom command.
+    default: op
+  ancientgates.addto.*:
+    description: Allows the use of Ancient Gates addto command globally.
+    children:
+      ancientgates.addto.local: true
+      ancientgates.addto.bungee: true
+  ancientgates.addto.local:
+    description: Allows the use of Ancient Gates addto command locally.
+    default: op
+  ancientgates.addto.bungee:
+    description: Allows the use of Ancient Gates addto command externally.
+    default: op
+  ancientgates.remto.*:
+    description: Allows the use of Ancient Gates remto command globally.
+    children:
+      ancientgates.remto.local: true
+      ancientgates.remto.bungee: true
+  ancientgates.remto.local:
+    description: Allows the use of Ancient Gates remto command locally.
+    default: op
+  ancientgates.remto.bungee:
+    description: Allows the use of Ancient Gates remto command externally.
     default: op
   ancientgates.setto.*:
     description: Allows the use of Ancient Gates setto command globally.

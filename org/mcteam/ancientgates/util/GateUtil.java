@@ -85,4 +85,40 @@ public class GateUtil {
 		return nearestFrom(new WorldCoord(location));
 	}
 	
+	// Nearest Ancient Gate 'to' location (coordinate)
+	public static String nearestTo(WorldCoord coord) {
+		String nearestTo = "";
+		double shortestDistance = -1;
+		
+		for (Gate gate : Gate.getAll()) {
+			if (gate.getTos() == null) {
+				continue;
+			}
+			
+			for (Location to : gate.getTos()) {
+				if ( ! to.getWorld().equals(coord.getWorld())) {
+					continue; // We can only be close to gates in the same world
+				}	
+				
+				double distance = GeometryUtil.distanceBetweenLocations(coord.getLocation(), to);
+
+				if (distance > 10.0) {
+					continue;
+				}
+
+				if (shortestDistance == -1 || shortestDistance > distance) {
+					nearestTo = TeleportUtil.locationToString(to);
+					shortestDistance = distance;
+				}
+			}
+		}
+		
+		return nearestTo;
+	}
+	
+	// Nearest Ancient Gate 'to' location (location)
+	public static String nearestTo(Location location) {
+		return nearestTo(new WorldCoord(location));
+	}
+	
 }

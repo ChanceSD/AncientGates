@@ -77,6 +77,8 @@ public class CommandHelp extends BaseCommand {
 		helpPages.add(pageLines);
 		
 		pageLines = new ArrayList<String>();
+		pageLines.add( new CommandAddTo().getUseageTemplate(true, true) );
+		pageLines.add( new CommandRemTo().getUseageTemplate(true, true) );
 		pageLines.add( new CommandInfo().getUseageTemplate(true, true) );
 		pageLines.add( new CommandList().getUseageTemplate(true, true) );
 		pageLines.add( new CommandSetBungeeType().getUseageTemplate(true, true) );
