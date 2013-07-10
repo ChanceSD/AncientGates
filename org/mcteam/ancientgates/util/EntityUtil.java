@@ -125,7 +125,7 @@ public class EntityUtil {
 				((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.getType(Integer.parseInt(parts[0])));
 				((LivingEntity)entity).setCustomName(parts[1]);
 			} else {
-				((LivingEntity)entity).setHealth(Integer.parseInt(parts[0]));
+				((LivingEntity)entity).setHealth(Double.parseDouble(parts[0]));
 				((LivingEntity)entity).setCustomName(parts[1]);
 			}
 		}
