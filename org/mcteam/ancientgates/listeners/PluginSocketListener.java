@@ -41,14 +41,24 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Check gate exists
 			} else if (!Gate.exists(gateid)) {
 				response = "There exists no gate with id \""+gateid+"\" on server \""+fromserver+"\"";
-							
-			// Set gate location
+			
+			// Get gate
 			} else {
 				Gate gate = Gate.get(gateid);
-				gate.setTo(null);
-				gate.setBungeeTo(server, location);
-				response = "To location for gate \""+gateid+"\" on server \""+fromserver+"\" is now where you stand.";
-				Gate.save();
+				
+				// Set gate location
+				if (gate.getTos() == null || gate.getTos().size() <= 1) {
+					gate.addTo(null);
+					gate.addBungeeTo(null, null); // Wipe previous bungeeto
+					gate.addBungeeTo(server, location);
+					response = "To location for gate \""+gateid+"\" on server \""+fromserver+"\" is now where you stand.";
+					Gate.save();
+
+				// Display multiple tos exist response
+				} else {
+					response = "This gate has multiple to locations. Use:";
+					//response += new CommandRemTo().getUseageTemplate(true, true);
+				}
 			}
 
 			// Build the packet, format is <message>

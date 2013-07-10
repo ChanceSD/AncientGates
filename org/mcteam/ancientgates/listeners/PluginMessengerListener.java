@@ -188,8 +188,9 @@ public class PluginMessengerListener implements PluginMessageListener {
 			if (command.toLowerCase().equals("setto")) {
 				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.setto.bungee")) {
 					Gate gate = Gate.get(gateid);
-					gate.setTo(null);
-					gate.setBungeeTo(server, comdata);
+					gate.addTo(null);
+					gate.addBungeeTo(null, null); // Wipe previous bungeeto
+					gate.addBungeeTo(server, comdata);
 					Gate.save();
 				}
 			}

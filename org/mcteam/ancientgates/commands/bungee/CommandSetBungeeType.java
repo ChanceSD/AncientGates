@@ -19,7 +19,7 @@ public class CommandSetBungeeType extends BaseCommand {
 	}
 	
 	public void perform() {
-		if (gate.getBungeeTo() == null) {
+		if (gate.getBungeeTos() == null) {
 			sendMessage("You can only use this command on a BungeeCord gate.");
 			return;
 		}

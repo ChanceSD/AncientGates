@@ -27,7 +27,7 @@ public class CommandOpen extends BaseCommand {
 			return;
 		}
 		
-		if (gate.getTo() == null && gate.getBungeeTo() == null) {
+		if (gate.getTos() == null && gate.getBungeeTos() == null) {
 			sendMessage("Sure, but note that this gate does not point anywhere :P");
 			sendMessage("To fix that: " + new CommandSetTo().getUseageTemplate(true, true));
 		}

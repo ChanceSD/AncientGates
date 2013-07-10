@@ -20,6 +20,7 @@ public class CommandSetFrom extends BaseCommand {
 	}
 	
 	public void perform() {
+		// Check if multiple froms exist
 		if (gate.getFroms() != null) {
 			if (gate.getFroms().size() > 1) {
 				sendMessage("This gate has multiple from locations. Use:");
@@ -35,10 +36,10 @@ public class CommandSetFrom extends BaseCommand {
 		Block upBlock = playerBlock.getRelative(BlockFace.UP);
 		
 		if (playerBlock.getType() == Material.AIR) {
-			gate.addFrom(null);
+			gate.addFrom(null); // Wipe previous from
 			gate.addFrom(playerBlock.getLocation());
 		} else if (upBlock.getType() == Material.AIR) {
-			gate.addFrom(null);
+			gate.addFrom(null); // Wipe previous from
 			gate.addFrom(upBlock.getLocation());
 		} else {
 			sendMessage("There is not enough room for a gate to open here");

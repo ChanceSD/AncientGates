@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -39,8 +40,8 @@ public class Gate {
 	// Gates
 	private transient String id;
 	private List<Location> froms;
-	private Location to;
-	private Map<String, String> bungeeto;
+	private List<Location> tos;
+	private List<Map<String, String>> bungeetos;
 	private String bungeetype;
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
@@ -49,7 +50,9 @@ public class Gate {
 	private double cost = 0.0;
 	
 	// Legacy entries
+	private Location to;
 	private Location from;
+	private Map<String, String> bungeeto;
 	
 	private transient Set<WorldCoord> frameBlockCoords;
 	private transient Set<WorldCoord> surroundingFrameBlockCoords;
@@ -89,34 +92,65 @@ public class Gate {
 		return froms;
 	}
 
-	public void setTo(Location to) {
-		this.to = to;
-	}
-
-	public Location getTo() {
-		return to;
-	}
-	
-	public void setBungeeTo(String server, String to) {
-		if (to==null) {
-			this.bungeeto = null;
-			this.bungeetype = null;
+	public void addTo(Location to) {
+		if (this.tos == null) {
+			this.tos = new ArrayList<Location>();
+		}
+		if (to == null) {
+			this.tos = null;
 		} else {
-			String[] parts = to.split(",");
-			this.bungeeto = new HashMap<String, String>();
-			this.bungeeto.put(SERVER, server);
-			this.bungeeto.put(WORLD, parts[0]);
-			this.bungeeto.put(X, parts[1]);
-			this.bungeeto.put(Y, parts[2]);
-			this.bungeeto.put(Z, parts[3]);
-			this.bungeeto.put(YAW, parts[4]);
-			this.bungeeto.put(PITCH, parts[5]);
-			if (this.bungeetype==null) this.bungeetype = Conf.bungeeTeleportDefault;
+			this.tos.add(to);		
 		}
 	}
 	
+	public void delTo(Location to) {		
+		this.tos.remove(to);
+	}
+
+	public List<Location> getTos() {
+		return tos;
+	}
+	
+	public Location getTo() {
+		if (tos == null) return null;
+		Random randomizer = new Random();
+		return tos.get(randomizer.nextInt(tos.size()));
+	}
+	
+	public void addBungeeTo(String server, String to) {
+		if (this.bungeetos == null) {
+			this.bungeetos = new ArrayList<Map<String, String>>();
+		}
+		if (to == null) {
+			this.bungeetos = null;
+			this.bungeetype = null;
+		} else {
+			String[] parts = to.split(",");
+			Map<String, String> bungeeto = new HashMap<String, String>();
+			bungeeto.put(SERVER, server);
+			bungeeto.put(WORLD, parts[0]);
+			bungeeto.put(X, parts[1]);
+			bungeeto.put(Y, parts[2]);
+			bungeeto.put(Z, parts[3]);
+			bungeeto.put(YAW, parts[4]);
+			bungeeto.put(PITCH, parts[5]);
+			this.bungeetos.add(bungeeto);
+			if (this.bungeetype==null) this.bungeetype = Conf.bungeeTeleportDefault;	
+		}
+	}
+	
+	public void delBungeeTo(Map<String, String> bungeeto) {		
+		this.bungeetos.remove(bungeeto);
+	}
+	
+	public List<Map<String, String>> getBungeeTos() {
+		return bungeetos;
+	}
+	
 	public Map<String, String> getBungeeTo() {
-		return bungeeto;
+		if (bungeetos == null) return null;
+		Random randomizer = new Random();
+		return bungeetos.get(randomizer.nextInt(bungeetos.size()));
 	}
 	
 	public void setBungeeType(String bungeeType) {
@@ -260,7 +294,17 @@ public class Gate {
 				gate.from = null;
 			}
 			
-			if (gate.bungeeto != null && gate.bungeetype == null) {
+			if (gate.to != null) {
+				gate.addTo(gate.to);
+				gate.to = null;
+			}
+			
+			if (gate.bungeeto != null) {
+				gate.bungeetos.add(gate.bungeeto);
+				gate.bungeeto = null;
+			}
+			
+			if (gate.bungeetos != null && gate.bungeetype == null) {
 				gate.bungeetype = Conf.bungeeTeleportDefault;
 			}
 		}

@@ -1,5 +1,7 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.Map;
+
 import org.bukkit.Location;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
@@ -88,16 +90,24 @@ public class CommandInfo extends BaseCommand {
 				sendMessage(Conf.colorSystem + "NOTE: this gate has no 'from' location");
 			}
 		}	
-		if (gate.getTo() != null) {
-			sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + gate.getTo().getBlockX() + ", " + gate.getTo().getBlockY() + ", " + gate.getTo().getBlockZ() + ") in " + gate.getTo().getWorld().getName());
-		} else if (gate.getBungeeTo() != null) {
-			if (gate.getBungeeType().equals("LOCATION")) {
-				sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(X)))) + ", " + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(Y)))) + ", " + String.valueOf(Math.round(Double.parseDouble(gate.getBungeeTo().get(Z)))) + ") in " + gate.getBungeeTo().get(WORLD) + " on " + gate.getBungeeTo().get(SERVER));	
-			} else {
-				sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + gate.getBungeeTo().get(SERVER));	
+		if (gate.getTos() != null) {
+			for (Location to : gate.getTos()) {
+				if (to != null) {
+					sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ") in " + to.getWorld().getName());
+				}
+			}
+		} else if (gate.getBungeeTos() != null) {
+			for (Map<String, String> bungeeto : gate.getBungeeTos()) {
+				if (bungeeto != null) {
+					if (gate.getBungeeType().equals("LOCATION")) {
+						sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + "(" + String.valueOf(Math.round(Double.parseDouble(bungeeto.get(X)))) + ", " + String.valueOf(Math.round(Double.parseDouble(bungeeto.get(Y)))) + ", " + String.valueOf(Math.round(Double.parseDouble(bungeeto.get(Z)))) + ") in " + bungeeto.get(WORLD) + " on " + bungeeto.get(SERVER));	
+					} else {
+						sendMessage(Conf.colorSystem + "to:  " + Conf.colorAlly + bungeeto.get(SERVER));	
+					}
+				}
 			}
 		} else {
-			sendMessage(Conf.colorSystem + "NOTE: this gate has no 'to' location");
+			sendMessage(Conf.colorSystem + "NOTE: this gate has no 'to' location(s)");
 		}
 		if (gate.getMessage() != null) {
 			sendMessage(Conf.colorSystem + "message: " + Conf.colorAlly + gate.getMessage());
@@ -118,7 +128,11 @@ public class CommandInfo extends BaseCommand {
 			sendMessage(Conf.colorSystem + "material" + Conf.colorAlly + " " + gate.getMaterialStr());
 		}
 		if (Conf.useEconomy) {
-			sendMessage(Conf.colorSystem + "cost" + Conf.colorAlly + " " + String.valueOf(gate.getCost()));
+			if (gate.getCost() == 0.00) {
+				sendMessage(Conf.colorSystem + "cost" + Conf.colorAlly + " free");
+			} else {
+				sendMessage(Conf.colorSystem + "cost" + Conf.colorAlly + " " + String.valueOf(gate.getCost()));
+			}
 		}	
 	}
 

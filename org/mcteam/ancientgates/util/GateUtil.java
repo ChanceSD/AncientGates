@@ -15,7 +15,7 @@ public class GateUtil {
 		double shortestDistance = -1;
 
 		for (Gate gate : Gate.getAll()) {
-			if (gate.getFroms() == null || (gate.getTo() == null && gate.getBungeeTo() == null && teleport == true)) continue;
+			if (gate.getFroms() == null || (gate.getTos() == null && gate.getBungeeTos() == null && teleport == true)) continue;
 
 			// Check the distance between the location and all portal blocks within the gate
 			Set<WorldCoord> portalBlockCoords = gate.getPortalBlocks().keySet();
@@ -43,7 +43,7 @@ public class GateUtil {
 		Gate nearestGate = Gates.gateFromAll(coord);
 
 		if (nearestGate != null) {
-			if (nearestGate.getFroms() == null || (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && teleport == true)) return null;
+			if (nearestGate.getFroms() == null || (nearestGate.getTos() == null && nearestGate.getBungeeTos() == null && teleport == true)) return null;
 		}
 
 		return nearestGate;

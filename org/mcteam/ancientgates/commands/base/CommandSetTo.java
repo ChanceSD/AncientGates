@@ -36,8 +36,18 @@ public class CommandSetTo extends BaseCommand {
 		
 		// Local 'setto' command
 		if (serverName == null || !Conf.bungeeCordSupport) {
-			gate.setTo(player.getLocation());
-			gate.setBungeeTo(null, null);
+			// Check if multiple tos exist
+			if (gate.getTos() != null) {
+				if (gate.getTos().size() > 1) {
+					sendMessage("This gate has multiple to locations. Use:");
+					//sendMessage(new CommandRemTo().getUseageTemplate(true, true));
+					return;
+				}
+			}
+			
+			gate.addTo(null); // Wipe previous to
+			gate.addTo(player.getLocation());
+			gate.addBungeeTo(null, null);
 			sendMessage("To location for gate \""+gate.getId()+"\" is now where you stand.");
 			Gate.save();
 			

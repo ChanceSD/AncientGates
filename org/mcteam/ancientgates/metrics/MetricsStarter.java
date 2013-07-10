@@ -30,7 +30,7 @@ public class MetricsStarter {
 				public int getValue() {
 					int i = 0;
 					for (Gate gate : Gate.getAll()) {
-						if (gate.getBungeeTo() != null) i++;
+						if (gate.getBungeeTos() != null) i++;
 					}
 					return i;
 				}
@@ -40,7 +40,7 @@ public class MetricsStarter {
 				public int getValue() {
 					int i = 0;
 					for (Gate gate : Gate.getAll()) {
-						if (gate.getTo() != null) i++;
+						if (gate.getTos() != null) i++;
 					}
 					return i;
 				}
@@ -50,7 +50,7 @@ public class MetricsStarter {
 				public int getValue() {
 					int i = 0;
 					for (Gate gate : Gate.getAll()) {
-						if (gate.getTo() == null) i++;
+						if (gate.getTos() == null) i++;
 					}
 					return i;
 				}
