@@ -90,6 +90,8 @@ public class Plugin extends JavaPlugin {
 	public static ArrayList<BungeeQueue> bungeeCordEntityInQueue = new ArrayList<BungeeQueue>();
 	public static ArrayList<BungeeQueue> bungeeCordVehicleInQueue = new ArrayList<BungeeQueue>();
 	
+	public static HashMap<String, Long> lastMessageTime = new HashMap<String, Long>();
+	
 	// Commands
 	public List<BaseCommand> commands = new ArrayList<BaseCommand>();
 	

@@ -1,7 +1,6 @@
 package org.mcteam.ancientgates.listeners;
 
 import java.util.Calendar;
-import java.util.HashMap;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -24,8 +23,6 @@ import org.mcteam.ancientgates.util.types.WorldCoord;
 public class PluginMovementListener implements Listener {
 	
     public Plugin plugin;
-    
-    protected HashMap<String, Long> lastMessageTime = new HashMap<String, Long>();
     
     public PluginMovementListener(Plugin plugin) {
         this.plugin = plugin;
@@ -57,36 +54,36 @@ public class PluginMovementListener implements Listener {
 			// Check player has permission to enter the gate.
 			if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
 					&& !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
-				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage("You lack the permissions to enter this gate.");
-					this.lastMessageTime.put(player.getName(), now);
+					Plugin.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 			
 			// Handle economy (check player has funds to use gate)
 			if (!Plugin.handleEconManage(player, nearestGate.getCost())) {
-				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
-					this.lastMessageTime.put(player.getName(), now);
+					Plugin.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 			
 			// Handle BungeeCord gates (BungeeCord support disabled)
 			if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
-				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage(String.format("BungeeCord support not enabled."));
-					this.lastMessageTime.put(player.getName(), now);
+					Plugin.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
 			
 			// Handle gates that do not point anywhere
 			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
-				if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage(String.format("This gate does not point anywhere :P"));
-					this.lastMessageTime.put(player.getName(), now);
+					Plugin.lastMessageTime.put(player.getName(), now);
 				}
 				return;
 			}
@@ -128,36 +125,36 @@ public class PluginMovementListener implements Listener {
 				// Check player has permission to enter the gate.
 				if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
 						&& !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
-					if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage("You lack the permissions to enter this gate.");
-						this.lastMessageTime.put(player.getName(), now);
+						Plugin.lastMessageTime.put(player.getName(), now);
 					}
 					return;
 				}
 				
 				// Handle economy (check player has funds to use gate)
 				if (!Plugin.handleEconManage(player, nearestGate.getCost())) {
-					if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage("This gate costs: "+nearestGate.getCost()+". You have insufficient funds.");
-						this.lastMessageTime.put(player.getName(), now);
+						Plugin.lastMessageTime.put(player.getName(), now);
 					}
 					return;
 				}
 				
 				// Handle BungeeCord gates (BungeeCord support disabled)
 				if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
-					if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage(String.format("BungeeCord support not enabled."));
-						this.lastMessageTime.put(player.getName(), now);
+						Plugin.lastMessageTime.put(player.getName(), now);
 					}
 					return;
 				}
 				
 				// Handle gates that do not point anywhere
 				if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
-					if (!this.lastMessageTime.containsKey(player.getName()) || this.lastMessageTime.get(player.getName()) < now - 10000L) {
+					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage(String.format("This gate does not point anywhere :P"));
-						this.lastMessageTime.put(player.getName(), now);
+						Plugin.lastMessageTime.put(player.getName(), now);
 					}
 					return;
 				}

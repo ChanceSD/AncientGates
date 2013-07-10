@@ -2,6 +2,7 @@ package org.mcteam.ancientgates.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -65,8 +66,14 @@ public class TeleportUtil {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
+				// Get current time
+		        Long now = Calendar.getInstance().getTimeInMillis();
+		        
 				Plugin.log("Error not yet connected to BungeeCord proxy.");
-				player.sendMessage("Error connecting to server. Try again.");
+				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
+					player.sendMessage("Error connecting to server. Try again.");
+					Plugin.lastMessageTime.put(player.getName(), now);
+				}
 				return;
 			}
 
@@ -242,8 +249,15 @@ public class TeleportUtil {
 				
 				// Check bungeeServerName found
 				if (Plugin.bungeeServerName == null) {
+					// Get current time
+			        Long now = Calendar.getInstance().getTimeInMillis();
+					
 					Plugin.log("Error not yet connected to BungeeCord proxy.");
 					player.sendMessage("Error connecting to server. Try again.");
+					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
+						player.sendMessage("Error connecting to server. Try again.");
+						Plugin.lastMessageTime.put(player.getName(), now);
+					}
 					return;
 				}
 
