@@ -300,6 +300,7 @@ public class Gate {
 			}
 			
 			if (gate.bungeeto != null) {
+				gate.bungeetos = new ArrayList<Map<String, String>>();
 				gate.bungeetos.add(gate.bungeeto);
 				gate.bungeeto = null;
 			}
