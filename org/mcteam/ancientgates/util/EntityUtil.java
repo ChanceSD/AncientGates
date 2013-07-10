@@ -84,49 +84,49 @@ public class EntityUtil {
 					((Animals)entity).setAge(Integer.parseInt(parts[0]));
 					((Sheep)entity).setSheared(Boolean.parseBoolean(parts[1]));
 					((Sheep)entity).setColor(sheepColor(parts[2]));
-					((LivingEntity)entity).setCustomName(parts[3]);
+					if (!parts[3].equals("null")) ((LivingEntity)entity).setCustomName(parts[3]);
                 } else if ((entity instanceof Wolf)) {
                 	if (Boolean.parseBoolean(parts[0])) {
                 		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[0]));
-                	} else if (parts[2] != "") {
+                	} else if (!parts[2].isEmpty()) {
                 		((Animals)entity).setAge(Integer.parseInt(parts[1]));
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
                 		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[3]));
                 	} else {
                 		((Animals)entity).setAge(Integer.parseInt(parts[1]));
                 	}
-                	((LivingEntity)entity).setCustomName(parts[1]);
+                	if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
                 } else if ((entity instanceof Ocelot)) {
             		((Animals)entity).setAge(Integer.parseInt(parts[0]));
-            		((LivingEntity)entity).setCustomName(parts[1]);
-                	if (parts[2] != "") {
+            		if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
+                	if (!parts[2].isEmpty()) {
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
                 		((Ocelot)entity).setCatType(catType(Integer.parseInt(parts[3])));
                 	}
                 } else if ((entity instanceof Pig)) {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
                 	((Pig)entity).setSaddle(Boolean.parseBoolean(parts[1]));
-                	((LivingEntity)entity).setCustomName(parts[2]);
+                	if (!parts[2].equals("null")) ((LivingEntity)entity).setCustomName(parts[2]);
                 } else {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
-                	((LivingEntity)entity).setCustomName(parts[1]);
+                	if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
                 }
 			} else if ((entity instanceof Villager)) {
 				((Villager)entity).setProfession(assignProf(Integer.parseInt(parts[0])));
 				((Villager)entity).setAge(Integer.parseInt(parts[1]));
-				((LivingEntity)entity).setCustomName(parts[2]);
+				if (!parts[2].equals("null")) ((LivingEntity)entity).setCustomName(parts[2]);
 			} else if ((entity instanceof Creeper)) {
 				((Creeper)entity).setPowered(Boolean.parseBoolean(parts[0]));
-				((LivingEntity)entity).setCustomName(parts[1]);
+				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			} else if ((entity instanceof Slime)) {
 				((Slime)entity).setSize(Integer.parseInt(parts[0]));
-				((LivingEntity)entity).setCustomName(parts[1]);
+				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			} else if ((entity instanceof Skeleton)) {
 				((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.getType(Integer.parseInt(parts[0])));
-				((LivingEntity)entity).setCustomName(parts[1]);
+				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			} else {
 				((LivingEntity)entity).setHealth(Double.parseDouble(parts[0]));
-				((LivingEntity)entity).setCustomName(parts[1]);
+				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			}
 		}
 	}
