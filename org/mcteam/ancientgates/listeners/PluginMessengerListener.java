@@ -60,15 +60,37 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String fromServer = parts[2];
 			String tpMsg = parts[3];
 			
+			Integer entityTypeId = null;
+			String entityTypeData = null;
+
+			// Handle player riding entity
+			if (parts.length > 4) {
+				entityTypeId = Integer.parseInt(parts[4]);
+				entityTypeData = parts[5];
+			}
+			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeId, entityTypeData, fromServer, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
 					Location location = TeleportUtil.stringToLocation(destination);
+					
+					// Handle player riding entity
+					Entity entity = null;
+					if (entityTypeId != null) {
+						World world = TeleportUtil.stringToWorld(destination);
+						if (EntityType.fromId(entityTypeId).isSpawnable()) {
+							// Spawn incoming BungeeCord player's entity
+							entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
+							EntityUtil.setEntityTypeData(entity, entityTypeData);
+						}
+					}
+			
 					TeleportUtil.teleportPlayer(player, location);
+					if (entity != null) entity.setPassenger(player);
 				}
 				
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);

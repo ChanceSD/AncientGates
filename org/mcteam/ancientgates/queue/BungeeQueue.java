@@ -27,17 +27,19 @@ public class BungeeQueue {
 	//----------------------------------------------//
 	// Constructors
 	//----------------------------------------------//
-	// Player queue
-	public BungeeQueue(String playerName, String server, String destination) {
+	// Player queue (could be riding an entity)
+	public BungeeQueue(String playerName, Integer entityTypeId, String entityTypeData, String server, String destination) {
 		this.queueType = BungeeQueueType.PLAYER;
 		this.playerName = playerName;
+		this.entityTypeId = entityTypeId;
+		this.entityTypeData = entityTypeData;
 		this.server = server;
 		if (!destination.equals("null")) this.destination = destination;
 	}
 	
 	// Player queue (with message)
-	public BungeeQueue(String playerName, String server, String destination, String message) {
-		this(playerName, server, destination);
+	public BungeeQueue(String playerName, Integer entityTypeId, String entityTypeData, String server, String destination, String message) {
+		this(playerName, entityTypeId, entityTypeData, server, destination);
 		this.message = message;
 	}
 	

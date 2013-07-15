@@ -61,6 +61,13 @@ public class PluginMessage {
 		this.destination = TeleportUtil.locationToString(destination);
 	}
 	
+	// Player teleport message (riding entity)
+	public PluginMessage(Player player, Entity entity, Map<String, String> destination, String fromServer, String message) {
+		this(player, destination, fromServer, message);
+		this.entityTypeId = String.valueOf(entity.getType().getTypeId());
+		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
+	}
+	
 	// Vehicle teleport message
 	public PluginMessage(Player player, EntityType vehicleType, double velocity, Map<String, String> destination, String fromServer, String message) {
 		this.channel = BungeeChannel.AGBungeeVehicleTele;	
@@ -137,8 +144,12 @@ public class PluginMessage {
 			// Build the message
 			String msg = "";
 			if (this.channel == BungeeChannel.AGBungeeTele) {
-				// Format is <player>#@#<destination>#@#<fromServer>#@#<message>
-				msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message;
+				// Format is <player>#@#<destination>#@#<fromServer>#@#<message>[#@#<entityTypeId>#@#<entityTypeData>]
+				if (this.entityTypeId != null) {
+					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message + "#@#" + this.entityTypeId + "#@#" + this.entityTypeData;
+				} else {
+					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message;
+				}
 			} else if (this.channel == BungeeChannel.AGBungeeSpawn) {
 				// Format is <entityTypeId>#@#<entityTypeData>#@#<destination>
 				msg = this.entityTypeId + "#@#" + this.entityTypeData + "#@#" + this.destination;

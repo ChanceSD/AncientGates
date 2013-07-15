@@ -3,6 +3,8 @@ package org.mcteam.ancientgates.listeners;
 import java.util.HashMap;
 
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,6 +21,7 @@ import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.tasks.BungeeServerName;
+import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
@@ -61,7 +64,22 @@ public class PluginPlayerListener implements Listener {
 				// Teleport incoming BungeeCord player
 				BungeeQueueType queueType = queue.getQueueType();
 				if (queueType == BungeeQueueType.PLAYER) {
-					TeleportUtil.teleportPlayer(player, queue.getDestination());
+					Location location = queue.getDestination();
+					
+					// Handle player riding entity
+					Entity entity = null;
+					if (queue.getEntityType() != null) {
+						World world = location.getWorld();
+						if (queue.getEntityType().isSpawnable()) {
+							// Spawn incoming BungeeCord player's entity
+							entity = world.spawnEntity(location, queue.getEntityType());
+							EntityUtil.setEntityTypeData(entity, queue.getEntityTypeData());
+						}
+					}
+						
+					TeleportUtil.teleportPlayer(player, location);
+					if (entity != null) entity.setPassenger(player);
+					
 					return;
 					// Teleport incoming BungeeCord passenger
 				} else if (queueType == BungeeQueueType.PASSENGER) {

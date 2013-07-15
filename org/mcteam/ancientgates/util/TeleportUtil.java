@@ -77,6 +77,10 @@ public class TeleportUtil {
 				}
 				return;
 			}
+			
+			// Handle player riding an entity
+			final Entity e = player.getVehicle();
+			if (player.isInsideVehicle() && e instanceof LivingEntity) e.eject();
 
 			// Imitate teleport by spinning player 180 deg
 			if (fullHeight) {
@@ -86,21 +90,30 @@ public class TeleportUtil {
 					yaw -= 360;
 				}
 				position.setYaw(yaw);
+				if (e != null) e.teleport(position);
 				player.teleport(position);
 			}
+			if (e != null) e.setFireTicks(0); // Cancel lava fire
 			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
 			tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 			PluginMessage msg;
+			// Player server teleport
 			if (tpType.equals("SERVER")) {
 				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpMsg);
-			} else {
+			// Player location teleport
+			} else if(e == null) {
 				msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpMsg);
+			// Player riding entity teleport
+			} else {
+				msg = new PluginMessage(player, e, location, Plugin.bungeeServerName, tpMsg);
 			}
 			// Send message over the AGBungeeTele BungeeCord channel
 			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
-			
+			// Imitate teleport by removing entity
+			if (e != null) e.remove();
+		
 			// Replace quit message is with BungeeCord teleport message
 			Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
 			
