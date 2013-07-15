@@ -15,6 +15,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -118,7 +119,7 @@ public class TeleportUtil {
 	
 	// BungeeCord entity spawn out
 	public static void teleportEntity(EntityPortalEvent event, Map<String, String> location) {
-		if (Conf.bungeeCordSupport && event.getEntityType().isSpawnable()) {
+		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() || event.getEntityType() == EntityType.DROPPED_ITEM)) {
 
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
@@ -188,9 +189,12 @@ public class TeleportUtil {
 			checkChunkLoad(destination.getBlock());
 			
 			if (queue.getEntityType().isSpawnable()) {
-				Entity entity = world.spawnEntity(destination, queue.getEntityType());
+				Entity entity = world.spawnEntity(destination, queue.getEntityType()); // Entity
 				EntityUtil.setEntityTypeData(entity, queue.getEntityTypeData());
 				entity.teleport(destination);
+			} else if (queue.getEntityType() == EntityType.DROPPED_ITEM) {
+				Item item = world.dropItemNaturally(destination, ItemStackUtil.stringToItemStack(queue.getEntityTypeData())[0]); // Dropped ItemStack
+				item.teleport(destination);
 			}
 			
 			// Remove from queue

@@ -8,6 +8,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -78,7 +79,11 @@ public class PluginMessage {
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
 		this.entityTypeId = String.valueOf(entityType.getTypeId());
-		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
+		if (entityType.getTypeId() == 1) {
+			this.entityTypeData = ItemStackUtil.itemStackToString(((Item)entity).getItemStack()); // Dropped ItemStack
+		} else {
+			this.entityTypeData = EntityUtil.getEntityTypeData(entity); // Entity
+		}
 	}
 	
 	// Vehicle spawn message

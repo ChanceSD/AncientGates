@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates.util;
 
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
@@ -10,12 +11,14 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
+import org.bukkit.inventory.ItemStack;
 import org.mcteam.ancientgates.Plugin;
 
 public class EntityUtil {
@@ -103,14 +106,14 @@ public class EntityUtil {
                 	if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
                 	if (Boolean.parseBoolean(parts[2])) {
                 		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[2]));
-                	} else if (!parts[3].isEmpty()) {
+                	} else if (parts.length > 3) {
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[3]));
                 		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[4]));
                 	}
                 } else if ((entity instanceof Ocelot)) {
             		((Animals)entity).setAge(Integer.parseInt(parts[0]));
             		if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
-                	if (!parts[2].isEmpty()) {
+                	if (parts.length > 2) {
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
                 		((Ocelot)entity).setCatType(catType(Integer.parseInt(parts[3])));
                 	}
@@ -146,6 +149,15 @@ public class EntityUtil {
 				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			} else if ((entity instanceof Skeleton)) {
 				((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.getType(Integer.parseInt(parts[0])));
+				if (parts[0].equals("0")) {
+					((Skeleton)entity).getEquipment().setItemInHand(new ItemStack(Material.BOW));
+				} else {
+					((Skeleton)entity).getEquipment().setItemInHand(new ItemStack(Material.BOW));
+				}
+				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);	
+			} else if ((entity instanceof PigZombie)) {
+				((LivingEntity)entity).setHealth(Double.parseDouble(parts[0]));
+				((LivingEntity)entity).getEquipment().setItemInHand(new ItemStack(Material.GOLD_SWORD));
 				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			} else {
 				((LivingEntity)entity).setHealth(Double.parseDouble(parts[0]));

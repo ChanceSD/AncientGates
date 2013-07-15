@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
  
 public class ItemStackUtil {
 	
-    public static String itemStackToString (ItemStack[] itemStack) {
+    public static String itemStackToString(ItemStack[] itemStack) {
         String serialization = itemStack.length + ";";
         for (int i = 0; i < itemStack.length; i++) {
             ItemStack is = itemStack[i];
@@ -42,8 +42,12 @@ public class ItemStackUtil {
         return serialization;
         
     }
+    
+    public static String itemStackToString(ItemStack itemStack) {
+        return itemStackToString(new ItemStack[]{itemStack});
+    }
    
-    public static ItemStack[] stringToItemStack (String itemStackString) {
+    public static ItemStack[] stringToItemStack(String itemStackString) {
         String[] serializedBlocks = itemStackString.split(";");
         String isInfo = serializedBlocks[0];
         ItemStack[] deserializedItemStack = new ItemStack[Integer.valueOf(isInfo)];
