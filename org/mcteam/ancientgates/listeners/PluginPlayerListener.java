@@ -2,6 +2,7 @@ package org.mcteam.ancientgates.listeners;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -52,7 +53,7 @@ public class PluginPlayerListener implements Listener {
 			String msg = null;
 			if (Conf.customBungeeMessages) {
 				String server = queue.getServer();
-				msg = playerName + " came from " + server + " server";
+				msg = ChatColor.YELLOW + playerName + " came from " + server + " server";
 			}
 			event.setJoinMessage(msg);
 			
@@ -107,7 +108,7 @@ public class PluginPlayerListener implements Listener {
 		String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
 		if (server != null) {
 			String msg = null;
-			if (Conf.customBungeeMessages) msg = playerName + " went to " + server + " server";
+			if (Conf.customBungeeMessages) msg = ChatColor.YELLOW + playerName + " went to " + server + " server";
 			event.setQuitMessage(msg);
 		}
 		
