@@ -58,9 +58,7 @@ public class GateUtil {
 		double shortestDistance = -1;
 		
 		for (Gate gate : Gate.getAll()) {
-			if (gate.getFroms() == null) {
-				continue;
-			}
+			if (gate.getFroms() == null) continue;
 			
 			for (Location from : gate.getFroms()) {
 				if (!from.getWorld().equals(coord.getWorld())) continue; // We can only be close to gates in the same world	
@@ -92,9 +90,7 @@ public class GateUtil {
 		double shortestDistance = -1;
 		
 		for (Gate gate : Gate.getAll()) {
-			if (gate.getTos() == null) {
-				continue;
-			}
+			if (gate.getTos() == null) continue;
 			
 			for (Location to : gate.getTos()) {
 				if (!to.getWorld().equals(coord.getWorld())) continue; // We can only be close to gates in the same world	
@@ -126,21 +122,19 @@ public class GateUtil {
 		double shortestDistance = -1;
 		
 		for (Gate gate : Gate.getAll()) {
-			if (gate.getBungeeTos() == null) {
-				continue;
-			}
+			if (gate.getBungeeTos() == null) continue;
 			
-			for (Map<String, String> to : gate.getBungeeTos()) {
-				if (!to.get(WORLD).equals(coord.getWorld())) continue; // We can only be close to gates in the same world
+			for (Map<String, String> bungeeto : gate.getBungeeTos()) {
+				if (!bungeeto.get(WORLD).equals(coord.worldName)) continue; // We can only be close to gates in the same world
 				
-				double distance = GeometryUtil.distanceBetweenCoords(coord, new WorldCoord(to));
+				double distance = GeometryUtil.distanceBetweenCoords(coord, new WorldCoord(bungeeto));
 
 				if (distance > 10.0) {
 					continue;
 				}
 
 				if (shortestDistance == -1 || shortestDistance > distance) {
-					nearestBungeeTo = TeleportUtil.locationToString(to);
+					nearestBungeeTo = TeleportUtil.locationToString(bungeeto);
 					shortestDistance = distance;
 				}
 			}
