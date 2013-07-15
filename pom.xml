@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mcteam.ancientgates</groupId>
     <artifactId>AncientGates</artifactId>
-    <version>1.7</version>
+    <version>1.7.0</version>
     <name>AncientGates</name>
     <url>https://github.com/peewi96/AncientGates</url>
     <issueManagement>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.5.2-R1.0</version>
+            <version>1.6.2-R0.1</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>

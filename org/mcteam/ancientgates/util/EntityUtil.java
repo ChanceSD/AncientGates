@@ -6,6 +6,7 @@ import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Pig;
@@ -22,47 +23,59 @@ public class EntityUtil {
 	public static String getEntityTypeData(Entity entity) {
 		String data ="";
 
-		if ((entity instanceof LivingEntity)) {
-			if ((entity instanceof Animals)) {
-				if ((entity instanceof Sheep)) {
+		if (entity instanceof LivingEntity) {
+			if (entity instanceof Animals) {
+				if (entity instanceof Sheep) {
 					data += String.valueOf(((Animals)entity).getAge()) + ",";
 					data += String.valueOf(((Sheep)entity).isSheared()) + ",";
 					data += ((Sheep)entity).getColor().name() + ",";
 					data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
-                } else if ((entity instanceof Wolf)) {
+                } else if (entity instanceof Wolf) {
                 	data += String.valueOf(((Wolf)entity).isAngry()) + ",";
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
-                	if (((Wolf) entity).isTamed()) {
+                	if (((Wolf)entity).isTamed()) {
                 		data += ((Tameable)entity).getOwner().getName() + ",";
                 		data += String.valueOf(((Wolf)entity).getCollarColor()) + ",";
                 	}
-                } else if ((entity instanceof Ocelot)) {
+                } else if (entity instanceof Ocelot) {
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
-                	if (((Ocelot) entity).isTamed()) {
+                	if (((Ocelot)entity).isTamed()) {
                 		data += ((Tameable)entity).getOwner().getName() + ",";
                 		data += String.valueOf(((Ocelot)entity).getCatType().getId()) + ",";
                 	}
-                } else if ((entity instanceof Pig)) {
+                } else if (entity instanceof Pig) {
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
                 	data += String.valueOf(((Pig)entity).hasSaddle()) + ",";
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
+                } else if (entity instanceof Horse) {
+                	data += String.valueOf(((Animals)entity).getAge()) + ",";
+                	data += String.valueOf(((Horse)entity).getVariant().name()) + ",";
+                	data += String.valueOf(((Horse)entity).getStyle().name()) + ",";
+    				data += String.valueOf(((Horse)entity).getColor().name()) + ",";
+    				data += String.valueOf(((Horse)entity).getDomestication()) + ",";
+    				data += String.valueOf(((Horse)entity).getJumpStrength()) + ",";
+        			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
+        			if (((Horse)entity).isTamed()) {
+        				data += ((Tameable)entity).getOwner().getName() + ",";
+        				data += ItemStackUtil.itemStackToString(((Horse)entity).getInventory().getContents()) + ",";
+        			}
                 } else {
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
                 }
-			} else if ((entity instanceof Villager)) {
+			} else if (entity instanceof Villager) {
 				data += String.valueOf(((Villager)entity).getProfession().getId()) + ",";
 				data += String.valueOf(((Villager)entity).getAge()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
-			} else if ((entity instanceof Creeper)) {
+			} else if (entity instanceof Creeper) {
 				data += String.valueOf(((Creeper)entity).isPowered()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
-			} else if ((entity instanceof Slime)) {
+			} else if (entity instanceof Slime) {
 				data += String.valueOf(((Slime)entity).getSize()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
-			} else if ((entity instanceof Skeleton)) {
+			} else if (entity instanceof Skeleton) {
 				data += String.valueOf(((Skeleton)entity).getSkeletonType().getId()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
 			} else {
@@ -107,6 +120,18 @@ public class EntityUtil {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
                 	((Pig)entity).setSaddle(Boolean.parseBoolean(parts[1]));
                 	if (!parts[2].equals("null")) ((LivingEntity)entity).setCustomName(parts[2]);
+                } else if ((entity instanceof Horse)) {  	
+                	((Animals)entity).setAge(Integer.parseInt(parts[0]));
+                	((Horse)entity).setVariant(horseVariant(parts[1]));
+                	((Horse)entity).setStyle(horseStyle(parts[2]));
+                	((Horse)entity).setColor(horseColor(parts[3]));
+                	((Horse)entity).setDomestication(Integer.parseInt(parts[4]));
+                	((Horse)entity).setJumpStrength(Integer.parseInt(parts[5]));
+                	if (!parts[6].equals("null")) ((LivingEntity)entity).setCustomName(parts[6]);
+        			if (!parts[7].isEmpty()) {
+                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[7]));
+                		((Horse)entity).getInventory().setContents(ItemStackUtil.stringToItemStack(parts[8]));
+        			}
                 } else {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
                 	if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
@@ -162,41 +187,90 @@ public class EntityUtil {
 	}
 	
 	public static DyeColor sheepColor(String color) {
-		  if (color.equalsIgnoreCase("white"))
-		    	return DyeColor.WHITE;
-		    if (color.equalsIgnoreCase("black"))
-		    	return DyeColor.BLACK;
-		    if (color.equalsIgnoreCase("blue"))
-		    	return DyeColor.BLUE;
-		    if (color.equalsIgnoreCase("brown"))
-		    	return DyeColor.BROWN;
-		    if (color.equalsIgnoreCase("cyan"))
-		    	return DyeColor.CYAN;
-		    if (color.equalsIgnoreCase("grey"))
-		    	return DyeColor.GRAY;
-		    if (color.equalsIgnoreCase("green"))
-		    	return DyeColor.GREEN;
-		    if (color.equalsIgnoreCase("light_blue"))
-		    	return DyeColor.LIGHT_BLUE;
-		    if (color.equalsIgnoreCase("lime"))
-		    	return DyeColor.LIME;
-		    if (color.equalsIgnoreCase("magenta"))
-		    	return DyeColor.MAGENTA;
-		    if (color.equalsIgnoreCase("orange"))
-		    	return DyeColor.ORANGE;
-		    if (color.equalsIgnoreCase("pink"))
-		    	return DyeColor.PINK;
-		    if (color.equalsIgnoreCase("purple"))
-		    	return DyeColor.PURPLE;
-		    if (color.equalsIgnoreCase("red"))
-		    	return DyeColor.RED;
-		    if (color.equalsIgnoreCase("silver"))
-		    	return DyeColor.SILVER;
-		    if (color.equalsIgnoreCase("yellow")) {
-		    	return DyeColor.YELLOW;
-		    }
-		    return DyeColor.WHITE;
-	  }
+		if (color.equalsIgnoreCase("white"))
+			return DyeColor.WHITE;
+		if (color.equalsIgnoreCase("black"))
+			return DyeColor.BLACK;
+		if (color.equalsIgnoreCase("blue"))
+			return DyeColor.BLUE;
+		if (color.equalsIgnoreCase("brown"))
+			return DyeColor.BROWN;
+		if (color.equalsIgnoreCase("cyan"))
+			return DyeColor.CYAN;
+		if (color.equalsIgnoreCase("gray"))
+			return DyeColor.GRAY;
+		if (color.equalsIgnoreCase("green"))
+			return DyeColor.GREEN;
+		if (color.equalsIgnoreCase("light_blue"))
+			return DyeColor.LIGHT_BLUE;
+		if (color.equalsIgnoreCase("lime"))
+			return DyeColor.LIME;
+		if (color.equalsIgnoreCase("magenta"))
+			return DyeColor.MAGENTA;
+		if (color.equalsIgnoreCase("orange"))
+			return DyeColor.ORANGE;
+		if (color.equalsIgnoreCase("pink"))
+			return DyeColor.PINK;
+		if (color.equalsIgnoreCase("purple"))
+			return DyeColor.PURPLE;
+		if (color.equalsIgnoreCase("red"))
+			return DyeColor.RED;
+		if (color.equalsIgnoreCase("silver"))
+			return DyeColor.SILVER;
+		if (color.equalsIgnoreCase("yellow")) {
+			return DyeColor.YELLOW;
+		}
+		return DyeColor.WHITE;
+	}
+	
+	public static Horse.Variant horseVariant(String variant) {
+		if (variant.equalsIgnoreCase("horse"))
+			return Horse.Variant.HORSE;
+		if (variant.equalsIgnoreCase("donkey"))
+			return Horse.Variant.DONKEY;
+		if (variant.equalsIgnoreCase("mule"))
+			return Horse.Variant.MULE;
+		if (variant.equalsIgnoreCase("undead_horse"))
+			return Horse.Variant.UNDEAD_HORSE;
+		if (variant.equalsIgnoreCase("skeleton_horse")) {
+			return Horse.Variant.SKELETON_HORSE;
+		}
+		return Horse.Variant.HORSE;
+	}
+	
+	public static Horse.Style horseStyle(String style) {
+		if (style.equalsIgnoreCase("none"))
+			return Horse.Style.NONE;
+		if (style.equalsIgnoreCase("white"))
+			return Horse.Style.WHITE;
+		if (style.equalsIgnoreCase("whitefield"))
+			return Horse.Style.WHITEFIELD;
+		if (style.equalsIgnoreCase("white_dots"))
+			return Horse.Style.WHITE_DOTS;
+		if (style.equalsIgnoreCase("black_dots")) {
+			return Horse.Style.BLACK_DOTS;
+		}
+		return Horse.Style.NONE;
+	}
+	
+	public static Horse.Color horseColor(String color) {
+		if (color.equalsIgnoreCase("white"))
+			return Horse.Color.WHITE;
+		if (color.equalsIgnoreCase("creamy"))
+			return Horse.Color.CREAMY;
+		if (color.equalsIgnoreCase("chestnut"))
+			return Horse.Color.CHESTNUT;
+		if (color.equalsIgnoreCase("brown"))
+			return Horse.Color.BROWN;
+		if (color.equalsIgnoreCase("black"))
+			return Horse.Color.BLACK;
+		if (color.equalsIgnoreCase("gray"))
+			return Horse.Color.GRAY;
+		if (color.equalsIgnoreCase("dark_brown")) {
+			return Horse.Color.DARK_BROWN;
+		}
+		return Horse.Color.WHITE;
+	}
 	
 	public static OfflinePlayer getPlayer(String name) {
 		OfflinePlayer player;
