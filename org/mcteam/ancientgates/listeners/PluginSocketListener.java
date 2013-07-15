@@ -187,7 +187,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			String[] args = {entityWorld, entityId};
 			Packet packet = new Packet("removeentity", "spawnentity", args);
 
-			if (EntityType.fromId(entityTypeId).isSpawnable()) {
+			if (EntityType.fromId(entityTypeId).isSpawnable() || EntityType.fromId(entityTypeId) == EntityType.DROPPED_ITEM) {
 				// Add entity to spawn queue
 				Plugin.bungeeCordEntityInQueue.add(new BungeeQueue(entityTypeId, entityTypeData, destination));
 				
