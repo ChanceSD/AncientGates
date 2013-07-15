@@ -30,6 +30,10 @@ public class WorldCoord {
 		this.z = z;
 	}
 	
+	public WorldCoord(String worldName, double x, double y, double z) {
+		this(worldName, (int)x, (int)y, (int)z);
+	}
+	
 	public WorldCoord(Location location) {
 		this(location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
 	}
@@ -39,7 +43,7 @@ public class WorldCoord {
 	}
 	
 	public WorldCoord(Map<String, String> location) {
-		this(location.get(WORLD), Integer.parseInt(location.get(X)), Integer.parseInt(location.get(Y)), Integer.parseInt(location.get(Z)));
+		this(location.get(WORLD), Double.parseDouble(location.get(X)), Double.parseDouble(location.get(Y)), Double.parseDouble(location.get(Z)));
 	}
 	
 	public WorldCoord(Block block) {
