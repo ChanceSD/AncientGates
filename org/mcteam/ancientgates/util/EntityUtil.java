@@ -31,9 +31,9 @@ public class EntityUtil {
 					data += ((Sheep)entity).getColor().name() + ",";
 					data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
                 } else if (entity instanceof Wolf) {
-                	data += String.valueOf(((Wolf)entity).isAngry()) + ",";
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
+                	data += String.valueOf(((Wolf)entity).isAngry()) + ",";
                 	if (((Wolf)entity).isTamed()) {
                 		data += ((Tameable)entity).getOwner().getName() + ",";
                 		data += String.valueOf(((Wolf)entity).getCollarColor()) + ",";
@@ -99,16 +99,14 @@ public class EntityUtil {
 					((Sheep)entity).setColor(sheepColor(parts[2]));
 					if (!parts[3].equals("null")) ((LivingEntity)entity).setCustomName(parts[3]);
                 } else if ((entity instanceof Wolf)) {
-                	if (Boolean.parseBoolean(parts[0])) {
-                		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[0]));
-                	} else if (!parts[2].isEmpty()) {
-                		((Animals)entity).setAge(Integer.parseInt(parts[1]));
-                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
-                		if (!parts[3].isEmpty()) ((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[3]));
-                	} else {
-                		((Animals)entity).setAge(Integer.parseInt(parts[1]));
-                	}
+                	((Animals)entity).setAge(Integer.parseInt(parts[0]));
                 	if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
+                	if (Boolean.parseBoolean(parts[2])) {
+                		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[2]));
+                	} else if (!parts[3].isEmpty()) {
+                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[3]));
+                		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[4]));
+                	}
                 } else if ((entity instanceof Ocelot)) {
             		((Animals)entity).setAge(Integer.parseInt(parts[0]));
             		if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
