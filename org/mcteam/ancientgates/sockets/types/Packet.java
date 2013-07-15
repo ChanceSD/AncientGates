@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
@@ -35,7 +36,11 @@ public class Packet {
 	public Packet(Entity entity, EntityType entityType, Map<String, String> destination) {
 		this.command = "spawnentity";
 		// Build the arguments, format is <entityId>,<entityWorld>,<entityTypeId>,<entityTypeData>,<location>
-		this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), String.valueOf(entityType.getTypeId()), EntityUtil.getEntityTypeData(entity), TeleportUtil.locationToString(destination)};
+		if (entityType.getTypeId() == 1) {
+			this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), String.valueOf(entityType.getTypeId()), ItemStackUtil.itemStackToString(((Item)entity).getItemStack()), TeleportUtil.locationToString(destination)}; // Dropped ItemStack
+		} else {
+			this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), String.valueOf(entityType.getTypeId()), EntityUtil.getEntityTypeData(entity), TeleportUtil.locationToString(destination)};	// Entity
+		}
 	}
 
 	// Spawn Vehicle packet

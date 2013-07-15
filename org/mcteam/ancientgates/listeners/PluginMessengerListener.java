@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.HopperMinecart;
@@ -113,10 +114,13 @@ public class PluginMessengerListener implements PluginMessageListener {
 			World world = TeleportUtil.stringToWorld(destination);
 
 			if (EntityType.fromId(entityTypeId).isSpawnable()) {
-				Entity entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
+				Entity entity = world.spawnEntity(location, EntityType.fromId(entityTypeId)); // Entity
 				EntityUtil.setEntityTypeData(entity, entityTypeData);
 				entity.teleport(location);
-			}	
+			} else if(EntityType.fromId(entityTypeId) == EntityType.DROPPED_ITEM) {
+				Item item = world.dropItemNaturally(location, ItemStackUtil.stringToItemStack(entityTypeData)[0]); // Dropped ItemStack
+				item.teleport(location);
+			}
 		// Parse BungeeCord vehicle spawn packet
 		} else if (inChannel.equals("AGBungeeVehicleSpawn")) {
 			// Data should be vehicletype id, velocity, destination location, entitytype id and entitytype data
