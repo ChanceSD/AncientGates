@@ -4,12 +4,17 @@ import org.bukkit.entity.EntityType;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.commands.base.CommandAddTo;
+import org.mcteam.ancientgates.commands.base.CommandRemTo;
+import org.mcteam.ancientgates.commands.base.CommandSetTo;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.events.ClientConnectionEvent;
 import org.mcteam.ancientgates.sockets.events.ClientRecieveEvent;
 import org.mcteam.ancientgates.sockets.events.SocketServerEventListener;
 import org.mcteam.ancientgates.sockets.types.Packet;
+import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginSocketListener implements SocketServerEventListener {
 	
@@ -47,7 +52,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				Gate gate = Gate.get(gateid);
 				
 				// Set gate location
-				if (gate.getTos() == null || gate.getTos().size() <= 1) {
+				if (gate.getBungeeTos() == null || gate.getBungeeTos().size() <= 1) {
 					gate.addTo(null);
 					gate.addBungeeTo(null, null); // Wipe previous bungeeto
 					gate.addBungeeTo(server, location);
@@ -57,7 +62,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				// Display multiple tos exist response
 				} else {
 					response = "This gate has multiple to locations. Use:";
-					//response += new CommandRemTo().getUseageTemplate(true, true);
+					response += new CommandRemTo().getUseageTemplate(true, true);
 				}
 			}
 
@@ -67,7 +72,107 @@ public class PluginSocketListener implements SocketServerEventListener {
 			
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
+
+		// Parse "addto" command
+		} else if (command.toLowerCase().equals("addto")) {		
+			// Data should be player, server, id and command data
+			String[] parts = event.getArguments();	
+			String player = parts[0];
+			String server = parts[1];
+			String gateid = parts[2];
+			String location = parts[3];
+			String fromserver = parts[4];
+						
+			// Message response
+			String response;
 			
+			// Check player has permission
+			if(!Plugin.hasPermManage(player, "ancientgates.addto.bungee")) {
+				response = "You lack the permissions to Add a \"to\" to your location.";
+			// Check gate exists
+			} else if (!Gate.exists(gateid)) {
+				response = "There exists no gate with id \""+gateid+"\" on server \""+fromserver+"\"";
+			
+			// Get gate
+			} else {
+				Gate gate = Gate.get(gateid);
+				
+				// Add gate location
+				if (gate.getBungeeTos() != null && gate.getBungeeTos().size() >= 1) {
+					gate.addTo(null);
+					gate.addBungeeTo(server, location);
+					response = "Another \"to\" location for gate \""+gateid+"\" on server \""+fromserver+"\" is now where you stand.";
+					Gate.save();
+
+				// Display multiple tos required response
+				} else {
+					response = "This gate needs an initial \"to\" location. Use:";
+					response += new CommandSetTo().getUseageTemplate(true, true);
+				}
+			}
+
+			// Build the packet, format is <message>
+			String[] args = {response};
+			Packet packet = new Packet("sendmsg", "addto", args);
+			
+			// Sent to querying server
+			Plugin.serv.sendToClient(event.getID(), packet);
+			
+		// Parse "remto" command
+		} else if (command.toLowerCase().equals("remto")) {		
+			// Data should be player, server, id and command data
+			String[] parts = event.getArguments();	
+			String player = parts[0];
+			String server = parts[1];
+			String gateid = parts[2];
+			String location = parts[3];
+			String fromserver = parts[4];
+						
+			// Message response
+			String response;
+			
+			// Check player has permission
+			if(!Plugin.hasPermManage(player, "ancientgates.remto.bungee")) {
+				response = "You lack the permissions to Remove a \"to\" from your location.";
+			// Check gate exists
+			} else if (!Gate.exists(gateid)) {
+				response = "There exists no gate with id \""+gateid+"\" on server \""+fromserver+"\"";
+			
+			// Get gate
+			} else {
+				Gate gate = Gate.get(gateid);
+				
+				// Display no to exists response
+				if (gate.getBungeeTos() == null) {
+					response = "This gate needs a \"to\" location. Use:";
+					response += new CommandSetTo().getUseageTemplate(true, true);
+					
+				// Display only one to exists response
+				} else if (gate.getTos().size() <= 1) {
+					response = "This gate needs multiple \"to\" locations. Use:";
+					response += new CommandAddTo().getUseageTemplate(true, true);
+				
+				// Remove gate location
+				} else {
+					String nearestTo = GateUtil.nearestTo(new WorldCoord(location));
+					
+					if (nearestTo.isEmpty()) {
+						response = "No nearby \"to\" location for gate \""+gateid+"\" on server \""+fromserver+"\".";
+					} else {
+						gate.delBungeeTo(server, nearestTo);
+						response = "Nearest \"to\" location for gate \""+gateid+"\" on server \""+fromserver+"\" is removed.";
+						Gate.save();
+					}
+				}
+			}
+
+			// Build the packet, format is <message>
+			String[] args = {response};
+			Packet packet = new Packet("sendmsg", "remto", args);
+			
+			// Sent to querying server
+			Plugin.serv.sendToClient(event.getID(), packet);
+
 		// Parse "spawnentity" command
 		} else if (command.toLowerCase().equals("spawnentity")) {
 			// Data should be entity id, entity world, entitytype id and destination location

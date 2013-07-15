@@ -59,7 +59,7 @@ public class CommandAddTo extends BaseCommand {
 					
 				// Send over the AGBungeeCom BungeeCord channel
 				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
-				sendMessage("To location for gate \""+parameters.get(0)+"\" on server \""+serverName+"\" has been sent.");
+				sendMessage("Another \"to\" location for gate \""+parameters.get(0)+"\" on server \""+serverName+"\" has been sent.");
 
 			// Send command packet via client socket
 			} else {

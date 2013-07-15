@@ -139,7 +139,16 @@ public class Gate {
 		}
 	}
 	
-	public void delBungeeTo(Map<String, String> bungeeto) {		
+	public void delBungeeTo(String server, String to) {
+		String[] parts = to.split(",");
+		Map<String, String> bungeeto = new HashMap<String, String>();
+		bungeeto.put(SERVER, server);
+		bungeeto.put(WORLD, parts[0]);
+		bungeeto.put(X, parts[1]);
+		bungeeto.put(Y, parts[2]);
+		bungeeto.put(Z, parts[3]);
+		bungeeto.put(YAW, parts[4]);
+		bungeeto.put(PITCH, parts[5]);
 		this.bungeetos.remove(bungeeto);
 	}
 	

@@ -20,8 +20,10 @@ import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.util.EntityUtil;
+import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginMessengerListener implements PluginMessageListener {
 
@@ -188,10 +190,34 @@ public class PluginMessengerListener implements PluginMessageListener {
 			if (command.toLowerCase().equals("setto")) {
 				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.setto.bungee")) {
 					Gate gate = Gate.get(gateid);
-					gate.addTo(null);
-					gate.addBungeeTo(null, null); // Wipe previous bungeeto
-					gate.addBungeeTo(server, comdata);
-					Gate.save();
+					if (gate.getBungeeTos() == null || gate.getBungeeTos().size() <= 1) {
+						gate.addTo(null);
+						gate.addBungeeTo(null, null); // Wipe previous bungeeto
+						gate.addBungeeTo(server, comdata);
+						Gate.save();
+					}
+				}
+			// Parse "addto" command
+			} else if (command.toLowerCase().equals("addto")) {
+				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.addto.bungee")) {
+					Gate gate = Gate.get(gateid);
+					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() >= 1) {
+						gate.addTo(null);
+						gate.addBungeeTo(server, comdata);
+						Gate.save();
+					}
+				}
+			// Parse "remto" command
+			} else if (command.toLowerCase().equals("remto")) {
+				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.remto.bungee")) {
+					Gate gate = Gate.get(gateid);
+					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() > 1) {
+						String nearestTo = GateUtil.nearestTo(new WorldCoord(comdata));
+						if (!nearestTo.isEmpty()) {
+							gate.delBungeeTo(server, nearestTo);
+							Gate.save();
+						}
+					}
 				}
 			}
 		// Parse BungeeCord server name packet
