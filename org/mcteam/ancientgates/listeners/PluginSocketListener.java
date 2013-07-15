@@ -148,7 +148,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 					response += new CommandSetTo().getUseageTemplate(true, true);
 					
 				// Display only one to exists response
-				} else if (gate.getTos().size() <= 1) {
+				} else if (gate.getBungeeTos().size() <= 1) {
 					response = "This gate needs multiple \"to\" locations. Use:";
 					response += new CommandAddTo().getUseageTemplate(true, true);
 				
