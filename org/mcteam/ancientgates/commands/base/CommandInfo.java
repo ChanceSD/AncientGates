@@ -50,7 +50,7 @@ public class CommandInfo extends BaseCommand {
 			
 			if (gate == null || from.isEmpty()) {
 				sendMessage("No gate in sight. Ensure you are looking at a gate, or use:");
-				sendMessage(new CommandInfo().getUseageTemplate(true, true));
+				sendMessage(new CommandInfo().getUsageTemplate(true, true));
 				return;
 			}
 			

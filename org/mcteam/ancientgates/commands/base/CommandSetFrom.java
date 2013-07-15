@@ -24,7 +24,7 @@ public class CommandSetFrom extends BaseCommand {
 		if (gate.getFroms() != null) {
 			if (gate.getFroms().size() > 1) {
 				sendMessage("This gate has multiple from locations. Use:");
-				sendMessage(new CommandRemFrom().getUseageTemplate(true, true));
+				sendMessage(new CommandRemFrom().getUsageTemplate(true, true));
 				return;
 			}
 			Gates.close(gate);
@@ -48,7 +48,7 @@ public class CommandSetFrom extends BaseCommand {
 		
 		sendMessage("From location for gate \""+gate.getId()+"\" is now where you stand.");
 		sendMessage("Build a frame around that block and:");
-		sendMessage(new CommandOpen().getUseageTemplate(true, true));
+		sendMessage(new CommandOpen().getUsageTemplate(true, true));
 		
 		Gate.save();
 	}        

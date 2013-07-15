@@ -61,8 +61,8 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 				// Display multiple tos exist response
 				} else {
-					response = "This gate has multiple to locations. Use:";
-					response += new CommandRemTo().getUseageTemplate(true, true);
+					response = "This gate has multiple to locations. Use:\n";
+					response += new CommandRemTo().getUsageTemplate(true, true);
 				}
 			}
 
@@ -106,8 +106,8 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 				// Display multiple tos required response
 				} else {
-					response = "This gate needs an initial \"to\" location. Use:";
-					response += new CommandSetTo().getUseageTemplate(true, true);
+					response = "This gate needs an initial \"to\" location. Use:\n";
+					response += new CommandSetTo().getUsageTemplate(true, true);
 				}
 			}
 
@@ -144,13 +144,13 @@ public class PluginSocketListener implements SocketServerEventListener {
 				
 				// Display no to exists response
 				if (gate.getBungeeTos() == null) {
-					response = "This gate needs a \"to\" location. Use:";
-					response += new CommandSetTo().getUseageTemplate(true, true);
+					response = "This gate needs a \"to\" location. Use:\n";
+					response += new CommandSetTo().getUsageTemplate(true, true);
 					
 				// Display only one to exists response
 				} else if (gate.getBungeeTos().size() <= 1) {
-					response = "This gate needs multiple \"to\" locations. Use:";
-					response += new CommandAddTo().getUseageTemplate(true, true);
+					response = "This gate needs multiple \"to\" locations. Use:\n";
+					response += new CommandAddTo().getUsageTemplate(true, true);
 				
 				// Remove gate location
 				} else {

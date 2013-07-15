@@ -29,7 +29,7 @@ public class CommandCreate extends BaseCommand {
 		
 		Gate.create(id);
 		sendMessage("Gate with id \"" + id + "\" was created. Now you should:");
-		sendMessage(new CommandSetFrom().getUseageTemplate(true, true));
+		sendMessage(new CommandSetFrom().getUsageTemplate(true, true));
 		
 		Gate.save();	
 	}

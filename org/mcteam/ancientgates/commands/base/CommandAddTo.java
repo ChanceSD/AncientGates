@@ -35,12 +35,12 @@ public class CommandAddTo extends BaseCommand {
 		if (serverName == null || !Conf.bungeeCordSupport) {
 			if (gate.getTos() == null) {
 				sendMessage("This gate needs an initial \"to\" location. Use:");
-				sendMessage(new CommandSetTo().getUseageTemplate(true, true));
+				sendMessage(new CommandSetTo().getUsageTemplate(true, true));
 				return;
 			}
 			if (gate.getTos().size() < 1) {
 				sendMessage("This gate needs an initial \"to\" location. Use:");
-				sendMessage(new CommandSetTo().getUseageTemplate(true, true));
+				sendMessage(new CommandSetTo().getUsageTemplate(true, true));
 				return;
 			}
 		

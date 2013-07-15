@@ -91,7 +91,7 @@ public class EntityUtil {
                 	} else if (!parts[2].isEmpty()) {
                 		((Animals)entity).setAge(Integer.parseInt(parts[1]));
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
-                		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[3]));
+                		if (!parts[3].isEmpty()) ((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[3]));
                 	} else {
                 		((Animals)entity).setAge(Integer.parseInt(parts[1]));
                 	}

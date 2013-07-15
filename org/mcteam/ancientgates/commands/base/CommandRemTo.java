@@ -38,12 +38,12 @@ public class CommandRemTo extends BaseCommand {
 		if (serverName == null || !Conf.bungeeCordSupport) {
 			if (gate.getTos() == null) {
 				sendMessage("This gate needs a \"to\" location. Use:");
-				sendMessage(new CommandSetTo().getUseageTemplate(true, true));
+				sendMessage(new CommandSetTo().getUsageTemplate(true, true));
 				return;		
 			}
 			if (gate.getTos().size() <= 1) {
 				sendMessage("This gate needs multiple \"to\" locations. Use:");
-				sendMessage(new CommandAddTo().getUseageTemplate(true, true));
+				sendMessage(new CommandAddTo().getUsageTemplate(true, true));
 				return;	
 			}
             

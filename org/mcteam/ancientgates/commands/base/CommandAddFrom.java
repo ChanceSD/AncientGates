@@ -21,12 +21,12 @@ public class CommandAddFrom extends BaseCommand {
 	public void perform() {
 		if (gate.getFroms() == null) {
 			sendMessage("This gate needs an initial \"from\" location. Use:");
-			sendMessage(new CommandSetFrom().getUseageTemplate(true, true));
+			sendMessage(new CommandSetFrom().getUsageTemplate(true, true));
 			return;
 		}
 		if (gate.getFroms().size() < 1) {
 			sendMessage("This gate needs an initial \"from\" location. Use:");
-			sendMessage(new CommandSetFrom().getUseageTemplate(true, true));
+			sendMessage(new CommandSetFrom().getUsageTemplate(true, true));
 			return;
 		}
 		
@@ -46,7 +46,7 @@ public class CommandAddFrom extends BaseCommand {
 		
 		sendMessage("Another \"from\" location for gate \""+gate.getId()+"\" is now where you stand.");
 		sendMessage("Build a frame around that block and re-issue:");
-		sendMessage(new CommandOpen().getUseageTemplate(true, true));
+		sendMessage(new CommandOpen().getUsageTemplate(true, true));
 		
 		Gate.save();
 	}        

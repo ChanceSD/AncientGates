@@ -91,7 +91,7 @@ public class BaseCommand {
 		}
 
 		if (parameters.size() < requiredParameters.size()) {
-			sendMessage("Usage: "+this.getUseageTemplate(true));
+			sendMessage("Usage: "+this.getUsageTemplate(true));
 			return false;
 		}
 		
@@ -127,7 +127,7 @@ public class BaseCommand {
 	// -------------------------------------------- //
 	// Help and usage description
 	// -------------------------------------------- //
-	public String getUseageTemplate(boolean withColor, boolean withDescription) {
+	public String getUsageTemplate(boolean withColor, boolean withDescription) {
 		String ret = "";
 		
 		if (withColor) {
@@ -158,12 +158,12 @@ public class BaseCommand {
 		return ret;
 	}
 	
-	public String getUseageTemplate(boolean withColor) {
-		return getUseageTemplate(withColor, false);
+	public String getUsageTemplate(boolean withColor) {
+		return getUsageTemplate(withColor, false);
 	}
 	
-	public String getUseageTemplate() {
-		return getUseageTemplate(true);
+	public String getUsageTemplate() {
+		return getUsageTemplate(true);
 	}
 	
 }

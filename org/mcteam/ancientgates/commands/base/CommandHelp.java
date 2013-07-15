@@ -55,37 +55,37 @@ public class CommandHelp extends BaseCommand {
 		ArrayList<String> pageLines;
 
 		pageLines = new ArrayList<String>();
-		pageLines.add( new CommandCreate().getUseageTemplate(true, true) );
-		pageLines.add( new CommandSetFrom().getUseageTemplate(true, true) );
-		pageLines.add( new CommandSetTo().getUseageTemplate(true, true) );
-		if (!Conf.useVanillaPortals) pageLines.add( new CommandSetMaterial().getUseageTemplate(true, true) );
-		pageLines.add( new CommandOpen().getUseageTemplate(true, true) );
-		pageLines.add( new CommandClose().getUseageTemplate(true, true) );
-		pageLines.add( new CommandDelete().getUseageTemplate(true, true) );
-		pageLines.add( new CommandRename().getUseageTemplate(true, true) );
+		pageLines.add( new CommandCreate().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetFrom().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetTo().getUsageTemplate(true, true) );
+		if (!Conf.useVanillaPortals) pageLines.add( new CommandSetMaterial().getUsageTemplate(true, true) );
+		pageLines.add( new CommandOpen().getUsageTemplate(true, true) );
+		pageLines.add( new CommandClose().getUsageTemplate(true, true) );
+		pageLines.add( new CommandDelete().getUsageTemplate(true, true) );
+		pageLines.add( new CommandRename().getUsageTemplate(true, true) );
 		helpPages.add(pageLines);
 		
 		pageLines = new ArrayList<String>();
-		pageLines.add( new CommandOpenAll().getUseageTemplate(true, true) );
-		pageLines.add( new CommandCloseAll().getUseageTemplate(true, true) );
-		pageLines.add( new CommandSetMessage().getUseageTemplate(true, true) );
-		pageLines.add( new CommandSetEntities().getUseageTemplate(true, true) );
-		if (!Conf.useVanillaPortals) pageLines.add( new CommandSetVehicles().getUseageTemplate(true, true) );
-		if (Conf.useEconomy) pageLines.add( new CommandSetCost().getUseageTemplate(true, true) );
-		pageLines.add( new CommandAddFrom().getUseageTemplate(true, true) );
-		pageLines.add( new CommandRemFrom().getUseageTemplate(true, true) );
+		pageLines.add( new CommandOpenAll().getUsageTemplate(true, true) );
+		pageLines.add( new CommandCloseAll().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetMessage().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetEntities().getUsageTemplate(true, true) );
+		if (!Conf.useVanillaPortals) pageLines.add( new CommandSetVehicles().getUsageTemplate(true, true) );
+		if (Conf.useEconomy) pageLines.add( new CommandSetCost().getUsageTemplate(true, true) );
+		pageLines.add( new CommandAddFrom().getUsageTemplate(true, true) );
+		pageLines.add( new CommandRemFrom().getUsageTemplate(true, true) );
 		helpPages.add(pageLines);
 		
 		pageLines = new ArrayList<String>();
-		pageLines.add( new CommandAddTo().getUseageTemplate(true, true) );
-		pageLines.add( new CommandRemTo().getUseageTemplate(true, true) );
-		pageLines.add( new CommandInfo().getUseageTemplate(true, true) );
-		pageLines.add( new CommandList().getUseageTemplate(true, true) );
-		pageLines.add( new CommandSetBungeeType().getUseageTemplate(true, true) );
+		pageLines.add( new CommandAddTo().getUsageTemplate(true, true) );
+		pageLines.add( new CommandRemTo().getUsageTemplate(true, true) );
+		pageLines.add( new CommandInfo().getUsageTemplate(true, true) );
+		pageLines.add( new CommandList().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetBungeeType().getUsageTemplate(true, true) );
 		if (Conf.useSocketComms) {
-			pageLines.add( new CommandAddServer().getUseageTemplate(true, true) );
-			pageLines.add( new CommandRemServer().getUseageTemplate(true, true) );
-			pageLines.add( new CommandServerList().getUseageTemplate(true, true) );
+			pageLines.add( new CommandAddServer().getUsageTemplate(true, true) );
+			pageLines.add( new CommandRemServer().getUsageTemplate(true, true) );
+			pageLines.add( new CommandServerList().getUsageTemplate(true, true) );
 		}
 		helpPages.add(pageLines);
 	}

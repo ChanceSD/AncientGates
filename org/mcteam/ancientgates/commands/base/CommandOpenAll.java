@@ -29,7 +29,7 @@ public class CommandOpenAll extends BaseCommand {
 			sendMessage("All gates have been opened.");
 		} else {
 			sendMessage("Failed to open " + numFails + " gate(s). Have you built all frames?");
-			sendMessage("More info here: " + new CommandHelp().getUseageTemplate(true, true));
+			sendMessage("More info here: " + new CommandHelp().getUsageTemplate(true, true));
 		}
 	}
         

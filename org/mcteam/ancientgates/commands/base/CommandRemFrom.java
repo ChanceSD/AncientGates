@@ -23,12 +23,12 @@ public class CommandRemFrom extends BaseCommand {
 	public void perform() {
 		if (gate.getFroms() == null) {
 			sendMessage("This gate needs a \"from\" location. Use:");
-			sendMessage(new CommandSetFrom().getUseageTemplate(true, true));
+			sendMessage(new CommandSetFrom().getUsageTemplate(true, true));
 			return;		
 		}
 		if (gate.getFroms().size() <= 1) {
 			sendMessage("This gate needs multiple \"from\" locations. Use:");
-			sendMessage(new CommandAddFrom().getUseageTemplate(true, true));
+			sendMessage(new CommandAddFrom().getUsageTemplate(true, true));
 			return;	
 		}
             
