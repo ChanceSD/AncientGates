@@ -60,7 +60,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(player, fromServer, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
@@ -86,7 +86,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(player, fromServer, vehicleTypeId, velocity, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeId, velocity, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {

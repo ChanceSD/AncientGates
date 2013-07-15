@@ -32,7 +32,7 @@ public class CommandList extends BaseCommand {
 		for (Gate gate : Gate.getAll()) {
 			ids.add(Conf.colorAlly + gate.getId());
 			states.add(Conf.colorAlly + (Gates.isOpen(gate) ? "open" : "closed"));
-			if (Plugin.econ != null) {
+			if (Conf.useEconomy && Plugin.econ != null) {
 				costs.add(Conf.colorAlly + String.valueOf(gate.getCost()));
 			}
 		}

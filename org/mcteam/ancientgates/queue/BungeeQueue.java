@@ -2,7 +2,6 @@ package org.mcteam.ancientgates.queue;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.util.TeleportUtil;
@@ -29,23 +28,23 @@ public class BungeeQueue {
 	// Constructors
 	//----------------------------------------------//
 	// Player queue
-	public BungeeQueue(Player player, String server, String destination) {
+	public BungeeQueue(String playerName, String server, String destination) {
 		this.queueType = BungeeQueueType.PLAYER;
-		this.playerName = player.getName();
+		this.playerName = playerName;
 		this.server = server;
 		if (!destination.equals("null")) this.destination = destination;
 	}
 	
 	// Player queue (with message)
-	public BungeeQueue(Player player, String server, String destination, String message) {
-		this(player, server, destination);
+	public BungeeQueue(String playerName, String server, String destination, String message) {
+		this(playerName, server, destination);
 		this.message = message;
 	}
 	
 	// Player passenger queue
-	public BungeeQueue(Player player, String server, int vehicleTypeId, double velocity, String destination) {
+	public BungeeQueue(String playerName, String server, int vehicleTypeId, double velocity, String destination) {
 		this.queueType = BungeeQueueType.PASSENGER;
-		this.playerName = player.getName();
+		this.playerName = playerName;
 		this.server = server;
 		this.vehicleTypeId = vehicleTypeId;
 		this.velocity = velocity;
@@ -53,8 +52,8 @@ public class BungeeQueue {
 	}
 	
 	// Player passenger queue (with message)
-	public BungeeQueue(Player player, String server, int vehicleTypeId, double velocity, String destination, String message) {
-		this(player, server, vehicleTypeId, velocity, destination);
+	public BungeeQueue(String playerName, String server, int vehicleTypeId, double velocity, String destination, String message) {
+		this(playerName, server, vehicleTypeId, velocity, destination);
 		this.message = message;
 	}
 	
