@@ -62,7 +62,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				// Display multiple tos exist response
 				} else {
 					response = "This gate has multiple to locations. Use:\n";
-					response += new CommandRemTo().getUsageTemplate(true, true);
+					response += new CommandRemTo().getUsageTemplate(false, true);
 				}
 			}
 
@@ -107,7 +107,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				// Display multiple tos required response
 				} else {
 					response = "This gate needs an initial \"to\" location. Use:\n";
-					response += new CommandSetTo().getUsageTemplate(true, true);
+					response += new CommandSetTo().getUsageTemplate(false, true);
 				}
 			}
 
@@ -145,21 +145,21 @@ public class PluginSocketListener implements SocketServerEventListener {
 				// Display no to exists response
 				if (gate.getBungeeTos() == null) {
 					response = "This gate needs a \"to\" location. Use:\n";
-					response += new CommandSetTo().getUsageTemplate(true, true);
+					response += new CommandSetTo().getUsageTemplate(false, true);
 					
 				// Display only one to exists response
 				} else if (gate.getBungeeTos().size() <= 1) {
 					response = "This gate needs multiple \"to\" locations. Use:\n";
-					response += new CommandAddTo().getUsageTemplate(true, true);
+					response += new CommandAddTo().getUsageTemplate(false, true);
 				
 				// Remove gate location
 				} else {
-					String nearestTo = GateUtil.nearestTo(new WorldCoord(location));
+					String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(location));
 					
-					if (nearestTo.isEmpty()) {
+					if (nearestBungeeTo.isEmpty()) {
 						response = "No nearby \"to\" location for gate \""+gateid+"\" on server \""+fromserver+"\".";
 					} else {
-						gate.delBungeeTo(server, nearestTo);
+						gate.delBungeeTo(server, nearestBungeeTo);
 						response = "Nearest \"to\" location for gate \""+gateid+"\" on server \""+fromserver+"\" is removed.";
 						Gate.save();
 					}

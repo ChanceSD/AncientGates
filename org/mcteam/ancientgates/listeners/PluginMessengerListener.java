@@ -212,9 +212,9 @@ public class PluginMessengerListener implements PluginMessageListener {
 				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.remto.bungee")) {
 					Gate gate = Gate.get(gateid);
 					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() > 1) {
-						String nearestTo = GateUtil.nearestTo(new WorldCoord(comdata));
-						if (!nearestTo.isEmpty()) {
-							gate.delBungeeTo(server, nearestTo);
+						String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(comdata));
+						if (!nearestBungeeTo.isEmpty()) {
+							gate.delBungeeTo(server, nearestBungeeTo);
 							Gate.save();
 						}
 					}

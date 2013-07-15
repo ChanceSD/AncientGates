@@ -1,5 +1,7 @@
 package org.mcteam.ancientgates.util.types;
 
+import java.util.Map;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,6 +14,11 @@ public class WorldCoord {
 	public int x = 0;
 	public int y = 0;
 	public int z = 0;
+	
+	private static final String WORLD = "world";
+	private static final String X = "x";
+	private static final String Y = "y";
+	private static final String Z = "z";
 	
 	//----------------------------------------------//
 	// Constructors
@@ -29,6 +36,10 @@ public class WorldCoord {
 	
 	public WorldCoord(String location) {
 		this(TeleportUtil.stringToLocation(location));
+	}
+	
+	public WorldCoord(Map<String, String> location) {
+		this(location.get(WORLD), Integer.parseInt(location.get(X)), Integer.parseInt(location.get(Y)), Integer.parseInt(location.get(Z)));
 	}
 	
 	public WorldCoord(Block block) {
