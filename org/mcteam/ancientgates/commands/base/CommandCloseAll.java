@@ -12,6 +12,7 @@ public class CommandCloseAll extends BaseCommand {
 		requiredPermission = "ancientgates.closeall";
 		
 		senderMustBePlayer = false;
+		hasGateParam = false;
 		
 		helpDescription = "Close all gates";
 	}

@@ -12,6 +12,7 @@ public class CommandOpenAll extends BaseCommand {
 		requiredPermission = "ancientgates.openall";
 		
 		senderMustBePlayer = false;
+		hasGateParam = false;
 		
 		helpDescription = "Open all gates";
 	}
