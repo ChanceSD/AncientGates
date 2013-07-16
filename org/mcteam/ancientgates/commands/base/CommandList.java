@@ -43,7 +43,7 @@ public class CommandList extends BaseCommand {
 		}
 		
 		sendMessage("There are currently "+ids.size()+" gates on this server: ");
-		if (Plugin.econ != null) {
+		if (Conf.useEconomy && Plugin.econ != null) {
 			sendMessage(TextUtil.implode(ids, states, costs, Conf.colorSystem+", "));
 		} else {
 			sendMessage(TextUtil.implode(ids, states, Conf.colorSystem+", "));	
