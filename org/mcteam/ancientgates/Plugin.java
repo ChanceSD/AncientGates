@@ -187,6 +187,9 @@ public class Plugin extends JavaPlugin {
 		log("Enabled");
 	}
 	
+	// -------------------------------------------- //
+	// Setup optional dependencies
+	// -------------------------------------------- //
 	private void setupBungeeCord() {	
 		// Enable required plugin channels 
 		Plugin.log("Enabling bungeecord channels");
