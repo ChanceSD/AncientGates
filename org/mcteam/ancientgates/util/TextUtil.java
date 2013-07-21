@@ -26,6 +26,13 @@ public class TextUtil {
 		return new ArrayList<String>(Arrays.asList(str.trim().split("\\s+")));
 	}
 	
+	public static Boolean containsSubString(List<String> strList, String subStr) {
+		for (String str : strList) {
+			if (str.contains(subStr)) return true;
+		}
+		return false;
+	}
+	
 	public static String implode(List<String> list1, List<String> list2, List<String> list3, String glue) {
 	    String ret = "";
 	    for (int i=0; i<list1.size(); i++) {

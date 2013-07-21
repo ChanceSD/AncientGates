@@ -99,7 +99,7 @@ public class BaseCommand {
 			String id = parameters.get(0);
 			if (!Gate.exists(id)) {
 				// Ignore id for "to" on external BungeeCord gates
-				if (Conf.bungeeCordSupport && aliases.contains("to") && parameters.size() > 1) return true;
+				if (Conf.bungeeCordSupport && TextUtil.containsSubString(aliases, "to") && parameters.size() > 1) return true;
 		
 				sendMessage("There exists no gate with id "+id);
 				return false;
