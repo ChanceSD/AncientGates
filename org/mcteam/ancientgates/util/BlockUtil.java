@@ -53,6 +53,7 @@ public class BlockUtil {
 		standableMaterials.add(38); // 38 Rose
 		standableMaterials.add(39); // 39 Brown Mushroom
 		standableMaterials.add(40); // 40 Red Mushroom
+		standableMaterials.add(44); // 44 Stone Slab
 		standableMaterials.add(50); // 50 Torch
 		standableMaterials.add(51); // 51 Fire
 		standableMaterials.add(55); // 55 Redstone Wire
@@ -74,7 +75,8 @@ public class BlockUtil {
 		standableMaterials.add(94); // 94 Redstone Repeater (On)
 		standableMaterials.add(106); // 106 Vines
 		standableMaterials.add(111); // 111 Lily Pad
-		standableMaterials.add(119); // 119 End Portal	
+		standableMaterials.add(119); // 119 End Portal
+		standableMaterials.add(126); // 126 Wooden Slab
 		standableMaterials.add(131); // 131 Tripwire Hook
 		standableMaterials.add(132); // 132 Tripwire
 		standableMaterials.add(140); // 140 Flower Pot
