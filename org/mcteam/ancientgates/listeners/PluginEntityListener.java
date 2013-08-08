@@ -44,8 +44,7 @@ public class PluginEntityListener implements Listener {
 					return;
 				}
 				
-				if ((nearestGate.getTeleportVehicles() ^ !(event.getEntity() instanceof Vehicle))
-						|| (nearestGate.getTeleportEntities() ^ (event.getEntity() instanceof Vehicle))) {
+				if (nearestGate.getTeleportEntities() && !(event.getEntity() instanceof Vehicle)) {
 					if (nearestGate.getBungeeTo() == null) {
 						TeleportUtil.teleportEntity(event, nearestGate.getTo());
 					} else {
