@@ -103,7 +103,7 @@ public class PluginMessage {
 	}
 	
 	// AncientGates command message
-	public PluginMessage(String command, Player player, String toServer, String... parameters) {
+	public PluginMessage(String command, Player player, String toServer, String[] parameters) {
 		this.channel = BungeeChannel.AGBungeeCom;	
 		this.toServer = toServer;
 		this.playerName = player.getName();
@@ -166,8 +166,8 @@ public class PluginMessage {
 					msg = this.vehicleTypeId + "#@#" + this.velocity + "#@#" + this.destination;	
 				}
 			} else if (this.channel == BungeeChannel.AGBungeeCom) {
-				// Format is <command>#@#<player>#@#<server>#@#<parameters>
-				msg = this.command + "#@#" + this.playerName + "#@#" + this.fromServer;
+				// Format is <command>#@#<player>#@#<parameters>
+				msg = this.command + "#@#" + this.playerName;
 				for (String parameter : this.parameters) {
 					msg += "#@#" + parameter;
 				}

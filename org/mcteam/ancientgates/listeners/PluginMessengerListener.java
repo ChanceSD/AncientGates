@@ -208,9 +208,9 @@ public class PluginMessengerListener implements PluginMessageListener {
 			
 			String command = parts[0];
 			String player = parts[1];
-			String server = parts[2];
-			String gateid = parts[3];
-			String comdata = parts[4];
+			String gateid = parts[2];
+			String comdata = parts[3];
+			String server = parts[4];
 			
 			// Parse "setto" command
 			if (command.toLowerCase().equals("setto")) {

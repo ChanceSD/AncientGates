@@ -53,10 +53,16 @@ public class CommandSetTo extends BaseCommand {
 			
 		// External BungeeCord 'setto' command
 		} else {
+			// Check bungeeServerName found
+			if (Plugin.bungeeServerName == null) {
+				sendMessage("Still connecting to BungeeCord. Try again.");
+				return;
+			}
+			
 			// Send command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Build the message, format is <command>#@#<player>#@#<server>#@#<gateid>#@#<data>
-				String[] args = new String[] {parameters.get(0), TeleportUtil.locationToString(player.getLocation()), serverName};
+				String[] args = new String[] {parameters.get(0), TeleportUtil.locationToString(player.getLocation()), Plugin.bungeeServerName};
 				PluginMessage msg = new PluginMessage("setto", player, serverName, args);
 				
 				// Send over the AGBungeeCom BungeeCord channel
@@ -68,12 +74,6 @@ public class CommandSetTo extends BaseCommand {
 				// Check server exists
 				if (!Server.exists(serverName)) {
 					sendMessage("The server \""+serverName+"\" does not exist.");
-					return;
-				}
-				
-				// Check bungeeServerName found
-				if (Plugin.bungeeServerName == null) {
-					sendMessage("Still connecting to BungeeCord. Try again.");
 					return;
 				}
 				
