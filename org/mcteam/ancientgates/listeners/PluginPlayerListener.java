@@ -51,9 +51,9 @@ public class PluginPlayerListener implements Listener {
 		if (queue != null) {
 			// Display custom join message
 			String msg = null;
-			if (Conf.customBungeeMessages) {
+			if (Conf.useBungeeMessages) {
 				String server = queue.getServer();
-				msg = ChatColor.YELLOW + playerName + " came from " + server + " server";
+				msg = ChatColor.translateAlternateColorCodes('&', Conf.bungeeJoinMessage.replace("%p", playerName).replace("%s", server));
 			}
 			event.setJoinMessage(msg);
 			
@@ -108,7 +108,7 @@ public class PluginPlayerListener implements Listener {
 		String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
 		if (server != null) {
 			String msg = null;
-			if (Conf.customBungeeMessages) msg = ChatColor.YELLOW + playerName + " went to " + server + " server";
+			if (Conf.useBungeeMessages) msg = ChatColor.translateAlternateColorCodes('&', Conf.bungeeQuitMessage.replace("%p", playerName).replace("%s", server));
 			event.setQuitMessage(msg);
 		}
 		

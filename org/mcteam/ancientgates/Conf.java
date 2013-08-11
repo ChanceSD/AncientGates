@@ -35,7 +35,9 @@ public class Conf {
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
 	public static String bungeeTeleportDefault = "LOCATION";
-	public static boolean customBungeeMessages = true;
+	public static boolean useBungeeMessages = true;
+	public static String bungeeJoinMessage = "&e%p came from %s server";
+	public static String bungeeQuitMessage = "&e%p went to %s server";
 	
 	// Socket comms settings
 	public static boolean useSocketComms = false;
@@ -50,6 +52,7 @@ public class Conf {
 	
 	// Legacy entries
 	private static Boolean useInstantNether = null;
+	private static Boolean customBungeeMessages = null;
 
 	public static int getGateMaxArea() {
 		return gateMaxArea*10;
@@ -107,6 +110,10 @@ public class Conf {
 		if (useInstantNether != null) {
 			useVanillaPortals = !useInstantNether;
 			useInstantNether = null;
+		}
+		if (customBungeeMessages != null) {
+			useBungeeMessages = customBungeeMessages;
+			customBungeeMessages = null;
 		}
 		
 		save();
