@@ -22,6 +22,7 @@ import org.bukkit.entity.Vehicle;
 import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import org.mcteam.ancientgates.Conf;
@@ -241,13 +242,32 @@ public class TeleportUtil {
 				}
 			}, 2);
 		} else {
+			ItemStack[] contents;
 			Vehicle mc = location.getWorld().spawn(location, vehicle.getClass());
-			if (mc instanceof StorageMinecart && teleportEntities) {
-				StorageMinecart smc = (StorageMinecart)mc;
-				smc.getInventory().setContents(((StorageMinecart)vehicle).getInventory().getContents());
-			} else if (mc instanceof HopperMinecart && teleportEntities) {
-				HopperMinecart hmc = (HopperMinecart)mc;
-				hmc.getInventory().setContents(((HopperMinecart)vehicle).getInventory().getContents());
+			if (mc instanceof StorageMinecart) {
+				contents = ((StorageMinecart)vehicle).getInventory().getContents();
+				// Teleport contents
+				if (teleportEntities) {
+					StorageMinecart smc = (StorageMinecart)mc;
+					smc.getInventory().setContents(contents);
+				// Drop contents
+				} else {
+					for (ItemStack itemStack : contents) {
+						if (itemStack != null) vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+					}
+				}
+			} else if (mc instanceof HopperMinecart) {
+				contents = ((HopperMinecart)vehicle).getInventory().getContents();
+				// Teleport contents
+				if (teleportEntities) {
+					HopperMinecart hmc = (HopperMinecart)mc;
+					hmc.getInventory().setContents(contents);
+				// Drop contents
+				} else {
+					for (ItemStack itemStack : contents) {
+						if (itemStack != null) vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+					}
+				}
 			}
 			mc.setVelocity(newVelocity);
 			vehicle.remove();
@@ -313,6 +333,8 @@ public class TeleportUtil {
 
 			// Entity vehicle teleport
 			} else {
+				ItemStack[] contents;
+				
 				// Imitate teleport by stopping
 				vehicle.setVelocity(new Vector());
 				
@@ -320,19 +342,37 @@ public class TeleportUtil {
 				if (!Conf.useSocketComms || Plugin.serv == null) {
 					// Send AGBungeeVehicleSpawn packet
 					PluginMessage msg = new PluginMessage(vehicle.getType(), velocity, location);
-						
+					
 					// Append passenger info
 					if (passenger != null) {
 						if (passenger.getType().isSpawnable()) {
 							msg.addEntity(passenger);
 						}
 					// Append vehicle contents
-					} else if (vehicle instanceof StorageMinecart && teleportEntities) {
-						msg.addItemStack(((StorageMinecart)vehicle).getInventory().getContents());	
-					} else if (vehicle instanceof HopperMinecart && teleportEntities) {
-						msg.addItemStack(((HopperMinecart)vehicle).getInventory().getContents());	
-					}	
-						
+					} else if (vehicle instanceof StorageMinecart) {
+						contents = ((StorageMinecart)vehicle).getInventory().getContents();
+						// Add contents
+						if (teleportEntities) {
+							msg.addItemStack(contents);
+						// Drop contents
+						} else {
+							for (ItemStack itemStack : contents) {
+								if (itemStack != null) vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+							}
+						}
+					} else if (vehicle instanceof HopperMinecart) {
+						contents = ((HopperMinecart)vehicle).getInventory().getContents();
+						// Add contents
+						if (teleportEntities) {
+							msg.addItemStack(((HopperMinecart)vehicle).getInventory().getContents());
+						// Drop contents
+						} else {
+							for (ItemStack itemStack : contents) {
+								if (itemStack != null) vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+							}	
+						}
+					}
+					
 					// Build the message data, sent over the AGBungeeTele BungeeCord channel
 					if (Plugin.instance.getServer().getOnlinePlayers().length > 0) {
 						// Use any player to send the plugin message
@@ -347,7 +387,7 @@ public class TeleportUtil {
 				// Send vehicle spawn command packet via client socket
 				} else {
 					// Get server
-					Server server = Server.get(location.get(SERVER));					
+					Server server = Server.get(location.get(SERVER));				
 					// Construct spawn vehicle packet
 					Packet packet = new Packet(vehicle, velocity, location);
 					// Append passenger info
@@ -356,11 +396,30 @@ public class TeleportUtil {
 							packet.addPassenger(passenger);
 						}
 					// Append vehicle contents
-					} else if (vehicle instanceof StorageMinecart && teleportEntities) {
-						packet.addItemStack(((StorageMinecart)vehicle).getInventory().getContents());
-					} else if (vehicle instanceof HopperMinecart && teleportEntities) {
-						packet.addItemStack(((HopperMinecart)vehicle).getInventory().getContents());
+					} else if (vehicle instanceof StorageMinecart) {
+						contents = ((StorageMinecart)vehicle).getInventory().getContents();
+						// Add contents
+						if (teleportEntities) {
+							packet.addItemStack(contents);
+						// Drop contents
+						} else {
+							for (ItemStack itemStack : contents) {
+								if (itemStack != null) vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);	
+							}
+						}
+					} else if (vehicle instanceof HopperMinecart) {
+						contents = ((HopperMinecart)vehicle).getInventory().getContents();
+						// Add contents
+						if (teleportEntities) {
+							packet.addItemStack(((HopperMinecart)vehicle).getInventory().getContents());
+						// Drop contents
+						} else {
+							for (ItemStack itemStack : contents) {
+								if (itemStack != null) vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+							}	
+						}
 					}
+					
 					// Setup socket client and listener
 					SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 					client.setListener(new SocketClientEventListener() {
