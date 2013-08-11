@@ -1,5 +1,6 @@
 package org.mcteam.ancientgates.listeners;
 
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -79,9 +80,11 @@ public class PluginEntityListener implements Listener {
 			// Ok so an entity damage event begins
 			// Find the nearest gate!
 			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			WorldCoord entityCoordUp = new WorldCoord(event.getEntity().getLocation().getBlock().getRelative(BlockFace.UP));
 			Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
+			Gate nearestGateUp = GateUtil.nearestGate(entityCoordUp, false);
 		
-			if (nearestGate != null) {
+			if (nearestGate != null || nearestGateUp != null) {
 				event.setCancelled(true);
 				event.getEntity().setFireTicks(0);
 			}
