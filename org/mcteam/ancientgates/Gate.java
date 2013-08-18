@@ -46,6 +46,8 @@ public class Gate {
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
 	private String material = Conf.gateMaterialDefault;
+	private String command;
+	private String commandtype;
 	private String msg;
 	private double cost = 0.0;
 	
@@ -176,6 +178,22 @@ public class Gate {
 	
 	public String getMessage() {
 		return msg;
+	}
+	
+	public void setCommand(String command) {
+		this.command = command;
+	}
+	
+	public String getCommand() {
+		return command;
+	}
+	
+	public void setCommandType(String commandType) {
+		this.commandtype= commandType.toUpperCase();
+	}
+	
+	public String getCommandType() {
+		return commandtype.toUpperCase();
 	}
 	
 	public void setCost(Double cost) {

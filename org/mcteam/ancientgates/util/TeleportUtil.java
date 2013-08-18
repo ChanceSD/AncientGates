@@ -116,7 +116,7 @@ public class TeleportUtil {
 			if (e != null) e.remove();
 		
 			// Replace quit message is with BungeeCord teleport message
-			Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
+			Plugin.bungeeCordOutQueue.put(player.getName().toLowerCase(), location.get(SERVER));
 			
 			// Connect player to new server
 			msg = new PluginMessage("Connect", location.get(SERVER));
@@ -325,7 +325,7 @@ public class TeleportUtil {
 				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 				
 				// Replace quit message is with BungeeCord teleport message
-				Plugin.bungeeCordOutQueue.put(player.getName(), location.get(SERVER));
+				Plugin.bungeeCordOutQueue.put(player.getName().toLowerCase(), location.get(SERVER));
 				
 				// Connect player to new server
 				msg = new PluginMessage("Connect", location.get(SERVER));

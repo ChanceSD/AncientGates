@@ -22,6 +22,7 @@ public class Conf {
 	// Flags
 	public static boolean enforceAccess = false;
 	public static boolean useEconomy = false;
+	public static boolean useDynmap = false;
 	public static boolean useVanillaPortals = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;

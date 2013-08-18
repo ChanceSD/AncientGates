@@ -214,7 +214,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			
 			// Parse "setto" command
 			if (command.toLowerCase().equals("setto")) {
-				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.setto.bungee")) {
+				if (Plugin.hasPermManage(player, "ancientgates.setto.bungee")) {
 					Gate gate = Gate.get(gateid);
 					if (gate.getBungeeTos() == null || gate.getBungeeTos().size() <= 1) {
 						gate.addTo(null);
@@ -225,7 +225,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				}
 			// Parse "addto" command
 			} else if (command.toLowerCase().equals("addto")) {
-				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.addto.bungee")) {
+				if (Plugin.hasPermManage(player, "ancientgates.addto.bungee")) {
 					Gate gate = Gate.get(gateid);
 					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() >= 1) {
 						gate.addTo(null);
@@ -235,7 +235,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				}
 			// Parse "remto" command
 			} else if (command.toLowerCase().equals("remto")) {
-				if (Plugin.hasPermManage((Player) Plugin.instance.getServer().getOfflinePlayer(player), "ancientgates.remto.bungee")) {
+				if (Plugin.hasPermManage(player, "ancientgates.remto.bungee")) {
 					Gate gate = Gate.get(gateid);
 					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() > 1) {
 						String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(comdata));
