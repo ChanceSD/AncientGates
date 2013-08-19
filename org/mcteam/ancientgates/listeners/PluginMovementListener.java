@@ -17,6 +17,7 @@ import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.BlockUtil;
+import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
@@ -80,7 +81,7 @@ public class PluginMovementListener implements Listener {
 			}
 			
 			// Handle gates that do not point anywhere
-			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
+			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && nearestGate.getCommand() == null) {
 				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage(String.format("This gate does not point anywhere :P"));
 					Plugin.lastMessageTime.put(player.getName(), now);
@@ -92,6 +93,7 @@ public class PluginMovementListener implements Listener {
 			if (nearestGate.getBungeeTo() == null)  {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
+				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
@@ -151,7 +153,7 @@ public class PluginMovementListener implements Listener {
 				}
 				
 				// Handle gates that do not point anywhere
-				if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
+				if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && nearestGate.getCommand() == null) {
 					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage(String.format("This gate does not point anywhere :P"));
 						Plugin.lastMessageTime.put(player.getName(), now);
@@ -169,6 +171,7 @@ public class PluginMovementListener implements Listener {
 				if (nearestGate.getBungeeTo() == null)  {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getTo(), nearestGate.getTeleportEntities());
 					
+					if (passenger instanceof Player && nearestGate.getCommand() != null) ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
 					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
 				} else {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());

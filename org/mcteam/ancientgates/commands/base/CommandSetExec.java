@@ -9,11 +9,10 @@ public class CommandSetExec extends BaseCommand {
 		aliases.add("setexec");
 		
 		requiredParameters.add("id");
+		requiredParameters.add("type");
 		requiredParameters.add("command");
 		
 		requiredPermission = "ancientgates.setexec";
-		
-		optionalParameters.add("type");
 		
 		senderMustBePlayer = false;
 		
@@ -21,15 +20,24 @@ public class CommandSetExec extends BaseCommand {
 	}
 	
 	public void perform() {	
-		String command = parameters.get(1);
-		String commandType = "PLAYER";
-		if (parameters.size() > 1) {
-			commandType = parameters.get(2);
+		String command = "";
+		String commandType = parameters.get(1).toUpperCase();
+		
+		if (!commandType.equals("PLAYER") && !commandType.equals("CONSOLE")) {
+			sendMessage("This is not a valid command type. Valid types:");
+			sendMessage("PLAYER, CONSOLE");
+			return;
+		}
+
+		parameters.remove(0);
+		parameters.remove(1);
+		for(String parameter : parameters) {
+			command += " " + parameter;
 		}
         
-		gate.setCommand(command);
+		gate.setCommand(command.trim());
 		gate.setCommandType(commandType);
-		sendMessage("Command for gate \""+gate.getId()+"\" is now "+command+".");
+		sendMessage("Command for gate \""+gate.getId()+"\" is now /"+command+".");
 		
 		Gate.save();
 	}

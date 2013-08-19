@@ -41,11 +41,6 @@ public class CommandRemTo extends BaseCommand {
 				sendMessage(new CommandSetTo().getUsageTemplate(true, true));
 				return;		
 			}
-			if (gate.getTos().size() <= 1) {
-				sendMessage("This gate needs multiple \"to\" locations. Use:");
-				sendMessage(new CommandAddTo().getUsageTemplate(true, true));
-				return;	
-			}
             
 			// Find the nearest gate based on the player's location
 			Location playerLocation = player.getLocation();

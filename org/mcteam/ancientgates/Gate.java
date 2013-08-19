@@ -181,7 +181,8 @@ public class Gate {
 	}
 	
 	public void setCommand(String command) {
-		this.command = command;
+		this.command = (command.isEmpty()) ? null : command;
+		if (command.isEmpty()) this.commandtype = null;
 	}
 	
 	public String getCommand() {

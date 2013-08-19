@@ -25,12 +25,14 @@ permissions:
       ancientgates.listserver: true
       ancientgates.open: true
       ancientgates.openall: true
+      ancientgates.remexec: true
       ancientgates.remserver: true
       ancientgates.remto: true
       ancientgates.rename: true
       ancientgates.setbungeetype: true
       ancientgates.setcost: true
       ancientgates.setentities: true
+      ancientgates.setexec: true
       ancientgates.setfrom: true
       ancientgates.setmaterial: true
       ancientgates.setmessage: true
@@ -67,6 +69,9 @@ permissions:
   ancientgates.openall:
     description: Allows the use of Ancient Gates openall command.
     default: op
+  ancientgates.remexec:
+    description: Allows the use of Ancient Gates remexec command.
+    default: op
   ancientgates.rename:
     description: Allows the use of Ancient Gates rename command.
     default: op
@@ -78,6 +83,9 @@ permissions:
     default: op
   ancientgates.setentities:
     description: Allows the use of Ancient Gates setentities command.
+    default: op
+  ancientgates.setexec:
+    description: Allows the use of Ancient Gates setexec command.
     default: op
   ancientgates.setfrom:
     description: Allows the use of Ancient Gates setfrom command.

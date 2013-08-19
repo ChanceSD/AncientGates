@@ -59,12 +59,6 @@ public class CommandSetTo extends BaseCommand {
 				return;
 			}
 			
-			// Check not sending message to own server
-			if (Plugin.bungeeServerName.equalsIgnoreCase(serverName)) {
-				sendMessage("Cannot send external server command to self.");
-				return;
-			}
-			
 			// Send command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Build the message, format is <command>#@#<player>#@#<server>#@#<gateid>#@#<data>

@@ -23,6 +23,7 @@ import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.tasks.BungeeServerName;
 import org.mcteam.ancientgates.util.EntityUtil;
+import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
@@ -155,11 +156,12 @@ public class PluginPlayerListener implements Listener {
 			}
 			
 			// Teleport the player (Nether method)
-			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null) {
+			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && nearestGate.getCommand() == null) {
 				player.sendMessage(String.format("This gate does not point anywhere :P"));
 			} else if (nearestGate.getBungeeTo() == null)  {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
+				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());
