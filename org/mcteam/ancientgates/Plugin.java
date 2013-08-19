@@ -38,10 +38,12 @@ import org.mcteam.ancientgates.commands.base.CommandInfo;
 import org.mcteam.ancientgates.commands.base.CommandList;
 import org.mcteam.ancientgates.commands.base.CommandOpen;
 import org.mcteam.ancientgates.commands.base.CommandOpenAll;
+import org.mcteam.ancientgates.commands.base.CommandRemExec;
 import org.mcteam.ancientgates.commands.base.CommandRemFrom;
 import org.mcteam.ancientgates.commands.base.CommandRemTo;
 import org.mcteam.ancientgates.commands.base.CommandRename;
 import org.mcteam.ancientgates.commands.base.CommandSetEntities;
+import org.mcteam.ancientgates.commands.base.CommandSetExec;
 import org.mcteam.ancientgates.commands.base.CommandSetFrom;
 import org.mcteam.ancientgates.commands.base.CommandSetMaterial;
 import org.mcteam.ancientgates.commands.base.CommandSetMessage;
@@ -140,10 +142,12 @@ public class Plugin extends JavaPlugin {
 		commands.add(new CommandHelp());
 		commands.add(new CommandCreate());
 		commands.add(new CommandDelete());
+		commands.add(new CommandSetExec());
 		commands.add(new CommandSetFrom());
 		commands.add(new CommandSetTo());
 		commands.add(new CommandOpen());
 		commands.add(new CommandClose());
+		commands.add(new CommandRemExec());
 		commands.add(new CommandRename());
 		commands.add(new CommandSetMessage());
 		if (econ != null) {
