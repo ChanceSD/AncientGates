@@ -158,13 +158,15 @@ public class PluginPlayerListener implements Listener {
 			// Teleport the player (Nether method)
 			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && nearestGate.getCommand() == null) {
 				player.sendMessage(String.format("This gate does not point anywhere :P"));
-			} else if (nearestGate.getBungeeTo() == null)  {
+			} else if (nearestGate.getTo() != null)  {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
-			} else {
+			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());
+			} else {
+				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 			}
 		}
 	}

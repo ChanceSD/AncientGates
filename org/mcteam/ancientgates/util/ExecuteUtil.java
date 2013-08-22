@@ -8,7 +8,7 @@ public class ExecuteUtil {
 	// Execute command as player or console
 	public static void execCommand(Player player, String command, String commandType) {
 		// Insert any player substitution variables
-		command.replace("%p", player.getName());
+		command = command.replace("%p", player.getName());
 		
 		// Execute command as player
 		if (commandType.equals("PLAYER")) {

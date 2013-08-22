@@ -190,7 +190,7 @@ public class Gate {
 	}
 	
 	public void setCommandType(String commandType) {
-		this.commandtype= commandType.toUpperCase();
+		this.commandtype = commandType.toUpperCase();
 	}
 	
 	public String getCommandType() {

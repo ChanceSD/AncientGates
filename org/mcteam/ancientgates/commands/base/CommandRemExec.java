@@ -19,8 +19,7 @@ public class CommandRemExec extends BaseCommand {
 	
 	public void perform() {	
         
-		gate.setCommand(null);
-		gate.setCommandType(null);
+		gate.setCommand("");
 		sendMessage("Command for gate \""+gate.getId()+"\" is removed.");
 		
 		Gate.save();

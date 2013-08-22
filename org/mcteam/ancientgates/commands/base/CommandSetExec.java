@@ -30,14 +30,14 @@ public class CommandSetExec extends BaseCommand {
 		}
 
 		parameters.remove(0);
-		parameters.remove(1);
+		parameters.remove(0);
 		for(String parameter : parameters) {
 			command += " " + parameter;
 		}
         
 		gate.setCommand(command.trim());
 		gate.setCommandType(commandType);
-		sendMessage("Command for gate \""+gate.getId()+"\" is now /"+command+".");
+		sendMessage("Command for gate \""+gate.getId()+"\" is now /"+command.trim()+".");
 		
 		Gate.save();
 	}

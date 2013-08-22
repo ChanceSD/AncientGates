@@ -90,13 +90,15 @@ public class PluginMovementListener implements Listener {
 			}
 
 			// Teleport the player (Instant method)
-			if (nearestGate.getBungeeTo() == null)  {
+			if (nearestGate.getTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
-			} else {
+			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
+			} else {
+				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 			}
 		}
 	}
@@ -168,13 +170,15 @@ public class PluginMovementListener implements Listener {
 			}
 			// Teleport the vehicle (with its passenger)
 			if (nearestGate.getTeleportVehicles()) {
-				if (nearestGate.getBungeeTo() == null)  {
+				if (nearestGate.getTo() != null) {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getTo(), nearestGate.getTeleportEntities());
 					
 					if (passenger instanceof Player && nearestGate.getCommand() != null) ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
 					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
-				} else {
+				} else if (nearestGate.getBungeeTo() != null) {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
+				} else if (passenger instanceof Player) {
+					ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
 				}
 			}
 		}
