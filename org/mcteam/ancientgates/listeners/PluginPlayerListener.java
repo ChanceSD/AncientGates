@@ -121,12 +121,12 @@ public class PluginPlayerListener implements Listener {
 			return;
 		}
 		
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		
 		// Ok so a player portal event begins
 		// Find the nearest gate!
 		WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(player));
-		Gate nearestGate = Gates.gateFromPortal(playerCoord);
+		final Gate nearestGate = Gates.gateFromPortal(playerCoord);
 		
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -161,7 +161,13 @@ public class PluginPlayerListener implements Listener {
 			} else if (nearestGate.getTo() != null)  {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
-				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
+				if (nearestGate.getCommand() != null) {
+					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						public void run() {
+							ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
+						}
+					}, 1);
+				}
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());

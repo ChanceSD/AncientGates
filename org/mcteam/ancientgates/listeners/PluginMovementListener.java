@@ -35,7 +35,7 @@ public class PluginMovementListener implements Listener {
 			return;
 		}
 		
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		Block blockTo = to.getBlock();
@@ -45,7 +45,7 @@ public class PluginMovementListener implements Listener {
 		// Ok so a player walks into a portal block
 		// Find the nearest gate!
 		WorldCoord playerCoord = new WorldCoord(player.getLocation());
-		Gate nearestGate = Gates.gateFromAll(playerCoord);
+		final Gate nearestGate = Gates.gateFromAll(playerCoord);
 		
 		if (nearestGate != null) {
 			
@@ -93,7 +93,13 @@ public class PluginMovementListener implements Listener {
 			if (nearestGate.getTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
-				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
+				if (nearestGate.getCommand() != null) {
+					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						public void run() {
+							ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
+						}
+					}, 1);
+				}
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
@@ -112,12 +118,12 @@ public class PluginMovementListener implements Listener {
 		if (!BlockUtil.canPlayerStandInGateBlock(blockTo, from.getBlockY() == to.getBlockY())) return;
 		
 		Vehicle vehicle = event.getVehicle();
-		Entity passenger = vehicle.getPassenger();
+		final Entity passenger = vehicle.getPassenger();
 		
 		// Ok so a vehicle drives into a portal block
 		// Find the nearest gate!
     	WorldCoord toCoord = new WorldCoord(event.getTo());
-		Gate nearestGate = Gates.gateFromAll(toCoord);
+		final Gate nearestGate = Gates.gateFromAll(toCoord);
 
 		if (nearestGate != null) {		
 			if (passenger instanceof Player) {
@@ -173,7 +179,13 @@ public class PluginMovementListener implements Listener {
 				if (nearestGate.getTo() != null) {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getTo(), nearestGate.getTeleportEntities());
 					
-					if (passenger instanceof Player && nearestGate.getCommand() != null) ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
+					if (passenger instanceof Player && nearestGate.getCommand() != null) {
+						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+							public void run() {
+								ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
+							}
+						}, 1);	
+					}
 					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
 				} else if (nearestGate.getBungeeTo() != null) {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getMessage());
