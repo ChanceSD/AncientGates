@@ -166,7 +166,7 @@ public class PluginPlayerListener implements Listener {
 						public void run() {
 							ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 						}
-					}, 1);
+					}, 2);
 				}
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
