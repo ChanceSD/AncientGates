@@ -98,7 +98,7 @@ public class PluginMovementListener implements Listener {
 						public void run() {
 							ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 						}
-					}, 2);
+					}, 20L);
 				}
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
@@ -184,7 +184,7 @@ public class PluginMovementListener implements Listener {
 							public void run() {
 								ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
 							}
-						}, 2);	
+						}, 40L);	
 					}
 					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
 				} else if (nearestGate.getBungeeTo() != null) {
