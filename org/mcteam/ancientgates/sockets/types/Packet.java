@@ -35,19 +35,19 @@ public class Packet {
 	// Spawn Entity packet
 	public Packet(Entity entity, EntityType entityType, Map<String, String> destination) {
 		this.command = "spawnentity";
-		// Build the arguments, format is <entityId>,<entityWorld>,<entityTypeId>,<entityTypeData>,<location>
-		if (entityType.getTypeId() == 1) {
-			this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), String.valueOf(entityType.getTypeId()), ItemStackUtil.itemStackToString(((Item)entity).getItemStack()), TeleportUtil.locationToString(destination)}; // Dropped ItemStack
+		// Build the arguments, format is <entityId>,<entityWorld>,<entityTypeName>,<entityTypeData>,<location>
+		if (entityType.equals(EntityType.DROPPED_ITEM)) {
+			this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(), ItemStackUtil.itemStackToString(((Item)entity).getItemStack()), TeleportUtil.locationToString(destination)}; // Dropped ItemStack
 		} else {
-			this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), String.valueOf(entityType.getTypeId()), EntityUtil.getEntityTypeData(entity), TeleportUtil.locationToString(destination)};	// Entity
+			this.args = new String[] {String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(), EntityUtil.getEntityTypeData(entity), TeleportUtil.locationToString(destination)};	// Entity
 		}
 	}
 
 	// Spawn Vehicle packet
 	public Packet(Entity vehicle, double velocity, Map<String, String> destination) {
 		this.command = "spawnvehicle";
-		// Build the arguments, format is <vehicleId>,<vehicleWorld>,<vehicleTypeId>,<velocity>,<location>[,<entityId>,<entityTypeId>,<entityTypeData>]
-		this.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), String.valueOf(vehicle.getType().getTypeId()), String.valueOf(velocity), TeleportUtil.locationToString(destination), null, null, null};
+		// Build the arguments, format is <vehicleId>,<vehicleWorld>,<vehicleTypeName>,<velocity>,<location>[,<entityId>,<entityTypeName>,<entityTypeData>]
+		this.args = new String[] {String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), vehicle.getType().name(), String.valueOf(velocity), TeleportUtil.locationToString(destination), null, null, null};
 	}
 	
 	//----------------------------------------------//
@@ -61,7 +61,7 @@ public class Packet {
 	// Append passenger args to vehicle packet
 	public void addPassenger(Entity passenger) {
 		this.ammendArg(String.valueOf(passenger.getEntityId()), 5);
-		this.ammendArg(String.valueOf(passenger.getType().getTypeId()), 6);
+		this.ammendArg(passenger.getType().name(), 6);
 		this.ammendArg(EntityUtil.getEntityTypeData(passenger), 7);
 	}
 	

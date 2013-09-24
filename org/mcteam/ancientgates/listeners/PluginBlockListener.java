@@ -235,7 +235,7 @@ public class PluginBlockListener implements Listener {
 
 		Block block = event.getBlock();
 
-		if (block.getTypeId() != 9 && block.getTypeId() != 11) return;
+		if (!block.getType().equals(Material.STATIONARY_WATER) && !block.getType().equals(Material.STATIONARY_LAVA)) return;
 
 		// Ok so water/lava starts flowing within a portal frame
 		// Find the nearest gate!

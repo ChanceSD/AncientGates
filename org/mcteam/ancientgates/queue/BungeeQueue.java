@@ -4,6 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
+import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
 public class BungeeQueue {
@@ -14,10 +15,10 @@ public class BungeeQueue {
 	private String server;
 	private String destination;
 	
-	private Integer vehicleTypeId;
+	private String vehicleTypeName;
 	private Double velocity;
 	
-	private Integer entityTypeId;
+	private String entityTypeName;
 	private String entityTypeData;
 	
 	private String itemStack;
@@ -28,66 +29,66 @@ public class BungeeQueue {
 	// Constructors
 	//----------------------------------------------//
 	// Player queue (could be riding an entity)
-	public BungeeQueue(String playerName, Integer entityTypeId, String entityTypeData, String server, String destination) {
+	public BungeeQueue(String playerName, String entityTypeName, String entityTypeData, String server, String destination) {
 		this.queueType = BungeeQueueType.PLAYER;
 		this.playerName = playerName;
-		this.entityTypeId = entityTypeId;
+		this.entityTypeName = entityTypeName;
 		this.entityTypeData = entityTypeData;
 		this.server = server;
 		if (!destination.equals("null")) this.destination = destination;
 	}
 	
 	// Player queue (with message)
-	public BungeeQueue(String playerName, Integer entityTypeId, String entityTypeData, String server, String destination, String message) {
-		this(playerName, entityTypeId, entityTypeData, server, destination);
+	public BungeeQueue(String playerName, String entityTypeName, String entityTypeData, String server, String destination, String message) {
+		this(playerName, entityTypeName, entityTypeData, server, destination);
 		this.message = message;
 	}
 	
 	// Player passenger queue
-	public BungeeQueue(String playerName, String server, int vehicleTypeId, double velocity, String destination) {
+	public BungeeQueue(String playerName, String server, String vehicleTypeName, double velocity, String destination) {
 		this.queueType = BungeeQueueType.PASSENGER;
 		this.playerName = playerName;
 		this.server = server;
-		this.vehicleTypeId = vehicleTypeId;
+		this.vehicleTypeName = vehicleTypeName;
 		this.velocity = velocity;
 		if (!destination.equals("null")) this.destination = destination;
 	}
 	
 	// Player passenger queue (with message)
-	public BungeeQueue(String playerName, String server, int vehicleTypeId, double velocity, String destination, String message) {
-		this(playerName, server, vehicleTypeId, velocity, destination);
+	public BungeeQueue(String playerName, String server, String vehicleTypeName, double velocity, String destination, String message) {
+		this(playerName, server, vehicleTypeName, velocity, destination);
 		this.message = message;
 	}
 	
 	// Vehicle queue
-	public BungeeQueue(int vehicleTypeId, double velocity, String destination) {
+	public BungeeQueue(String vehicleTypeName, double velocity, String destination) {
 		this.queueType = BungeeQueueType.VEHICLE;
-		this.vehicleTypeId = vehicleTypeId;
+		this.vehicleTypeName = vehicleTypeName;
 		this.velocity = velocity;
 		this.destination = destination;
 	}
 	
 	// Vehicle queue (with contents)
-	public BungeeQueue(int vehicleTypeId, double velocity, String destination, String entityItemStack) {
-		this(vehicleTypeId, velocity, destination);
+	public BungeeQueue(String vehicleTypeName, double velocity, String destination, String entityItemStack) {
+		this(vehicleTypeName, velocity, destination);
 		this.itemStack = entityItemStack;
 	}
 	
 	// Entity queue
-	public BungeeQueue(int entityTypeId, String entityTypeData, String destination) {
+	public BungeeQueue(String entityTypeName, String entityTypeData, String destination) {
 		this.queueType = BungeeQueueType.ENTITY;
-		this.entityTypeId = entityTypeId;
+		this.entityTypeName = entityTypeName;
 		this.entityTypeData = entityTypeData;
 		this.destination = destination;
 	}
 	
 	// Entity passenger queue
-	public BungeeQueue(int vehicleTypeId, double velocity, String destination, int entityTypeId, String entityTypeData) {
+	public BungeeQueue(String vehicleTypeName, double velocity, String destination, String entityTypeName, String entityTypeData) {
 		this.queueType = BungeeQueueType.PASSENGER;
-		this.vehicleTypeId = vehicleTypeId;
+		this.vehicleTypeName = vehicleTypeName;
 		this.velocity = velocity;
 		this.destination = destination;
-		this.entityTypeId = entityTypeId;
+		this.entityTypeName = entityTypeName;
 		this.entityTypeData = entityTypeData;
 	}
 	
@@ -106,8 +107,8 @@ public class BungeeQueue {
 		return this.server;
 	}
 	
-	public Integer getVehicleTypeId() {
-		return this.vehicleTypeId;
+	public String getVehicleTypeName() {
+		return this.vehicleTypeName;
 	}
 	
 	public Double getVelocity() {
@@ -136,15 +137,15 @@ public class BungeeQueue {
 	}
 	
 	public EntityType getEntityType() {
-		Integer entityTypeId = this.entityTypeId;
-		if (entityTypeId == null) return null;
-		return EntityType.fromId(entityTypeId);
+		String entityTypeName = this.entityTypeName;
+		if (entityTypeName == null) return null;
+		return EntityUtil.entityType(entityTypeName);
 	}
 	
 	public EntityType getVehicleType() {
-		Integer vehicleTypeId = this.vehicleTypeId;
-		if (vehicleTypeId == null) return null;
-		return EntityType.fromId(vehicleTypeId);
+		String vehicleTypeName = this.vehicleTypeName;
+		if (vehicleTypeName == null) return null;
+		return EntityUtil.entityType(vehicleTypeName);
 	}
 
 }

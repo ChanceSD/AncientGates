@@ -471,14 +471,14 @@ public class TeleportUtil {
 	}
 	
 	// Bungee vehicle teleport in
-	public static void teleportVehicle(final Player player, int vehicleTypeId, double velocity, Location location) {
+	public static void teleportVehicle(final Player player, String vehicleTypeName, double velocity, Location location) {
 		checkChunkLoad(location.getBlock());
 
 		// Crete new velocity
 		final Vector newVelocity = location.getDirection();
 		newVelocity.multiply(velocity);
 
-		final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+		final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
 		player.teleport(location);
 		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 			public void run() {

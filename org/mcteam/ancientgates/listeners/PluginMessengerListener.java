@@ -60,19 +60,19 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String fromServer = parts[2];
 			String tpMsg = parts[3];
 			
-			Integer entityTypeId = null;
+			String entityTypeName = null;
 			String entityTypeData = null;
 
 			// Handle player riding entity
 			if (parts.length > 4) {
-				entityTypeId = Integer.parseInt(parts[4]);
+				entityTypeName = parts[4];
 				entityTypeData = parts[5];
 			}
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeId, entityTypeData, fromServer, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
@@ -80,11 +80,11 @@ public class PluginMessengerListener implements PluginMessageListener {
 					
 					// Handle player riding entity
 					Entity entity = null;
-					if (entityTypeId != null) {
+					if (entityTypeName != null) {
 						World world = TeleportUtil.stringToWorld(destination);
-						if (EntityType.fromId(entityTypeId).isSpawnable()) {
+						if (EntityUtil.entityType(entityTypeName).isSpawnable()) {
 							// Spawn incoming BungeeCord player's entity
-							entity = world.spawnEntity(location, EntityType.fromId(entityTypeId));
+							entity = world.spawnEntity(location, EntityUtil.entityType(entityTypeName));
 							EntityUtil.setEntityTypeData(entity, entityTypeData);
 						}
 					}
@@ -102,7 +102,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String[] parts = msg.split("#@#");
 			
 			String playerName = parts[0];
-			int vehicleTypeId = Integer.parseInt(parts[1]);
+			String vehicleTypeName = parts[1];
 			double velocity = Double.parseDouble(parts[2]);
 			String destination = parts[3];
 			String fromServer = parts[4];
@@ -111,12 +111,12 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeId, velocity, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeName, velocity, destination, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
 					Location location = TeleportUtil.stringToLocation(destination);
-					TeleportUtil.teleportVehicle(player, vehicleTypeId, velocity, location);
+					TeleportUtil.teleportVehicle(player, vehicleTypeName, velocity, location);
 				}
 				
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
@@ -127,7 +127,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String msg = new String(data);
 			String[] parts = msg.split("#@#");
 				
-			int entityTypeId = Integer.parseInt(parts[0]);
+			String entityTypeName = parts[0];
 			String entityTypeData = parts[1];
 			String destination = parts[2];
 				
@@ -135,11 +135,11 @@ public class PluginMessengerListener implements PluginMessageListener {
 			Location location = TeleportUtil.stringToLocation(destination);
 			World world = TeleportUtil.stringToWorld(destination);
 
-			if (EntityType.fromId(entityTypeId).isSpawnable()) {
-				Entity entity = world.spawnEntity(location, EntityType.fromId(entityTypeId)); // Entity
+			if (EntityUtil.entityType(entityTypeName).isSpawnable()) {
+				Entity entity = world.spawnEntity(location, EntityUtil.entityType(entityTypeName)); // Entity
 				EntityUtil.setEntityTypeData(entity, entityTypeData);
 				entity.teleport(location);
-			} else if(EntityType.fromId(entityTypeId) == EntityType.DROPPED_ITEM) {
+			} else if(EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
 				Item item = world.dropItemNaturally(location, ItemStackUtil.stringToItemStack(entityTypeData)[0]); // Dropped ItemStack
 				item.teleport(location);
 			}
@@ -149,7 +149,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String msg = new String(data);
 			String[] parts = msg.split("#@#");
 				
-			int vehicleTypeId = Integer.parseInt(parts[0]);
+			String vehicleTypeName = parts[0];
 			double velocity = Double.parseDouble(parts[1]);
 			String destination = parts[2];
 			
@@ -161,12 +161,12 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 			// Parse passenger info
 			if (parts.length > 4) {
-				int entityTypeId = Integer.parseInt(parts[3]);
+				String entityTypeName = parts[3];
 				String entityTypeData = parts[4];
 
-				if (EntityType.fromId(entityTypeId).isSpawnable()) {
+				if (EntityUtil.entityType(entityTypeName).isSpawnable()) {
 					// Spawn incoming BungeeCord entity
-					passenger = world.spawnEntity(location, EntityType.fromId(entityTypeId));
+					passenger = world.spawnEntity(location, EntityUtil.entityType(entityTypeName));
 					EntityUtil.setEntityTypeData(passenger, entityTypeData);
 					passenger.teleport(location);
 				}
@@ -182,7 +182,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 			// Spawn incoming BungeeCord vehicle
 			if (passenger != null) {
-				final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+				final Vehicle v = (Vehicle)location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
 				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 					public void run() {
 						if (p != null) v.setPassenger(p);
@@ -190,7 +190,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 					}
 				}, 2);
 			} else {
-				Vehicle mc = (Vehicle)location.getWorld().spawnEntity(location, EntityType.fromId(vehicleTypeId));
+				Vehicle mc = (Vehicle)location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
 					StorageMinecart smc = (StorageMinecart)mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));

@@ -44,6 +44,7 @@ public class CommandInfo extends BaseCommand {
 		// Info based on sight
 		if (id == null) {
 			// Find gate based on the player's line of sight
+			@SuppressWarnings("deprecation")
 			WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock(null, 20));
 			gate = GateUtil.nearestGate(playerTargetCoord, false);
 			String from = GateUtil.nearestFrom(playerTargetCoord);

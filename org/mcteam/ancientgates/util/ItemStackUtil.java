@@ -9,14 +9,15 @@ import org.bukkit.inventory.ItemStack;
  
 public class ItemStackUtil {
 	
-    public static String itemStackToString(ItemStack[] itemStack) {
+    @SuppressWarnings("deprecation")
+	public static String itemStackToString(ItemStack[] itemStack) {
         String serialization = itemStack.length + ";";
         for (int i = 0; i < itemStack.length; i++) {
             ItemStack is = itemStack[i];
             if (is != null) {
                 String serializedItemStack = new String();
                
-                String isType = String.valueOf(is.getType().getId());
+				String isType = String.valueOf(is.getType().getId());
                 serializedItemStack += "t@" + isType;
                
                 if (is.getDurability() != 0) {
@@ -47,7 +48,8 @@ public class ItemStackUtil {
         return itemStackToString(new ItemStack[]{itemStack});
     }
    
-    public static ItemStack[] stringToItemStack(String itemStackString) {
+    @SuppressWarnings("deprecation")
+	public static ItemStack[] stringToItemStack(String itemStackString) {
         String[] serializedBlocks = itemStackString.split(";");
         String isInfo = serializedBlocks[0];
         ItemStack[] deserializedItemStack = new ItemStack[Integer.valueOf(isInfo)];

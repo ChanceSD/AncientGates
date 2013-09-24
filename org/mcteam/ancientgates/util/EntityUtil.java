@@ -1,5 +1,8 @@
 package org.mcteam.ancientgates.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -7,6 +10,7 @@ import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Ocelot;
@@ -14,14 +18,84 @@ import org.bukkit.entity.Pig;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Skeleton.SkeletonType;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
+
 import org.mcteam.ancientgates.Plugin;
 
 public class EntityUtil {
+	
+	public static Map<String, EntityType> entityTypes;
+	public static Map<String, SkeletonType> skeletonTypes;
+	public static Map<String, Ocelot.Type> catTypes;
+	
+	public static Map<String, Horse.Variant> horseVariants;
+	public static Map<String, Horse.Style> horseStyles;
+	public static Map<String, Horse.Color> horseColors;
+
+	public static Map<String, Villager.Profession> villagerProfessions;
+	
+	public static Map<String, DyeColor> sheepColors;
+	
+	static {
+		  entityTypes = new HashMap<String, EntityType>();
+		  for (EntityType e : EntityType.values()) {
+			  entityTypes.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  skeletonTypes = new HashMap<String, SkeletonType>();
+		  for (SkeletonType e : SkeletonType.values()) {
+			  skeletonTypes.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  catTypes = new HashMap<String, Ocelot.Type>();
+		  for (Ocelot.Type e : Ocelot.Type.values()) {
+			  catTypes.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  horseVariants = new HashMap<String, Horse.Variant>();
+		  for (Horse.Variant e : Horse.Variant.values()) {
+			  horseVariants.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  horseStyles = new HashMap<String, Horse.Style>();
+		  for (Horse.Style e : Horse.Style.values()) {
+			  horseStyles.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  horseColors = new HashMap<String, Horse.Color>();
+		  for (Horse.Color e : Horse.Color.values()) {
+			  horseColors.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  villagerProfessions = new HashMap<String, Villager.Profession>();
+		  for (Villager.Profession e : Villager.Profession.values()) {
+			  villagerProfessions.put(e.name(), e);
+		  }
+	}
+	
+	static {
+		  sheepColors = new HashMap<String, DyeColor>();
+		  for (DyeColor e : DyeColor.values()) {
+			  sheepColors.put(e.name(), e);
+		  }
+	}
 	
 	public static String getEntityTypeData(Entity entity) {
 		String data ="";
@@ -46,7 +120,7 @@ public class EntityUtil {
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
                 	if (((Ocelot)entity).isTamed()) {
                 		data += ((Tameable)entity).getOwner().getName() + ",";
-                		data += String.valueOf(((Ocelot)entity).getCatType().getId()) + ",";
+                		data += String.valueOf(((Ocelot)entity).getCatType().name()) + ",";
                 	}
                 } else if (entity instanceof Pig) {
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
@@ -70,7 +144,7 @@ public class EntityUtil {
         			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
                 }
 			} else if (entity instanceof Villager) {
-				data += String.valueOf(((Villager)entity).getProfession().getId()) + ",";
+				data += String.valueOf(((Villager)entity).getProfession().name()) + ",";
 				data += String.valueOf(((Villager)entity).getAge()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
 			} else if (entity instanceof Creeper) {
@@ -80,7 +154,7 @@ public class EntityUtil {
 				data += String.valueOf(((Slime)entity).getSize()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
 			} else if (entity instanceof Skeleton) {
-				data += String.valueOf(((Skeleton)entity).getSkeletonType().getId()) + ",";
+				data += String.valueOf(((Skeleton)entity).getSkeletonType().name()) + ",";
 				data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
 			} else {
 				data += String.valueOf(((LivingEntity)entity).getHealth()) + ",";
@@ -100,7 +174,7 @@ public class EntityUtil {
 				if ((entity instanceof Sheep)) {
 					((Animals)entity).setAge(Integer.parseInt(parts[0]));
 					((Sheep)entity).setSheared(Boolean.parseBoolean(parts[1]));
-					((Sheep)entity).setColor(sheepColor(parts[2]));
+					((Sheep)entity).setColor(sheepColors.get(parts[2]));
 					if (!parts[3].equals("null")) ((LivingEntity)entity).setCustomName(parts[3]);
                 } else if ((entity instanceof Wolf)) {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
@@ -116,7 +190,7 @@ public class EntityUtil {
             		if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
                 	if (parts.length > 2) {
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
-                		((Ocelot)entity).setCatType(catType(Integer.parseInt(parts[3])));
+                		((Ocelot)entity).setCatType(catTypes.get(parts[3]));
                 	}
                 } else if ((entity instanceof Pig)) {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
@@ -124,9 +198,9 @@ public class EntityUtil {
                 	if (!parts[2].equals("null")) ((LivingEntity)entity).setCustomName(parts[2]);
                 } else if ((entity instanceof Horse)) {  	
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
-                	((Horse)entity).setVariant(horseVariant(parts[1]));
-                	((Horse)entity).setStyle(horseStyle(parts[2]));
-                	((Horse)entity).setColor(horseColor(parts[3]));
+                	((Horse)entity).setVariant(horseVariants.get(parts[1]));
+                	((Horse)entity).setStyle(horseStyles.get(parts[2]));
+                	((Horse)entity).setColor(horseColors.get(parts[3]));
                 	((Horse)entity).setDomestication(Integer.parseInt(parts[4]));
                 	((Horse)entity).setJumpStrength(Double.parseDouble(parts[5]));
                 	if (!parts[6].equals("null")) ((LivingEntity)entity).setCustomName(parts[6]);
@@ -140,7 +214,7 @@ public class EntityUtil {
                 	if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
                 }
 			} else if ((entity instanceof Villager)) {
-				((Villager)entity).setProfession(assignProf(Integer.parseInt(parts[0])));
+				((Villager)entity).setProfession(villagerProfessions.get(parts[0]));
 				((Villager)entity).setAge(Integer.parseInt(parts[1]));
 				if (!parts[2].equals("null")) ((LivingEntity)entity).setCustomName(parts[2]);
 			} else if ((entity instanceof Creeper)) {
@@ -150,7 +224,7 @@ public class EntityUtil {
 				((Slime)entity).setSize(Integer.parseInt(parts[0]));
 				if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
 			} else if ((entity instanceof Skeleton)) {
-				((Skeleton)entity).setSkeletonType(Skeleton.SkeletonType.getType(Integer.parseInt(parts[0])));
+				((Skeleton)entity).setSkeletonType(skeletonTypes.get(parts[0]));
 				if (parts[0].equals("0")) {
 					((Skeleton)entity).getEquipment().setItemInHand(new ItemStack(Material.BOW));
 				} else {
@@ -168,120 +242,8 @@ public class EntityUtil {
 		}
 	}
 	
-	public static Ocelot.Type catType(int i) {
-		Ocelot.Type type = null;
-		if (i == 0)
-			type = Ocelot.Type.WILD_OCELOT;
-		else if (i == 1)
-			type = Ocelot.Type.BLACK_CAT;
-		else if (i == 2)
-			type = Ocelot.Type.RED_CAT;
-		else if (i == 3) {
-			type = Ocelot.Type.SIAMESE_CAT;
-		}
-	    return type;
-	}
-	
-	public static Villager.Profession assignProf(int i) {
-		Villager.Profession prof = null;
-	    if (i == 0)
-	    	prof = Villager.Profession.FARMER;
-	    else if (i == 1)
-	    	prof = Villager.Profession.LIBRARIAN;
-	    else if (i == 2)
-	    	prof = Villager.Profession.PRIEST;
-	    else if (i == 3)
-	    	prof = Villager.Profession.BLACKSMITH;
-	    else if (i == 4) {
-	    	prof = Villager.Profession.BUTCHER;
-	    }
-	    return prof;
-	}
-	
-	public static DyeColor sheepColor(String color) {
-		if (color.equalsIgnoreCase("white"))
-			return DyeColor.WHITE;
-		if (color.equalsIgnoreCase("black"))
-			return DyeColor.BLACK;
-		if (color.equalsIgnoreCase("blue"))
-			return DyeColor.BLUE;
-		if (color.equalsIgnoreCase("brown"))
-			return DyeColor.BROWN;
-		if (color.equalsIgnoreCase("cyan"))
-			return DyeColor.CYAN;
-		if (color.equalsIgnoreCase("gray"))
-			return DyeColor.GRAY;
-		if (color.equalsIgnoreCase("green"))
-			return DyeColor.GREEN;
-		if (color.equalsIgnoreCase("light_blue"))
-			return DyeColor.LIGHT_BLUE;
-		if (color.equalsIgnoreCase("lime"))
-			return DyeColor.LIME;
-		if (color.equalsIgnoreCase("magenta"))
-			return DyeColor.MAGENTA;
-		if (color.equalsIgnoreCase("orange"))
-			return DyeColor.ORANGE;
-		if (color.equalsIgnoreCase("pink"))
-			return DyeColor.PINK;
-		if (color.equalsIgnoreCase("purple"))
-			return DyeColor.PURPLE;
-		if (color.equalsIgnoreCase("red"))
-			return DyeColor.RED;
-		if (color.equalsIgnoreCase("silver"))
-			return DyeColor.SILVER;
-		if (color.equalsIgnoreCase("yellow")) {
-			return DyeColor.YELLOW;
-		}
-		return DyeColor.WHITE;
-	}
-	
-	public static Horse.Variant horseVariant(String variant) {
-		if (variant.equalsIgnoreCase("horse"))
-			return Horse.Variant.HORSE;
-		if (variant.equalsIgnoreCase("donkey"))
-			return Horse.Variant.DONKEY;
-		if (variant.equalsIgnoreCase("mule"))
-			return Horse.Variant.MULE;
-		if (variant.equalsIgnoreCase("undead_horse"))
-			return Horse.Variant.UNDEAD_HORSE;
-		if (variant.equalsIgnoreCase("skeleton_horse")) {
-			return Horse.Variant.SKELETON_HORSE;
-		}
-		return Horse.Variant.HORSE;
-	}
-	
-	public static Horse.Style horseStyle(String style) {
-		if (style.equalsIgnoreCase("none"))
-			return Horse.Style.NONE;
-		if (style.equalsIgnoreCase("white"))
-			return Horse.Style.WHITE;
-		if (style.equalsIgnoreCase("whitefield"))
-			return Horse.Style.WHITEFIELD;
-		if (style.equalsIgnoreCase("white_dots"))
-			return Horse.Style.WHITE_DOTS;
-		if (style.equalsIgnoreCase("black_dots")) {
-			return Horse.Style.BLACK_DOTS;
-		}
-		return Horse.Style.NONE;
-	}
-	
-	public static Horse.Color horseColor(String color) {
-		if (color.equalsIgnoreCase("white"))
-			return Horse.Color.WHITE;
-		if (color.equalsIgnoreCase("creamy"))
-			return Horse.Color.CREAMY;
-		if (color.equalsIgnoreCase("chestnut"))
-			return Horse.Color.CHESTNUT;
-		if (color.equalsIgnoreCase("brown"))
-			return Horse.Color.BROWN;
-		if (color.equalsIgnoreCase("black"))
-			return Horse.Color.BLACK;
-		if (color.equalsIgnoreCase("gray"))
-			return Horse.Color.GRAY;
-		if (color.equalsIgnoreCase("dark_brown")) {
-			return Horse.Color.DARK_BROWN;
-		}
-		return Horse.Color.WHITE;
+	public static EntityType entityType(String name) {
+		return entityTypes.get(name);
 	}
 	
 	public static OfflinePlayer getPlayer(String name) {

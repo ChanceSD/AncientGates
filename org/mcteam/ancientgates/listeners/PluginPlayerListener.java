@@ -85,7 +85,7 @@ public class PluginPlayerListener implements Listener {
 					return;
 					// Teleport incoming BungeeCord passenger
 				} else if (queueType == BungeeQueueType.PASSENGER) {
-					TeleportUtil.teleportVehicle(player, queue.getVehicleTypeId(), queue.getVelocity(), queue.getDestination());
+					TeleportUtil.teleportVehicle(player, queue.getVehicleTypeName(), queue.getVelocity(), queue.getDestination());
 					return;
 				}
 			}

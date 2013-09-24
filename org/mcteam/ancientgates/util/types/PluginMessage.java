@@ -30,10 +30,10 @@ public class PluginMessage {
 	private String fromServer;
 	private String message;	
 	
-	private String entityTypeId;
+	private String entityTypeName;
 	private String entityTypeData;
 	
-	private String vehicleTypeId;
+	private String vehicleTypeName;
 	private String velocity;
 	
 	private String itemStack;
@@ -64,7 +64,7 @@ public class PluginMessage {
 	// Player teleport message (riding entity)
 	public PluginMessage(Player player, Entity entity, Map<String, String> destination, String fromServer, String message) {
 		this(player, destination, fromServer, message);
-		this.entityTypeId = String.valueOf(entity.getType().getTypeId());
+		this.entityTypeName = entity.getType().name();
 		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
 	}
 	
@@ -74,7 +74,7 @@ public class PluginMessage {
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
 		this.playerName = player.getName();
-		this.vehicleTypeId = String.valueOf(vehicleType.getTypeId());
+		this.vehicleTypeName = vehicleType.name();
 		this.velocity = String.valueOf(velocity);
 		this.fromServer = fromServer;
 		this.message = message;
@@ -85,8 +85,8 @@ public class PluginMessage {
 		this.channel = BungeeChannel.AGBungeeSpawn;	
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
-		this.entityTypeId = String.valueOf(entityType.getTypeId());
-		if (entityType.getTypeId() == 1) {
+		this.entityTypeName = entityType.name();
+		if (entityType.equals(EntityType.DROPPED_ITEM)) {
 			this.entityTypeData = ItemStackUtil.itemStackToString(((Item)entity).getItemStack()); // Dropped ItemStack
 		} else {
 			this.entityTypeData = EntityUtil.getEntityTypeData(entity); // Entity
@@ -98,7 +98,7 @@ public class PluginMessage {
 		this.channel = BungeeChannel.AGBungeeVehicleSpawn;	
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
-		this.vehicleTypeId = String.valueOf(vehicleType.getTypeId());
+		this.vehicleTypeName = vehicleType.name();
 		this.velocity = String.valueOf(velocity);
 	}
 	
@@ -127,7 +127,7 @@ public class PluginMessage {
 	//----------------------------------------------//
 	// Append entity info
 	public void addEntity(Entity entity) {
-		this.entityTypeId = String.valueOf(entity.getType().getTypeId());
+		this.entityTypeName = entity.getType().name();
 		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
 	}
 	// Append item stack info
@@ -144,26 +144,26 @@ public class PluginMessage {
 			// Build the message
 			String msg = "";
 			if (this.channel == BungeeChannel.AGBungeeTele) {
-				// Format is <player>#@#<destination>#@#<fromServer>#@#<message>[#@#<entityTypeId>#@#<entityTypeData>]
-				if (this.entityTypeId != null) {
-					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message + "#@#" + this.entityTypeId + "#@#" + this.entityTypeData;
+				// Format is <player>#@#<destination>#@#<fromServer>#@#<message>[#@#<entityTypeName>#@#<entityTypeData>]
+				if (this.entityTypeName != null) {
+					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message + "#@#" + this.entityTypeName + "#@#" + this.entityTypeData;
 				} else {
 					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message;
 				}
 			} else if (this.channel == BungeeChannel.AGBungeeSpawn) {
-				// Format is <entityTypeId>#@#<entityTypeData>#@#<destination>
-				msg = this.entityTypeId + "#@#" + this.entityTypeData + "#@#" + this.destination;
+				// Format is <entityTypeName>#@#<entityTypeData>#@#<destination>
+				msg = this.entityTypeName + "#@#" + this.entityTypeData + "#@#" + this.destination;
 			} else if (this.channel == BungeeChannel.AGBungeeVehicleTele) {
-				// Format is <player>#@#<vehicleTypeId>#@#<velocity>#@#<destination>#@#<fromServerName>#@#<message>
-				msg = this.playerName + "#@#" + this.vehicleTypeId + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message;
+				// Format is <player>#@#<vehicleTypeName>#@#<velocity>#@#<destination>#@#<fromServerName>#@#<message>
+				msg = this.playerName + "#@#" + this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.message;
 			} else if (this.channel == BungeeChannel.AGBungeeVehicleSpawn) {
-				// Format is <vehicleTypeId>#@#<velocity>#@#<destination>[#@#<entityTypeId>#@#<entityTypeData>|#@#<itemStack>]
-				if (this.entityTypeId != null) {
-					msg = this.vehicleTypeId + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.entityTypeId + "#@#" + this.entityTypeData;
+				// Format is <vehicleTypeName>#@#<velocity>#@#<destination>[#@#<entityTypeName>#@#<entityTypeData>|#@#<itemStack>]
+				if (this.entityTypeName != null) {
+					msg = this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.entityTypeName + "#@#" + this.entityTypeData;
 				} else if (this.itemStack != null) {
-					msg = this.vehicleTypeId + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.itemStack;
+					msg = this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.itemStack;
 				} else {
-					msg = this.vehicleTypeId + "#@#" + this.velocity + "#@#" + this.destination;	
+					msg = this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination;	
 				}
 			} else if (this.channel == BungeeChannel.AGBungeeCom) {
 				// Format is <command>#@#<player>#@#<parameters>

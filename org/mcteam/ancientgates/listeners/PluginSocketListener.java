@@ -12,6 +12,7 @@ import org.mcteam.ancientgates.sockets.events.ClientConnectionEvent;
 import org.mcteam.ancientgates.sockets.events.ClientRecieveEvent;
 import org.mcteam.ancientgates.sockets.events.SocketServerEventListener;
 import org.mcteam.ancientgates.sockets.types.Packet;
+import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.WorldCoord;
@@ -179,7 +180,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			String[] parts = event.getArguments();	
 			String entityId = parts[0];
 			String entityWorld = parts[1];
-			int entityTypeId = Integer.parseInt(parts[2]);
+			String entityTypeName = parts[2];
 			String entityTypeData = parts[3];
 			String destination = parts[4];
 			
@@ -187,9 +188,9 @@ public class PluginSocketListener implements SocketServerEventListener {
 			String[] args = {entityWorld, entityId};
 			Packet packet = new Packet("removeentity", "spawnentity", args);
 
-			if (EntityType.fromId(entityTypeId).isSpawnable() || EntityType.fromId(entityTypeId) == EntityType.DROPPED_ITEM) {
+			if (EntityUtil.entityType(entityTypeName).isSpawnable() || EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
 				// Add entity to spawn queue
-				Plugin.bungeeCordEntityInQueue.add(new BungeeQueue(entityTypeId, entityTypeData, destination));
+				Plugin.bungeeCordEntityInQueue.add(new BungeeQueue(entityTypeName, entityTypeData, destination));
 				
 				// Schedule synchronous task to process spawn queue
 				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
@@ -208,7 +209,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			String[] parts = event.getArguments();	
 			String vehicleId = parts[0];
 			String vehicleWorld = parts[1];
-			int vehicleTypeId = Integer.parseInt(parts[2]);
+			String vehicleTypeName = parts[2];
 			double velocity = Double.parseDouble(parts[3]);
 			String destination = parts[4];
 			
@@ -219,11 +220,11 @@ public class PluginSocketListener implements SocketServerEventListener {
 			String[] args = null;
 			if(parts[6] != null) {
 				String entityId = parts[5];
-				int entityTypeId = Integer.parseInt(parts[6]);
+				String entityTypeName = parts[6];
 				String entityTypeData = parts[7];
 				
 				// Build spawn queue (incl. passenger info)
-				queue = new BungeeQueue(vehicleTypeId, velocity, destination, entityTypeId, entityTypeData);
+				queue = new BungeeQueue(vehicleTypeName, velocity, destination, entityTypeName, entityTypeData);
 				
 				// Build the packet, format is <message>
 				args = new String[] {vehicleWorld, vehicleId, entityId};
@@ -232,13 +233,13 @@ public class PluginSocketListener implements SocketServerEventListener {
 				String entityItemStack = parts[5];
 				
 				// Build spawn queue (incl. contents info)
-				queue = new BungeeQueue(vehicleTypeId, velocity, destination, entityItemStack);
+				queue = new BungeeQueue(vehicleTypeName, velocity, destination, entityItemStack);
 					
 				// Build the packet, format is <message>
 				args = new String[] {vehicleWorld, vehicleId};
 			} else {
 				// Build spawn queue
-				queue = new BungeeQueue(vehicleTypeId, velocity, destination);
+				queue = new BungeeQueue(vehicleTypeName, velocity, destination);
 				
 				// Build the packet, format is <message>
 				args = new String[] {vehicleWorld, vehicleId};
