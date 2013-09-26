@@ -23,6 +23,7 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
@@ -272,6 +273,19 @@ public class PluginBlockListener implements Listener {
 		
 		// Stop sugarcane blocks from growing
 		if (BlockUtil.isStandableGateMaterial(event.getNewState().getType()) && Gates.gateFromPortalSurround(coord) != null) {
+			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if (event.isCancelled()) return;
+		
+		Block block = event.getClickedBlock();
+		WorldCoord coord = new WorldCoord(block);
+		
+		// Stop sugarcane blocks from growing
+		if (BlockUtil.isStandableGateMaterial(event.getClickedBlock().getType()) && Gates.gateFromPortal(coord) != null) {
 			event.setCancelled(true);
 		}
 	}
