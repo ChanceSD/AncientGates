@@ -22,13 +22,15 @@ public class Conf {
 	// Flags
 	public static boolean enforceAccess = false;
 	public static boolean useEconomy = false;
-	public static boolean useDynmap = false;
 	public static boolean useVanillaPortals = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;
 	
 	// Maximum gate fill area
 	private static int gateMaxArea = 70;
+	
+	// Timeouts & delays
+	private static double execWarmupDelay = 0.05;
 	
 	// Default gate material
 	public static String gateMaterialDefault = "PORTAL";
@@ -57,6 +59,10 @@ public class Conf {
 
 	public static int getGateMaxArea() {
 		return gateMaxArea*10;
+	}
+	
+	public static long getExecWarmupDelay() {
+		return Math.round(execWarmupDelay*20);
 	}
 	
 	// -------------------------------------------- //

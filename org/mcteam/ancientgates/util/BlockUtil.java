@@ -16,6 +16,7 @@ public class BlockUtil {
 
 	static {
 		spawnableGateMaterials = new HashMap<String, Material>();
+		spawnableGateMaterials.put("AIR", Material.PISTON_MOVING_PIECE);
 		spawnableGateMaterials.put("ENDPORTAL", Material.ENDER_PORTAL);
 		spawnableGateMaterials.put("LAVA", Material.STATIONARY_LAVA);
 		spawnableGateMaterials.put("PORTAL", Material.PORTAL);
@@ -26,6 +27,7 @@ public class BlockUtil {
 	
 	static {
 		standableGateMaterials = new HashSet<Material>();
+		standableGateMaterials.add(Material.PISTON_MOVING_PIECE);
 		standableGateMaterials.add(Material.ENDER_PORTAL);
 		standableGateMaterials.add(Material.LAVA);
 		standableGateMaterials.add(Material.PORTAL);
@@ -49,6 +51,7 @@ public class BlockUtil {
 		standableMaterials.add(Material.WEB); // 30 Cobweb
 		standableMaterials.add(Material.LONG_GRASS); // 31 Tall Grass
 		standableMaterials.add(Material.DEAD_BUSH); // 32 Dead Bush
+		standableMaterials.add(Material.PISTON_MOVING_PIECE); // 36 Piston (Moving)
 		standableMaterials.add(Material.YELLOW_FLOWER); // 37 Dandelion
 		standableMaterials.add(Material.RED_ROSE); // 38 Rose
 		standableMaterials.add(Material.BROWN_MUSHROOM); // 39 Brown Mushroom
