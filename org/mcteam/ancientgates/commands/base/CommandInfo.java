@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.GeometryUtil;
@@ -44,6 +45,7 @@ public class CommandInfo extends BaseCommand {
 		// Info based on sight
 		if (id == null) {
 			// Find gate based on the player's line of sight
+			// NB :- getTargetBlock deprecation warnings suppressed until Bukkit API provides an alternative method
 			@SuppressWarnings("deprecation")
 			WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock(null, 20));
 			gate = GateUtil.nearestGate(playerTargetCoord, false);
@@ -109,6 +111,13 @@ public class CommandInfo extends BaseCommand {
 			}
 		} else {
 			sendMessage(Conf.colorSystem + "NOTE: this gate has no 'to' location(s)");
+		}
+		if (Plugin.hasPermManage(player, "ancientgates.info.exec")) {
+			if (gate.getCommand() != null) {
+				sendMessage(Conf.colorSystem + "exec: " + Conf.colorAlly + "/" + gate.getCommand());
+			} else {
+				sendMessage(Conf.colorSystem + "NOTE: this gate has no command to execute");
+			}
 		}
 		if (gate.getMessage() != null) {
 			sendMessage(Conf.colorSystem + "message: " + Conf.colorAlly + gate.getMessage());

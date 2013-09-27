@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
  
 public class ItemStackUtil {
 	
-    @SuppressWarnings("deprecation")
 	public static String itemStackToString(ItemStack[] itemStack) {
         String serialization = itemStack.length + ";";
         for (int i = 0; i < itemStack.length; i++) {
@@ -17,7 +16,7 @@ public class ItemStackUtil {
             if (is != null) {
                 String serializedItemStack = new String();
                
-				String isType = String.valueOf(is.getType().getId());
+				String isType = is.getType().name();
                 serializedItemStack += "t@" + isType;
                
                 if (is.getDurability() != 0) {
@@ -33,7 +32,7 @@ public class ItemStackUtil {
                 Map<Enchantment,Integer> isEnch = is.getEnchantments();
                 if (isEnch.size() > 0) {
                     for (Entry<Enchantment,Integer> ench : isEnch.entrySet()) {
-                        serializedItemStack += ":e@" + ench.getKey().getId() + "@" + ench.getValue();
+                        serializedItemStack += ":e@" + ench.getKey().getName() + "@" + ench.getValue();
                     }
                 }
                
@@ -48,7 +47,6 @@ public class ItemStackUtil {
         return itemStackToString(new ItemStack[]{itemStack});
     }
    
-    @SuppressWarnings("deprecation")
 	public static ItemStack[] stringToItemStack(String itemStackString) {
         String[] serializedBlocks = itemStackString.split(";");
         String isInfo = serializedBlocks[0];
@@ -69,14 +67,14 @@ public class ItemStackUtil {
             for (String itemInfo : serializedItemStack) {
                 String[] itemAttribute = itemInfo.split("@");
                 if (itemAttribute[0].equals("t")) {
-                    is = new ItemStack(Material.getMaterial(Integer.valueOf(itemAttribute[1])));
+                    is = new ItemStack(Material.getMaterial(itemAttribute[1]));
                     createdItemStack = true;
                 } else if (itemAttribute[0].equals("d") && createdItemStack) {
                     is.setDurability(Short.valueOf(itemAttribute[1]));
                 } else if (itemAttribute[0].equals("a") && createdItemStack) {
                     is.setAmount(Integer.valueOf(itemAttribute[1]));
                 } else if (itemAttribute[0].equals("e") && createdItemStack) {
-                    is.addEnchantment(Enchantment.getById(Integer.valueOf(itemAttribute[1])), Integer.valueOf(itemAttribute[2]));
+                    is.addEnchantment(Enchantment.getByName(itemAttribute[1]), Integer.valueOf(itemAttribute[2]));
                 }
             }
             deserializedItemStack[i-1] = new ItemStack(is);

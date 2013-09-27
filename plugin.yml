@@ -21,6 +21,7 @@ permissions:
       ancientgates.delete: true
       ancientgates.help: true
       ancientgates.info: true
+      ancientgates.info.exec: true
       ancientgates.list: true
       ancientgates.listserver: true
       ancientgates.open: true
@@ -59,6 +60,9 @@ permissions:
     default: op
   ancientgates.info:
     description: Allows the use of Ancient Gates info command.
+    default: op
+  ancientgates.info.exec:
+    description: Allows access to exec info in info command.
     default: op
   ancientgates.list:
     description: Allows the use of Ancient Gates list command.
