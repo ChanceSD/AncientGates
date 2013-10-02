@@ -282,6 +282,8 @@ public class PluginBlockListener implements Listener {
 		if (event.isCancelled()) return;
 		
 		Block block = event.getClickedBlock();
+		if (block == null) return;
+		
 		WorldCoord coord = new WorldCoord(block);
 		
 		// Stop sugarcane blocks from growing
