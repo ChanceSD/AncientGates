@@ -21,6 +21,7 @@ import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.util.EntityUtil;
+import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
@@ -58,21 +59,23 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String playerName = parts[0];
 			String destination = parts[1];
 			String fromServer = parts[2];
-			String tpMsg = parts[3];
+			String tpCmd = parts[3];
+			String tpCmdType = parts[4];
+			String tpMsg = parts[5];
 			
 			String entityTypeName = null;
 			String entityTypeData = null;
 
 			// Handle player riding entity
-			if (parts.length > 4) {
-				entityTypeName = parts[4];
-				entityTypeData = parts[5];
+			if (parts.length > 6) {
+				entityTypeName = parts[6];
+				entityTypeData = parts[7];
 			}
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
@@ -93,6 +96,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 					if (entity != null) entity.setPassenger(player);
 				}
 				
+				if (!tpCmd.equals("null")) ExecuteUtil.execCommand(player, tpCmd, tpCmdType);
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
 			}
 		// Parse BungeeCord vehicle teleport packet
@@ -106,12 +110,14 @@ public class PluginMessengerListener implements PluginMessageListener {
 			double velocity = Double.parseDouble(parts[2]);
 			String destination = parts[3];
 			String fromServer = parts[4];
-			String tpMsg = parts[5];
+			String tpCmd = parts[5];
+			String tpCmdType = parts[6];
+			String tpMsg = parts[7];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue
 			Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeName, velocity, destination, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeName, velocity, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
@@ -119,6 +125,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 					TeleportUtil.teleportVehicle(player, vehicleTypeName, velocity, location);
 				}
 				
+				if (!tpCmd.equals("null")) ExecuteUtil.execCommand(player, tpCmd, tpCmdType);
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
 			}
 		// Parse BungeeCord spawn packet

@@ -25,6 +25,9 @@ public class BungeeQueue {
 	
 	private String message;
 	
+	private String command;
+	private String commandType;
+	
 	//----------------------------------------------//
 	// Constructors
 	//----------------------------------------------//
@@ -38,9 +41,11 @@ public class BungeeQueue {
 		if (!destination.equals("null")) this.destination = destination;
 	}
 	
-	// Player queue (with message)
-	public BungeeQueue(String playerName, String entityTypeName, String entityTypeData, String server, String destination, String message) {
+	// Player queue (with command and message)
+	public BungeeQueue(String playerName, String entityTypeName, String entityTypeData, String server, String destination, String command, String commandType, String message) {
 		this(playerName, entityTypeName, entityTypeData, server, destination);
+		this.command = command;
+		this.commandType = commandType;
 		this.message = message;
 	}
 	
@@ -54,9 +59,11 @@ public class BungeeQueue {
 		if (!destination.equals("null")) this.destination = destination;
 	}
 	
-	// Player passenger queue (with message)
-	public BungeeQueue(String playerName, String server, String vehicleTypeName, double velocity, String destination, String message) {
+	// Player passenger queue (with command and message)
+	public BungeeQueue(String playerName, String server, String vehicleTypeName, double velocity, String destination, String command, String commandType, String message) {
 		this(playerName, server, vehicleTypeName, velocity, destination);
+		this.command = command;
+		this.commandType = commandType;
 		this.message = message;
 	}
 	
@@ -121,6 +128,14 @@ public class BungeeQueue {
 	
 	public String getItemStack() {
 		return this.itemStack;
+	}
+	
+	public String getCommand() {
+		return this.command;
+	}
+	
+	public String getCommandType() {
+		return this.commandType;
 	}
 	
 	public String getMessage() {

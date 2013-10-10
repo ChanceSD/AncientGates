@@ -29,9 +29,6 @@ public class Conf {
 	// Maximum gate fill area
 	private static int gateMaxArea = 70;
 	
-	// Timeouts & delays
-	private static double execWarmupDelay = 0.05;
-	
 	// Default gate material
 	public static String gateMaterialDefault = "PORTAL";
 	
@@ -59,10 +56,6 @@ public class Conf {
 
 	public static int getGateMaxArea() {
 		return gateMaxArea*10;
-	}
-	
-	public static long getExecWarmupDelay() {
-		return Math.round(execWarmupDelay*20);
 	}
 	
 	// -------------------------------------------- //

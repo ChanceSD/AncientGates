@@ -89,6 +89,11 @@ public class PluginPlayerListener implements Listener {
 					return;
 				}
 			}
+			
+			// Execute teleport command
+			String command = queue.getCommand();
+			String commandType = queue.getCommandType();
+			if (!command.equals("null")) ExecuteUtil.execCommand(player, command, commandType);
 		}
 		
 		// Schedule task to check bungeeServerName is set
@@ -161,18 +166,12 @@ public class PluginPlayerListener implements Listener {
 			} else if (nearestGate.getTo() != null)  {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
 				
-				if (nearestGate.getCommand() != null) {
-					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-						public void run() {
-							ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
-						}
-					}, Conf.getExecWarmupDelay());
-				}
+				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getMessage());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
-				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
+				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 			}
 		}
 	}

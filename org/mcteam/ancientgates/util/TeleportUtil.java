@@ -64,7 +64,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location, String tpType, Boolean fullHeight, String tpMsg) {
+	public static void teleportPlayer(Player player, Map<String, String> location, String tpType, Boolean fullHeight, String tpCmd, String tpCmdType, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
@@ -98,17 +98,19 @@ public class TeleportUtil {
 			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
+			tpCmdType = (tpCmdType == null) ? "null" : tpCmdType; 
+			tpCmd = (tpCmd == null) ? "null" : tpCmd; 
 			tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 			PluginMessage msg;
 			// Player server teleport
 			if (tpType.equals("SERVER")) {
-				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpMsg);
+				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			// Player location teleport
 			} else if(e == null) {
-				msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpMsg);
+				msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			// Player riding entity teleport
 			} else {
-				msg = new PluginMessage(player, e, location, Plugin.bungeeServerName, tpMsg);
+				msg = new PluginMessage(player, e, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			}
 			// Send message over the AGBungeeTele BungeeCord channel
 			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
@@ -275,7 +277,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, String tpType, Boolean teleportEntities, Boolean fullHeight, String tpMsg) {		
+	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, String tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, String tpCmdType, String tpMsg) {		
 		if (Conf.bungeeCordSupport) {			
 			double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();
@@ -314,12 +316,14 @@ public class TeleportUtil {
 				player.setFireTicks(0); // Cancel lava fire
 				
 				// Send AGBungeeTele/AGBungeeVehicleTele packet first
+				tpCmdType = (tpCmdType == null) ? "null" : tpCmdType;
+				tpCmd = (tpCmd == null) ? "null" : tpCmd;
 				tpMsg = (tpMsg == null) ? "null" : tpMsg;
 				PluginMessage msg;
 				if (tpType.equals("SERVER")) {
-					msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpMsg);
+					msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 				} else {
-					msg = new PluginMessage(player, vehicle.getType(), velocity, location, Plugin.bungeeServerName, tpMsg);
+					msg = new PluginMessage(player, vehicle.getType(), velocity, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 				}
 				// Sent over the AGBungeeVehicleTele BungeeCord channel
 				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
