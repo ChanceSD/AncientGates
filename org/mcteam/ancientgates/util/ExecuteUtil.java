@@ -2,7 +2,11 @@ package org.mcteam.ancientgates.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
+import org.mcteam.ancientgates.Plugin;
 
 public class ExecuteUtil {
 	
@@ -21,7 +25,7 @@ public class ExecuteUtil {
 		}
 	}
 	
-	// Execute command and teleport back from gate
+	// Teleport player back from gate and execute command
 	public static void execCommand(Player player, String command, String commandType, Boolean teleport) {
 		// Spin player 180 deg
 		if (teleport == true) {
@@ -31,11 +35,51 @@ public class ExecuteUtil {
 				yaw -= 360;
 			}
 			position.setYaw(yaw);
+			
+			// Handle player riding an entity
+			final Entity e = player.getVehicle();
+			if (player.isInsideVehicle() && e instanceof LivingEntity) {
+				e.eject();
+				e.teleport(position);
+				e.setFireTicks(0); // Cancel lava fire
+			}
+				
 			player.teleport(position);
+			player.setFireTicks(0); // Cancel lava fire
+			if (e != null) e.setPassenger(player);
 		}
 		
 		// Execute command as player or console
 		execCommand(player, command, commandType);
+	}
+	
+	// Teleport vehicle back from gate and execute command
+	public static void execCommand(Vehicle vehicle, String command, String commandType, Boolean teleport) {
+		final Entity passenger = vehicle.getPassenger();
+		
+		// Spin player 180 deg
+		if (teleport == true) {
+			Location position = vehicle.getLocation();
+			float yaw = position.getYaw();
+			if ((yaw += 180) > 360) {
+				yaw -= 360;
+			}
+			position.setYaw(yaw);
+			
+			final Vehicle v = position.getWorld().spawn(position, vehicle.getClass());
+			vehicle.eject();
+			vehicle.remove();
+			passenger.teleport(position);
+			passenger.setFireTicks(0); // Cancel lava fire
+			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				public void run() {
+					v.setPassenger(passenger);
+				}
+			}, 2);
+		}
+		
+		// Execute command as player or console
+		execCommand((Player)passenger, command, commandType);
 	}
 	
 }

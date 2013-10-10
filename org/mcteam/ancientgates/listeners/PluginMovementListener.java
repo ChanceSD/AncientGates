@@ -178,7 +178,7 @@ public class PluginMovementListener implements Listener {
 				} else if (nearestGate.getBungeeTo() != null) {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 				} else if (passenger instanceof Player) {
-					ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType(), true);
+					ExecuteUtil.execCommand(vehicle, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 				}
 			}
 		}
