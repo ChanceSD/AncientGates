@@ -4,8 +4,6 @@ import java.lang.reflect.Type;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.WorldCreator;
 import org.bukkit.craftbukkit.libs.com.google.gson.JsonDeserializationContext;
 import org.bukkit.craftbukkit.libs.com.google.gson.JsonDeserializer;
 import org.bukkit.craftbukkit.libs.com.google.gson.JsonElement;
@@ -27,14 +25,19 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 	public Location deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		JsonObject obj = json.getAsJsonObject();
 		
+		Location location = null;
 		World world = this.getWorld(obj.get(WORLD).getAsString());
-		double x = obj.get(X).getAsDouble();
-		double y = obj.get(Y).getAsDouble();
-		double z = obj.get(Z).getAsDouble();
-		float yaw = obj.get(YAW).getAsFloat();
-		float pitch = obj.get(PITCH).getAsFloat();
 		
-		return new Location(world, x, y, z, yaw, pitch);
+		if (world != null) {
+			double x = obj.get(X).getAsDouble();
+			double y = obj.get(Y).getAsDouble();
+			double z = obj.get(Z).getAsDouble();
+			float yaw = obj.get(YAW).getAsFloat();
+			float pitch = obj.get(PITCH).getAsFloat();
+			location = new Location(world, x, y, z, yaw, pitch);
+		}
+		
+		return location;
 	}
 
 	@Override
@@ -61,9 +64,6 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 	
 	private World getWorld(String name) {
 		World world = Plugin.instance.getServer().getWorld(name);
-		if (world == null) {
-			world = Plugin.instance.getServer().createWorld((WorldCreator.name(name).environment(Environment.NORMAL)));
-		}
 		return world;
     }
 

@@ -4,7 +4,6 @@ import org.bukkit.entity.EntityType;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.commands.base.CommandAddTo;
 import org.mcteam.ancientgates.commands.base.CommandRemTo;
 import org.mcteam.ancientgates.commands.base.CommandSetTo;
 import org.mcteam.ancientgates.queue.BungeeQueue;
@@ -147,11 +146,6 @@ public class PluginSocketListener implements SocketServerEventListener {
 				if (gate.getBungeeTos() == null) {
 					response = "This gate needs a \"to\" location. Use:\n";
 					response += new CommandSetTo().getUsageTemplate(false, true);
-					
-				// Display only one to exists response
-				} else if (gate.getBungeeTos().size() <= 1) {
-					response = "This gate needs multiple \"to\" locations. Use:\n";
-					response += new CommandAddTo().getUsageTemplate(false, true);
 				
 				// Remove gate location
 				} else {

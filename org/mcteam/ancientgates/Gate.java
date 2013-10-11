@@ -107,6 +107,7 @@ public class Gate {
 	
 	public void delTo(Location to) {		
 		this.tos.remove(to);
+		if (this.tos.size() == 0) this.tos = null;
 	}
 
 	public List<Location> getTos() {
@@ -152,6 +153,7 @@ public class Gate {
 		bungeeto.put(YAW, parts[4]);
 		bungeeto.put(PITCH, parts[5]);
 		this.bungeetos.remove(bungeeto);
+		if (this.bungeetos.size() == 0) this.bungeetos = null;
 	}
 	
 	public List<Map<String, String>> getBungeeTos() {
@@ -194,6 +196,7 @@ public class Gate {
 	}
 	
 	public String getCommandType() {
+		if (commandtype == null) return null;
 		return commandtype.toUpperCase();
 	}
 	
@@ -336,6 +339,17 @@ public class Gate {
 			if (gate.bungeetos != null && gate.bungeetype == null) {
 				gate.bungeetype = Conf.bungeeTeleportDefault;
 			}
+		}
+		
+		// Cleanup non-existent worlds
+		for (Gate gate : Gate.getAll()) {
+			if (gate.froms != null)
+				for (Location from : gate.froms)
+					if (from == null) gate.froms.remove(from);
+			
+			if (gate.tos != null)
+				for (Location to : gate.tos)
+					if (to == null) gate.tos.remove(to);
 		}
 		
 		save();

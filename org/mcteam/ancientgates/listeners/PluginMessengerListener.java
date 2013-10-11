@@ -244,7 +244,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			} else if (command.toLowerCase().equals("remto")) {
 				if (Plugin.hasPermManage(player, "ancientgates.remto.bungee")) {
 					Gate gate = Gate.get(gateid);
-					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() > 1) {
+					if (gate.getBungeeTos() != null) {
 						String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(comdata));
 						if (!nearestBungeeTo.isEmpty()) {
 							gate.delBungeeTo(server, nearestBungeeTo);
