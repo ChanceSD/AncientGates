@@ -4,7 +4,7 @@ description: Easily create portals with any custom design.
 main: org.mcteam.ancientgates.Plugin
 load: postworld
 author: peewi96
-softdepend: [Vault]
+softdepend: [Vault, Multiverse-Core]
 commands:
   gate:
     description: All of the Ancient Gates commands.
