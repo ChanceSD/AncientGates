@@ -47,20 +47,30 @@ public class TeleportUtil {
 	private static final String PITCH = "pitch";
 	
 	// Normal player teleport & BungeeCord player teleport in
-	public static void teleportPlayer(Player player, Location location) {
+	public static void teleportPlayer(final Player player, Location location) {
 		checkChunkLoad(location.getBlock());
 		
 		// Handle player riding an entity
-		final Entity e = player.getVehicle();
-		if (player.isInsideVehicle() && e instanceof LivingEntity) {
-			e.eject();
-			e.teleport(location);
-			e.setFireTicks(0); // Cancel lava fire
+		final Entity entity = player.getVehicle();
+		if (player.isInsideVehicle() && entity instanceof LivingEntity) {
+			entity.eject();
+			entity.remove();
 		}
-			
+
+		// Teleport player
 		player.teleport(location);
 		player.setFireTicks(0); // Cancel lava fire
-		if (e != null) e.setPassenger(player);
+		
+		// Re-mount player on entity
+		if (entity != null && entity instanceof LivingEntity) {
+			final Entity e = location.getWorld().spawn(location, entity.getClass());
+			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity)); // Clone entity data
+			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				public void run() {
+					e.setPassenger(player);
+				}
+			}, 2);
+		}
 	}
 	
 	// BungeeCord player teleport out
@@ -129,8 +139,22 @@ public class TeleportUtil {
 	// Entity teleport
 	public static void teleportEntity(EntityPortalEvent event, Location location) {
 		checkChunkLoad(location.getBlock());
-		event.getEntity().teleport(location);
-		event.getEntity().setFireTicks(0); // Cancel lava fire
+		
+		// Remove entity
+		final Entity entity = event.getEntity();
+		entity.remove();
+
+		// Clone entity - Spawnable
+		if (entity.getType().isSpawnable()) {
+			Entity e = location.getWorld().spawn(location, entity.getClass());
+			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity));
+		
+		// Clone entity - Itemstack
+		} else if (entity.getType() == EntityType.DROPPED_ITEM) {
+			Item i = location.getWorld().dropItemNaturally(location, ((Item)entity).getItemStack());
+			i.teleport(location);	
+		}
+
 	}
 	
 	// BungeeCord entity spawn out

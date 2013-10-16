@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates.listeners;
 
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -32,7 +33,7 @@ public class PluginEntityListener implements Listener {
 			return;
 		}
 		
-		if (!(event.getEntity() instanceof Player)) {
+		if (!(event.getEntity() instanceof Player) && !(event.getEntity().getPassenger() instanceof Player)) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
 			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
@@ -41,11 +42,24 @@ public class PluginEntityListener implements Listener {
 			if (nearestGate != null) {
 				event.setCancelled(true);
 				
-				if (Conf.useVanillaPortals ^ (event.getEntity() instanceof Vehicle)) {
+				/* Teleport non-living vehicles - Only when useVanillaPortals is enabled
+				 * 
+				 *  P | V | L | !P & (V & !L)  
+				 * ---+---+---+--------------- 
+				 *  T | T | T | F
+				 *  T | F | T | F   
+				 *  F | T | T | F 
+				 *  F | F | T | F
+				 *  T | T | F | F 
+				 *  T | F | F | F
+				 *  F | T | F | T 
+				 *  F | F | F | F  
+				 */
+				if (!Conf.useVanillaPortals && (event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity))) {
 					return;
 				}
 				
-				if (nearestGate.getTeleportEntities() && !(event.getEntity() instanceof Vehicle)) {
+				if (nearestGate.getTeleportEntities()) {
 					if (nearestGate.getBungeeTo() == null) {
 						TeleportUtil.teleportEntity(event, nearestGate.getTo());
 					} else {
