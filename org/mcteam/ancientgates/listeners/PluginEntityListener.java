@@ -44,22 +44,22 @@ public class PluginEntityListener implements Listener {
 				
 				/* Teleport non-living vehicles - Only when useVanillaPortals is enabled
 				 * 
-				 *  P | V | L | !P & (V & !L)  
-				 * ---+---+---+--------------- 
-				 *  T | T | T | F
-				 *  T | F | T | F   
-				 *  F | T | T | F 
-				 *  F | F | T | F
-				 *  T | T | F | F 
-				 *  T | F | F | F
-				 *  F | T | F | T 
-				 *  F | F | F | F  
+				 * Boolean Expression:
+				 * Rtrn = VanilFlag' InstVeh InstLiv';
 				 */
 				if (!Conf.useVanillaPortals && (event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity))) {
 					return;
 				}
 				
-				if (nearestGate.getTeleportEntities()) {
+				/* Teleport entities (incl. living vehicles) - If they're allowed
+				 * Teleport non-living vehicles if they're allowed
+				 * 
+				 * Boolean Expression:
+				 * Tele = EntFlag InstVeh' + EntFlag InstLiv + VehFlag InstVeh InstLiv';
+				 */
+				if (nearestGate.getTeleportEntities() && !(event.getEntity() instanceof Vehicle) ||
+						(nearestGate.getTeleportEntities() && event.getEntity() instanceof LivingEntity) ||
+						(nearestGate.getTeleportVehicles() && event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity))) {
 					if (nearestGate.getBungeeTo() == null) {
 						TeleportUtil.teleportEntity(event, nearestGate.getTo());
 					} else {
