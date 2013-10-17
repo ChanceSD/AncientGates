@@ -105,7 +105,14 @@ public class Plugin extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		log(String.format("Disabled Version %s", getDescription().getName(), getDescription().getVersion()));
+		// Unbind SocketComms listener
+		if (serv != null) {
+			Plugin.log("Disabling comms channel");
+			serv.close();
+			serv.stop();
+		}
+		
+		log("Disabled");
 	}
 
 	@Override
