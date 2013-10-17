@@ -92,7 +92,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 						}
 					}
 			
-					TeleportUtil.teleportPlayer(player, location);
+					TeleportUtil.teleportPlayer(player, location, false);
 					if (entity != null) entity.setPassenger(player);
 				}
 				

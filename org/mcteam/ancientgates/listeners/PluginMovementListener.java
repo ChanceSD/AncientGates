@@ -36,6 +36,12 @@ public class PluginMovementListener implements Listener {
 		}
 		
 		final Player player = event.getPlayer();
+		
+		// Check player is not carrying a passenger
+		if (player.getPassenger() != null) {
+			return;
+		}
+		
 		Location from = event.getFrom();
 		Location to = event.getTo();
 		Block blockTo = to.getBlock();
@@ -91,12 +97,12 @@ public class PluginMovementListener implements Listener {
 
 			// Teleport the player (Instant method)
 			if (nearestGate.getTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
+				TeleportUtil.teleportPlayer(player, nearestGate.getTo(), nearestGate.getTeleportEntities());
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 			}

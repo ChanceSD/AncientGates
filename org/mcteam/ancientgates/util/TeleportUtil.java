@@ -47,14 +47,14 @@ public class TeleportUtil {
 	private static final String PITCH = "pitch";
 	
 	// Normal player teleport & BungeeCord player teleport in
-	public static void teleportPlayer(final Player player, Location location) {
+	public static void teleportPlayer(final Player player, Location location, Boolean teleportEntities) {
 		checkChunkLoad(location.getBlock());
 		
 		// Handle player riding an entity
 		final Entity entity = player.getVehicle();
 		if (player.isInsideVehicle() && entity instanceof LivingEntity) {
 			entity.eject();
-			entity.remove();
+			if (teleportEntities && !(entity instanceof Player)) entity.remove();
 		}
 
 		// Teleport player
@@ -62,7 +62,7 @@ public class TeleportUtil {
 		player.setFireTicks(0); // Cancel lava fire
 		
 		// Re-mount player on entity
-		if (entity != null && entity instanceof LivingEntity) {
+		if (entity != null && teleportEntities && entity instanceof LivingEntity && !(entity instanceof Player)) {
 			final Entity e = location.getWorld().spawn(location, entity.getClass());
 			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity)); // Clone entity data
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
@@ -74,7 +74,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location, String tpType, Boolean fullHeight, String tpCmd, String tpCmdType, String tpMsg) {
+	public static void teleportPlayer(Player player, Map<String, String> location, String tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, String tpCmdType, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
@@ -116,7 +116,7 @@ public class TeleportUtil {
 			if (tpType.equals("SERVER")) {
 				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			// Player location teleport
-			} else if(e == null) {
+			} else if(e == null || !teleportEntities || e instanceof Player) {
 				msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			// Player riding entity teleport
 			} else {
@@ -125,7 +125,7 @@ public class TeleportUtil {
 			// Send message over the AGBungeeTele BungeeCord channel
 			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 			// Imitate teleport by removing entity
-			if (e != null) e.remove();
+			if (e != null && teleportEntities && tpType.equals("LOCATION") && !(e instanceof Player)) e.remove();
 		
 			// Replace quit message is with BungeeCord teleport message
 			Plugin.bungeeCordOutQueue.put(player.getName().toLowerCase(), location.get(SERVER));

@@ -79,7 +79,7 @@ public class PluginPlayerListener implements Listener {
 						}
 					}
 						
-					TeleportUtil.teleportPlayer(player, location);
+					TeleportUtil.teleportPlayer(player, location, false);
 					if (entity != null) entity.setPassenger(player);
 					
 					return;
@@ -140,6 +140,11 @@ public class PluginPlayerListener implements Listener {
 			if (!Conf.useVanillaPortals) {
 				return;
 			}
+			
+			// Check player is not carrying a passenger
+			if (player.getPassenger() != null) {
+				return;
+			}
 
 			// Check player has permission to enter the gate.
 			if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
@@ -164,12 +169,12 @@ public class PluginPlayerListener implements Listener {
 			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && nearestGate.getCommand() == null) {
 				player.sendMessage(String.format("This gate does not point anywhere :P"));
 			} else if (nearestGate.getTo() != null)  {
-				TeleportUtil.teleportPlayer(player, nearestGate.getTo());
+				TeleportUtil.teleportPlayer(player, nearestGate.getTo(), nearestGate.getTeleportEntities());
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 			}
