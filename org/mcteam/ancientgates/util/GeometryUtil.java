@@ -22,4 +22,11 @@ public class GeometryUtil {
 		return Math.sqrt(X*X+Y*Y+Z*Z);
 	}
 	
+	// Add additional height to location
+	public static Location addHeightToLocation(Location location, double h) {
+		double Y = location.getY();
+		location.setY(Y+h);
+		return location;
+	}
+	
 }

@@ -93,11 +93,6 @@ public class ClientConnectionThread implements Runnable {
 		
 		if(thread != null) {
 			this.isRunning = false;
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				if (Conf.debug) Plugin.log("Error while closing client thread.");
-			}
 			thread = null;
 		}
 	}

@@ -10,7 +10,6 @@ import java.util.Set;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 
-import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.sockets.events.*;
 import org.mcteam.ancientgates.sockets.types.ConnectionState;
@@ -100,12 +99,6 @@ public class SocketServer implements Runnable {
 				Plugin.log("Server stopped.");
 			} catch (IOException e) {
 				Plugin.log("Error while closing server socket.");
-			}
-			
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				if (Conf.debug) Plugin.log("Error while closing server thread.");
 			}
 			thread = null;
 		}

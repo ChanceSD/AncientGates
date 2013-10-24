@@ -28,13 +28,14 @@ public class ExecuteUtil {
 	// Teleport player back from gate and execute command
 	public static void execCommand(Player player, String command, String commandType, Boolean teleport) {
 		// Spin player 180 deg
-		if (teleport == true) {
+		if (teleport) {
 			Location position = player.getLocation();
 			float yaw = position.getYaw();
 			if ((yaw += 180) > 360) {
 				yaw -= 360;
 			}
 			position.setYaw(yaw);
+			position.add(position.getDirection().multiply(2));
 			
 			// Handle player riding an entity
 			final Entity e = player.getVehicle();
@@ -54,17 +55,18 @@ public class ExecuteUtil {
 	}
 	
 	// Teleport vehicle back from gate and execute command
-	public static void execCommand(Vehicle vehicle, String command, String commandType, Boolean teleport) {
+	public static void execCommand(Vehicle vehicle, final String command, final String commandType, Boolean teleport) {
 		final Entity passenger = vehicle.getPassenger();
 		
 		// Spin player 180 deg
-		if (teleport == true) {
+		if (teleport) {
 			Location position = vehicle.getLocation();
 			float yaw = position.getYaw();
 			if ((yaw += 180) > 360) {
 				yaw -= 360;
 			}
 			position.setYaw(yaw);
+			position.add(position.getDirection().multiply(2));
 			
 			final Vehicle v = position.getWorld().spawn(position, vehicle.getClass());
 			vehicle.eject();
@@ -79,7 +81,11 @@ public class ExecuteUtil {
 		}
 		
 		// Execute command as player or console
-		execCommand((Player)passenger, command, commandType);
+		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+			public void run() {
+				execCommand((Player)passenger, command, commandType);
+			}
+		}, 3);
 	}
 	
 }

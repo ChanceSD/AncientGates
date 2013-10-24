@@ -244,23 +244,28 @@ public class TeleportUtil {
 
 	// Normal vehicle teleport
 	public static void teleportVehicle(final Vehicle vehicle, Location location, Boolean teleportEntities) {
+		final Location destination = GeometryUtil.addHeightToLocation(location, 0.5); // Fix vehicle spawn glitch
 		double velocity = vehicle.getVelocity().length();
-		checkChunkLoad(location.getBlock());
+		checkChunkLoad(destination.getBlock());
 
 		// Stop and teleport
 		vehicle.setVelocity(new Vector());
 
 		// Get new velocity
-		final Vector newVelocity = location.getDirection();
+		final Vector newVelocity = destination.getDirection();
 		newVelocity.multiply(velocity);
 
 		final Entity passenger = vehicle.getPassenger();
 		if (passenger != null) {
-			final Vehicle v = location.getWorld().spawn(location, vehicle.getClass());
+			final Vehicle v = destination.getWorld().spawn(destination, vehicle.getClass());
 			vehicle.eject();
 			vehicle.remove();
-			passenger.teleport(location);
-			passenger.setFireTicks(0); // Cancel lava fire
+			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				public void run() {
+					passenger.teleport(destination);
+					passenger.setFireTicks(0); // Cancel lava fire
+				}
+			}, 0);
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				public void run() {
 					v.setPassenger(passenger);
@@ -269,7 +274,7 @@ public class TeleportUtil {
 			}, 2);
 		} else {
 			ItemStack[] contents;
-			Vehicle mc = location.getWorld().spawn(location, vehicle.getClass());
+			Vehicle mc = destination.getWorld().spawn(destination, vehicle.getClass());
 			if (mc instanceof StorageMinecart) {
 				contents = ((StorageMinecart)vehicle).getInventory().getContents();
 				// Teleport contents
