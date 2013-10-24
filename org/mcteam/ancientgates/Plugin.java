@@ -119,7 +119,7 @@ public class Plugin extends JavaPlugin {
 	public void onEnable() {
 		//Check for updates
 		if (Conf.autoUpdate) {
-			new Updater(this, "ancient-gates-reloaded", this.getFile(), Updater.UpdateType.DEFAULT, false);
+			new Updater(this, 51406, this.getFile(), Updater.UpdateType.DEFAULT, false);
 		}
 		
 		//Enable permissions and economy
