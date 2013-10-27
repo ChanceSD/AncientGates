@@ -1,5 +1,6 @@
 package org.mcteam.ancientgates.listeners;
 
+import java.util.Calendar;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
@@ -103,11 +104,15 @@ public class PluginPlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		String playerName = event.getPlayer().getName();
+
+		// Clear player hashmaps
+		Plugin.lastMessageTime.remove(playerName);
+		Plugin.lastTeleportTime.remove(playerName);
+		
 		if (!Conf.bungeeCordSupport) {
 			return;
 		}
-		
-		String playerName = event.getPlayer().getName();
 
 		// Ok so a player quits the server
 		// If it's a BungeeCord teleport, display a custom quit message
@@ -117,7 +122,6 @@ public class PluginPlayerListener implements Listener {
 			if (Conf.useBungeeMessages) msg = ChatColor.translateAlternateColorCodes('&', Conf.bungeeQuitMessage.replace("%p", playerName).replace("%s", server));
 			event.setQuitMessage(msg);
 		}
-		
 	}
     
 	@EventHandler(priority = EventPriority.HIGH)
@@ -143,6 +147,14 @@ public class PluginPlayerListener implements Listener {
 			
 			// Check player is not carrying a passenger
 			if (player.getPassenger() != null) {
+				return;
+			}
+			
+			// Get current time
+	        Long now = Calendar.getInstance().getTimeInMillis();
+			
+			// Check player has passed cooldown period
+			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis()) {
 				return;
 			}
 
@@ -173,10 +185,13 @@ public class PluginPlayerListener implements Listener {
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
+				
+				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
+				Plugin.lastTeleportTime.put(player.getName(), now);
 			}
 		}
 	}

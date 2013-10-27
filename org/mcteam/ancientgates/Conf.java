@@ -32,6 +32,9 @@ public class Conf {
 	// Default gate material
 	public static String gateMaterialDefault = "PORTAL";
 	
+	// Gate cooldown/warmup period
+	private static int gateCooldownPeriod = 1000;
+	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
 	public static String bungeeTeleportDefault = "LOCATION";
@@ -56,6 +59,10 @@ public class Conf {
 
 	public static int getGateMaxArea() {
 		return gateMaxArea*10;
+	}
+	
+	public static long getGateCooldownMillis() {
+		return gateCooldownPeriod;
 	}
 	
 	// -------------------------------------------- //

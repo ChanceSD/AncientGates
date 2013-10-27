@@ -86,14 +86,15 @@ public class Plugin extends JavaPlugin {
 	
 	// HashMap of incoming BungeeCord players & passengers
 	public static Map<String, BungeeQueue> bungeeCordInQueue = new HashMap<String, BungeeQueue>();
-	
-	// HashMap of outgoing BungeeCord players & passengers
-	public static Map<String, String> bungeeCordOutQueue = new HashMap<String, String>();
-	
+
 	// ArrayList of incoming BungeeCord entities & vehicles
 	public static ArrayList<BungeeQueue> bungeeCordEntityInQueue = new ArrayList<BungeeQueue>();
 	public static ArrayList<BungeeQueue> bungeeCordVehicleInQueue = new ArrayList<BungeeQueue>();
 	
+	// HashMap of outgoing BungeeCord players & passengers
+	public static Map<String, String> bungeeCordOutQueue = new HashMap<String, String>();
+	
+	public static HashMap<String, Long> lastTeleportTime = new HashMap<String, Long>();
 	public static HashMap<String, Long> lastMessageTime = new HashMap<String, Long>();
 	
 	// Commands

@@ -57,7 +57,12 @@ public class PluginMovementListener implements Listener {
 			
 			// Get current time
 	        Long now = Calendar.getInstance().getTimeInMillis();
-			
+	        
+			// Check player has passed cooldown period
+			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis()) {
+				return;
+			}
+
 			// Check player has permission to enter the gate.
 			if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
 					&& !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
@@ -101,10 +106,13 @@ public class PluginMovementListener implements Listener {
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
+				
+				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
+				Plugin.lastTeleportTime.put(player.getName(), now);
 			}
 		}
 	}
@@ -126,11 +134,18 @@ public class PluginMovementListener implements Listener {
 		final Gate nearestGate = Gates.gateFromAll(toCoord);
 
 		if (nearestGate != null) {		
+			Long now = 0L;
+			
 			if (passenger instanceof Player) {
 				Player player = (Player)passenger;
 				
 				// Get current time
-		        Long now = Calendar.getInstance().getTimeInMillis();
+		        now = Calendar.getInstance().getTimeInMillis();
+		        
+				// Check player has passed cooldown period
+				if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis()) {
+					return;
+				}
 				
 				// Check player has permission to enter the gate.
 				if ((!Plugin.hasPermManage(player, "ancientgates.use."+nearestGate.getId())
@@ -181,10 +196,13 @@ public class PluginMovementListener implements Listener {
 					
 					if (passenger instanceof Player && nearestGate.getCommand() != null) ExecuteUtil.execCommand((Player)passenger, nearestGate.getCommand(), nearestGate.getCommandType());
 					if (passenger instanceof Player && nearestGate.getMessage() != null) ((Player)passenger).sendMessage(nearestGate.getMessage());
+					
+					if (passenger instanceof Player) Plugin.lastMessageTime.put(((Player)passenger).getName(), now);
 				} else if (nearestGate.getBungeeTo() != null) {
 					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 				} else if (passenger instanceof Player) {
 					ExecuteUtil.execCommand(vehicle, nearestGate.getCommand(), nearestGate.getCommandType(), true);
+					if (passenger instanceof Player) Plugin.lastMessageTime.put(((Player)passenger).getName(), now);
 				}
 			}
 		}
