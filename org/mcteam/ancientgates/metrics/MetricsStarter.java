@@ -228,6 +228,16 @@ public class MetricsStarter {
 					return i;
 				}
 			});
+			materialsGraph.addPlotter(new Metrics.Plotter("Air") {
+				@Override
+				public int getValue() {
+					int i = 0;
+					for (Gate gate: Gate.getAll()) {
+						if (gate.getMaterial()==Material.PISTON_MOVING_PIECE) i++;
+					}
+					return i;
+				}
+			});
 
 
 			// Submit metrics

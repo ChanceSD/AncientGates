@@ -95,6 +95,10 @@ public class PluginPlayerListener implements Listener {
 			String command = queue.getCommand();
 			String commandType = queue.getCommandType();
 			if (!command.equals("null")) ExecuteUtil.execCommand(player, command, commandType);
+			
+			// Activate cooldown period
+	        Long now = Calendar.getInstance().getTimeInMillis();
+	        Plugin.lastTeleportTime.put(player.getName(), now);
 		}
 		
 		// Schedule task to check bungeeServerName is set

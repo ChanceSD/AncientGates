@@ -3,6 +3,7 @@ package org.mcteam.ancientgates.listeners;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.Calendar;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -77,6 +78,9 @@ public class PluginMessengerListener implements PluginMessageListener {
 			if (player == null) {
 				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
+				// Get current time
+		        Long now = Calendar.getInstance().getTimeInMillis();
+				
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
 					Location location = TeleportUtil.stringToLocation(destination);
@@ -98,6 +102,8 @@ public class PluginMessengerListener implements PluginMessageListener {
 				
 				if (!tpCmd.equals("null")) ExecuteUtil.execCommand(player, tpCmd, tpCmdType);
 				if (!tpMsg.equals("null")) player.sendMessage(tpMsg);
+				
+				Plugin.lastTeleportTime.put(player.getName(), now);
 			}
 		// Parse BungeeCord vehicle teleport packet
 		} else if (inChannel.equals("AGBungeeVehicleTele")) {
