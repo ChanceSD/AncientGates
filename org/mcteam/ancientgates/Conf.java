@@ -25,7 +25,6 @@ public class Conf {
 	public static boolean useVanillaPortals = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;
-	public static boolean gateDiagonalOrientations = false;
 	
 	// Maximum gate fill area
 	private static int gateMaxArea = 70;

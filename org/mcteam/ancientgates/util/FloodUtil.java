@@ -39,8 +39,7 @@ public class FloodUtil {
 	public static Map<FloodOrientation, Set<Block>> getAllAirFloods(Block startBlock, Collection<FloodOrientation> orientations, int limit) {
 		Map<FloodOrientation, Set<Block>> ret = new HashMap<FloodOrientation, Set<Block>>();
 		for (FloodOrientation orientation : orientations) {
-			if (Conf.gateDiagonalOrientations || (!orientation.equals(FloodOrientation.VERTICAL3) && !orientation.equals(FloodOrientation.VERTICAL4)))
-				ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), orientation.getDirections(), limit));
+			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), orientation.getDirections(), limit));
 		}
 		return ret;	
 	}
