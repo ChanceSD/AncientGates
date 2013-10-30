@@ -7,17 +7,17 @@ import java.util.Set;
 import org.bukkit.block.BlockFace;
 
 public enum FloodOrientation {
-	// |
-	VERTICAL1("facing west/east",  BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.UP, BlockFace.DOWN),
-	
-	// --
-	VERTICAL2("facing north/south", BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN),
-	
 	// /
-	VERTICAL3("facing northwest/southeast", BlockFace.NORTH_WEST, BlockFace.SOUTH_EAST, BlockFace.NORTH_EAST, BlockFace.SOUTH_WEST, BlockFace.UP, BlockFace.DOWN),
+	VERTICAL1("facing northwest/southeast", BlockFace.NORTH_WEST, BlockFace.SOUTH_EAST, BlockFace.NORTH_EAST, BlockFace.SOUTH_WEST, BlockFace.UP, BlockFace.DOWN),
 	
 	// \
-	VERTICAL4("facing northeast/southwest", BlockFace.NORTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST, BlockFace.SOUTH_EAST, BlockFace.UP, BlockFace.DOWN),
+	VERTICAL2("facing northeast/southwest", BlockFace.NORTH_EAST, BlockFace.SOUTH_WEST, BlockFace.NORTH_WEST, BlockFace.SOUTH_EAST, BlockFace.UP, BlockFace.DOWN),
+	
+	// |
+	VERTICAL3("facing west/east",  BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.UP, BlockFace.DOWN),
+	
+	// --
+	VERTICAL4("facing north/south", BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN),
 	
 	// O
 	HORIZONTAL("facing up/down", BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST),
