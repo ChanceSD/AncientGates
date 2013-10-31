@@ -118,11 +118,6 @@ public class Plugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		//Check for updates
-		if (Conf.autoUpdate) {
-			new Updater(this, 51406, this.getFile(), Updater.UpdateType.DEFAULT, false);
-		}
-		
 		//Enable permissions and economy
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {
 			if (!setupPermissions()) {
@@ -138,8 +133,15 @@ public class Plugin extends JavaPlugin {
 		// Ensure base folder exists!
 		this.getDataFolder().mkdirs();
 		
-		// Load from disc
+		// Load config from disc
 		Conf.load();
+		
+		//Check for updates
+		if (Conf.autoUpdate) {
+			new Updater(this, 51406, this.getFile(), Updater.UpdateType.DEFAULT, false);
+		}
+		
+		// Load gates from disc
 		Gates.load();
 		
 		// Setup BungeeCord support
