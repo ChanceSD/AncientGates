@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates;
 
 import java.lang.reflect.Modifier;
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -179,7 +180,7 @@ public class Plugin extends JavaPlugin {
 		if (Conf.bungeeCordSupport) {
 			commands.add(new CommandSetBungeeType());
 		}
-		if (Conf.useSocketComms) {
+		if (Conf.useSocketComms && serv != null) {
 			commands.add(new CommandAddServer());
 			commands.add(new CommandRemServer());
 			commands.add(new CommandServerList());
@@ -223,7 +224,12 @@ public class Plugin extends JavaPlugin {
 	
 		// Enable server socket channel
 		Plugin.log("Enabling comms channel");
-		serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
+		try {
+			serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
+		} catch (BindException e) {
+			Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
+			return;
+		}
 		serv.addClientListener(new PluginSocketListener());
     }
 	

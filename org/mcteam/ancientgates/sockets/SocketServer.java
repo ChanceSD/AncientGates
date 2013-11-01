@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates.sockets;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -28,13 +29,15 @@ public class SocketServer implements Runnable {
 	private boolean isRunning;
 	private Set<Integer> ids;
 	
-	public SocketServer(int clientCount, int port, String password) {
+	public SocketServer(int clientCount, int port, String password) throws BindException {
 		this.maxClient = clientCount;
 		this.password = TextUtil.md5(password);
 		try {
 			this.listener = new ServerSocket(port);
 			this.start();
 			Plugin.log("Server started on port " + port + ".");
+		} catch (BindException e) {
+			throw new BindException();
 		} catch (IOException e) {
 			Plugin.log("Error starting listener on port " + port + ".");
 			e.printStackTrace();
