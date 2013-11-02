@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.EnumSet;
@@ -343,13 +344,23 @@ public class Gate {
 		
 		// Cleanup non-existent worlds
 		for (Gate gate : Gate.getAll()) {
-			if (gate.froms != null)
-				for (Location from : gate.froms)
-					if (from == null) gate.froms.remove(from);
+			if (gate.froms != null) {
+				Iterator<Location> it = gate.froms.iterator();
+				while(it.hasNext()) {
+					Location from = it.next();
+					if(from == null) it.remove();
+				}
+				if (gate.froms.isEmpty()) gate.froms = null;
+			}
 			
-			if (gate.tos != null)
-				for (Location to : gate.tos)
-					if (to == null) gate.tos.remove(to);
+			if (gate.tos != null) {
+				Iterator<Location> it = gate.tos.iterator();
+				while(it.hasNext()) {
+					Location from = it.next();
+					if(from == null) it.remove();
+				}
+				if (gate.tos.isEmpty()) gate.tos = null;
+			}
 		}
 		
 		save();
