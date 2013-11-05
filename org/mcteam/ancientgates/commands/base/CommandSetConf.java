@@ -28,8 +28,8 @@ public class CommandSetConf extends BaseCommand {
 		Field[] fields = Conf.class.getDeclaredFields();
 		for (Field f : fields) {
 			f.setAccessible(true); // Modify private fields
-		    if (Modifier.isStatic(f.getModifiers()) && parameters.get(0).equalsIgnoreCase(f.getName())) {
-		        try {
+			if (Modifier.isStatic(f.getModifiers()) && parameters.get(0).equalsIgnoreCase(f.getName())) {
+		    	try {
 		        	if (TextUtil.isBoolean(parameters.get(1))) {
 		        		f.set(null, Boolean.parseBoolean(parameters.get(1)));
 		        	} else if (TextUtil.isInteger(parameters.get(1))) {
@@ -39,7 +39,7 @@ public class CommandSetConf extends BaseCommand {
 		        	} else {
 		        		f.set(null, parameters.get(1));
 		        	}
-				} catch (IllegalArgumentException e) {
+		        } catch (IllegalArgumentException e) {
 					sendMessage("Config option \""+f.getName()+"\" does not accept the value \""+parameters.get(1)+"\".");
 					return;
 				} catch (IllegalAccessException e) {

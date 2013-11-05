@@ -138,6 +138,9 @@ public class EntityUtil {
         				data += ((Tameable)entity).getOwner().getName() + ",";
         				data += ItemStackUtil.itemStackToString(((Horse)entity).getInventory().getSaddle()) + ",";
         				data += ItemStackUtil.itemStackToString(((Horse)entity).getInventory().getArmor()) + ",";
+        				if (((Horse)entity).isCarryingChest()) {
+        					data += ItemStackUtil.itemStackToString(((Horse)entity).getInventory().getContents()) + ",";
+        				}
         			}
                 } else {
                 	data += String.valueOf(((Animals)entity).getAge()) + ",";
@@ -182,6 +185,7 @@ public class EntityUtil {
                 	if (Boolean.parseBoolean(parts[2])) {
                 		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[2]));
                 	} else if (parts.length > 3) {
+                		((Tameable)entity).setTamed(true);
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[3]));
                 		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[4]));
                 	}
@@ -189,6 +193,7 @@ public class EntityUtil {
             		((Animals)entity).setAge(Integer.parseInt(parts[0]));
             		if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
                 	if (parts.length > 2) {
+                		((Tameable)entity).setTamed(true);
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[2]));
                 		((Ocelot)entity).setCatType(catTypes.get(parts[3]));
                 	}
@@ -204,10 +209,15 @@ public class EntityUtil {
                 	((Horse)entity).setDomestication(Integer.parseInt(parts[4]));
                 	((Horse)entity).setJumpStrength(Double.parseDouble(parts[5]));
                 	if (!parts[6].equals("null")) ((LivingEntity)entity).setCustomName(parts[6]);
-        			if (!parts[7].isEmpty()) {
+        			if (parts.length > 7) {
+                		((Tameable)entity).setTamed(true);
                 		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[7]));
                 		((Horse)entity).getInventory().setSaddle(ItemStackUtil.stringToItemStack(parts[8])[0]);
                 		((Horse)entity).getInventory().setArmor(ItemStackUtil.stringToItemStack(parts[9])[0]);
+                		if (parts.length > 10) {
+                			((Horse)entity).setCarryingChest(true);
+                			((Horse)entity).getInventory().setContents(ItemStackUtil.stringToItemStack(parts[10]));
+                		}
         			}
                 } else {
                 	((Animals)entity).setAge(Integer.parseInt(parts[0]));
