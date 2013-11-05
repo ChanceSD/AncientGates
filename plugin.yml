@@ -31,6 +31,7 @@ permissions:
       ancientgates.remto: true
       ancientgates.rename: true
       ancientgates.setbungeetype: true
+      ancientgates.setconf: true
       ancientgates.setcost: true
       ancientgates.setentities: true
       ancientgates.setexec: true
@@ -81,6 +82,9 @@ permissions:
     default: op
   ancientgates.setbungeetype:
     description: Allows the use of Ancient Gates setbungeetype command.
+    default: op
+  ancientgates.setconf:
+    description: Allows the use of Ancient Gates setconf command.
     default: op
   ancientgates.setcost:
     description: Allows the use of Ancient Gates setcost command.

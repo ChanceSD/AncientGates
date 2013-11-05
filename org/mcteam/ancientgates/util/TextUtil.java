@@ -98,6 +98,19 @@ public class TextUtil {
 		return null;
 	}
 	
+	public static boolean isBoolean(String s) {
+	    return "true".equalsIgnoreCase(s) || "false".equalsIgnoreCase(s);
+	}
+	
+	public static boolean isInteger(String s) {
+	    try { 
+	        Integer.parseInt(s); 
+	    } catch(NumberFormatException e) { 
+	        return false; 
+	    }
+	    return true;
+	}
+	
 }
 
 

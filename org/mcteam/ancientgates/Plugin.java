@@ -43,6 +43,7 @@ import org.mcteam.ancientgates.commands.base.CommandRemExec;
 import org.mcteam.ancientgates.commands.base.CommandRemFrom;
 import org.mcteam.ancientgates.commands.base.CommandRemTo;
 import org.mcteam.ancientgates.commands.base.CommandRename;
+import org.mcteam.ancientgates.commands.base.CommandSetConf;
 import org.mcteam.ancientgates.commands.base.CommandSetEntities;
 import org.mcteam.ancientgates.commands.base.CommandSetExec;
 import org.mcteam.ancientgates.commands.base.CommandSetFrom;
@@ -185,6 +186,7 @@ public class Plugin extends JavaPlugin {
 			commands.add(new CommandRemServer());
 			commands.add(new CommandServerList());
 		}
+		commands.add(new CommandSetConf());
 		
 		// Register events
 		PluginManager pm = this.getServer().getPluginManager();
