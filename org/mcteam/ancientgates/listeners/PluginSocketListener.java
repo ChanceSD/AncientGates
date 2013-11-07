@@ -72,6 +72,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
+			Plugin.serv.removeClient(event.getID());
 
 		// Parse "addto" command
 		} else if (command.toLowerCase().equals("addto")) {		
@@ -117,6 +118,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
+			Plugin.serv.removeClient(event.getID());
 			
 		// Parse "remto" command
 		} else if (command.toLowerCase().equals("remto")) {		
@@ -167,6 +169,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
+			Plugin.serv.removeClient(event.getID());
 
 		// Parse "spawnentity" command
 		} else if (command.toLowerCase().equals("spawnentity")) {
@@ -195,6 +198,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				
 				// Send entity removal command back to client
 				Plugin.serv.sendToClient(event.getID(), packet);
+				Plugin.serv.removeClient(event.getID());
 			}
 		// Parse "spawnvehicle" command
 		} else if (command.toLowerCase().equals("spawnvehicle")) {
@@ -252,6 +256,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				
 			// Send entity removal command back to client
 			Plugin.serv.sendToClient(event.getID(), packet);
+			Plugin.serv.removeClient(event.getID());
 		}
 	}
 

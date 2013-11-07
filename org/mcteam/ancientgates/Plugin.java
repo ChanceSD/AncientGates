@@ -113,6 +113,7 @@ public class Plugin extends JavaPlugin {
 			Plugin.log("Disabling comms channel");
 			serv.close();
 			serv.stop();
+			serv = null;
 		}
 		
 		log("Disabled");
