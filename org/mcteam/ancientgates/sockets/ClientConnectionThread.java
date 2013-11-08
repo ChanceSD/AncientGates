@@ -107,14 +107,15 @@ public class ClientConnectionThread implements Runnable {
 			String out = "";
 			while(this.isRunning) {
 				int encRecievedLen = this.inStream.readInt();
-				buffer = new byte[encRecievedLen];
-				int encRecieved = this.inStream.read(buffer);
-				if(encRecieved == -1) {
+				if(encRecievedLen == -1) {
 					this.isRunning = false;
 					this.server.removeClient(this.ID);
 					stop();
 					break;
 				}
+				buffer = new byte[encRecievedLen];
+				
+				this.inStream.read(buffer);
 				byte[] encInput = new byte[encRecievedLen];
 				System.arraycopy(buffer, 0, encInput, 0, encInput.length);
 				byte[] decInput = this.de_encrypt(this.server.getPassword(), encInput);
@@ -128,7 +129,7 @@ public class ClientConnectionThread implements Runnable {
 				out = new String(contentData);
 				if (Conf.debug) Plugin.log(out);
 				this.server.handle(this.ID, out);
-				buffer = new byte[1024];
+				encInput = new byte[1024];
 			}
 		} catch(IOException e) {
 			if (Conf.debug) Plugin.log("Lost connection to client " + this.ID + ".");

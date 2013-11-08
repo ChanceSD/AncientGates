@@ -46,6 +46,7 @@ public class Conf {
 	public static boolean useSocketComms = false;
 	public static int socketCommsPort = 18001;
 	public static String socketCommsPass = "agserver1";
+	public static int socketCommsTimeout = 10000;
 	
 	// Enable auto-update
 	public static boolean autoUpdate = true;

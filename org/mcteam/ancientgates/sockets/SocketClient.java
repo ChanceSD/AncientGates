@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
@@ -45,19 +46,21 @@ public class SocketClient implements Runnable {
 				return;
 			}
 			
+			long timeoutExpired = System.currentTimeMillis() + Conf.socketCommsTimeout;
 			try {
 				byte[] buffer = new byte[1024];
 				String out = "";
 				while(this.listening) {
 					int encRecievedLen = this.reader.readInt();
-					buffer = new byte[encRecievedLen];
-					int encRecieved = this.reader.read(buffer);
-					if(encRecieved == -1) {
+					if(encRecievedLen == -1 || System.currentTimeMillis() >= timeoutExpired) {
 						this.stopListening();
 						this.close();
 						Plugin.log("Connection closed");
 						break;
 					}
+					buffer = new byte[encRecievedLen];
+					
+					this.reader.read(buffer);
 					byte[] encInput = new byte[encRecievedLen];
 					System.arraycopy(buffer, 0, encInput, 0, encInput.length);
 					byte[] decInput = this.de_encrypt(this.serverPass, encInput);
@@ -73,7 +76,7 @@ public class SocketClient implements Runnable {
 						if (Conf.debug) Plugin.log(out);
 						this.listener.onServerMessageRecieve(this, this.parse(out));
 					}
-					buffer = new byte[1024];
+					encInput = new byte[1024];
 				}
 				if (Conf.debug) Plugin.log("End recieve");
 				
@@ -95,7 +98,8 @@ public class SocketClient implements Runnable {
 	}
 	
 	public void connect() throws Exception {
-		this.socket = new Socket(this.serverIP, this.serverPort);
+		this.socket = new Socket();
+		this.socket.connect(new InetSocketAddress(this.serverIP, this.serverPort), Conf.socketCommsTimeout);
 		this.reader = new DataInputStream(this.socket.getInputStream());
 		this.writer = new DataOutputStream(this.socket.getOutputStream());
 		this.startListening();
