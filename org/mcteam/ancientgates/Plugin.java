@@ -18,10 +18,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.Gson;
 import org.bukkit.craftbukkit.libs.com.google.gson.GsonBuilder;
@@ -72,12 +75,13 @@ public class Plugin extends JavaPlugin {
 	public static Logger log;
 	
 	public static SocketServer serv = null;
-	
 	public static Permission perms = null;
     public static Economy econ = null;
     
 	public static String bungeeServerName = null;
     
+    private Listener pluginMovementListener = null;
+    private PluginMessageListener pluginMessengerListener = null;
 	private String baseCommand;
 	
 	public final static Gson gson = new GsonBuilder()
@@ -144,14 +148,39 @@ public class Plugin extends JavaPlugin {
 			new Updater(this, 51406, this.getFile(), Updater.UpdateType.DEFAULT, false);
 		}
 		
-		// Load gates from disc
-		Gates.load();
+		// Register events
+		PluginManager pm = this.getServer().getPluginManager();
+		pm.registerEvents(new PluginBlockListener(this), this);
+		pm.registerEvents(new PluginEntityListener(this), this);
+		pm.registerEvents(new PluginPlayerListener(this), this);
+
+		// Load reloadable config
+		reload();
 		
+		//Submit Stats
+		MetricsStarter metrics = new MetricsStarter(this);
+		metrics.setupMetrics();
+		
+		// Load gates from disc (1 tick ensures worlds are loaded)
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			public void run() {
+				Gates.load();
+				log("Enabled");
+			}
+		}, 1);
+	}
+	
+	// -------------------------------------------- //
+	// Auto-reload config
+	// -------------------------------------------- //
+	public void reload() {	
 		// Setup BungeeCord support
-		if (Conf.useSocketComms) Server.load();
-		if (Conf.bungeeCordSupport) setupBungeeCord();
+		if (Conf.useSocketComms && serv == null) Server.load();
+		if (Conf.bungeeCordSupport && pluginMessengerListener == null) setupBungeeCord();
+		if (!Conf.bungeeCordSupport && pluginMessengerListener != null) takedownBungeeCord();
 		
 		// Add the commands
+		if (!commands.isEmpty()) commands.clear();
 		commands.add(new CommandHelp());
 		commands.add(new CommandCreate());
 		commands.add(new CommandDelete());
@@ -163,7 +192,7 @@ public class Plugin extends JavaPlugin {
 		commands.add(new CommandRemExec());
 		commands.add(new CommandRename());
 		commands.add(new CommandSetMessage());
-		if (econ != null) {
+		if (Conf.useEconomy && econ != null) {
 			commands.add(new CommandSetCost());
 		}
 		commands.add(new CommandSetEntities());
@@ -189,20 +218,15 @@ public class Plugin extends JavaPlugin {
 		}
 		commands.add(new CommandSetConf());
 		
-		// Register events
-		PluginManager pm = this.getServer().getPluginManager();
-		pm.registerEvents(new PluginBlockListener(this), this);
-		pm.registerEvents(new PluginEntityListener(this), this);
-		pm.registerEvents(new PluginPlayerListener(this), this);
-		if (!Conf.useVanillaPortals) {
-			pm.registerEvents(new PluginMovementListener(this), this);
+		// Register/Unregister events
+		if (!Conf.useVanillaPortals && pluginMovementListener == null) {
+			pluginMovementListener = new PluginMovementListener(this);
+			PluginManager pm = this.getServer().getPluginManager();
+			pm.registerEvents(pluginMovementListener, this);
+		} else if (Conf.useVanillaPortals && pluginMovementListener != null) {
+			HandlerList.unregisterAll(pluginMovementListener);
+			pluginMovementListener = null;
 		}
-		
-		//Submit Stats
-		MetricsStarter metrics = new MetricsStarter(this);
-		metrics.setupMetrics();
-		
-		log("Enabled");
 	}
 	
 	// -------------------------------------------- //
@@ -211,8 +235,9 @@ public class Plugin extends JavaPlugin {
 	private void setupBungeeCord() {	
 		// Enable required plugin channels 
 		Plugin.log("Enabling bungeecord channels");
+		pluginMessengerListener = new PluginMessengerListener();
 		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new PluginMessengerListener());
+		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
 		
 		if (!Conf.useSocketComms) {
 			Plugin.log("Socket comms disabled. Using generic BungeeCord messaging.");
@@ -226,14 +251,35 @@ public class Plugin extends JavaPlugin {
 		}
 	
 		// Enable server socket channel
-		Plugin.log("Enabling comms channel");
-		try {
-			serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
-		} catch (BindException e) {
-			Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
-			return;
+		if (Conf.useSocketComms && serv == null) {
+			Plugin.log("Enabling comms channel");
+			try {
+				serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
+			} catch (BindException e) {
+				Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
+				return;
+			}
+			serv.addClientListener(new PluginSocketListener());
+		} else if (!Conf.useSocketComms && serv != null) {
+			Plugin.log("Disabling comms channel");
+			serv.close();
+			serv.stop();
+			serv = null;	
 		}
-		serv.addClientListener(new PluginSocketListener());
+    }
+	
+	private void takedownBungeeCord() {	
+		// Disable required plugin channels 
+		Plugin.log("Disabling bungeecord channels");
+		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
+		Bukkit.getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
+		pluginMessengerListener = null;
+		
+		// Disable server socket channel
+		Plugin.log("Disabling comms channel");
+		serv.close();
+		serv.stop();
+		serv = null;
     }
 	
 	private boolean setupPermissions() {

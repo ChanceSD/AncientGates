@@ -83,12 +83,13 @@ public class CommandHelp extends BaseCommand {
 		pageLines.add( new CommandRemTo().getUsageTemplate(true, true) );
 		pageLines.add( new CommandInfo().getUsageTemplate(true, true) );
 		pageLines.add( new CommandList().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetConf().getUsageTemplate(true, true) );
 		pageLines.add( new CommandSetBungeeType().getUsageTemplate(true, true) );
-		if (Conf.useSocketComms) pageLines.add( new CommandAddServer().getUsageTemplate(true, true) );
 		helpPages.add(pageLines);
 		
 		pageLines = new ArrayList<String>();
 		if (Conf.useSocketComms) {
+			pageLines.add( new CommandAddServer().getUsageTemplate(true, true) );
 			pageLines.add( new CommandRemServer().getUsageTemplate(true, true) );
 			pageLines.add( new CommandServerList().getUsageTemplate(true, true) );
 		}

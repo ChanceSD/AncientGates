@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 
 import org.bukkit.ChatColor;
 import org.mcteam.ancientgates.Conf;
+import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.TextUtil;
 
@@ -47,6 +48,7 @@ public class CommandSetConf extends BaseCommand {
 				}
 		        sendMessage("Config option \""+f.getName()+"\" is now "+parameters.get(1)+".");
 		        Conf.save();
+		        Plugin.instance.reload();
 		        return;
 		    } 
 		}
