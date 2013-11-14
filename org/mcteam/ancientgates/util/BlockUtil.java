@@ -1,8 +1,6 @@
 package org.mcteam.ancientgates.util;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,20 +8,8 @@ import org.bukkit.block.BlockFace;
 
 public class BlockUtil {
 
-	public static Map<String, Material> spawnableGateMaterials;
 	public static HashSet<Material> standableGateMaterials;
 	public static HashSet<Material> standableMaterials;
-
-	static {
-		spawnableGateMaterials = new HashMap<String, Material>();
-		spawnableGateMaterials.put("AIR", Material.PISTON_MOVING_PIECE);
-		spawnableGateMaterials.put("ENDPORTAL", Material.ENDER_PORTAL);
-		spawnableGateMaterials.put("LAVA", Material.STATIONARY_LAVA);
-		spawnableGateMaterials.put("PORTAL", Material.PORTAL);
-		spawnableGateMaterials.put("SUGARCANE", Material.SUGAR_CANE_BLOCK);
-		spawnableGateMaterials.put("WATER", Material.STATIONARY_WATER);
-		spawnableGateMaterials.put("WEB", Material.WEB);
-	}
 	
 	static {
 		standableGateMaterials = new HashSet<Material>();
@@ -96,12 +82,8 @@ public class BlockUtil {
 		} catch (NoSuchFieldError e) {} // Support previous MC versions
 	}
 	
-	public static Material asSpawnableGateMaterial(String material) {
-		return spawnableGateMaterials.get(material);
-	}
-	
-	public static boolean isPortalGateMaterial(String material) {
-		return spawnableGateMaterials.get(material) == Material.PORTAL || spawnableGateMaterials.get(material) == Material.ENDER_PORTAL;
+	public static boolean isPortalGateMaterial(Material material) {
+		return material.equals(Material.PORTAL) || material.equals(Material.ENDER_PORTAL);
 	}
 	
 	public static boolean isStandableGateMaterial(Material material) {

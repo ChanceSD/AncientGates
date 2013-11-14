@@ -1,7 +1,12 @@
 package org.mcteam.ancientgates.commands.bungee;
 
+import java.util.Arrays;
+
+import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.TeleportType;
 
 public class CommandSetBungeeType extends BaseCommand {
 	
@@ -26,9 +31,9 @@ public class CommandSetBungeeType extends BaseCommand {
 		
 		String bungeeType = parameters.get(1).toUpperCase();
 		
-		if (!bungeeType.equals("LOCATION") && !bungeeType.equals("SERVER")) {
+		if (TeleportType.fromName(bungeeType) == null) {
 			sendMessage("This is not a valid BungeeCord teleportation type. Valid types:");
-			sendMessage("LOCATION, SERVER");
+			sendMessage(TextUtil.implode(Arrays.asList(TeleportType.names), Conf.colorSystem+", "));
 			return;
 		}
             

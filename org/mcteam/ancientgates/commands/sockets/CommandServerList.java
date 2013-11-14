@@ -26,7 +26,7 @@ public class CommandServerList extends BaseCommand {
 		List<String> names = new ArrayList<String>();
 		
 		for (Server server : Server.getAll()) {
-			names.add(Conf.colorAlly + server.getName());
+			names.add(Conf.colorValue + server.getName());
 		}
 		
 		if (names.size() == 0) {

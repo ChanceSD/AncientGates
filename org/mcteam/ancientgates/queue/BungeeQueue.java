@@ -6,6 +6,7 @@ import org.bukkit.entity.EntityType;
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.CommandType;
 
 public class BungeeQueue {
 
@@ -26,7 +27,7 @@ public class BungeeQueue {
 	private String message;
 	
 	private String command;
-	private String commandType;
+	private CommandType commandType;
 	
 	//----------------------------------------------//
 	// Constructors
@@ -42,7 +43,7 @@ public class BungeeQueue {
 	}
 	
 	// Player queue (with command and message)
-	public BungeeQueue(String playerName, String entityTypeName, String entityTypeData, String server, String destination, String command, String commandType, String message) {
+	public BungeeQueue(String playerName, String entityTypeName, String entityTypeData, String server, String destination, String command, CommandType commandType, String message) {
 		this(playerName, entityTypeName, entityTypeData, server, destination);
 		this.command = command;
 		this.commandType = commandType;
@@ -60,7 +61,7 @@ public class BungeeQueue {
 	}
 	
 	// Player passenger queue (with command and message)
-	public BungeeQueue(String playerName, String server, String vehicleTypeName, double velocity, String destination, String command, String commandType, String message) {
+	public BungeeQueue(String playerName, String server, String vehicleTypeName, double velocity, String destination, String command, CommandType commandType, String message) {
 		this(playerName, server, vehicleTypeName, velocity, destination);
 		this.command = command;
 		this.commandType = commandType;
@@ -134,7 +135,7 @@ public class BungeeQueue {
 		return this.command;
 	}
 	
-	public String getCommandType() {
+	public CommandType getCommandType() {
 		return this.commandType;
 	}
 	

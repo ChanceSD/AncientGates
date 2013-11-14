@@ -2,18 +2,22 @@ package org.mcteam.ancientgates;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
-import org.mcteam.ancientgates.util.BlockUtil;
+//import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.DiscUtil;
+import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.GateMaterial;
+import org.mcteam.ancientgates.util.types.TeleportType;
 
 public class Conf {
 	
 	public static transient File file = new File(Plugin.instance.getDataFolder(), "conf.json");
 	
 	// Colors
-	public static ChatColor colorAlly = ChatColor.LIGHT_PURPLE;
+	public static ChatColor colorValue = ChatColor.LIGHT_PURPLE;
 	public static ChatColor colorSystem = ChatColor.YELLOW;
 	public static ChatColor colorChrome = ChatColor.GOLD;
 	public static ChatColor colorCommand = ChatColor.AQUA;
@@ -30,14 +34,14 @@ public class Conf {
 	private static int gateMaxArea = 70;
 	
 	// Default gate material
-	public static String gateMaterialDefault = "PORTAL";
+	public static GateMaterial gateMaterialDefault = GateMaterial.PORTAL;
 	
 	// Gate cooldown/warmup period
 	private static int gateCooldownPeriod = 1000;
 	
 	// BungeeCord settings
 	public static boolean bungeeCordSupport = false;
-	public static String bungeeTeleportDefault = "LOCATION";
+	public static TeleportType bungeeTeleportDefault = TeleportType.LOCATION;
 	public static boolean useBungeeMessages = true;
 	public static String bungeeJoinMessage = "&e%p came from %s server";
 	public static String bungeeQuitMessage = "&e%p went to %s server";
@@ -104,16 +108,16 @@ public class Conf {
 			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 500.");
 		}
 		
-		// Check string values
-		if (BlockUtil.asSpawnableGateMaterial(gateMaterialDefault) == null) {
-			gateMaterialDefault = "PORTAL";
-			Plugin.log(Level.WARNING, "\"gateMaterialDefault\" is invalid. Setting to PORTAL.");
+		// Check enum values
+		if (gateMaterialDefault == null) {
+			gateMaterialDefault = GateMaterial.PORTAL;
+			Plugin.log(Level.WARNING, "\"gateMaterialDefault\" is invalid. Valid materials are: " + TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
 		}
-		if (!bungeeTeleportDefault.equals("LOCATION") && !bungeeTeleportDefault.equals("SERVER")) {
-			bungeeTeleportDefault = "LOCATION";
-			Plugin.log(Level.WARNING, "\"bungeeTeleportDefault\" is invalid. Setting to LOCATION.");
+		if (bungeeTeleportDefault == null) {
+			bungeeTeleportDefault = TeleportType.LOCATION;
+			Plugin.log(Level.WARNING, "\"bungeeTeleportDefault\" is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(TeleportType.names), ", ") + ".");
 		}
-		
+
 		// Migrate old format
 		if (useInstantNether != null) {
 			useVanillaPortals = !useInstantNether;

@@ -26,6 +26,7 @@ import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginMessengerListener implements PluginMessageListener {
@@ -61,7 +62,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String destination = parts[1];
 			String fromServer = parts[2];
 			String tpCmd = parts[3];
-			String tpCmdType = parts[4];
+			CommandType tpCmdType = CommandType.fromName(parts[4]);
 			String tpMsg = parts[5];
 			
 			String entityTypeName = null;
@@ -117,7 +118,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String destination = parts[3];
 			String fromServer = parts[4];
 			String tpCmd = parts[5];
-			String tpCmdType = parts[6];
+			CommandType tpCmdType = CommandType.fromName(parts[6]);
 			String tpMsg = parts[7];
 			
 			// Check if the player is online, if so, teleport, otherwise, queue

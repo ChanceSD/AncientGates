@@ -1,12 +1,28 @@
 package org.mcteam.ancientgates.util;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+
 import org.mcteam.ancientgates.Conf;
 
 public class TextUtil {
+	
+	public static Map<String, ChatColor> chatColors;
+	static {
+		chatColors = new HashMap<String, ChatColor>();
+		  for (ChatColor c : ChatColor.values()) {
+			  chatColors.put(c.name(), c);
+		  }
+	}
 	
 	public static String titleize(String str) {
 		String line = Conf.colorChrome+repeat("_", 60);

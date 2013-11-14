@@ -1,11 +1,13 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.Arrays;
+
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.commands.BaseCommand;
-import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.GateMaterial;
 
 public class CommandSetMaterial extends BaseCommand {
 	
@@ -25,9 +27,9 @@ public class CommandSetMaterial extends BaseCommand {
 	public void perform() {	
 		String material = parameters.get(1).toUpperCase();
 		
-		if (BlockUtil.asSpawnableGateMaterial(material) == null) {
+		if (GateMaterial.fromName(material) == null) {
 			sendMessage("This is not a valid gate material. Valid materials:");
-			sendMessage(TextUtil.implode(BlockUtil.spawnableGateMaterials, Conf.colorSystem+", "));
+			sendMessage(TextUtil.implode(Arrays.asList(GateMaterial.names), Conf.colorSystem+", "));
 			return;
 		}
         

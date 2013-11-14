@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,10 +22,14 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.libs.com.google.gson.reflect.TypeToken;
-import org.mcteam.ancientgates.util.BlockUtil;
+
 import org.mcteam.ancientgates.util.DiscUtil;
 import org.mcteam.ancientgates.util.FloodUtil;
+import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.FloodOrientation;
+import org.mcteam.ancientgates.util.types.GateMaterial;
+import org.mcteam.ancientgates.util.types.TeleportType;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class Gate {
@@ -43,12 +49,12 @@ public class Gate {
 	private List<Location> froms;
 	private List<Location> tos;
 	private List<Map<String, String>> bungeetos;
-	private String bungeetype;
+	private TeleportType bungeetype;
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
-	private String material = Conf.gateMaterialDefault;
+	private GateMaterial material = Conf.gateMaterialDefault;
 	private String command;
-	private String commandtype;
+	private CommandType commandtype;
 	private String msg;
 	private double cost = 0.0;
 	
@@ -168,11 +174,11 @@ public class Gate {
 	}
 	
 	public void setBungeeType(String bungeeType) {
-		this.bungeetype = bungeeType.toUpperCase();
+		this.bungeetype = TeleportType.fromName(bungeeType.toUpperCase());
 	}
 	
-	public String getBungeeType() {
-		return bungeetype.toUpperCase();
+	public TeleportType getBungeeType() {
+		return bungeetype;
 	}
 	
 	public void setMessage(String msg) {
@@ -193,12 +199,11 @@ public class Gate {
 	}
 	
 	public void setCommandType(String commandType) {
-		this.commandtype = commandType.toUpperCase();
+		this.commandtype = CommandType.fromName(commandType.toUpperCase());
 	}
 	
-	public String getCommandType() {
-		if (commandtype == null) return null;
-		return commandtype.toUpperCase();
+	public CommandType getCommandType() {
+		return commandtype;
 	}
 	
 	public void setCost(Double cost) {
@@ -226,15 +231,15 @@ public class Gate {
 	}
 	
 	public void setMaterial(String material) {
-		this.material = material.toUpperCase();
+		this.material = GateMaterial.fromName(material.toUpperCase());
 	}
 	
 	public Material getMaterial() {
-		return BlockUtil.asSpawnableGateMaterial(material.toUpperCase());
+		return material.getMaterial();
 	}
 	
 	public String getMaterialStr() {
-		return material.toUpperCase();
+		return material.name();
 	}
 	
 	public void rename(String id, String newid) {
@@ -318,6 +323,22 @@ public class Gate {
 		}
 		
 		fillIds();
+		
+		// Check enum values
+		for (Gate gate : Gate.getAll()) {
+			if (gate.material == null) {
+				gate.material = GateMaterial.PORTAL;
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"material\" } is invalid. Valid materials are: " + TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
+			}
+			if (gate.bungeetos != null && gate.bungeetype == null) {
+				gate.bungeetype = TeleportType.LOCATION;
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"bungeetype\" } is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(TeleportType.names), ", ") + ".");
+			}
+			if (gate.command != null && gate.commandtype == null) {
+				gate.commandtype = CommandType.PLAYER;
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"commandtype\" } is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(CommandType.names), ", ") + ".");
+			}
+		}
 		
 		// Migrate old format
 		for (Gate gate : Gate.getAll()) {

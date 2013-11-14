@@ -46,32 +46,32 @@ public class PluginMessage {
 	// Constructor
 	//----------------------------------------------//
 	// Player teleport message
-	public PluginMessage(Player player, String toServer, String fromServer, String command, String commandType, String message) {
+	public PluginMessage(Player player, String toServer, String fromServer, String command, CommandType commandType, String message) {
 		this.channel = BungeeChannel.AGBungeeTele;
 		this.toServer = toServer;
 		this.destination = "null";
 		this.playerName = player.getName();
 		this.fromServer = fromServer;
 		this.command = command;
-		this.commandType = commandType;
+		this.commandType = (commandType == null) ? "null" : commandType.name();
 		this.message = message;
 	}
 	
 	// Player teleport message (with destination)
-	public PluginMessage(Player player, Map<String, String> destination, String fromServer, String command, String commandType, String message) {
+	public PluginMessage(Player player, Map<String, String> destination, String fromServer, String command, CommandType commandType, String message) {
 		this(player, destination.get(SERVER), fromServer, command, commandType, message);
 		this.destination = TeleportUtil.locationToString(destination);
 	}
 	
 	// Player teleport message (riding entity)
-	public PluginMessage(Player player, Entity entity, Map<String, String> destination, String fromServer, String command, String commandType, String message) {
+	public PluginMessage(Player player, Entity entity, Map<String, String> destination, String fromServer, String command, CommandType commandType, String message) {
 		this(player, destination, fromServer, command, commandType, message);
 		this.entityTypeName = entity.getType().name();
 		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
 	}
 	
 	// Vehicle teleport message
-	public PluginMessage(Player player, EntityType vehicleType, double velocity, Map<String, String> destination, String fromServer, String command, String commandType, String message) {
+	public PluginMessage(Player player, EntityType vehicleType, double velocity, Map<String, String> destination, String fromServer, String command, CommandType commandType, String message) {
 		this.channel = BungeeChannel.AGBungeeVehicleTele;	
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
@@ -79,6 +79,8 @@ public class PluginMessage {
 		this.vehicleTypeName = vehicleType.name();
 		this.velocity = String.valueOf(velocity);
 		this.fromServer = fromServer;
+		this.command = command;
+		this.commandType = (commandType == null) ? "null" : commandType.name();
 		this.message = message;
 	}
 	

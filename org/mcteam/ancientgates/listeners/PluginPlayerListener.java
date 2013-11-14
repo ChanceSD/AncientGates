@@ -26,6 +26,7 @@ import org.mcteam.ancientgates.tasks.BungeeServerName;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginPlayerListener implements Listener {
@@ -93,7 +94,7 @@ public class PluginPlayerListener implements Listener {
 			
 			// Execute teleport command
 			String command = queue.getCommand();
-			String commandType = queue.getCommandType();
+			CommandType commandType = queue.getCommandType();
 			if (!command.equals("null")) ExecuteUtil.execCommand(player, command, commandType);
 			
 			// Activate cooldown period

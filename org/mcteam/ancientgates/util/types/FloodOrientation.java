@@ -20,8 +20,7 @@ public enum FloodOrientation {
 	VERTICAL4("facing north/south", BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN),
 	
 	// O
-	HORIZONTAL("facing up/down", BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST),
-	;
+	HORIZONTAL("facing up/down", BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.WEST, BlockFace.EAST);
 	
 	protected final Set<BlockFace> directions;
 	public Set<BlockFace> getDirections() { return this.directions; }

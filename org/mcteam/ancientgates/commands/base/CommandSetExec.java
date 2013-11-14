@@ -1,7 +1,12 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.Arrays;
+
+import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.CommandType;
 
 public class CommandSetExec extends BaseCommand {
 	
@@ -23,9 +28,9 @@ public class CommandSetExec extends BaseCommand {
 		String command = "";
 		String commandType = parameters.get(1).toUpperCase();
 		
-		if (!commandType.equals("PLAYER") && !commandType.equals("CONSOLE")) {
+		if (CommandType.fromName(commandType) == null) {
 			sendMessage("This is not a valid command type. Valid types:");
-			sendMessage("PLAYER, CONSOLE");
+			sendMessage(TextUtil.implode(Arrays.asList(CommandType.names), Conf.colorSystem+", "));
 			return;
 		}
 

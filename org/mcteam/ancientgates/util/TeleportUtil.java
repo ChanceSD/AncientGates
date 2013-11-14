@@ -34,7 +34,9 @@ import org.mcteam.ancientgates.sockets.SocketClient;
 import org.mcteam.ancientgates.sockets.events.SocketClientEventListener;
 import org.mcteam.ancientgates.sockets.types.Packet;
 import org.mcteam.ancientgates.sockets.types.Packets;
+import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.PluginMessage;
+import org.mcteam.ancientgates.util.types.TeleportType;
 
 public class TeleportUtil {
 	
@@ -74,7 +76,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location, String tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, String tpCmdType, String tpMsg) {
+	public static void teleportPlayer(Player player, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
@@ -108,12 +110,11 @@ public class TeleportUtil {
 			player.setFireTicks(0); // Cancel lava fire
 			
 			// Send AGBungeeTele packet first
-			tpCmdType = (tpCmdType == null) ? "null" : tpCmdType; 
 			tpCmd = (tpCmd == null) ? "null" : tpCmd; 
 			tpMsg = (tpMsg == null) ? "null" : tpMsg; 
 			PluginMessage msg;
 			// Player server teleport
-			if (tpType.equals("SERVER")) {
+			if (tpType.equals(TeleportType.SERVER)) {
 				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			// Player location teleport
 			} else if(e == null || !teleportEntities || e instanceof Player) {
@@ -125,7 +126,7 @@ public class TeleportUtil {
 			// Send message over the AGBungeeTele BungeeCord channel
 			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 			// Imitate teleport by removing entity
-			if (e != null && teleportEntities && tpType.equals("LOCATION") && !(e instanceof Player)) e.remove();
+			if (e != null && teleportEntities && tpType.equals(TeleportType.LOCATION) && !(e instanceof Player)) e.remove();
 		
 			// Replace quit message is with BungeeCord teleport message
 			Plugin.bungeeCordOutQueue.put(player.getName().toLowerCase(), location.get(SERVER));
@@ -306,7 +307,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, String tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, String tpCmdType, String tpMsg) {		
+	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {		
 		if (Conf.bungeeCordSupport) {			
 			double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();
@@ -345,11 +346,10 @@ public class TeleportUtil {
 				player.setFireTicks(0); // Cancel lava fire
 				
 				// Send AGBungeeTele/AGBungeeVehicleTele packet first
-				tpCmdType = (tpCmdType == null) ? "null" : tpCmdType;
 				tpCmd = (tpCmd == null) ? "null" : tpCmd;
 				tpMsg = (tpMsg == null) ? "null" : tpMsg;
 				PluginMessage msg;
-				if (tpType.equals("SERVER")) {
+				if (tpType.equals(TeleportType.SERVER)) {
 					msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 				} else {
 					msg = new PluginMessage(player, vehicle.getType(), velocity, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);

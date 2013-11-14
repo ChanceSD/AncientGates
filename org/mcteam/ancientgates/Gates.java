@@ -66,7 +66,7 @@ public class Gates {
 		
 		// This is not to do an effect
 		// It is to stop portalblocks from destroyingthemself as they can't rely on non created blocks
-		if (BlockUtil.isPortalGateMaterial(gate.getMaterialStr())) {
+		if (BlockUtil.isPortalGateMaterial(gate.getMaterial())) {
 			for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
 				coord.getBlock().setType(Material.GLOWSTONE);
 			}
