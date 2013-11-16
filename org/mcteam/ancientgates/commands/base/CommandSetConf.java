@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.tasks.BungeeServerName;
 import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.TeleportType;
@@ -65,8 +66,14 @@ public class CommandSetConf extends BaseCommand {
 					continue;
 				}
 		        sendMessage("Config option \""+f.getName()+"\" is now "+value+".");
+		        
 		        Conf.save();
 		        Plugin.instance.reload();
+		        
+		        if (Conf.bungeeCordSupport && Plugin.bungeeServerName == null) {
+		        	new BungeeServerName(Plugin.instance).runTaskLater(Plugin.instance, 20L);
+		        }
+		        
 		        return;
 		    } 
 		}

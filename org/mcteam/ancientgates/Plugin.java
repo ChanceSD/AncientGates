@@ -175,9 +175,11 @@ public class Plugin extends JavaPlugin {
 	// -------------------------------------------- //
 	public void reload() {	
 		// Setup BungeeCord support
-		if (Conf.useSocketComms && serv == null) Server.load();
 		if (Conf.bungeeCordSupport && pluginMessengerListener == null) setupBungeeCord();
+		if (Conf.bungeeCordSupport && Conf.useSocketComms && serv == null ) setupSocketComms();
+		// Takedown BungeeCord support
 		if (!Conf.bungeeCordSupport && pluginMessengerListener != null) takedownBungeeCord();
+		if ((!Conf.bungeeCordSupport || !Conf.useSocketComms) && serv != null) takedownSocketComms();
 		
 		// Add the commands
 		if (!commands.isEmpty()) commands.clear();
@@ -243,30 +245,28 @@ public class Plugin extends JavaPlugin {
 			Plugin.log("Socket comms disabled. Using generic BungeeCord messaging.");
 			return;
 		}
+	}
+	
+	private void setupSocketComms() {
+		// Load servers list
+		Server.load();
 		
 		// Check socket comms port in range
 		if (Conf.socketCommsPort > 65535) {
 			Plugin.log("socketCommsPort out of range. Using generic BungeeCord messaging.");
 			return;
 		}
-	
+		
 		// Enable server socket channel
-		if (Conf.useSocketComms && serv == null) {
-			Plugin.log("Enabling comms channel");
-			try {
-				serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
-			} catch (BindException e) {
-				Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
-				return;
-			}
-			serv.addClientListener(new PluginSocketListener());
-		} else if (!Conf.useSocketComms && serv != null) {
-			Plugin.log("Disabling comms channel");
-			serv.close();
-			serv.stop();
-			serv = null;	
+		Plugin.log("Enabling comms channel");
+		try {
+			serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
+		} catch (BindException e) {
+			Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
+			return;
 		}
-    }
+		serv.addClientListener(new PluginSocketListener());
+	}
 	
 	private void takedownBungeeCord() {	
 		// Disable required plugin channels 
@@ -274,7 +274,9 @@ public class Plugin extends JavaPlugin {
 		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
 		Bukkit.getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
 		pluginMessengerListener = null;
-		
+    }
+	
+	private void takedownSocketComms() {	
 		// Disable server socket channel
 		Plugin.log("Disabling comms channel");
 		serv.close();
