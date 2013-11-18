@@ -27,6 +27,7 @@ import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.CommandType;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginPlayerListener implements Listener {
@@ -81,7 +82,7 @@ public class PluginPlayerListener implements Listener {
 						}
 					}
 						
-					TeleportUtil.teleportPlayer(player, location, false);
+					TeleportUtil.teleportPlayer(player, location, false, InvBoolean.FALSE);
 					if (entity != null) entity.setPassenger(player);
 					
 					return;
@@ -186,14 +187,14 @@ public class PluginPlayerListener implements Listener {
 			if (nearestGate.getTo() == null && nearestGate.getBungeeTo() == null && nearestGate.getCommand() == null) {
 				player.sendMessage(String.format("This gate does not point anywhere :P"));
 			} else if (nearestGate.getTo() != null)  {
-				TeleportUtil.teleportPlayer(player, nearestGate.getTo(), nearestGate.getTeleportEntities());
+				TeleportUtil.teleportPlayer(player, nearestGate.getTo(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory());
 				
 				if (nearestGate.getCommand() != null) ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
 				if (nearestGate.getMessage() != null) player.sendMessage(nearestGate.getMessage());
 				
 				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 				Plugin.lastTeleportTime.put(player.getName(), now);

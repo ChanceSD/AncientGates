@@ -17,6 +17,7 @@ import org.bukkit.entity.minecart.HopperMinecart;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 import org.bukkit.util.Vector;
+
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
@@ -27,6 +28,7 @@ import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.CommandType;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginMessengerListener implements PluginMessageListener {
@@ -97,7 +99,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 						}
 					}
 			
-					TeleportUtil.teleportPlayer(player, location, false);
+					TeleportUtil.teleportPlayer(player, location, false, InvBoolean.FALSE);
 					if (entity != null) entity.setPassenger(player);
 				}
 				

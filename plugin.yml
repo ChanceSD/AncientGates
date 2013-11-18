@@ -36,6 +36,7 @@ permissions:
       ancientgates.setentities: true
       ancientgates.setexec: true
       ancientgates.setfrom: true
+      ancientgates.setinventory: true
       ancientgates.setmaterial: true
       ancientgates.setmessage: true
       ancientgates.setvehicles: true
@@ -97,6 +98,9 @@ permissions:
     default: op
   ancientgates.setfrom:
     description: Allows the use of Ancient Gates setfrom command.
+    default: op
+  ancientgates.setinventory:
+    description: Allows the use of Ancient Gates setinventory command.
     default: op
   ancientgates.setmaterial:
     description: Allows the use of Ancient Gates setmaterial command.

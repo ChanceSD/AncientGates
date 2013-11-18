@@ -6,10 +6,11 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
-//import org.mcteam.ancientgates.util.BlockUtil;
+
 import org.mcteam.ancientgates.util.DiscUtil;
 import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.TeleportType;
 
 public class Conf {
@@ -29,6 +30,9 @@ public class Conf {
 	public static boolean useVanillaPortals = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;
+	
+	// Extended flags
+	public static InvBoolean teleportInventoryDefault = InvBoolean.TRUE;
 	
 	// Maximum gate fill area
 	private static int gateMaxArea = 70;

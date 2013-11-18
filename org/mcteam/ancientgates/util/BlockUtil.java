@@ -79,6 +79,7 @@ public class BlockUtil {
 			standableMaterials.add(Material.DAYLIGHT_DETECTOR); // 151 Daylight Sensor
 			standableMaterials.add(Material.ACTIVATOR_RAIL); // 157 Activator Rail
 			standableMaterials.add(Material.CARPET); // 171 Carpet
+			//standableMaterials.add(Material.DOUBLE_PLANT); // double_plant Double Plants
 		} catch (NoSuchFieldError e) {} // Support previous MC versions
 	}
 	

@@ -50,6 +50,7 @@ import org.mcteam.ancientgates.commands.base.CommandSetConf;
 import org.mcteam.ancientgates.commands.base.CommandSetEntities;
 import org.mcteam.ancientgates.commands.base.CommandSetExec;
 import org.mcteam.ancientgates.commands.base.CommandSetFrom;
+import org.mcteam.ancientgates.commands.base.CommandSetInventory;
 import org.mcteam.ancientgates.commands.base.CommandSetMaterial;
 import org.mcteam.ancientgates.commands.base.CommandSetMessage;
 import org.mcteam.ancientgates.commands.base.CommandSetTo;
@@ -202,6 +203,7 @@ public class Plugin extends JavaPlugin {
 			commands.add(new CommandSetVehicles());
 			commands.add(new CommandSetMaterial());
 		}
+		commands.add(new CommandSetInventory());
 		commands.add(new CommandAddFrom());
 		commands.add(new CommandRemFrom());
 		commands.add(new CommandAddTo());

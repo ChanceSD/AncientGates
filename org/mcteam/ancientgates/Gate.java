@@ -29,6 +29,7 @@ import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.FloodOrientation;
 import org.mcteam.ancientgates.util.types.GateMaterial;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.TeleportType;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
@@ -52,6 +53,7 @@ public class Gate {
 	private TeleportType bungeetype;
 	private Boolean entities = Conf.teleportEntitiesDefault;
 	private Boolean vehicles = Conf.teleportVehiclesDefault;
+	private InvBoolean inventory = Conf.teleportInventoryDefault;
 	private GateMaterial material = Conf.gateMaterialDefault;
 	private String command;
 	private CommandType commandtype;
@@ -228,6 +230,14 @@ public class Gate {
 	
 	public Boolean getTeleportVehicles() {
 		return vehicles;
+	}
+	
+	public void setTeleportInventory(InvBoolean teleportInventory) {
+		this.inventory = teleportInventory;
+	}
+	
+	public InvBoolean getTeleportInventory() {
+		return inventory;
 	}
 	
 	public void setMaterial(String material) {

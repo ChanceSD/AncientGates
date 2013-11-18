@@ -35,6 +35,7 @@ import org.mcteam.ancientgates.sockets.events.SocketClientEventListener;
 import org.mcteam.ancientgates.sockets.types.Packet;
 import org.mcteam.ancientgates.sockets.types.Packets;
 import org.mcteam.ancientgates.util.types.CommandType;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.PluginMessage;
 import org.mcteam.ancientgates.util.types.TeleportType;
 
@@ -49,8 +50,20 @@ public class TeleportUtil {
 	private static final String PITCH = "pitch";
 	
 	// Normal player teleport & BungeeCord player teleport in
-	public static void teleportPlayer(final Player player, Location location, Boolean teleportEntities) {
+	public static void teleportPlayer(final Player player, Location location, Boolean teleportEntities, InvBoolean teleportInventory) {
 		checkChunkLoad(location.getBlock());
+		
+		// Handle player inventory
+		if (!teleportInventory.equals(InvBoolean.TRUE)) {
+			final ItemStack[] contents = player.getInventory().getContents();
+			player.getInventory().clear();
+		
+			if (teleportInventory.equals(InvBoolean.FALSE)) {
+				for (ItemStack itemStack : contents) {
+					if (itemStack != null) player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+				}
+			}
+		}
 		
 		// Handle player riding an entity
 		final Entity entity = player.getVehicle();
@@ -76,7 +89,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {
+	public static void teleportPlayer(Player player, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, InvBoolean teleportInventory, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
@@ -108,6 +121,18 @@ public class TeleportUtil {
 			}
 			if (e != null) e.setFireTicks(0); // Cancel lava fire
 			player.setFireTicks(0); // Cancel lava fire
+			
+			// Handle player inventory
+			if (!teleportInventory.equals(InvBoolean.TRUE)) {
+				final ItemStack[] contents = player.getInventory().getContents();
+				player.getInventory().clear();
+			
+				if (teleportInventory.equals(InvBoolean.FALSE)) {
+					for (ItemStack itemStack : contents) {
+						if (itemStack != null) player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+					}
+				}
+			}
 			
 			// Send AGBungeeTele packet first
 			tpCmd = (tpCmd == null) ? "null" : tpCmd; 
@@ -244,7 +269,7 @@ public class TeleportUtil {
 	}
 
 	// Normal vehicle teleport
-	public static void teleportVehicle(final Vehicle vehicle, Location location, Boolean teleportEntities) {
+	public static void teleportVehicle(final Vehicle vehicle, Location location, Boolean teleportEntities, InvBoolean teleportInventory) {
 		final Location destination = GeometryUtil.addHeightToLocation(location, 0.5); // Fix vehicle spawn glitch
 		double velocity = vehicle.getVelocity().length();
 		checkChunkLoad(destination.getBlock());
@@ -258,6 +283,19 @@ public class TeleportUtil {
 
 		final Entity passenger = vehicle.getPassenger();
 		if (passenger != null) {
+			// Handle player inventory
+			if (passenger instanceof Player) {
+				if (!teleportInventory.equals(InvBoolean.TRUE)) {
+					final ItemStack[] contents = ((Player)passenger).getInventory().getContents();
+					((Player)passenger).getInventory().clear();
+			
+					if (teleportInventory.equals(InvBoolean.FALSE)) {
+						for (ItemStack itemStack : contents) {
+							if (itemStack != null) ((Player)passenger).getWorld().dropItemNaturally(((Player)passenger).getLocation(), itemStack);
+						}
+					}
+				}
+			}
 			final Vehicle v = destination.getWorld().spawn(destination, vehicle.getClass());
 			vehicle.eject();
 			vehicle.remove();
@@ -307,7 +345,7 @@ public class TeleportUtil {
 	}
 	
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {		
+	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, InvBoolean teleportInventory, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {		
 		if (Conf.bungeeCordSupport) {			
 			double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();
@@ -344,6 +382,18 @@ public class TeleportUtil {
 					player.teleport(position);
 				}
 				player.setFireTicks(0); // Cancel lava fire
+				
+				// Handle player inventory
+				if (!teleportInventory.equals(InvBoolean.TRUE)) {
+					final ItemStack[] contents = player.getInventory().getContents();
+					player.getInventory().clear();
+				
+					if (teleportInventory.equals(InvBoolean.FALSE)) {
+						for (ItemStack itemStack : contents) {
+							if (itemStack != null) player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+						}
+					}
+				}
 				
 				// Send AGBungeeTele/AGBungeeVehicleTele packet first
 				tpCmd = (tpCmd == null) ? "null" : tpCmd;
