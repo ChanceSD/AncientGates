@@ -232,8 +232,8 @@ public class Gate {
 		return vehicles;
 	}
 	
-	public void setTeleportInventory(InvBoolean teleportInventory) {
-		this.inventory = teleportInventory;
+	public void setTeleportInventory(String teleportInventory) {
+		this.inventory = InvBoolean.fromName(teleportInventory.toUpperCase());
 	}
 	
 	public InvBoolean getTeleportInventory() {
@@ -339,6 +339,10 @@ public class Gate {
 			if (gate.material == null) {
 				gate.material = GateMaterial.PORTAL;
 				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"material\" } is invalid. Valid materials are: " + TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
+			}
+			if (gate.inventory == null) {
+				gate.inventory = InvBoolean.TRUE;
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"inventory\" } is invalid. Valid options are: " + TextUtil.implode(Arrays.asList(InvBoolean.names), ", ") + ".");
 			}
 			if (gate.bungeetos != null && gate.bungeetype == null) {
 				gate.bungeetype = TeleportType.LOCATION;

@@ -24,5 +24,12 @@ public enum InvBoolean {
 	public static InvBoolean fromName(String name) {
 		return nameToInvBool.get(name);
 	}
+	
+    public static final String[] names=new String[values().length];
+    static {
+        InvBoolean[] values=values();
+        for(int i=0;i<values.length;i++)
+            names[i]=values[i].name();
+    }
 
 }

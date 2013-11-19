@@ -117,6 +117,10 @@ public class Conf {
 			gateMaterialDefault = GateMaterial.PORTAL;
 			Plugin.log(Level.WARNING, "\"gateMaterialDefault\" is invalid. Valid materials are: " + TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
 		}
+		if (teleportInventoryDefault == null) {
+			teleportInventoryDefault = InvBoolean.TRUE;
+			Plugin.log(Level.WARNING, "\"teleportInventoryDefault\" is invalid. Valid options are: " + TextUtil.implode(Arrays.asList(InvBoolean.names), ", ") + ".");
+		}
 		if (bungeeTeleportDefault == null) {
 			bungeeTeleportDefault = TeleportType.LOCATION;
 			Plugin.log(Level.WARNING, "\"bungeeTeleportDefault\" is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(TeleportType.names), ", ") + ".");
