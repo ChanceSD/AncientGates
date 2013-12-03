@@ -9,6 +9,7 @@ import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.tasks.BungeeServerName;
 import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.TeleportType;
 
 public class CommandSetConf extends BaseCommand {
@@ -42,7 +43,9 @@ public class CommandSetConf extends BaseCommand {
 			f.setAccessible(true); // Modify private fields
 			if (Modifier.isStatic(f.getModifiers()) && item.equalsIgnoreCase(f.getName())) {
 		    	try {
-		        	if (TextUtil.isBoolean(value)) {
+					if (f.getType().equals("InvBoolean")) {
+						f.set(null, InvBoolean.fromName(value));
+					} else if (TextUtil.isBoolean(value)) {
 		        		f.set(null, Boolean.parseBoolean(value));
 		        	} else if (TextUtil.isInteger(value)) {
 		        		f.set(null, Integer.valueOf(value));

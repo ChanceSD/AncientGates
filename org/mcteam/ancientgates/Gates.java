@@ -65,7 +65,7 @@ public class Gates {
 		buildIndexFor(gate);
 		
 		// This is not to do an effect
-		// It is to stop portalblocks from destroyingthemself as they can't rely on non created blocks
+		// It is to stop portalblocks from destroying themselves as they can't rely on air blocks
 		if (BlockUtil.isPortalGateMaterial(gate.getMaterial())) {
 			for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
 				coord.getBlock().setType(Material.GLOWSTONE);
