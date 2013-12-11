@@ -43,19 +43,20 @@ public class CommandSetConf extends BaseCommand {
 			f.setAccessible(true); // Modify private fields
 			if (Modifier.isStatic(f.getModifiers()) && item.equalsIgnoreCase(f.getName())) {
 		    	try {
-					if (f.getType().equals("InvBoolean")) {
-						f.set(null, InvBoolean.fromName(value));
-					} else if (TextUtil.isBoolean(value)) {
+					if (f.getType().getSimpleName().equals("boolean") && TextUtil.isBoolean(value)) {
 		        		f.set(null, Boolean.parseBoolean(value));
-		        	} else if (TextUtil.isInteger(value)) {
+		        	} else if (f.getType().getSimpleName().equals("int") && TextUtil.isInteger(value)) {
 		        		f.set(null, Integer.valueOf(value));
-		        	} else if (GateMaterial.fromName(value.toUpperCase()) != null) {
+		        	} else if (f.getType().getSimpleName().equals("InvBoolean") && InvBoolean.fromName(value.toUpperCase()) != null) {
+		        		value = value.toUpperCase();
+		        		f.set(null, InvBoolean.fromName(value));
+		        	} else if (f.getType().getSimpleName().equals("GateMaterial") && GateMaterial.fromName(value.toUpperCase()) != null) {
 		        		value = value.toUpperCase();
 		        		f.set(null, GateMaterial.fromName(value));
-		        	} else if (TeleportType.fromName(value.toUpperCase()) != null) {
+		        	} else if (f.getType().getSimpleName().equals("TeleportType") && TeleportType.fromName(value.toUpperCase()) != null) {
 		        		value = value.toUpperCase();
 		        		f.set(null, TeleportType.fromName(value));
-		        	} else if (TextUtil.chatColors.containsKey(value.toUpperCase())) {
+		        	} else if (f.getType().getSimpleName().equals("ChatColor") && TextUtil.chatColors.containsKey(value.toUpperCase())) {
 		        		value = value.toUpperCase();
 		        		f.set(null, TextUtil.chatColors.get(value));
 		        	} else {
