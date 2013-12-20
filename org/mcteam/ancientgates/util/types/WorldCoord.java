@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Item;
 import org.mcteam.ancientgates.util.TeleportUtil;
 
 public class WorldCoord {
@@ -48,6 +49,10 @@ public class WorldCoord {
 	
 	public WorldCoord(Block block) {
 		this(block.getWorld().getName(), block.getX(), block.getY(), block.getZ());
+	}
+	
+	public WorldCoord(Item item) {
+		this(item.getLocation());
 	}
 	
 	//----------------------------------------------//

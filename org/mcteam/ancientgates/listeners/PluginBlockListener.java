@@ -6,6 +6,9 @@ import java.util.List;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -21,6 +24,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -286,9 +290,28 @@ public class PluginBlockListener implements Listener {
 		
 		WorldCoord coord = new WorldCoord(block);
 		
-		// Stop sugarcane blocks from growing
+		// Stop piston moving pieces (false air) disappearing
 		if (BlockUtil.isStandableGateMaterial(event.getClickedBlock().getType()) && Gates.gateFromPortal(coord) != null) {
 			event.setCancelled(true);
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onItemSpawn(ItemSpawnEvent event) {
+		if (event.isCancelled()) return;
+
+		Entity item = event.getEntity();
+		if (item.getType() != EntityType.DROPPED_ITEM || ((Item)item).getItemStack().getType() != Material.SUGAR_CANE) return;
+		
+		// Stop sugarcane block from decaying (workaround for lack of 1.7.2-R0.1 physics support)
+		final WorldCoord coord = new WorldCoord((Item)item);
+		if (Gates.gateFromPortal(coord) != null) {
+			event.getEntity().remove();
+			plugin.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				public void run() {
+					coord.getBlock().setType(Material.SUGAR_CANE_BLOCK);
+				}
+			}, 1);
 		}
 	}
 	

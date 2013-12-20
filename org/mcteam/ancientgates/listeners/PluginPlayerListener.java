@@ -136,12 +136,12 @@ public class PluginPlayerListener implements Listener {
 			return;
 		}
 		
-		final Player player = event.getPlayer();
+		Player player = event.getPlayer();
 		
 		// Ok so a player portal event begins
 		// Find the nearest gate!
 		WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(player));
-		final Gate nearestGate = Gates.gateFromPortal(playerCoord);
+		Gate nearestGate = Gates.gateFromPortal(playerCoord);
 		
 		if (nearestGate != null) {
 			event.setCancelled(true);
