@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -424,7 +423,7 @@ public class Gate {
 		
 		// Loop through all from locations
 		for (Location from : froms) {
-			Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), EnumSet.allOf(FloodOrientation.class));
+			Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), FloodOrientation.values());
 			if (flood == null) return false;
 			
 			// Force vertical PORTALs and horizontal ENDER_PORTALs

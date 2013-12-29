@@ -85,8 +85,8 @@ public class Gates {
 			
 			coord.getBlock().setType(material);
 			
-			// Stop ice forming based on biome
-			if (gate.getMaterial() == Material.STATIONARY_WATER) {
+			// Stop ice forming based on biome (horizontal water portals)
+			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == Material.STATIONARY_WATER) {
 				coord.getBlock().setBiome(Biome.FOREST);
 			}
 		}

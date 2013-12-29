@@ -1,10 +1,7 @@
 package org.mcteam.ancientgates.util;
 
-import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -36,8 +33,8 @@ public class FloodUtil {
 	}
 
 	// Multi-flood all orientations
-	public static Map<FloodOrientation, Set<Block>> getAllAirFloods(Block startBlock, Collection<FloodOrientation> orientations, int limit) {
-		Map<FloodOrientation, Set<Block>> ret = new HashMap<FloodOrientation, Set<Block>>();
+	public static LinkedHashMap<FloodOrientation, Set<Block>> getAllAirFloods(Block startBlock, FloodOrientation[] orientations, int limit) {
+		LinkedHashMap<FloodOrientation, Set<Block>> ret = new LinkedHashMap<FloodOrientation, Set<Block>>();
 		for (FloodOrientation orientation : orientations) {
 			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), orientation.getDirections(), limit));
 		}
@@ -45,8 +42,8 @@ public class FloodUtil {
 	}
 	
 	 // Multi-flood best orientation
-	public static Entry<FloodOrientation, Set<Block>> getBestAirFlood(Block startBlock, Collection<FloodOrientation> orientations) {
-		Map<FloodOrientation, Set<Block>> floods = getAllAirFloods(startBlock, orientations, Conf.getGateMaxArea());
+	public static Entry<FloodOrientation, Set<Block>> getBestAirFlood(Block startBlock, FloodOrientation[] orientations) {
+		LinkedHashMap<FloodOrientation, Set<Block>> floods = getAllAirFloods(startBlock, orientations, Conf.getGateMaxArea());
 		Entry<FloodOrientation, Set<Block>> ret = null;
 		Integer bestSize = null;
 		for (Entry<FloodOrientation, Set<Block>> entry : floods.entrySet()) {
@@ -66,7 +63,7 @@ public class FloodUtil {
 		return blocks;	
 	}
 	public static Set<Block> getPortalBlocks(Block block) {
-		Entry<FloodOrientation, Set<Block>> flood = getBestAirFlood(block, EnumSet.allOf(FloodOrientation.class));
+		Entry<FloodOrientation, Set<Block>> flood = getBestAirFlood(block, FloodOrientation.values());
 		if (flood == null) return null;
 
 		FloodOrientation orientation = flood.getKey();
