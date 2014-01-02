@@ -82,7 +82,7 @@ public class PluginPlayerListener implements Listener {
 						}
 					}
 						
-					TeleportUtil.teleportPlayer(player, location, false, InvBoolean.FALSE);
+					TeleportUtil.teleportPlayer(player, location, false, InvBoolean.TRUE);
 					if (entity != null) entity.setPassenger(player);
 					
 					return;

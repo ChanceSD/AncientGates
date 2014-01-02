@@ -12,6 +12,7 @@ import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.GeometryUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.TextUtil;
+import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class CommandInfo extends BaseCommand {
@@ -136,6 +137,13 @@ public class CommandInfo extends BaseCommand {
 				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorValue + " not allowed");
 			}
 			sendMessage(Conf.colorSystem + "material" + Conf.colorValue + " " + gate.getMaterialStr());
+		}
+		if (gate.getTeleportInventory() == InvBoolean.TRUE) {
+			sendMessage(Conf.colorSystem + "inventory" + Conf.colorValue + " allowed");
+		} else if (gate.getTeleportInventory() == InvBoolean.CLEAR) {
+				sendMessage(Conf.colorSystem + "inventory" + Conf.colorValue + " cleared");	
+		} else {
+			sendMessage(Conf.colorSystem + "inventory" + Conf.colorValue + " not allowed");
 		}
 		if (Conf.useEconomy) {
 			if (gate.getCost() == 0.00) {

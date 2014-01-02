@@ -305,7 +305,11 @@ public class PluginBlockListener implements Listener {
 		
 		// Stop sugarcane block from decaying (workaround for lack of 1.7.2-R0.1 physics support)
 		final WorldCoord coord = new WorldCoord((Item)item);
-		if (Gates.gateFromPortal(coord) != null) {
+		Gate nearestGate = Gates.gateFromPortal(coord);
+		
+		if (nearestGate != null) {
+			if (nearestGate.getMaterial() != Material.SUGAR_CANE_BLOCK) return;
+			
 			event.getEntity().remove();
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				public void run() {
