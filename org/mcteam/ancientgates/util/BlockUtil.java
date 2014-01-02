@@ -1,6 +1,8 @@
 package org.mcteam.ancientgates.util;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,7 +11,7 @@ import org.bukkit.block.BlockFace;
 public class BlockUtil {
 
 	public static HashSet<Material> standableGateMaterials;
-	public static HashSet<Material> standableMaterials;
+	public static Map<Material, Boolean> standableMaterials;
 	
 	static {
 		standableGateMaterials = new HashSet<Material>();
@@ -25,61 +27,61 @@ public class BlockUtil {
 	}
 	
 	static {
-		standableMaterials = new HashSet<Material>();
+		standableMaterials = new HashMap<Material, Boolean>();
 		try {
-			standableMaterials.add(Material.AIR); // 0 Air
-			standableMaterials.add(Material.SAPLING); // 6 Saplings
-			standableMaterials.add(Material.WATER); // 8 Water
-			standableMaterials.add(Material.STATIONARY_WATER); // 9 Stationary water
-			standableMaterials.add(Material.LAVA); // 10 Lava
-			standableMaterials.add(Material.STATIONARY_LAVA); // 11 Stationary lava
-			standableMaterials.add(Material.POWERED_RAIL); // 27 Powered Rail
-			standableMaterials.add(Material.DETECTOR_RAIL); // 28 Detector Rail
-			standableMaterials.add(Material.WEB); // 30 Cobweb
-			standableMaterials.add(Material.LONG_GRASS); // 31 Tall Grass
-			standableMaterials.add(Material.DEAD_BUSH); // 32 Dead Bush
-			standableMaterials.add(Material.PISTON_MOVING_PIECE); // 36 Piston (Moving)
-			standableMaterials.add(Material.YELLOW_FLOWER); // 37 Dandelion
-			standableMaterials.add(Material.RED_ROSE); // 38 Rose
-			standableMaterials.add(Material.BROWN_MUSHROOM); // 39 Brown Mushroom
-			standableMaterials.add(Material.RED_MUSHROOM); // 40 Red Mushroom
-			standableMaterials.add(Material.STEP); // 44 Stone Slab
-			standableMaterials.add(Material.TORCH); // 50 Torch
-			standableMaterials.add(Material.FIRE); // 51 Fire
-			standableMaterials.add(Material.REDSTONE_WIRE); // 55 Redstone Wire
-			standableMaterials.add(Material.CROPS); // 59 Wheat Seeds
-			standableMaterials.add(Material.SIGN_POST); // 63 Sign Post
-			standableMaterials.add(Material.LADDER); // 65 Ladders
-			standableMaterials.add(Material.RAILS); // 66 Rails
-			standableMaterials.add(Material.WALL_SIGN); // 68 Wall Sign
-			standableMaterials.add(Material.LEVER); // 69 Lever
-			standableMaterials.add(Material.STONE_PLATE); // 70 Stone Pressure Plate
-			standableMaterials.add(Material.WOOD_PLATE); // 72 Wooden Pressure Plate
-			standableMaterials.add(Material.REDSTONE_TORCH_OFF); // 75 Redstone Torch (Off)
-			standableMaterials.add(Material.REDSTONE_TORCH_ON); // 76 Redstone Torch (On)
-			standableMaterials.add(Material.STONE_BUTTON); // 77 Stone Button
-			standableMaterials.add(Material.SNOW); // 78 Snow
-			standableMaterials.add(Material.SUGAR_CANE_BLOCK); // 83 Sugar Cane
-			standableMaterials.add(Material.PORTAL); // 90 Portal
-			standableMaterials.add(Material.DIODE_BLOCK_OFF); // 93 Redstone Repeater (Off)
-			standableMaterials.add(Material.DIODE_BLOCK_ON); // 94 Redstone Repeater (On)
-			standableMaterials.add(Material.VINE); // 106 Vines
-			standableMaterials.add(Material.WATER_LILY); // 111 Lily Pad
-			standableMaterials.add(Material.ENDER_PORTAL); // 119 End Portal
-			standableMaterials.add(Material.WOOD_STEP); // 126 Wooden Slab
-			standableMaterials.add(Material.TRIPWIRE_HOOK); // 131 Tripwire Hook
-			standableMaterials.add(Material.TRIPWIRE); // 132 Tripwire
-			standableMaterials.add(Material.FLOWER_POT); // 140 Flower Pot
-			standableMaterials.add(Material.CARROT); // 141 Carrot
-			standableMaterials.add(Material.POTATO); // 142 Potatoes	
-			standableMaterials.add(Material.GOLD_PLATE); // 147 Gold Pressure Plate
-			standableMaterials.add(Material.IRON_PLATE); // 148 Iron Pressure Plate
-			standableMaterials.add(Material.REDSTONE_COMPARATOR_OFF); // 149 Redstone Comparator (Off)
-			standableMaterials.add(Material.REDSTONE_COMPARATOR_ON); // 150 Redstone Comparator (On)	
-			standableMaterials.add(Material.DAYLIGHT_DETECTOR); // 151 Daylight Sensor
-			standableMaterials.add(Material.ACTIVATOR_RAIL); // 157 Activator Rail
-			standableMaterials.add(Material.CARPET); // 171 Carpet
-			standableMaterials.add(Material.DOUBLE_PLANT); // double_plant Double Plants
+			standableMaterials.put(Material.AIR, true); // 0 Air
+			standableMaterials.put(Material.SAPLING, true); // 6 Saplings
+			standableMaterials.put(Material.WATER, true); // 8 Water
+			standableMaterials.put(Material.STATIONARY_WATER, true); // 9 Stationary water
+			standableMaterials.put(Material.LAVA, true); // 10 Lava
+			standableMaterials.put(Material.STATIONARY_LAVA, true); // 11 Stationary lava
+			standableMaterials.put(Material.POWERED_RAIL, true); // 27 Powered Rail
+			standableMaterials.put(Material.DETECTOR_RAIL, true); // 28 Detector Rail
+			standableMaterials.put(Material.WEB, true); // 30 Cobweb
+			standableMaterials.put(Material.LONG_GRASS, true); // 31 Tall Grass
+			standableMaterials.put(Material.DEAD_BUSH, true); // 32 Dead Bush
+			standableMaterials.put(Material.PISTON_MOVING_PIECE, true); // 36 Piston (Moving)
+			standableMaterials.put(Material.YELLOW_FLOWER, true); // 37 Dandelion
+			standableMaterials.put(Material.RED_ROSE, true); // 38 Rose
+			standableMaterials.put(Material.BROWN_MUSHROOM, true); // 39 Brown Mushroom
+			standableMaterials.put(Material.RED_MUSHROOM, true); // 40 Red Mushroom
+			standableMaterials.put(Material.STEP, false); // 44 Stone Slab
+			standableMaterials.put(Material.TORCH, true); // 50 Torch
+			standableMaterials.put(Material.FIRE, true); // 51 Fire
+			standableMaterials.put(Material.REDSTONE_WIRE, true); // 55 Redstone Wire
+			standableMaterials.put(Material.CROPS, true); // 59 Wheat Seeds
+			standableMaterials.put(Material.SIGN_POST, true); // 63 Sign Post
+			standableMaterials.put(Material.LADDER, true); // 65 Ladders
+			standableMaterials.put(Material.RAILS, true); // 66 Rails
+			standableMaterials.put(Material.WALL_SIGN, true); // 68 Wall Sign
+			standableMaterials.put(Material.LEVER, true); // 69 Lever
+			standableMaterials.put(Material.STONE_PLATE, true); // 70 Stone Pressure Plate
+			standableMaterials.put(Material.WOOD_PLATE, true); // 72 Wooden Pressure Plate
+			standableMaterials.put(Material.REDSTONE_TORCH_OFF, true); // 75 Redstone Torch (Off)
+			standableMaterials.put(Material.REDSTONE_TORCH_ON, true); // 76 Redstone Torch (On)
+			standableMaterials.put(Material.STONE_BUTTON, true); // 77 Stone Button
+			standableMaterials.put(Material.SNOW, true); // 78 Snow
+			standableMaterials.put(Material.SUGAR_CANE_BLOCK, true); // 83 Sugar Cane
+			standableMaterials.put(Material.PORTAL, true); // 90 Portal
+			standableMaterials.put(Material.DIODE_BLOCK_OFF, true); // 93 Redstone Repeater (Off)
+			standableMaterials.put(Material.DIODE_BLOCK_ON, true); // 94 Redstone Repeater (On)
+			standableMaterials.put(Material.VINE, true); // 106 Vines
+			standableMaterials.put(Material.WATER_LILY, true); // 111 Lily Pad
+			standableMaterials.put(Material.ENDER_PORTAL, true); // 119 End Portal
+			standableMaterials.put(Material.WOOD_STEP, false); // 126 Wooden Slab
+			standableMaterials.put(Material.TRIPWIRE_HOOK, true); // 131 Tripwire Hook
+			standableMaterials.put(Material.TRIPWIRE, true); // 132 Tripwire
+			standableMaterials.put(Material.FLOWER_POT, true); // 140 Flower Pot
+			standableMaterials.put(Material.CARROT, true); // 141 Carrot
+			standableMaterials.put(Material.POTATO, true); // 142 Potatoes	
+			standableMaterials.put(Material.GOLD_PLATE, true); // 147 Gold Pressure Plate
+			standableMaterials.put(Material.IRON_PLATE, true); // 148 Iron Pressure Plate
+			standableMaterials.put(Material.REDSTONE_COMPARATOR_OFF, true); // 149 Redstone Comparator (Off)
+			standableMaterials.put(Material.REDSTONE_COMPARATOR_ON, true); // 150 Redstone Comparator (On)	
+			standableMaterials.put(Material.DAYLIGHT_DETECTOR, false); // 151 Daylight Sensor
+			standableMaterials.put(Material.ACTIVATOR_RAIL, true); // 157 Activator Rail
+			standableMaterials.put(Material.CARPET, true); // 171 Carpet
+			standableMaterials.put(Material.DOUBLE_PLANT, true); // double_plant Double Plants
 		} catch (NoSuchFieldError e) {} // Support previous MC versions
 	}
 	
@@ -100,7 +102,11 @@ public class BlockUtil {
 	}
 	
 	public static boolean isStandableMaterial(Material material) {
-		return standableMaterials.contains(material);
+		return standableMaterials.containsKey(material);
+	}
+	
+	public static boolean canPassThroughMaterial(Material material) {
+		return (standableMaterials.get(material) == null) ? false : standableMaterials.get(material);
 	}
 
 }
