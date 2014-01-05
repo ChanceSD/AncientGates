@@ -55,6 +55,8 @@ import org.mcteam.ancientgates.commands.base.CommandSetMaterial;
 import org.mcteam.ancientgates.commands.base.CommandSetMessage;
 import org.mcteam.ancientgates.commands.base.CommandSetTo;
 import org.mcteam.ancientgates.commands.base.CommandSetVehicles;
+import org.mcteam.ancientgates.commands.base.CommandTeleportFrom;
+import org.mcteam.ancientgates.commands.base.CommandTeleportTo;
 import org.mcteam.ancientgates.commands.bungee.CommandSetBungeeType;
 import org.mcteam.ancientgates.commands.economy.CommandSetCost;
 import org.mcteam.ancientgates.commands.sockets.CommandAddServer;
@@ -204,6 +206,8 @@ public class Plugin extends JavaPlugin {
 			commands.add(new CommandSetMaterial());
 		}
 		commands.add(new CommandSetInventory());
+		commands.add(new CommandTeleportFrom());
+		commands.add(new CommandTeleportTo());
 		commands.add(new CommandAddFrom());
 		commands.add(new CommandRemFrom());
 		commands.add(new CommandAddTo());

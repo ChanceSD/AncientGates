@@ -40,6 +40,8 @@ permissions:
       ancientgates.setmaterial: true
       ancientgates.setmessage: true
       ancientgates.setvehicles: true
+      ancientgates.tpfrom: true
+      ancientgates.tpto: true
       ancientgates.addfrom.*: true
       ancientgates.remfrom.*: true
       ancientgates.setto.*: true
@@ -110,6 +112,12 @@ permissions:
     default: op
   ancientgates.setvehicles:
     description: Allows the use of Ancient Gates setvehicles command.
+    default: op
+  ancientgates.tpfrom:
+    description: Allows the use of Ancient Gates tpfrom command.
+    default: op
+  ancientgates.tpto:
+    description: Allows the use of Ancient Gates tpto command.
     default: op
   ancientgates.addfrom:
     description: Allows the use of Ancient Gates addfrom command.

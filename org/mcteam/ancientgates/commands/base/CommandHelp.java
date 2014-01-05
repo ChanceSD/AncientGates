@@ -78,16 +78,18 @@ public class CommandHelp extends BaseCommand {
 		
 		pageLines = new ArrayList<String>();
 		if (Conf.useEconomy) pageLines.add( new CommandSetCost().getUsageTemplate(true, true) );
+		pageLines.add( new CommandTeleportFrom().getUsageTemplate(true, true) );
+		pageLines.add( new CommandTeleportTo().getUsageTemplate(true, true) );
 		pageLines.add( new CommandAddFrom().getUsageTemplate(true, true) );
 		pageLines.add( new CommandRemFrom().getUsageTemplate(true, true) );
 		pageLines.add( new CommandAddTo().getUsageTemplate(true, true) );
 		pageLines.add( new CommandRemTo().getUsageTemplate(true, true) );
 		pageLines.add( new CommandInfo().getUsageTemplate(true, true) );
-		pageLines.add( new CommandList().getUsageTemplate(true, true) );
-		pageLines.add( new CommandSetConf().getUsageTemplate(true, true) );
 		helpPages.add(pageLines);
 		
 		pageLines = new ArrayList<String>();
+		pageLines.add( new CommandList().getUsageTemplate(true, true) );
+		pageLines.add( new CommandSetConf().getUsageTemplate(true, true) );
 		pageLines.add( new CommandSetBungeeType().getUsageTemplate(true, true) );
 		if (Conf.useSocketComms) {
 			pageLines.add( new CommandAddServer().getUsageTemplate(true, true) );
