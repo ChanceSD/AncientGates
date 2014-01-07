@@ -49,7 +49,7 @@ public class SocketServer implements Runnable {
 
 	public synchronized void removeClient(int id) {
 		ClientConnectionThread th = this.clients.get(this.getClientIndex(id));
-		this.fireClientDisconnectEvent(new ClientConnectionEvent(th.getSocket(), id, ConnectionState.Disconnected));
+		this.fireClientDisconnectEvent(new ClientConnectionEvent(th.getSocket(), id, ConnectionState.DISCONNECTED));
 		th.stop();	
 		
 		this.clients.remove(this.getClientIndex(id));
@@ -81,7 +81,7 @@ public class SocketServer implements Runnable {
 		}
 		
 		ClientConnectionThread th = new ClientConnectionThread(this.getNewID(), this, client);
-		this.fireClientConnectEvent(new ClientConnectionEvent(client, th.getID(), ConnectionState.Connected));
+		this.fireClientConnectEvent(new ClientConnectionEvent(client, th.getID(), ConnectionState.CONNECTED));
 		this.clients.add(th);
 		
 	}

@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import org.bukkit.craftbukkit.libs.com.google.gson.reflect.TypeToken;
+import org.mcteam.ancientgates.sockets.types.ConnectionState;
 import org.mcteam.ancientgates.util.DiscUtil;
 
 public class Server {
@@ -20,6 +21,7 @@ public class Server {
 	private String address;
 	private int port;
 	private String password;
+	private ConnectionState state = null;
 	
 	// -------------------------------------------- //
 	// Getters And Setters
@@ -57,6 +59,14 @@ public class Server {
 		return password;
 	}
 	
+	public void setState(ConnectionState state) {
+		this.state = state;
+	}
+	
+	public ConnectionState getState() {
+		return state;
+	}
+	
 	//----------------------------------------------//
 	// Persistance and entity management
 	//----------------------------------------------//
@@ -77,7 +87,7 @@ public class Server {
 		server.setPort(port);
 		server.setPassword(password);
 		
-		Plugin.log("added new server "+server.name);
+		Plugin.log("Added new server "+server.name);
 		
 		return server;
 	}
@@ -88,6 +98,11 @@ public class Server {
 	}
 
 	public static boolean save() {
+		// Clear connection states before saving
+		for (Server server : Server.getAll()) {
+			server.state = null;
+		}
+		
 		try {
 			DiscUtil.write(file, Plugin.gson.toJson(instances));
 		} catch (IOException e) {
@@ -109,11 +124,11 @@ public class Server {
 			Plugin.log("No servers to load from disk. Creating new file.");
 			
 			Server server = new Server();
-			server.name = "server1";
+			server.name = (Plugin.bungeeServerName != null) ? Plugin.bungeeServerName : "server1";
 			instances.put(server.name, server);
 			server.address = "localhost";
-			server.port = 18001;
-			server.password = "agserver1";
+			server.port = Conf.socketCommsPort;
+			server.password = Conf.socketCommsPass;
 			
 			save();
 			return true;

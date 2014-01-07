@@ -53,6 +53,7 @@ public class SocketClient implements Runnable {
 				while(this.listening) {
 					int encRecievedLen = this.reader.readInt();
 					if(encRecievedLen == -1 || System.currentTimeMillis() >= timeoutExpired) {
+						this.listener.onServerMessageError();
 						this.stopListening();
 						this.close();
 						Plugin.log("Connection closed");
@@ -81,8 +82,13 @@ public class SocketClient implements Runnable {
 				if (Conf.debug) Plugin.log("End recieve");
 				
 			} catch (IOException e) {
-				Plugin.log("There was an error recieving.");
-				e.printStackTrace();
+				this.listener.onServerMessageError();
+				this.stopListening();
+				this.close();
+				if(Conf.debug) {
+					Plugin.log("There was an error recieving.");
+					e.printStackTrace();
+				}
 			}
 		}
 	}

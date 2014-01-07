@@ -23,7 +23,7 @@ public class CommandList extends BaseCommand {
 		senderMustBePlayer = false;
 		hasGateParam = false;
 		
-		helpDescription = "Display a list of the gates";
+		helpDescription = "Display list of the gates";
 	}
 	
 	public void perform() {

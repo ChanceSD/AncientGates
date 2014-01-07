@@ -1,7 +1,5 @@
 package org.mcteam.ancientgates.commands.sockets;
 
-import java.util.Arrays;
-
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Server;
 import org.mcteam.ancientgates.commands.BaseCommand;
@@ -17,8 +15,8 @@ public class CommandAddServer extends BaseCommand {
 		aliases.add("addserver");
 		
 		requiredParameters.add("name");
-		requiredParameters.add("address");
-		requiredParameters.add("password");
+		requiredParameters.add("address:port");
+		requiredParameters.add("pass");
 		
 		requiredPermission = "ancientgates.addserver";
 		
@@ -63,7 +61,7 @@ public class CommandAddServer extends BaseCommand {
 			return;
 		}
 		
-		if (!Arrays.asList(Plugin.bungeeServerList).contains(name)) {
+		if (!Plugin.bungeeServerList.contains(name)) {
 			sendMessage("The server \"" + name + "\" does not exist in BungeeCord.");
 			return;
 		}
@@ -79,12 +77,15 @@ public class CommandAddServer extends BaseCommand {
 		    		if (packet.command.toLowerCase().equals("pong")) {
 		    			// Add server on valid ping response
 		    			Server.add(name, address, port, password);
-		    			sendMessage("The server \"" + name + "\" was added, with address \"" + address + "\".");
+		    			sendMessage("The server \"" + name + "\" was added, with address \"" + address + ":" + port + "\".");
 		    			// Save to disc
 		    			Server.save();	
 		    		}
 		    	}
 		    	client.close();
+		    }
+		    public void onServerMessageError() {
+		    	sendMessage("Could not connect to server. Check port and password.");
 		    }
 		});
 		
@@ -93,7 +94,7 @@ public class CommandAddServer extends BaseCommand {
 			client.connect();
 			client.send(packet);
 		} catch (Exception e) {
-			sendMessage("Could not find server on \""+address+":"+port+"\". Try again.");
+			sendMessage("Could not find server on \"" + address + ":" + port + "\". Try again.");
 		}
 	}
         

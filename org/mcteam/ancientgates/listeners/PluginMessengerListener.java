@@ -29,6 +29,7 @@ import org.mcteam.ancientgates.util.ExecuteUtil;
 import org.mcteam.ancientgates.util.GateUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
+import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.PluginMessage;
@@ -337,8 +338,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 		// Parse BungeeCord server list packet
 		} else if (inChannel.equals("GetServers")) {
 			if (Conf.debug) Plugin.log("Getting BungeeCord server list");
-			String[] serverList = new String(data).split(", ");
-			Plugin.bungeeServerList = serverList;
+			Plugin.bungeeServerList = TextUtil.split(new String(data), ", ");
 		} else {
 			return;
 		}	

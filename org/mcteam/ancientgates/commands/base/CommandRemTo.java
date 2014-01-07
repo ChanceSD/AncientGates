@@ -82,7 +82,7 @@ public class CommandRemTo extends BaseCommand {
 				}
 
 				// Get server
-				Server server = Server.get(serverName);
+				final Server server = Server.get(serverName);
 
 				// Build the packet, format is <player>,<server>,<gateid>,<data>,<fromserver>
 				String[] args = new String[] {player.getName(), Plugin.bungeeServerName, parameters.get(0), TeleportUtil.locationToString(player.getLocation()), serverName};
@@ -94,11 +94,15 @@ public class CommandRemTo extends BaseCommand {
 					public void onServerMessageRecieve(SocketClient client, Packets packets) {
 					    for (Packet packet : packets.packets) {
 					    	if (packet.command.toLowerCase().equals("sendmsg")) {
-					    		player.sendMessage(Conf.colorSystem+packet.args[0]);
+					    		sendMessage(packet.args[0]);
 					    	}
 					    }
 					    client.close();
-					   }
+					}
+					public void onServerMessageError() {
+						sendMessage("Could not connect to server \""+server.getName()+"\".");
+						Plugin.log("There was an error connection to the server.");
+					}
 				});
 
 				// Connect and send packet

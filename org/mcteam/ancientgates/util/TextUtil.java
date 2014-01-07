@@ -41,8 +41,8 @@ public class TextUtil {
 	    else return s + repeat(s, times-1);
 	}
 	
-	public static ArrayList<String> split(String str) {
-		return new ArrayList<String>(Arrays.asList(str.trim().split("\\s+")));
+	public static ArrayList<String> split(String str, String delim) {
+		return new ArrayList<String>(Arrays.asList(str.split(delim)));
 	}
 	
 	public static Boolean containsSubString(List<String> strList, String subStr) {

@@ -228,6 +228,7 @@ public class TeleportUtil {
 						}
 						client.close();
 					}
+					public void onServerMessageError(){}
 				});
 				// Connect and send packet
 				try {
@@ -538,6 +539,7 @@ public class TeleportUtil {
 							}
 							client.close();
 						}
+						public void onServerMessageError(){}
 					});
 					// Connect and send packet
 					try {

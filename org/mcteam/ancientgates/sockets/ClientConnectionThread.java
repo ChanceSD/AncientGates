@@ -122,6 +122,9 @@ public class ClientConnectionThread implements Runnable {
 				
 				DataInputStream data = new DataInputStream(new ByteArrayInputStream(decInput));
 				int contentLen = data.readInt();
+				// If > 1MB, throw exception - Probable cause, wrong encryption
+				if (contentLen > 1048576) throw new IOException();
+				// Read content data
 				byte[] contentData = new byte[contentLen];
 				data.readFully(contentData);
 				data.close();

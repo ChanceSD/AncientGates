@@ -83,7 +83,7 @@ public class Plugin extends JavaPlugin {
     public static Economy econ = null;
     
 	public static String bungeeServerName = null;
-	public static String[] bungeeServerList = null;
+	public static ArrayList<String> bungeeServerList = null;
     
     private Listener pluginMovementListener = null;
     private PluginMessageListener pluginMessengerListener = null;
