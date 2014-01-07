@@ -1,7 +1,15 @@
 package org.mcteam.ancientgates.commands.sockets;
 
+import java.util.Arrays;
+
+import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.Server;
 import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.sockets.SocketClient;
+import org.mcteam.ancientgates.sockets.events.SocketClientEventListener;
+import org.mcteam.ancientgates.sockets.types.Packet;
+import org.mcteam.ancientgates.sockets.types.Packets;
+import org.mcteam.ancientgates.tasks.BungeeServerList;
 
 public class CommandAddServer extends BaseCommand {
 	
@@ -21,9 +29,19 @@ public class CommandAddServer extends BaseCommand {
 		helpDescription = "Add a server";
 	}
 	
-	public void perform() {    
-		String name = parameters.get(0);
-		String password = parameters.get(2);
+	public void perform() {
+		// Grab new BungeeCord server list
+		new BungeeServerList(Plugin.instance).run();
+		
+		// Check bungeeServerList found
+		if (Plugin.bungeeServerList == null) {
+			sendMessage("Still connecting to BungeeCord. Try again.");
+			return;
+		}
+		
+		// Parse command parameters
+		final String name = parameters.get(0);
+		final String password = parameters.get(2);
 		
 		if (!parameters.get(1).contains(":")) {
 			sendMessage("Incorrect address format. Use [ip]:[port].");
@@ -31,8 +49,8 @@ public class CommandAddServer extends BaseCommand {
 		}
 		
 		String parts[] = parameters.get(1).split(":");
-		String address = parts[0];
-		int port;
+		final String address = parts[0];
+		final int port;
 		try {
 			port = Integer.parseInt(parts[1]);
 		} catch(NumberFormatException e) {
@@ -45,10 +63,38 @@ public class CommandAddServer extends BaseCommand {
 			return;
 		}
 		
-		Server.add(name, address, port, password);
-		sendMessage("The server \"" + name + "\" was added, with address \"" + address + "\".");
+		if (!Arrays.asList(Plugin.bungeeServerList).contains(name)) {
+			sendMessage("The server \"" + name + "\" does not exist in BungeeCord.");
+			return;
+		}
 		
-		Server.save();	
+		// Ping the server
+		Packet packet = new Packet("ping", new String[] {});
+		
+		// Setup socket client and listener
+		SocketClient client = new SocketClient(address, port, password);
+		client.setListener(new SocketClientEventListener() {
+		    public void onServerMessageRecieve(SocketClient client, Packets packets) {
+		    	for (Packet packet : packets.packets) {
+		    		if (packet.command.toLowerCase().equals("pong")) {
+		    			// Add server on valid ping response
+		    			Server.add(name, address, port, password);
+		    			sendMessage("The server \"" + name + "\" was added, with address \"" + address + "\".");
+		    			// Save to disc
+		    			Server.save();	
+		    		}
+		    	}
+		    	client.close();
+		    }
+		});
+		
+		// Connect and send packet
+		try {
+			client.connect();
+			client.send(packet);
+		} catch (Exception e) {
+			sendMessage("Could not find server on \""+address+":"+port+"\". Try again.");
+		}
 	}
         
 }

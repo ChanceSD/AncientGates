@@ -22,6 +22,8 @@ import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
+import org.mcteam.ancientgates.tasks.BungeeMessage;
+import org.mcteam.ancientgates.tasks.BungeeServerList;
 import org.mcteam.ancientgates.tasks.BungeeServerName;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ExecuteUtil;
@@ -103,8 +105,12 @@ public class PluginPlayerListener implements Listener {
 	        Plugin.lastTeleportTime.put(player.getName(), now);
 		}
 		
-		// Schedule task to check bungeeServerName is set
+		// Process BungeeCord message queue
+		if (Plugin.bungeeMsgQueue.size() > 0) new BungeeMessage(plugin).runTaskLater(plugin, 20L);
+		
+		// Schedule task to check bungeeServerName & bungeeServerList is set
 		if (Plugin.bungeeServerName == null) new BungeeServerName(plugin).runTaskLater(plugin, 20L);
+		if (Plugin.bungeeServerList == null) new BungeeServerList(plugin).runTaskLater(plugin, 20L);
 
 	}
 	

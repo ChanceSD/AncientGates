@@ -257,6 +257,13 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Send entity removal command back to client
 			Plugin.serv.sendToClient(event.getID(), packet);
 			Plugin.serv.removeClient(event.getID());
+		// Parse "ping" command
+		} else if (command.toLowerCase().equals("ping")) {
+			Packet packet = new Packet("pong", "ping", new String[] {});
+			
+			// Send pong command back to client
+			Plugin.serv.sendToClient(event.getID(), packet);
+			Plugin.serv.removeClient(event.getID());
 		}
 	}
 

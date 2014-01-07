@@ -21,6 +21,8 @@ import org.bukkit.util.Vector;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.commands.base.CommandRemTo;
+import org.mcteam.ancientgates.commands.base.CommandSetTo;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ExecuteUtil;
@@ -29,6 +31,7 @@ import org.mcteam.ancientgates.util.ItemStackUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.CommandType;
 import org.mcteam.ancientgates.util.types.InvBoolean;
+import org.mcteam.ancientgates.util.types.PluginMessage;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginMessengerListener implements PluginMessageListener {
@@ -228,45 +231,114 @@ public class PluginMessengerListener implements PluginMessageListener {
 			String comdata = parts[3];
 			String server = parts[4];
 			
+			// Message response
+			String response = null;
+			
 			// Parse "setto" command
 			if (command.toLowerCase().equals("setto")) {
-				if (Plugin.hasPermManage(player, "ancientgates.setto.bungee")) {
+				// Check player has permission
+				if(!Plugin.hasPermManage(player, "ancientgates.setto.bungee")) {
+					response = "You lack the permissions to Set \"to\" to your location.";
+				// Check gate exists
+				} else if (!Gate.exists(gateid)) {
+					response = "There exists no gate with id \""+gateid+"\" on server \""+server+"\"";
+				
+				// Get gate
+				} else {
 					Gate gate = Gate.get(gateid);
+					
+					// Set gate location
 					if (gate.getBungeeTos() == null || gate.getBungeeTos().size() <= 1) {
 						gate.addTo(null);
 						gate.addBungeeTo(null, null); // Wipe previous bungeeto
 						gate.addBungeeTo(server, comdata);
+						response = "To location for gate \""+gateid+"\" on server \""+server+"\" is now where you stand.";
 						Gate.save();
+
+					// Display multiple tos exist response
+					} else {
+						response = "This gate has multiple to locations. Use:\n";
+						response += new CommandRemTo().getUsageTemplate(false, true);
 					}
 				}
 			// Parse "addto" command
 			} else if (command.toLowerCase().equals("addto")) {
-				if (Plugin.hasPermManage(player, "ancientgates.addto.bungee")) {
+				// Check player has permission
+				if(!Plugin.hasPermManage(player, "ancientgates.addto.bungee")) {
+					response = "You lack the permissions to Add a \"to\" to your location.";
+				// Check gate exists
+				} else if (!Gate.exists(gateid)) {
+					response = "There exists no gate with id \""+gateid+"\" on server \""+server+"\"";
+				
+				// Get gate
+				} else {
 					Gate gate = Gate.get(gateid);
+					
+					// Add gate location
 					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() >= 1) {
 						gate.addTo(null);
 						gate.addBungeeTo(server, comdata);
+						response = "Another \"to\" location for gate \""+gateid+"\" on server \""+server+"\" is now where you stand.";
 						Gate.save();
+
+					// Display multiple tos required response
+					} else {
+						response = "This gate needs an initial \"to\" location. Use:\n";
+						response += new CommandSetTo().getUsageTemplate(false, true);
 					}
 				}
 			// Parse "remto" command
 			} else if (command.toLowerCase().equals("remto")) {
-				if (Plugin.hasPermManage(player, "ancientgates.remto.bungee")) {
+				// Check player has permission
+				if(!Plugin.hasPermManage(player, "ancientgates.remto.bungee")) {
+					response = "You lack the permissions to Remove a \"to\" from your location.";
+				// Check gate exists
+				} else if (!Gate.exists(gateid)) {
+					response = "There exists no gate with id \""+gateid+"\" on server \""+server+"\"";
+				
+				// Get gate
+				} else {
 					Gate gate = Gate.get(gateid);
-					if (gate.getBungeeTos() != null) {
+					
+					// Display no to exists response
+					if (gate.getBungeeTos() == null) {
+						response = "This gate needs a \"to\" location. Use:\n";
+						response += new CommandSetTo().getUsageTemplate(false, true);
+					
+					// Remove gate location
+					} else {
 						String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(comdata));
-						if (!nearestBungeeTo.isEmpty()) {
+						
+						if (nearestBungeeTo.isEmpty()) {
+							response = "No nearby \"to\" location for gate \""+gateid+"\" on server \""+server+"\".";
+						} else {
 							gate.delBungeeTo(server, nearestBungeeTo);
+							response = "Nearest \"to\" location for gate \""+gateid+"\" on server \""+server+"\" is removed.";
 							Gate.save();
 						}
 					}
 				}
 			}
+
+			// Send response back if a player is online, otherwise queue
+			if (response != null) {
+				PluginMessage rMsg = new PluginMessage("Message", player, Conf.colorSystem+response);
+				if (Plugin.instance.getServer().getOnlinePlayers().length == 0) {
+					Plugin.bungeeMsgQueue.add(rMsg);
+				} else {
+					Plugin.instance.getServer().getOnlinePlayers()[0].sendPluginMessage(Plugin.instance, "BungeeCord", rMsg.toByteArray());
+				}
+			}
 		// Parse BungeeCord server name packet
 		} else if (inChannel.equals("GetServer")) {
-			Plugin.log("Getting BungeeCord server name");
+			if (Conf.debug) Plugin.log("Getting BungeeCord server name");
 			String server = new String(data);
 			Plugin.bungeeServerName = server;
+		// Parse BungeeCord server list packet
+		} else if (inChannel.equals("GetServers")) {
+			if (Conf.debug) Plugin.log("Getting BungeeCord server list");
+			String[] serverList = new String(data).split(", ");
+			Plugin.bungeeServerList = serverList;
 		} else {
 			return;
 		}	

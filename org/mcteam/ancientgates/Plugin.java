@@ -71,6 +71,7 @@ import org.mcteam.ancientgates.listeners.PluginSocketListener;
 import org.mcteam.ancientgates.metrics.MetricsStarter;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.SocketServer;
+import org.mcteam.ancientgates.util.types.PluginMessage;
 
 public class Plugin extends JavaPlugin {
 	
@@ -82,6 +83,7 @@ public class Plugin extends JavaPlugin {
     public static Economy econ = null;
     
 	public static String bungeeServerName = null;
+	public static String[] bungeeServerList = null;
     
     private Listener pluginMovementListener = null;
     private PluginMessageListener pluginMessengerListener = null;
@@ -102,6 +104,9 @@ public class Plugin extends JavaPlugin {
 	
 	// HashMap of outgoing BungeeCord players & passengers
 	public static Map<String, String> bungeeCordOutQueue = new HashMap<String, String>();
+	
+	// ArrayList of outgoing BungeeCord messages
+	public static ArrayList<PluginMessage> bungeeMsgQueue = new ArrayList<PluginMessage>();
 	
 	public static HashMap<String, Long> lastTeleportTime = new HashMap<String, Long>();
 	public static HashMap<String, Long> lastMessageTime = new HashMap<String, Long>();
