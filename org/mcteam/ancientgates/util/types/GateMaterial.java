@@ -10,14 +10,11 @@ public enum GateMaterial {
 	// AIR
 	AIR("psudeo air blocks", Material.PISTON_MOVING_PIECE),
 	
-	// ENDER PORTAL
-	ENDPORTAL("ender portal blocks (horizontal only)", Material.ENDER_PORTAL),
-	
 	// LAVA
 	LAVA("stationary lava blocks", Material.STATIONARY_LAVA),
 	
-	// NETHER PORTAL
-	PORTAL("nether portal blocks", Material.PORTAL),
+	// NETHER/ENDER PORTAL
+	PORTAL("nether/ender portal blocks", Material.PORTAL),
 	
 	// SUGARCANE
 	SUGARCANE("sugarcane blocks", Material.SUGAR_CANE_BLOCK),

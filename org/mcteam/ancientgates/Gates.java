@@ -99,7 +99,15 @@ public class Gates {
 		
 		for (WorldCoord coord :  gate.getPortalBlocks().keySet()) {
 			coord.getBlock().setType(Material.AIR);
-		}	
+		}
+		
+		for (WorldCoord coord :  gate.getPortalBlocks().keySet()) {
+			// Revert biome back to gate frame biome
+			FloodOrientation orientation = gate.getPortalBlocks().get(coord);
+			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == Material.STATIONARY_WATER) {
+				coord.getBlock().setBiome(((WorldCoord)gate.getFrameBlocks().toArray()[0]).getBlock().getBiome());
+			}
+		}
 	
 		// Clear data
 		clearIndexFor(gate);
