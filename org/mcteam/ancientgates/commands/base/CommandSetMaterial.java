@@ -33,8 +33,11 @@ public class CommandSetMaterial extends BaseCommand {
 			return;
 		}
         
-		Gates.close(gate);
+		boolean isOpen = Gates.isOpen(gate);
+		
+		if (isOpen) Gates.close(gate);
 		gate.setMaterial(material);
+		if (isOpen) Gates.open(gate);
 		sendMessage("Portal material for gate \""+gate.getId()+"\" is now "+material+".");
 		
 		Gate.save();
