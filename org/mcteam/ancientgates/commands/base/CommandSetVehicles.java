@@ -15,7 +15,7 @@ public class CommandSetVehicles extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Allow vehicles through gate.";
+		helpDescription = "Allow vehicles in gate";
 	}
 	
 	public void perform() {

@@ -14,7 +14,7 @@ public class CommandRemExec extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Remove \"exec\" command for the gate.";
+		helpDescription = "Remove \"exec\" cmd for gate";
 	}
 	
 	public void perform() {	

@@ -16,6 +16,8 @@ public class CommandServerList extends BaseCommand {
 		
 		requiredPermission = "ancientgates.serverlist";
 		
+		optionalParameters.add("page");
+		
 		senderMustBePlayer = false;
 		hasGateParam = false;
 		
@@ -23,8 +25,16 @@ public class CommandServerList extends BaseCommand {
 	}
 	
 	public void perform() {
-		List<String> names = new ArrayList<String>();
+		int page = 1;
+		if (parameters.size() > 0) {
+			try {
+				page = Integer.parseInt(parameters.get(0));
+			} catch (NumberFormatException e) {
+				// wasn't an integer
+			}
+		}
 		
+		List<String> names = new ArrayList<String>();
 		for (Server server : Server.getAll()) {
 			names.add(Conf.colorValue + server.getName());
 		}
@@ -34,8 +44,8 @@ public class CommandServerList extends BaseCommand {
 			return;
 		}
 		
-		sendMessage("There are currently "+names.size()+" server(s) known to this server: ");
-		sendMessage(TextUtil.implode(names, Conf.colorSystem+", "));
+		// Send list as readable pages
+		sendMessage(TextUtil.getPage(names, page, "Server List - "+names.size()+" server(s) -", sender));
 	}     
 	
 }

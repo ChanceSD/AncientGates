@@ -21,7 +21,7 @@ public class CommandSetMaterial extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Set portal \"material\" of the gate.";
+		helpDescription = "Set portal \"material\" for gate";
 	}
 	
 	public void perform() {	

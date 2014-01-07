@@ -7,14 +7,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import org.mcteam.ancientgates.Conf;
 
 public class TextUtil {
+	
+    public static final int PAGEHEIGHT_PLAYER = 9;
+    public static final int PAGEHEIGHT_CONSOLE = 50;
 	
 	public static Map<String, ChatColor> chatColors;
 	static {
@@ -49,28 +52,6 @@ public class TextUtil {
 		return false;
 	}
 	
-	public static String implode(List<String> list1, List<String> list2, List<String> list3, String glue) {
-	    String ret = "";
-	    for (int i=0; i<list1.size(); i++) {
-	        if (i!=0) {
-	        	ret += glue;
-	        }
-	        ret += list1.get(i)+" ("+list2.get(i)+" - "+list3.get(i)+")";
-	    }
-	    return ret;
-	}
-	
-	public static String implode(List<String> list1, List<String> list2, String glue) {
-	    String ret = "";
-	    for (int i=0; i<list1.size(); i++) {
-	        if (i!=0) {
-	        	ret += glue;
-	        }
-	        ret += list1.get(i)+" ("+list2.get(i)+")";
-	    }
-	    return ret;
-	}
-	
 	public static String implode(List<String> list, String glue) {
 	    String ret = "";
 	    for (int i=0; i<list.size(); i++) {
@@ -86,15 +67,18 @@ public class TextUtil {
 		return implode(list, " ");
 	}
 	
-	public static String implode(Map<String, Material> list, String glue) {
-	    String ret = "";
-	    int i = 0;
-	    Set<String> keys = list.keySet();
-	    for (String key : keys) {
-	        if (i++!=0) {
-	        	ret += glue;
-	        }
-	        ret += key;
+	public static ArrayList<String> concatenate(List<String> list1, List<String> list2, List<String> list3) {
+		ArrayList<String> ret = new ArrayList<String>();
+	    for (int i=0; i<list1.size(); i++) {
+	        ret.add(list1.get(i)+" "+Conf.colorChrome+"("+list2.get(i)+" - "+list3.get(i)+Conf.colorChrome+")");
+	    }
+	    return ret;
+	}
+	
+	public static ArrayList<String> concatenate(List<String> list1, List<String> list2) {
+		ArrayList<String> ret = new ArrayList<String>();
+	    for (int i=0; i<list1.size(); i++) {
+	        ret.add(list1.get(i)+Conf.colorChrome+"("+list2.get(i)+Conf.colorChrome+")");
 	    }
 	    return ret;
 	}
@@ -126,6 +110,35 @@ public class TextUtil {
 	    }
 	    return true;
 	}
+	
+    public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, CommandSender sender) {
+    	return getPage(lines, pageHumanBased, title, (sender instanceof Player) ? PAGEHEIGHT_PLAYER : PAGEHEIGHT_CONSOLE);
+    }
+    
+    public static ArrayList<String> getPage(List<String> lines, int pageHumanBased, String title, int pageheight) {
+    	ArrayList<String> ret = new ArrayList<String>();
+    	int pageZeroBased = pageHumanBased - 1;
+    	int pagecount = (int)Math.ceil(((double)lines.size()) / pageheight);
+            
+    	ret.add(titleize(title+" "+pageHumanBased+"/"+pagecount));
+            
+    	if (pagecount == 0) {
+    		ret.add("Sorry. No Pages available.");
+    		return ret;
+    	} else if (pageZeroBased < 0 || pageHumanBased > pagecount) {
+    		ret.add("Invalid page. Must be between 1 and "+pagecount);
+    		return ret;
+    	}
+            
+    	int from = pageZeroBased * pageheight;
+    	int to = from+pageheight;
+    	if (to > lines.size()) {
+    		to = lines.size();
+    	}
+            
+    	ret.addAll(lines.subList(from, to));
+    	return ret;
+    }
 	
 }
 

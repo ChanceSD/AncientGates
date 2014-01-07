@@ -11,17 +11,16 @@ import org.mcteam.ancientgates.util.types.InvBoolean;
 public class CommandSetInventory extends BaseCommand {
 	
 	public CommandSetInventory() {
-		aliases.add("setinventory");
 		aliases.add("setinv");
 		
 		requiredParameters.add("id");
 		requiredParameters.add("true/false/clear");
 		
-		requiredPermission = "ancientgates.setinventory";
+		requiredPermission = "ancientgates.setinv";
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Allow inventory through gate.";
+		helpDescription = "Allow inventory in gate";
 	}
 	
 	public void perform() {

@@ -16,7 +16,7 @@ public class CommandSetFrom extends BaseCommand {
 		
 		requiredPermission = "ancientgates.setfrom";
 		
-		helpDescription = "Set \"from\" to your location.";
+		helpDescription = "Set \"from\" to your location";
 	}
 	
 	public void perform() {

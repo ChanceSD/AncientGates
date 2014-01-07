@@ -15,7 +15,7 @@ public class CommandSetCost extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Set \"cost\" of the gate.";
+		helpDescription = "Set \"cost\" for gate";
 	}
 	
 	public void perform() {	

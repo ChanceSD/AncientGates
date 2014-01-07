@@ -59,7 +59,7 @@ public class WorldCoord {
 	// Converters
 	//----------------------------------------------//
 	public String toString() {
-		return "WorldCoord["+worldName+","+x+","+y+","+z+"]";
+		return "("+x+", "+y+", "+z+") in "+worldName;
 	}
 	
 	public Block getBlock() {

@@ -24,7 +24,7 @@ public class CommandRemTo extends BaseCommand {
 		
 		requiredPermission = "ancientgates.remto";
 		
-		helpDescription = "Remove a \"to\" from your location.";
+		helpDescription = "Remove a \"to\" at your location";
 	}
 	
 	public void perform() {

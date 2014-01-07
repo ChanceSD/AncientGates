@@ -26,7 +26,7 @@ public class CommandSetConf extends BaseCommand {
 		senderMustBePlayer = false;
 		hasGateParam = false;
 		
-		helpDescription = "Set config option to value.";
+		helpDescription = "Set config option to value";
 	}
 	
 	public void perform() {

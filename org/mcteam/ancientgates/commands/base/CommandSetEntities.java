@@ -15,7 +15,7 @@ public class CommandSetEntities extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Allow entities through gate.";
+		helpDescription = "Allow entities in gate";
 	}
 	
 	public void perform() {

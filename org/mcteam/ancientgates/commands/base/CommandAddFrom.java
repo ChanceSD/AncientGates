@@ -15,7 +15,7 @@ public class CommandAddFrom extends BaseCommand {
 		
 		requiredPermission = "ancientgates.addfrom";
 		
-		helpDescription = "Add another \"from\" to your location.";
+		helpDescription = "Add another \"from\" to your location";
 	}
 	
 	public void perform() {

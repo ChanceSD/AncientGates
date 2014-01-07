@@ -21,7 +21,7 @@ public class CommandSetExec extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Set \"exec\" command for the gate.";
+		helpDescription = "Set \"exec\" cmd for gate";
 	}
 	
 	public void perform() {	

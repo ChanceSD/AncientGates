@@ -13,15 +13,12 @@ import org.mcteam.ancientgates.util.GeometryUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.InvBoolean;
+import org.mcteam.ancientgates.util.types.TeleportType;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class CommandInfo extends BaseCommand {
 	
 	private static final String SERVER = "server";
-	private static final String WORLD = "world";
-	private static final String X = "x";
-	private static final String Y = "y";
-	private static final String Z = "z";
 	
 	public CommandInfo() {
 		aliases.add("info");
@@ -32,7 +29,7 @@ public class CommandInfo extends BaseCommand {
 		
 		hasGateParam = false;
 		
-		helpDescription = "Display info about a gate.";
+		helpDescription = "Display info about a gate";
 	}
 	
 	public void perform() {		
@@ -73,83 +70,83 @@ public class CommandInfo extends BaseCommand {
 		}
 		
 		// Display gate info
-		sendMessage(TextUtil.titleize("Gate: "+ Conf.colorParameter + gate.getId() + Conf.colorSystem + ""));
+		sendMessage(TextUtil.titleize("Gate: "+ Conf.colorValue + gate.getId()));
 		if (Gates.isOpen(gate)) {
-			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorValue + " open");
+			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorCommand + " open");
 		} else {
-			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorValue + " closed");
+			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorParameter + " closed");
 		}
 		for (Location from : gate.getFroms()) {
-			if (from != null) {
+			if (from != null) {//
 				if (nearestFrom != null){
 					if (GeometryUtil.distanceBetweenLocations(from, nearestFrom) < 1.0) {
-						sendMessage(Conf.colorSystem + "from:     " + Conf.colorParameter + "(" + from.getBlockX() + ", " + from.getBlockY() + ", " + from.getBlockZ() + ") in " + from.getWorld().getName());
+						sendMessage("from: " + Conf.colorCommand + new WorldCoord(from).toString());
 					} else {
-						sendMessage(Conf.colorSystem + "from:     " + Conf.colorValue + "(" + from.getBlockX() + ", " + from.getBlockY() + ", " + from.getBlockZ() + ") in " + from.getWorld().getName());
+						sendMessage("from: " + Conf.colorParameter + new WorldCoord(from).toString());
 					}
 				} else {
-					sendMessage(Conf.colorSystem + "from:     " + Conf.colorValue + "(" + from.getBlockX() + ", " + from.getBlockY() + ", " + from.getBlockZ() + ") in " + from.getWorld().getName());
+					sendMessage("from: " + Conf.colorParameter + new WorldCoord(from).toString());
 				}
 			} else {
-				sendMessage(Conf.colorSystem + "NOTE: this gate has no 'from' location");
+				sendMessage("NOTE: this gate has no 'from' location");
 			}
 		}	
 		if (gate.getTos() != null) {
 			for (Location to : gate.getTos()) {
 				if (to != null) {
-					sendMessage(Conf.colorSystem + "to:  " + Conf.colorValue + "(" + to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ") in " + to.getWorld().getName());
+					sendMessage("to:    " + Conf.colorChrome  + new WorldCoord(to).toString());
 				}
 			}
 		} else if (gate.getBungeeTos() != null) {
 			for (Map<String, String> bungeeto : gate.getBungeeTos()) {
 				if (bungeeto != null) {
-					if (gate.getBungeeType().equals("LOCATION")) {
-						sendMessage(Conf.colorSystem + "to:  " + Conf.colorValue + "(" + String.valueOf(Math.round(Double.parseDouble(bungeeto.get(X)))) + ", " + String.valueOf(Math.round(Double.parseDouble(bungeeto.get(Y)))) + ", " + String.valueOf(Math.round(Double.parseDouble(bungeeto.get(Z)))) + ") in " + bungeeto.get(WORLD) + " on " + bungeeto.get(SERVER));	
+					if (gate.getBungeeType() == TeleportType.LOCATION) {
+						sendMessage("to:    " + Conf.colorChrome + new WorldCoord(bungeeto).toString() + " on " + bungeeto.get(SERVER));	
 					} else {
-						sendMessage(Conf.colorSystem + "to:  " + Conf.colorValue + bungeeto.get(SERVER));	
+						sendMessage("to:    " + Conf.colorChrome + bungeeto.get(SERVER));	
 					}
 				}
 			}
 		} else {
-			sendMessage(Conf.colorSystem + "NOTE: this gate has no 'to' location(s)");
+			sendMessage("NOTE: this gate has no 'to' location(s)");
 		}
 		if (Plugin.hasPermManage(player, "ancientgates.info.exec")) {
 			if (gate.getCommand() != null) {
-				sendMessage(Conf.colorSystem + "exec: " + Conf.colorValue + "/" + gate.getCommand());
+				sendMessage("exec: " + Conf.colorValue + "/" + gate.getCommand());
 			} else {
-				sendMessage(Conf.colorSystem + "NOTE: this gate has no command to execute");
+				sendMessage("NOTE: this gate has no command to execute");
 			}
 		}
 		if (gate.getMessage() != null) {
-			sendMessage(Conf.colorSystem + "message: " + Conf.colorValue + gate.getMessage());
+			sendMessage("message: " + Conf.colorValue + gate.getMessage());
 		} else {
-			sendMessage(Conf.colorSystem + "NOTE: this gate has no teleport message");
+			sendMessage("NOTE: this gate has no teleport message");
 		}
 		if (gate.getTeleportEntities()) {
-			sendMessage(Conf.colorSystem + "entities" + Conf.colorValue + " allowed");
+			sendMessage("entities" + Conf.colorCommand + " allowed");
 		} else {
-			sendMessage(Conf.colorSystem + "entities" + Conf.colorValue + " not allowed");
+			sendMessage("entities" + Conf.colorParameter + " not allowed");
 		}
 		if (!Conf.useVanillaPortals) {
 			if (gate.getTeleportVehicles()) {
-				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorValue + " allowed");
+				sendMessage("vehicles" + Conf.colorCommand + " allowed");
 			} else {
-				sendMessage(Conf.colorSystem + "vehicles" + Conf.colorValue + " not allowed");
+				sendMessage("vehicles" + Conf.colorParameter + " not allowed");
 			}
-			sendMessage(Conf.colorSystem + "material" + Conf.colorValue + " " + gate.getMaterialStr());
+			sendMessage("material" + Conf.colorValue + " " + gate.getMaterialStr());
 		}
 		if (gate.getTeleportInventory() == InvBoolean.TRUE) {
-			sendMessage(Conf.colorSystem + "inventory" + Conf.colorValue + " allowed");
+			sendMessage("inventory" + Conf.colorCommand + " allowed");
 		} else if (gate.getTeleportInventory() == InvBoolean.CLEAR) {
-				sendMessage(Conf.colorSystem + "inventory" + Conf.colorValue + " cleared");	
+				sendMessage("inventory" + Conf.colorValue + " cleared");	
 		} else {
-			sendMessage(Conf.colorSystem + "inventory" + Conf.colorValue + " not allowed");
+			sendMessage("inventory" + Conf.colorParameter + " not allowed");
 		}
 		if (Conf.useEconomy) {
 			if (gate.getCost() == 0.00) {
-				sendMessage(Conf.colorSystem + "cost" + Conf.colorValue + " free");
+				sendMessage("cost" + Conf.colorValue + " free");
 			} else {
-				sendMessage(Conf.colorSystem + "cost" + Conf.colorValue + " " + String.valueOf(gate.getCost()));
+				sendMessage("cost" + Conf.colorValue + " " + String.valueOf(gate.getCost()));
 			}
 		}	
 	}

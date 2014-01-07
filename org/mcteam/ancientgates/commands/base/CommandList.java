@@ -18,22 +18,32 @@ public class CommandList extends BaseCommand {
 		
 		requiredPermission = "ancientgates.list";
 		
+		optionalParameters.add("page");
+		
 		senderMustBePlayer = false;
 		hasGateParam = false;
 		
-		helpDescription = "Display a list of the gates.";
+		helpDescription = "Display a list of the gates";
 	}
 	
 	public void perform() {
+		int page = 1;
+		if (parameters.size() > 0) {
+			try {
+				page = Integer.parseInt(parameters.get(0));
+			} catch (NumberFormatException e) {
+				// wasn't an integer
+			}
+		}
+		
 		List<String> ids = new ArrayList<String>();
 		List<String> states = new ArrayList<String>();
 		List<String> costs = new ArrayList<String>();
-		
 		for (Gate gate : Gate.getAll()) {
 			ids.add(Conf.colorValue + gate.getId());
-			states.add(Conf.colorValue + (Gates.isOpen(gate) ? "open" : "closed"));
+			states.add((Gates.isOpen(gate) ? Conf.colorCommand+"open" : Conf.colorParameter+"closed"));
 			if (Conf.useEconomy && Plugin.econ != null) {
-				costs.add(Conf.colorValue + String.valueOf(gate.getCost()));
+				costs.add(Conf.colorSystem + String.valueOf(gate.getCost()));
 			}
 		}
 		
@@ -41,12 +51,12 @@ public class CommandList extends BaseCommand {
 			sendMessage("There are no gates yet.");
 			return;
 		}
-		
-		sendMessage("There are currently "+ids.size()+" gates on this server: ");
+
+		// Send list as readable pages
 		if (Conf.useEconomy && Plugin.econ != null) {
-			sendMessage(TextUtil.implode(ids, states, costs, Conf.colorSystem+", "));
+			sendMessage(TextUtil.getPage(TextUtil.concatenate(ids, states, costs), page, "Gate List - "+ids.size()+" gates(s) -", sender));
 		} else {
-			sendMessage(TextUtil.implode(ids, states, Conf.colorSystem+", "));	
+			sendMessage(TextUtil.getPage(TextUtil.concatenate(ids, states), page, "Gate List - "+ids.size()+" gates(s) -", sender));	
 		}
 	}
 	

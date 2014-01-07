@@ -24,7 +24,7 @@ public class CommandSetTo extends BaseCommand {
 			optionalParameters.add("server");
 		}
 		
-		helpDescription = "Set \"to\" to your location.";
+		helpDescription = "Set \"to\" to your location";
 	}
 	
 	public void perform() {

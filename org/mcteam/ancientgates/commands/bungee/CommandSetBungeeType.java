@@ -20,7 +20,7 @@ public class CommandSetBungeeType extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Set BungeeCord teleport type LOCATION or SERVER.";
+		helpDescription = "Set teleport type";
 	}
 	
 	public void perform() {

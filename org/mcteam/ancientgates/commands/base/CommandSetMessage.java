@@ -16,7 +16,7 @@ public class CommandSetMessage extends BaseCommand {
 		
 		senderMustBePlayer = false;
 		
-		helpDescription = "Set teleport \"msg\" for the gate.";
+		helpDescription = "Set tp \"msg\" for gate";
 	}
 	
 	public void perform() {	

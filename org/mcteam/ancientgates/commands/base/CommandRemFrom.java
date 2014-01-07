@@ -17,7 +17,7 @@ public class CommandRemFrom extends BaseCommand {
 		
 		requiredPermission = "ancientgates.remfrom";
 		
-		helpDescription = "Remove a \"from\" from your location.";
+		helpDescription = "Remove a \"from\" at your location";
 	}
 	
 	public void perform() {
