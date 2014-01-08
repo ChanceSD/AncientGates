@@ -73,7 +73,7 @@ public class CommandSetConf extends BaseCommand {
 		        sendMessage("Config option \""+f.getName()+"\" is now "+value+".");
 		        
 		        Conf.save();
-		        Plugin.instance.reload();
+		        Plugin.instance.reload(sender);
 		        
 		        if (Conf.bungeeCordSupport) {
 		        	if (Plugin.bungeeServerName == null) new BungeeServerName(Plugin.instance).runTaskLater(Plugin.instance, 20L);

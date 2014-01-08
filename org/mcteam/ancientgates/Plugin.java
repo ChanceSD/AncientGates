@@ -163,7 +163,7 @@ public class Plugin extends JavaPlugin {
 		pm.registerEvents(new PluginPlayerListener(this), this);
 
 		// Load reloadable config
-		reload();
+		reload(null);
 		
 		//Submit Stats
 		MetricsStarter metrics = new MetricsStarter(this);
@@ -181,13 +181,13 @@ public class Plugin extends JavaPlugin {
 	// -------------------------------------------- //
 	// Auto-reload config
 	// -------------------------------------------- //
-	public void reload() {	
-		// Setup BungeeCord support
-		if (Conf.bungeeCordSupport && pluginMessengerListener == null) setupBungeeCord();
-		if (Conf.bungeeCordSupport && Conf.useSocketComms && serv == null ) setupSocketComms();
+	public void reload(CommandSender sender) {
 		// Takedown BungeeCord support
 		if (!Conf.bungeeCordSupport && pluginMessengerListener != null) takedownBungeeCord();
-		if ((!Conf.bungeeCordSupport || !Conf.useSocketComms) && serv != null) takedownSocketComms();
+		if (serv != null) takedownSocketComms();
+		// Setup BungeeCord support
+		if (Conf.bungeeCordSupport && pluginMessengerListener == null) setupBungeeCord();
+		if (Conf.bungeeCordSupport && Conf.useSocketComms && serv == null ) setupSocketComms(sender);
 		
 		// Add the commands
 		if (!commands.isEmpty()) commands.clear();
@@ -258,13 +258,14 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 	
-	private void setupSocketComms() {
+	private void setupSocketComms(CommandSender sender) {
 		// Load servers list
 		Server.load();
 		
 		// Check socket comms port in range
 		if (Conf.socketCommsPort > 65535) {
 			Plugin.log("socketCommsPort out of range. Using generic BungeeCord messaging.");
+			if (sender != null) sender.sendMessage(Conf.colorSystem+"\"socketCommsPort\" is out of range. Try another port.");
 			return;
 		}
 		
@@ -274,6 +275,7 @@ public class Plugin extends JavaPlugin {
 			serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
 		} catch (BindException e) {
 			Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
+			if (sender != null) sender.sendMessage(Conf.colorSystem+"\"socketCommsPort\" "+Conf.socketCommsPort+" is already in use. Try another port.");
 			return;
 		}
 		serv.addClientListener(new PluginSocketListener());
