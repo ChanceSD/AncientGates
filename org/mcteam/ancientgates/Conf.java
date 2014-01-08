@@ -53,7 +53,7 @@ public class Conf {
 	// Socket comms settings
 	public static boolean useSocketComms = false;
 	public static int socketCommsPort = 18001;
-	public static String socketCommsPass = "";
+	public static String socketCommsPass = "agserver1";
 	public static int socketCommsTimeout = 10000;
 	
 	// Enable auto-update
@@ -93,8 +93,6 @@ public class Conf {
 		
 		if ( ! file.exists()) {
 			Plugin.log("No conf to load from disk. Creating new file.");
-			// Generate random password
-			socketCommsPass = Long.toHexString(Double.doubleToLongBits(Math.random()));
 			save();
 			return true;
 		}
