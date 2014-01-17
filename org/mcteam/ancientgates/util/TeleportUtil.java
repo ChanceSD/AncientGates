@@ -1,5 +1,7 @@
 package org.mcteam.ancientgates.util;
 
+import io.github.dsh105.echopet.entity.living.CraftLivingPet;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -69,15 +71,15 @@ public class TeleportUtil {
 		final Entity entity = player.getVehicle();
 		if (player.isInsideVehicle() && entity instanceof LivingEntity) {
 			entity.eject();
-			if (teleportEntities && !(entity instanceof Player)) entity.remove();
+			if (teleportEntities && !(entity instanceof Player) && !(entity instanceof CraftLivingPet)) entity.remove();
 		}
 
 		// Teleport player
 		player.teleport(location);
 		player.setFireTicks(0); // Cancel lava fire
 		
-		// Re-mount player on entity
-		if (entity != null && teleportEntities && entity instanceof LivingEntity && !(entity instanceof Player)) {
+		// Re-mount player on entity (excl. EchoPet)
+		if (entity != null && teleportEntities && entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof CraftLivingPet)) {
 			final Entity e = location.getWorld().spawn(location, entity.getClass());
 			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity)); // Clone entity data
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
@@ -142,9 +144,9 @@ public class TeleportUtil {
 			if (tpType.equals(TeleportType.SERVER)) {
 				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			// Player location teleport
-			} else if(e == null || !teleportEntities || e instanceof Player) {
+			} else if(e == null || !teleportEntities || e instanceof Player || e instanceof CraftLivingPet) {
 				msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
-			// Player riding entity teleport
+			// Player riding entity teleport (excl. EchoPet)
 			} else {
 				msg = new PluginMessage(player, e, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			}
@@ -170,8 +172,8 @@ public class TeleportUtil {
 		final Entity entity = event.getEntity();
 		entity.remove();
 
-		// Clone entity - Spawnable
-		if (entity.getType().isSpawnable()) {
+		// Clone entity - Spawnable (excl. EchoPet)
+		if (entity.getType().isSpawnable() && !(entity instanceof CraftLivingPet)) {
 			Entity e = location.getWorld().spawn(location, entity.getClass());
 			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity));
 		
@@ -183,9 +185,9 @@ public class TeleportUtil {
 
 	}
 	
-	// BungeeCord entity spawn out
+	// BungeeCord entity spawn out (excl. EchoPet)
 	public static void teleportEntity(EntityPortalEvent event, Map<String, String> location) {
-		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() || event.getEntityType() == EntityType.DROPPED_ITEM)) {
+		if (Conf.bungeeCordSupport && ((event.getEntityType().isSpawnable() && !(event.getEntity() instanceof CraftLivingPet)) || event.getEntityType() == EntityType.DROPPED_ITEM)) {
 
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
@@ -308,7 +310,7 @@ public class TeleportUtil {
 			}, 0);
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				public void run() {
-					v.setPassenger(passenger);
+					if(!(passenger instanceof CraftLivingPet)) v.setPassenger(passenger);
 					v.setVelocity(newVelocity);
 				}
 			}, 2);
@@ -427,8 +429,8 @@ public class TeleportUtil {
 					// Send AGBungeeVehicleSpawn packet
 					PluginMessage msg = new PluginMessage(vehicle.getType(), velocity, location);
 					
-					// Append passenger info
-					if (passenger != null) {
+					// Append passenger info (excl. EchoPet)
+					if (passenger != null && !(passenger instanceof CraftLivingPet)) {
 						if (passenger.getType().isSpawnable()) {
 							msg.addEntity(passenger);
 						}
@@ -474,8 +476,8 @@ public class TeleportUtil {
 					Server server = Server.get(location.get(SERVER));				
 					// Construct spawn vehicle packet
 					Packet packet = new Packet(vehicle, velocity, location);
-					// Append passenger info
-					if (passenger != null) {
+					// Append passenger info (excl. EchoPet)
+					if (passenger != null && !(passenger instanceof CraftLivingPet)) {
 						if (passenger.getType().isSpawnable()) {
 							packet.addPassenger(passenger);
 						}
