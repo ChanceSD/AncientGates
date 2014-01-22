@@ -3,6 +3,9 @@ package org.mcteam.ancientgates.util;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.dsh105.echopet.entity.inanimate.CraftInanimatePet;
+import io.github.dsh105.echopet.entity.living.CraftLivingPet;
+
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -231,6 +234,12 @@ public class EntityUtil {
 		    }
 		}
 		return player;
+	}
+	
+	public static boolean isEchoPet(Entity entity) {
+		// If EchoPet plugin present, check if entity is a pet
+		try { return entity instanceof CraftLivingPet || entity instanceof CraftInanimatePet;
+		} catch (NoClassDefFoundError e) { return false; }
 	}
 	  
 }
