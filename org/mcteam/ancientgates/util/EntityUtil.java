@@ -105,6 +105,7 @@ public class EntityUtil {
 
 		if (entity instanceof LivingEntity) {
 			data += String.valueOf(((LivingEntity)entity).getHealth()) + ",";
+			data += String.valueOf(((LivingEntity)entity).getMaxHealth()) + ",";
 			data += String.valueOf(((LivingEntity)entity).getCustomName()) + ",";
 			if (entity instanceof Animals) {
 				data += String.valueOf(((Animals)entity).getAge()) + ",";
@@ -129,6 +130,7 @@ public class EntityUtil {
                 	data += String.valueOf(((Horse)entity).getStyle().name()) + ",";
     				data += String.valueOf(((Horse)entity).getColor().name()) + ",";
     				data += String.valueOf(((Horse)entity).getDomestication()) + ",";
+    				data += String.valueOf(((Horse)entity).getMaxDomestication()) + ",";
     				data += String.valueOf(((Horse)entity).getJumpStrength()) + ",";
         			if (((Horse)entity).isTamed()) {
         				data += ((Tameable)entity).getOwner().getName() + ",";
@@ -160,55 +162,57 @@ public class EntityUtil {
 		String parts[] = data.split(",");
 		if ((entity instanceof LivingEntity)) {
 			((LivingEntity)entity).setHealth(Double.parseDouble(parts[0]));
-			if (!parts[1].equals("null")) ((LivingEntity)entity).setCustomName(parts[1]);
+			((LivingEntity)entity).setMaxHealth(Double.parseDouble(parts[1]));
+			if (!parts[2].equals("null")) ((LivingEntity)entity).setCustomName(parts[2]);
 			if ((entity instanceof Animals)) {
-				((Animals)entity).setAge(Integer.parseInt(parts[2]));
+				((Animals)entity).setAge(Integer.parseInt(parts[3]));
 				if ((entity instanceof Sheep)) {
-					((Sheep)entity).setSheared(Boolean.parseBoolean(parts[3]));
-					((Sheep)entity).setColor(sheepColors.get(parts[4]));
+					((Sheep)entity).setSheared(Boolean.parseBoolean(parts[4]));
+					((Sheep)entity).setColor(sheepColors.get(parts[5]));
                 } else if ((entity instanceof Wolf)) {
-                	if (Boolean.parseBoolean(parts[3])) {
-                		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[3]));
-                	} else if (parts.length > 4) {
+                	if (Boolean.parseBoolean(parts[4])) {
+                		((Wolf)entity).setAngry(Boolean.parseBoolean(parts[4]));
+                	} else if (parts.length > 5) {
                 		((Tameable)entity).setTamed(true);
-                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[4]));
-                		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[5]));
+                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[5]));
+                		((Wolf)entity).setCollarColor(DyeColor.valueOf(parts[6]));
                 	}
                 } else if ((entity instanceof Ocelot)) {
-                	if (parts.length > 3) {
+                	if (parts.length > 4) {
                 		((Tameable)entity).setTamed(true);
-                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[3]));
-                		((Ocelot)entity).setCatType(catTypes.get(parts[4]));
+                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[4]));
+                		((Ocelot)entity).setCatType(catTypes.get(parts[5]));
                 	}
                 } else if ((entity instanceof Pig)) {
-                	((Pig)entity).setSaddle(Boolean.parseBoolean(parts[3]));
+                	((Pig)entity).setSaddle(Boolean.parseBoolean(parts[4]));
                 } else if ((entity instanceof Horse)) {  	
-                	((Horse)entity).setVariant(horseVariants.get(parts[3]));
-                	((Horse)entity).setStyle(horseStyles.get(parts[4]));
-                	((Horse)entity).setColor(horseColors.get(parts[5]));
-                	((Horse)entity).setDomestication(Integer.parseInt(parts[6]));
-                	((Horse)entity).setJumpStrength(Double.parseDouble(parts[7]));
-        			if (parts.length > 8) {
+                	((Horse)entity).setVariant(horseVariants.get(parts[4]));
+                	((Horse)entity).setStyle(horseStyles.get(parts[5]));
+                	((Horse)entity).setColor(horseColors.get(parts[6]));
+                	((Horse)entity).setDomestication(Integer.parseInt(parts[7]));
+                	((Horse)entity).setMaxDomestication(Integer.parseInt(parts[8]));
+                	((Horse)entity).setJumpStrength(Double.parseDouble(parts[9]));
+        			if (parts.length > 10) {
                 		((Tameable)entity).setTamed(true);
-                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[8]));
-                		((Horse)entity).getInventory().setSaddle(ItemStackUtil.stringToItemStack(parts[9])[0]);
-                		((Horse)entity).getInventory().setArmor(ItemStackUtil.stringToItemStack(parts[10])[0]);
-                		if (parts.length > 11) {
+                		((Tameable)entity).setOwner((AnimalTamer)getPlayer(parts[10]));
+                		((Horse)entity).getInventory().setSaddle(ItemStackUtil.stringToItemStack(parts[11])[0]);
+                		((Horse)entity).getInventory().setArmor(ItemStackUtil.stringToItemStack(parts[12])[0]);
+                		if (parts.length > 13) {
                 			((Horse)entity).setCarryingChest(true);
-                			((Horse)entity).getInventory().setContents(ItemStackUtil.stringToItemStack(parts[11]));
+                			((Horse)entity).getInventory().setContents(ItemStackUtil.stringToItemStack(parts[13]));
                 		}
         			}
                 }
 			} else if ((entity instanceof Villager)) {
-				((Villager)entity).setProfession(villagerProfessions.get(parts[2]));
-				((Villager)entity).setAge(Integer.parseInt(parts[3]));
+				((Villager)entity).setProfession(villagerProfessions.get(parts[3]));
+				((Villager)entity).setAge(Integer.parseInt(parts[4]));
 			} else if ((entity instanceof Creeper)) {
-				((Creeper)entity).setPowered(Boolean.parseBoolean(parts[2]));
+				((Creeper)entity).setPowered(Boolean.parseBoolean(parts[3]));
 			} else if ((entity instanceof Slime)) {
-				((Slime)entity).setSize(Integer.parseInt(parts[2]));
+				((Slime)entity).setSize(Integer.parseInt(parts[3]));
 			} else if ((entity instanceof Skeleton)) {
-				((Skeleton)entity).setSkeletonType(skeletonTypes.get(parts[2]));
-				if (parts[2].equals("0")) {
+				((Skeleton)entity).setSkeletonType(skeletonTypes.get(parts[3]));
+				if (parts[3].equals("0")) {
 					((Skeleton)entity).getEquipment().setItemInHand(new ItemStack(Material.BOW));
 				} else {
 					((Skeleton)entity).getEquipment().setItemInHand(new ItemStack(Material.BOW));
