@@ -98,7 +98,7 @@ public class Gates {
 		if (!isOpen(gate)) return;
 		
 		for (WorldCoord coord :  gate.getPortalBlocks().keySet()) {
-			coord.getBlock().setType(Material.AIR);
+			coord.getBlock().breakNaturally(); // Break naturally - Fix portal orientation
 		}
 		
 		for (WorldCoord coord :  gate.getPortalBlocks().keySet()) {
