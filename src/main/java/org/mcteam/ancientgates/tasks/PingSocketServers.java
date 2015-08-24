@@ -1,7 +1,6 @@
 package org.mcteam.ancientgates.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
-
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Server;
 import org.mcteam.ancientgates.sockets.SocketClient;

@@ -6,7 +6,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
-
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.types.CommandType;
 

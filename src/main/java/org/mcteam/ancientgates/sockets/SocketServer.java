@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.sockets.events.*;
+import org.mcteam.ancientgates.sockets.events.ClientConnectionEvent;
+import org.mcteam.ancientgates.sockets.events.ClientRecieveEvent;
+import org.mcteam.ancientgates.sockets.events.SocketServerEventListener;
 import org.mcteam.ancientgates.sockets.types.ConnectionState;
 import org.mcteam.ancientgates.sockets.types.Packet;
 import org.mcteam.ancientgates.sockets.types.Packets;

@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.logging.Level;
 
 import org.bukkit.ChatColor;
-
 import org.mcteam.ancientgates.util.DiscUtil;
 import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;

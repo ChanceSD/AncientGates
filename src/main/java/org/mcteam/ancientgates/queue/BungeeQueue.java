@@ -2,7 +2,6 @@ package org.mcteam.ancientgates.queue;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
-
 import org.mcteam.ancientgates.queue.types.BungeeQueueType;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.TeleportUtil;

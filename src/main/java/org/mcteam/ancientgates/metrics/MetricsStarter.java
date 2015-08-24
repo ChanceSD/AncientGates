@@ -3,7 +3,6 @@ package org.mcteam.ancientgates.metrics;
 import java.io.IOException;
 
 import org.bukkit.Material;
-
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;

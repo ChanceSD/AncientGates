@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Server;
 import org.mcteam.ancientgates.util.TextUtil;
 

@@ -11,7 +11,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.ItemStackUtil;

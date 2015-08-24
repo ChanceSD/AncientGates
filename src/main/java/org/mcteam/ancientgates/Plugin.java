@@ -10,22 +10,17 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.milkbowl.vault.economy.Economy;
-import net.milkbowl.vault.economy.EconomyResponse;
-import net.milkbowl.vault.permission.Permission;
-
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
-import org.bukkit.Location;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.mcteam.ancientgates.gson.typeadapters.LocationTypeAdapter;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.base.CommandAddFrom;
 import org.mcteam.ancientgates.commands.base.CommandAddTo;
@@ -58,11 +53,12 @@ import org.mcteam.ancientgates.commands.economy.CommandSetCost;
 import org.mcteam.ancientgates.commands.sockets.CommandAddServer;
 import org.mcteam.ancientgates.commands.sockets.CommandRemServer;
 import org.mcteam.ancientgates.commands.sockets.CommandServerList;
+import org.mcteam.ancientgates.gson.typeadapters.LocationTypeAdapter;
 import org.mcteam.ancientgates.listeners.PluginBlockListener;
 import org.mcteam.ancientgates.listeners.PluginEntityListener;
 import org.mcteam.ancientgates.listeners.PluginMessengerListener;
-import org.mcteam.ancientgates.listeners.PluginPlayerListener;
 import org.mcteam.ancientgates.listeners.PluginMovementListener;
+import org.mcteam.ancientgates.listeners.PluginPlayerListener;
 import org.mcteam.ancientgates.listeners.PluginSocketListener;
 import org.mcteam.ancientgates.metrics.MetricsStarter;
 import org.mcteam.ancientgates.queue.BungeeQueue;
@@ -71,6 +67,10 @@ import org.mcteam.ancientgates.util.types.PluginMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.economy.EconomyResponse;
+import net.milkbowl.vault.permission.Permission;
 
 public class Plugin extends JavaPlugin {
 

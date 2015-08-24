@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.mcteam.ancientgates.sockets.types.ConnectionState;
 import org.mcteam.ancientgates.util.DiscUtil;

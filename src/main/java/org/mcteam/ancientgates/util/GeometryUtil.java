@@ -1,7 +1,6 @@
 package org.mcteam.ancientgates.util;
 
 import org.bukkit.Location;
-
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class GeometryUtil {

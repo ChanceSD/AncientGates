@@ -11,7 +11,6 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import org.mcteam.ancientgates.Conf;
 
 public class TextUtil {
