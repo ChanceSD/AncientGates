@@ -11,7 +11,7 @@ public class BungeeServerList extends BukkitRunnable {
 
 	private final Plugin plugin;
 
-	public BungeeServerList(Plugin plugin) {
+	public BungeeServerList(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 

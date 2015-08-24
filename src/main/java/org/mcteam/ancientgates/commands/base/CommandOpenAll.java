@@ -21,7 +21,7 @@ public class CommandOpenAll extends BaseCommand {
 	public void perform() {
 		int numFails = 0;
 
-		for (Gate gate : Gate.getAll()) {
+		for (final Gate gate : Gate.getAll()) {
 			if (gate.getFroms() == null)
 				continue;
 

@@ -45,7 +45,7 @@ public class PluginMessage {
 	// Constructor
 	// ----------------------------------------------//
 	// Player teleport message
-	public PluginMessage(Player player, String toServer, String fromServer, String command, CommandType commandType, String message) {
+	public PluginMessage(final Player player, final String toServer, final String fromServer, final String command, final CommandType commandType, final String message) {
 		this.channel = BungeeChannel.AGBungeeTele;
 		this.toServer = toServer;
 		this.destination = "null";
@@ -57,20 +57,20 @@ public class PluginMessage {
 	}
 
 	// Player teleport message (with destination)
-	public PluginMessage(Player player, Map<String, String> destination, String fromServer, String command, CommandType commandType, String message) {
+	public PluginMessage(final Player player, final Map<String, String> destination, final String fromServer, final String command, final CommandType commandType, final String message) {
 		this(player, destination.get(SERVER), fromServer, command, commandType, message);
 		this.destination = TeleportUtil.locationToString(destination);
 	}
 
 	// Player teleport message (riding entity)
-	public PluginMessage(Player player, Entity entity, Map<String, String> destination, String fromServer, String command, CommandType commandType, String message) {
+	public PluginMessage(final Player player, final Entity entity, final Map<String, String> destination, final String fromServer, final String command, final CommandType commandType, final String message) {
 		this(player, destination, fromServer, command, commandType, message);
 		this.entityTypeName = entity.getType().name();
 		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
 	}
 
 	// Vehicle teleport message
-	public PluginMessage(Player player, EntityType vehicleType, double velocity, Map<String, String> destination, String fromServer, String command, CommandType commandType, String message) {
+	public PluginMessage(final Player player, final EntityType vehicleType, final double velocity, final Map<String, String> destination, final String fromServer, final String command, final CommandType commandType, final String message) {
 		this.channel = BungeeChannel.AGBungeeVehicleTele;
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
@@ -84,7 +84,7 @@ public class PluginMessage {
 	}
 
 	// Entity spawn message
-	public PluginMessage(EntityType entityType, Entity entity, Map<String, String> destination) {
+	public PluginMessage(final EntityType entityType, final Entity entity, final Map<String, String> destination) {
 		this.channel = BungeeChannel.AGBungeeSpawn;
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
@@ -98,7 +98,7 @@ public class PluginMessage {
 	}
 
 	// Vehicle spawn message
-	public PluginMessage(EntityType vehicleType, double velocity, Map<String, String> destination) {
+	public PluginMessage(final EntityType vehicleType, final double velocity, final Map<String, String> destination) {
 		this.channel = BungeeChannel.AGBungeeVehicleSpawn;
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
@@ -107,7 +107,7 @@ public class PluginMessage {
 	}
 
 	// AncientGates command message
-	public PluginMessage(String command, Player player, String toServer, String[] parameters) {
+	public PluginMessage(final String command, final Player player, final String toServer, final String[] parameters) {
 		this.channel = BungeeChannel.AGBungeeCom;
 		this.toServer = toServer;
 		this.playerName = player.getName();
@@ -116,12 +116,12 @@ public class PluginMessage {
 	}
 
 	// BungeeCord command message
-	public PluginMessage(String command) {
+	public PluginMessage(final String command) {
 		this.command = command;
 	}
 
 	// BungeeCord command message (with parameters)
-	public PluginMessage(String command, String... parameters) {
+	public PluginMessage(final String command, final String... parameters) {
 		this.command = command;
 		this.parameters = parameters;
 	}
@@ -130,13 +130,13 @@ public class PluginMessage {
 	// Setters
 	// ----------------------------------------------//
 	// Append entity info
-	public void addEntity(Entity entity) {
+	public void addEntity(final Entity entity) {
 		this.entityTypeName = entity.getType().name();
 		this.entityTypeData = EntityUtil.getEntityTypeData(entity);
 	}
 
 	// Append item stack info
-	public void addItemStack(ItemStack[] itemStack) {
+	public void addItemStack(final ItemStack[] itemStack) {
 		this.itemStack = ItemStackUtil.itemStackToString(itemStack);
 	}
 
@@ -176,14 +176,14 @@ public class PluginMessage {
 			} else if (this.channel == BungeeChannel.AGBungeeCom) {
 				// Format is <command>#@#<player>#@#<parameters>
 				msg = this.command + "#@#" + this.playerName;
-				for (String parameter : this.parameters) {
+				for (final String parameter : this.parameters) {
 					msg += "#@#" + parameter;
 				}
 			}
 
 			// Build the message data, sent over the <channel> BungeeCord channel
-			ByteArrayOutputStream b = new ByteArrayOutputStream();
-			DataOutputStream out = new DataOutputStream(b);
+			final ByteArrayOutputStream b = new ByteArrayOutputStream();
+			final DataOutputStream out = new DataOutputStream(b);
 			try {
 				out.writeUTF("Forward");
 				out.writeUTF(this.toServer); // Server
@@ -191,7 +191,7 @@ public class PluginMessage {
 				out.writeShort(msg.length()); // Data Length
 				out.writeBytes(msg); // Data
 				return b.toByteArray();
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				if (this.channel == BungeeChannel.AGBungeeCom)
 					Bukkit.getPlayer(this.playerName).sendMessage("Error sending command externally via BungeeCord.");
 				Plugin.log.severe("Error sending BungeeCord " + this.channel.toString() + " packet");
@@ -200,16 +200,16 @@ public class PluginMessage {
 			}
 			// BungeeCord command message
 		} else {
-			ByteArrayOutputStream b = new ByteArrayOutputStream();
-			DataOutputStream out = new DataOutputStream(b);
+			final ByteArrayOutputStream b = new ByteArrayOutputStream();
+			final DataOutputStream out = new DataOutputStream(b);
 			try {
 				out.writeUTF(this.command);
 				if (this.parameters != null) {
-					for (String parameter : this.parameters)
+					for (final String parameter : this.parameters)
 						out.writeUTF(parameter);
 				}
 				return b.toByteArray();
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				Plugin.log.severe("Error sending BungeeCord " + this.command + " packet");
 				ex.printStackTrace();
 				return null;

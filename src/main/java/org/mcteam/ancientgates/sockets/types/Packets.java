@@ -6,11 +6,11 @@ public class Packets {
 	public Packets() {
 	}
 
-	public Packets(Packet[] packets) {
+	public Packets(final Packet[] packets) {
 		this.packets = packets;
 	}
 
-	public Packets(Packet packet) {
+	public Packets(final Packet packet) {
 		this.packets = new Packet[] { packet };
 	}
 

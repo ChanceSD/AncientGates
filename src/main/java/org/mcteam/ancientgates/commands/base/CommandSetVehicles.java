@@ -20,7 +20,7 @@ public class CommandSetVehicles extends BaseCommand {
 
 	@Override
 	public void perform() {
-		Boolean flag = Boolean.valueOf(parameters.get(1));
+		final Boolean flag = Boolean.valueOf(parameters.get(1));
 
 		gate.setTeleportVehicles(flag);
 		sendMessage("Vehicle teleportation for gate \"" + gate.getId() + "\" is now " + String.valueOf(flag) + ".");

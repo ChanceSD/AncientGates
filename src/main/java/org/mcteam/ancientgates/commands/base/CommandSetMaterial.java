@@ -26,7 +26,7 @@ public class CommandSetMaterial extends BaseCommand {
 
 	@Override
 	public void perform() {
-		String material = parameters.get(1).toUpperCase();
+		final String material = parameters.get(1).toUpperCase();
 
 		if (GateMaterial.fromName(material) == null) {
 			sendMessage("This is not a valid gate material. Valid materials:");
@@ -34,7 +34,7 @@ public class CommandSetMaterial extends BaseCommand {
 			return;
 		}
 
-		boolean isOpen = Gates.isOpen(gate);
+		final boolean isOpen = Gates.isOpen(gate);
 
 		if (isOpen)
 			Gates.close(gate);

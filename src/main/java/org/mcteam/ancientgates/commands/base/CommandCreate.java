@@ -20,7 +20,7 @@ public class CommandCreate extends BaseCommand {
 
 	@Override
 	public void perform() {
-		String id = parameters.get(0);
+		final String id = parameters.get(0);
 
 		if (Gate.exists(id)) {
 			sendMessage("The gate \"" + id + "\" already exists.");

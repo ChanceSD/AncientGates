@@ -13,15 +13,15 @@ import java.io.OutputStreamWriter;
 public class DiscUtil {
 
 	// Convenience function for writing a string to a file.
-	public static void write(File file, String content) throws IOException {
-		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF8"));
+	public static void write(final File file, final String content) throws IOException {
+		final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, false), "UTF8"));
 		out.write(content);
 		out.close();
 	}
 
 	// Convenience function for reading a file as a string.
-	public static String read(File file) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+	public static String read(final File file) throws IOException {
+		final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
 		String ret = new String(new byte[0], "UTF-8");
 
 		String line;

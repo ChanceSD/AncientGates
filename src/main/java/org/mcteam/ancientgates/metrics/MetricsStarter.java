@@ -12,7 +12,7 @@ public class MetricsStarter {
 
 	public Plugin plugin;
 
-	public MetricsStarter(Plugin plugin) {
+	public MetricsStarter(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 
@@ -20,15 +20,15 @@ public class MetricsStarter {
 
 		try {
 			// Initialise metics
-			Metrics metrics = new Metrics(plugin);
+			final Metrics metrics = new Metrics(plugin);
 
 			// Plot number of gates
-			Graph gatesGraph = metrics.createGraph("Number of Gates");
+			final Graph gatesGraph = metrics.createGraph("Number of Gates");
 			gatesGraph.addPlotter(new Metrics.Plotter("Bungee Gates") {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getBungeeTos() != null)
 							i++;
 					}
@@ -39,7 +39,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getTos() != null)
 							i++;
 					}
@@ -50,7 +50,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getTos() == null)
 							i++;
 					}
@@ -65,7 +65,7 @@ public class MetricsStarter {
 			});
 
 			// Plot gate entity access
-			Graph accessGraph = metrics.createGraph("Gate Access");
+			final Graph accessGraph = metrics.createGraph("Gate Access");
 			accessGraph.addPlotter(new Metrics.Plotter("Players") {
 				@Override
 				public int getValue() {
@@ -76,7 +76,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getTeleportEntities())
 							i++;
 					}
@@ -87,7 +87,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getTeleportVehicles())
 							i++;
 					}
@@ -102,7 +102,7 @@ public class MetricsStarter {
 			});
 
 			// Plot number of servers
-			Graph serverGraph = metrics.createGraph("Number of Servers");
+			final Graph serverGraph = metrics.createGraph("Number of Servers");
 			serverGraph.addPlotter(new Metrics.Plotter("Bungee Servers") {
 				@Override
 				public int getValue() {
@@ -123,7 +123,7 @@ public class MetricsStarter {
 			});
 
 			// Plot features
-			Graph featureGraph = metrics.createGraph("Features");
+			final Graph featureGraph = metrics.createGraph("Features");
 			featureGraph.addPlotter(new Metrics.Plotter("BungeeCord Support") {
 				@Override
 				public int getValue() {
@@ -156,7 +156,7 @@ public class MetricsStarter {
 			});
 
 			// Plot teleportation method
-			Graph methodGraph = metrics.createGraph("Teleportation method");
+			final Graph methodGraph = metrics.createGraph("Teleportation method");
 			methodGraph.addPlotter(new Metrics.Plotter("Movement Hook") {
 				@Override
 				public int getValue() {
@@ -171,12 +171,12 @@ public class MetricsStarter {
 			});
 
 			// Plot gate portal materials
-			Graph materialsGraph = metrics.createGraph("Gate Materials");
+			final Graph materialsGraph = metrics.createGraph("Gate Materials");
 			materialsGraph.addPlotter(new Metrics.Plotter("Web") {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.WEB)
 							i++;
 					}
@@ -187,7 +187,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.STATIONARY_WATER)
 							i++;
 					}
@@ -198,7 +198,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.SUGAR_CANE_BLOCK)
 							i++;
 					}
@@ -209,7 +209,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.PORTAL)
 							i++;
 					}
@@ -220,7 +220,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.STATIONARY_LAVA)
 							i++;
 					}
@@ -231,7 +231,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.ENDER_PORTAL)
 							i++;
 					}
@@ -242,7 +242,7 @@ public class MetricsStarter {
 				@Override
 				public int getValue() {
 					int i = 0;
-					for (Gate gate : Gate.getAll()) {
+					for (final Gate gate : Gate.getAll()) {
 						if (gate.getMaterial() == Material.PISTON_MOVING_PIECE)
 							i++;
 					}
@@ -252,7 +252,7 @@ public class MetricsStarter {
 
 			// Submit metrics
 			metrics.start();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// Failed to submit the stats :-(
 		}
 	}

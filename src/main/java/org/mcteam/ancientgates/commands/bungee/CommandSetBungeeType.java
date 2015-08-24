@@ -30,7 +30,7 @@ public class CommandSetBungeeType extends BaseCommand {
 			return;
 		}
 
-		String bungeeType = parameters.get(1).toUpperCase();
+		final String bungeeType = parameters.get(1).toUpperCase();
 
 		if (TeleportType.fromName(bungeeType) == null) {
 			sendMessage("This is not a valid BungeeCord teleportation type. Valid types:");

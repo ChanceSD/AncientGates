@@ -35,48 +35,48 @@ public class PluginPlayerListener implements Listener {
 
 	public Plugin plugin;
 
-	private HashMap<Player, Location> playerLocationAtEvent = new HashMap<Player, Location>();
+	private final HashMap<Player, Location> playerLocationAtEvent = new HashMap<Player, Location>();
 
-	public PluginPlayerListener(Plugin plugin) {
+	public PluginPlayerListener(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
+	public void onPlayerJoin(final PlayerJoinEvent event) {
 		if (!Conf.bungeeCordSupport) {
 			return;
 		}
 
 		final Player player = event.getPlayer();
-		String playerName = player.getName();
+		final String playerName = player.getName();
 
 		// Ok so a player joins the server
 		// Find if they're in the BungeeCord in-bound teleport queue
-		BungeeQueue queue = Plugin.bungeeCordInQueue.remove(playerName.toLowerCase());
+		final BungeeQueue queue = Plugin.bungeeCordInQueue.remove(playerName.toLowerCase());
 		if (queue != null) {
 			// Display custom join message
 			String msg = null;
 			if (Conf.useBungeeMessages) {
-				String server = queue.getServer();
+				final String server = queue.getServer();
 				msg = ChatColor.translateAlternateColorCodes('&', Conf.bungeeJoinMessage.replace("%p", playerName).replace("%s", server));
 			}
 			event.setJoinMessage(msg);
 
 			// Display teleport message
-			String message = queue.getMessage();
+			final String message = queue.getMessage();
 			if (!message.equals("null"))
 				player.sendMessage(message);
 
 			if (queue.getDestination() != null) {
 				// Teleport incoming BungeeCord player
-				BungeeQueueType queueType = queue.getQueueType();
+				final BungeeQueueType queueType = queue.getQueueType();
 				if (queueType == BungeeQueueType.PLAYER) {
-					Location location = queue.getDestination();
+					final Location location = queue.getDestination();
 
 					// Handle player riding entity
 					Entity entity = null;
 					if (queue.getEntityType() != null) {
-						World world = location.getWorld();
+						final World world = location.getWorld();
 						if (queue.getEntityType().isSpawnable()) {
 							// Spawn incoming BungeeCord player's entity
 							entity = world.spawnEntity(location, queue.getEntityType());
@@ -97,13 +97,13 @@ public class PluginPlayerListener implements Listener {
 			}
 
 			// Execute teleport command
-			String command = queue.getCommand();
-			CommandType commandType = queue.getCommandType();
+			final String command = queue.getCommand();
+			final CommandType commandType = queue.getCommandType();
 			if (!command.equals("null"))
 				ExecuteUtil.execCommand(player, command, commandType);
 
 			// Activate cooldown period
-			Long now = Calendar.getInstance().getTimeInMillis();
+			final Long now = Calendar.getInstance().getTimeInMillis();
 			Plugin.lastTeleportTime.put(player.getName(), now);
 		}
 
@@ -120,8 +120,8 @@ public class PluginPlayerListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		String playerName = event.getPlayer().getName();
+	public void onPlayerQuit(final PlayerQuitEvent event) {
+		final String playerName = event.getPlayer().getName();
 
 		// Clear player hashmaps
 		Plugin.lastMessageTime.remove(playerName);
@@ -133,7 +133,7 @@ public class PluginPlayerListener implements Listener {
 
 		// Ok so a player quits the server
 		// If it's a BungeeCord teleport, display a custom quit message
-		String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
+		final String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
 		if (server != null) {
 			String msg = null;
 			if (Conf.useBungeeMessages)
@@ -143,17 +143,17 @@ public class PluginPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerPortal(PlayerPortalEvent event) {
+	public void onPlayerPortal(final PlayerPortalEvent event) {
 		if (event.isCancelled()) {
 			return;
 		}
 
-		Player player = event.getPlayer();
+		final Player player = event.getPlayer();
 
 		// Ok so a player portal event begins
 		// Find the nearest gate!
-		WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(player));
-		Gate nearestGate = Gates.gateFromPortal(playerCoord);
+		final WorldCoord playerCoord = new WorldCoord(this.playerLocationAtEvent.get(player));
+		final Gate nearestGate = Gates.gateFromPortal(playerCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -169,7 +169,7 @@ public class PluginPlayerListener implements Listener {
 			}
 
 			// Get current time
-			Long now = Calendar.getInstance().getTimeInMillis();
+			final Long now = Calendar.getInstance().getTimeInMillis();
 
 			// Check player has passed cooldown period
 			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis()) {
@@ -217,13 +217,13 @@ public class PluginPlayerListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onEntityPortalEnterEvent(EntityPortalEnterEvent event) {
+	public void onEntityPortalEnterEvent(final EntityPortalEnterEvent event) {
 		if (event.getEntity() instanceof Player) {
-			Player player = (Player) event.getEntity();
+			final Player player = (Player) event.getEntity();
 
 			// Ok so a player enters a portal
 			// Immediately record their location
-			Location playerLocation = event.getLocation();
+			final Location playerLocation = event.getLocation();
 			this.playerLocationAtEvent.put(player, playerLocation);
 		}
 	}

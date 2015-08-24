@@ -34,8 +34,8 @@ public class CommandRemFrom extends BaseCommand {
 		}
 
 		// Find the nearest gate based on the player's location
-		Location playerLocation = player.getLocation();
-		String nearestFrom = GateUtil.nearestFrom(playerLocation);
+		final Location playerLocation = player.getLocation();
+		final String nearestFrom = GateUtil.nearestFrom(playerLocation);
 
 		if (nearestFrom.isEmpty()) {
 			sendMessage("No nearby \"from\" location for gate \"" + gate.getId() + "\".");

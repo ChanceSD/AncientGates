@@ -22,25 +22,25 @@ import com.google.gson.Gson;
 
 public class SocketServer implements Runnable {
 
-	private int maxClient;
-	private String password;
+	private final int maxClient;
+	private final String password;
 	private ServerSocket listener;
-	private List<ClientConnectionThread> clients;
+	private final List<ClientConnectionThread> clients;
 	private Thread thread;
-	private List<SocketServerEventListener> clientListeners;
+	private final List<SocketServerEventListener> clientListeners;
 	private boolean isRunning;
-	private Set<Integer> ids;
+	private final Set<Integer> ids;
 
-	public SocketServer(int clientCount, int port, String password) throws BindException {
+	public SocketServer(final int clientCount, final int port, final String password) throws BindException {
 		this.maxClient = clientCount;
 		this.password = TextUtil.md5(password);
 		try {
 			this.listener = new ServerSocket(port);
 			this.start();
 			Plugin.log("Server started on port " + port + ".");
-		} catch (BindException e) {
+		} catch (final BindException e) {
 			throw new BindException();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Plugin.log("Error starting listener on port " + port + ".");
 			e.printStackTrace();
 		}
@@ -49,8 +49,8 @@ public class SocketServer implements Runnable {
 		this.ids = new HashSet<Integer>();
 	}
 
-	public synchronized void removeClient(int id) {
-		ClientConnectionThread th = this.clients.get(this.getClientIndex(id));
+	public synchronized void removeClient(final int id) {
+		final ClientConnectionThread th = this.clients.get(this.getClientIndex(id));
 		this.fireClientDisconnectEvent(new ClientConnectionEvent(th.getSocket(), id, ConnectionState.DISCONNECTED));
 		th.stop();
 
@@ -62,13 +62,13 @@ public class SocketServer implements Runnable {
 		while (thread != null && this.isRunning) {
 			try {
 				this.addThread(this.listener.accept());
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				Plugin.log("Error while accepting client.");
 			}
 		}
 	}
 
-	private int getClientIndex(int id) {
+	private int getClientIndex(final int id) {
 		for (int i = 0; i < this.clients.size(); i++) {
 			if (this.clients.get(i).getID() == id)
 				return i;
@@ -76,13 +76,13 @@ public class SocketServer implements Runnable {
 		return -1;
 	}
 
-	private void addThread(Socket client) {
+	private void addThread(final Socket client) {
 		if (this.clients.size() >= this.maxClient && this.maxClient > 0) {
 			Plugin.log("Refused client: maximum reached.");
 			return;
 		}
 
-		ClientConnectionThread th = new ClientConnectionThread(this.getNewID(), this, client);
+		final ClientConnectionThread th = new ClientConnectionThread(this.getNewID(), this, client);
 		this.fireClientConnectEvent(new ClientConnectionEvent(client, th.getID(), ConnectionState.CONNECTED));
 		this.clients.add(th);
 
@@ -102,28 +102,28 @@ public class SocketServer implements Runnable {
 			try {
 				this.listener.close();
 				Plugin.log("Server stopped.");
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				Plugin.log("Error while closing server socket.");
 			}
 			thread = null;
 		}
 	}
 
-	public void sendToClient(int client, Packet data) {
-		Packets p = new Packets();
+	public void sendToClient(final int client, final Packet data) {
+		final Packets p = new Packets();
 		p.packets = new Packet[] { data };
 		this.sendToClient(client, p);
 	}
 
-	public void sendToClient(int client, Packets data) {
-		Gson gson = new Gson();
-		String json = gson.toJson(data, Packets.class);
+	public void sendToClient(final int client, final Packets data) {
+		final Gson gson = new Gson();
+		final String json = gson.toJson(data, Packets.class);
 
-		int clientIndex = this.getClientIndex(client);
+		final int clientIndex = this.getClientIndex(client);
 		if (clientIndex < 0)
 			return;
 
-		ClientConnectionThread th = this.clients.get(clientIndex);
+		final ClientConnectionThread th = this.clients.get(clientIndex);
 		th.send(json);
 	}
 
@@ -140,55 +140,55 @@ public class SocketServer implements Runnable {
 		return found;
 	}
 
-	private boolean isIDAvaible(int id) {
+	private boolean isIDAvaible(final int id) {
 		return !this.ids.contains(id);
 	}
 
-	public void handle(int client, String input) {
-		Gson gson = new Gson();
-		Packets packets = gson.fromJson(input, Packets.class);
-		for (Packet p : packets.packets) {
+	public void handle(final int client, final String input) {
+		final Gson gson = new Gson();
+		final Packets packets = gson.fromJson(input, Packets.class);
+		for (final Packet p : packets.packets) {
 			this.fireClientRecieveEvent(new ClientRecieveEvent(client, this.clients.get(this.getClientIndex(client)).getSocket(), p));
 		}
 	}
 
 	public void close() {
 		try {
-			for (ClientConnectionThread th : this.clients) {
+			for (final ClientConnectionThread th : this.clients) {
 				th.close();
 				th.stop();
 			}
 			this.clientListeners.clear();
 			this.listener.close();
 			this.stop();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void fireClientConnectEvent(ClientConnectionEvent event) {
-		for (SocketServerEventListener listener : this.clientListeners) {
+	private void fireClientConnectEvent(final ClientConnectionEvent event) {
+		for (final SocketServerEventListener listener : this.clientListeners) {
 			listener.onClientConnect(event);
 		}
 	}
 
-	private void fireClientDisconnectEvent(ClientConnectionEvent event) {
-		for (SocketServerEventListener listener : this.clientListeners) {
+	private void fireClientDisconnectEvent(final ClientConnectionEvent event) {
+		for (final SocketServerEventListener listener : this.clientListeners) {
 			listener.onClientDisconnect(event);
 		}
 	}
 
-	private void fireClientRecieveEvent(ClientRecieveEvent event) {
-		for (SocketServerEventListener listener : this.clientListeners) {
+	private void fireClientRecieveEvent(final ClientRecieveEvent event) {
+		for (final SocketServerEventListener listener : this.clientListeners) {
 			listener.onClientRecieve(event);
 		}
 	}
 
-	public void addClientListener(SocketServerEventListener listener) {
+	public void addClientListener(final SocketServerEventListener listener) {
 		this.clientListeners.add(listener);
 	}
 
-	public void removeClientListener(SocketServerEventListener listener) {
+	public void removeClientListener(final SocketServerEventListener listener) {
 		this.clientListeners.remove(listener);
 	}
 

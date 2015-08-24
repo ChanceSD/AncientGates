@@ -47,7 +47,7 @@ public class CommandServerList extends BaseCommand {
 		if (parameters.size() > 0) {
 			try {
 				tmpPage = Integer.parseInt(parameters.get(0));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				// wasn't an integer
 			}
 		}
@@ -58,8 +58,8 @@ public class CommandServerList extends BaseCommand {
 		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 			public void run() {
 				// Create list of SocketComms servers
-				List<String> servers = new ArrayList<String>();
-				for (Server server : Server.getAll()) {
+				final List<String> servers = new ArrayList<String>();
+				for (final Server server : Server.getAll()) {
 					servers.add(Conf.colorValue + server.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: " + ((Plugin.bungeeServerList.contains(server.getName())) ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorSystem + ", SC: "
 		                    + Conf.colorParameter + ((server.getState() == ConnectionState.CONNECTED) ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorChrome + ")");
 				}

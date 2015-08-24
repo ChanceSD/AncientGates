@@ -22,26 +22,26 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 	private static final String YAW = "yaw";
 	private static final String PITCH = "pitch";
 
-	public Location deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		JsonObject obj = json.getAsJsonObject();
+	public Location deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
+		final JsonObject obj = json.getAsJsonObject();
 
 		Location location = null;
-		World world = this.getWorld(obj.get(WORLD).getAsString());
+		final World world = this.getWorld(obj.get(WORLD).getAsString());
 
 		if (world != null) {
-			double x = obj.get(X).getAsDouble();
-			double y = obj.get(Y).getAsDouble();
-			double z = obj.get(Z).getAsDouble();
-			float yaw = obj.get(YAW).getAsFloat();
-			float pitch = obj.get(PITCH).getAsFloat();
+			final double x = obj.get(X).getAsDouble();
+			final double y = obj.get(Y).getAsDouble();
+			final double z = obj.get(Z).getAsDouble();
+			final float yaw = obj.get(YAW).getAsFloat();
+			final float pitch = obj.get(PITCH).getAsFloat();
 			location = new Location(world, x, y, z, yaw, pitch);
 		}
 
 		return location;
 	}
 
-	public JsonElement serialize(Location src, Type typeOfSrc, JsonSerializationContext context) {
-		JsonObject obj = new JsonObject();
+	public JsonElement serialize(final Location src, final Type typeOfSrc, final JsonSerializationContext context) {
+		final JsonObject obj = new JsonObject();
 
 		if (src == null) {
 			Plugin.log("Passed location is null in MyLocationTypeAdapter.");
@@ -61,8 +61,8 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 		return obj;
 	}
 
-	private World getWorld(String name) {
-		World world = Plugin.instance.getServer().getWorld(name);
+	private World getWorld(final String name) {
+		final World world = Plugin.instance.getServer().getWorld(name);
 		return world;
 	}
 

@@ -20,20 +20,20 @@ public class Packet {
 	// Constructors
 	// ----------------------------------------------//
 	// Command packet
-	public Packet(String command, String[] args) {
+	public Packet(final String command, final String[] args) {
 		this.command = command;
 		this.args = args;
 	}
 
 	// Command packet (with response)
-	public Packet(String command, String responseTo, String[] args) {
+	public Packet(final String command, final String responseTo, final String[] args) {
 		this.command = command;
 		this.responseCommand = responseTo;
 		this.args = args;
 	}
 
 	// Spawn Entity packet
-	public Packet(Entity entity, EntityType entityType, Map<String, String> destination) {
+	public Packet(final Entity entity, final EntityType entityType, final Map<String, String> destination) {
 		this.command = "spawnentity";
 		// Build the arguments, format is
 		// <entityId>,<entityWorld>,<entityTypeName>,<entityTypeData>,<location>
@@ -46,7 +46,7 @@ public class Packet {
 	}
 
 	// Spawn Vehicle packet
-	public Packet(Entity vehicle, double velocity, Map<String, String> destination) {
+	public Packet(final Entity vehicle, final double velocity, final Map<String, String> destination) {
 		this.command = "spawnvehicle";
 		// Build the arguments, format is
 		// <vehicleId>,<vehicleWorld>,<vehicleTypeName>,<velocity>,<location>[,<entityId>,<entityTypeName>,<entityTypeData>]
@@ -57,19 +57,19 @@ public class Packet {
 	// Setters
 	// ----------------------------------------------//
 	// Ammend arg to command packet
-	public void ammendArg(String arg, int pos) {
+	public void ammendArg(final String arg, final int pos) {
 		this.args[pos] = arg;
 	}
 
 	// Append passenger args to vehicle packet
-	public void addPassenger(Entity passenger) {
+	public void addPassenger(final Entity passenger) {
 		this.ammendArg(String.valueOf(passenger.getEntityId()), 5);
 		this.ammendArg(passenger.getType().name(), 6);
 		this.ammendArg(EntityUtil.getEntityTypeData(passenger), 7);
 	}
 
 	// Append itemstack arg to vehicle packet
-	public void addItemStack(ItemStack[] itemStack) {
+	public void addItemStack(final ItemStack[] itemStack) {
 		this.ammendArg(ItemStackUtil.itemStackToString(itemStack), 5);
 	}
 

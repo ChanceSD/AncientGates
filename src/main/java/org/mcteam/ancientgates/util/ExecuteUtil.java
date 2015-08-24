@@ -12,7 +12,7 @@ import org.mcteam.ancientgates.util.types.CommandType;
 public class ExecuteUtil {
 
 	// Execute command as player or console
-	public static void execCommand(Player player, String command, CommandType commandType) {
+	public static void execCommand(final Player player, String command, final CommandType commandType) {
 		// Insert any player substitution variables
 		command = command.replace("%p", player.getName());
 
@@ -27,10 +27,10 @@ public class ExecuteUtil {
 	}
 
 	// Teleport player back from gate and execute command
-	public static void execCommand(Player player, String command, CommandType commandType, Boolean teleport) {
+	public static void execCommand(final Player player, final String command, final CommandType commandType, final Boolean teleport) {
 		// Spin player 180 deg
 		if (teleport) {
-			Location position = player.getLocation();
+			final Location position = player.getLocation();
 			float yaw = position.getYaw();
 			if ((yaw += 180) > 360) {
 				yaw -= 360;
@@ -57,12 +57,12 @@ public class ExecuteUtil {
 	}
 
 	// Teleport vehicle back from gate and execute command
-	public static void execCommand(Vehicle vehicle, final String command, final CommandType commandType, Boolean teleport) {
+	public static void execCommand(final Vehicle vehicle, final String command, final CommandType commandType, final Boolean teleport) {
 		final Entity passenger = vehicle.getPassenger();
 
 		// Spin player 180 deg
 		if (teleport) {
-			Location position = vehicle.getLocation();
+			final Location position = vehicle.getLocation();
 			float yaw = position.getYaw();
 			if ((yaw += 180) > 360) {
 				yaw -= 360;

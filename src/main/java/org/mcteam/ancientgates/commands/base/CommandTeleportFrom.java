@@ -28,7 +28,7 @@ public class CommandTeleportFrom extends BaseCommand {
 		if (parameters.size() > 1) {
 			try {
 				from = Integer.parseInt(parameters.get(1));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				// wasn't an integer
 			}
 		}
@@ -43,7 +43,7 @@ public class CommandTeleportFrom extends BaseCommand {
 		} else {
 			TeleportUtil.teleportPlayer(player, gate.getFroms().get(from), false, InvBoolean.TRUE);
 
-			Long now = Calendar.getInstance().getTimeInMillis() + 1000;
+			final Long now = Calendar.getInstance().getTimeInMillis() + 1000;
 			Plugin.lastTeleportTime.put(player.getName(), now);
 		}
 	}

@@ -38,21 +38,21 @@ public class PluginBlockListener implements Listener {
 
 	public Plugin plugin;
 
-	public PluginBlockListener(Plugin plugin) {
+	public PluginBlockListener(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockBreak(BlockBreakEvent event) {
+	public void onBlockBreak(final BlockBreakEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		// Ok so a player breaks a portal/frame block
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromAll(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromAll(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -60,16 +60,16 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockBurn(BlockBurnEvent event) {
+	public void onBlockBurn(final BlockBurnEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		// Ok so a frame block is burning
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -77,16 +77,16 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockIgnite(BlockIgniteEvent event) {
+	public void onBlockIgnite(final BlockIgniteEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		// Ok so a frame block ignites
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -94,16 +94,16 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockSpread(BlockSpreadEvent event) {
+	public void onBlockSpread(final BlockSpreadEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		// Ok so a frame block fire spreads
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -111,16 +111,16 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockPlace(BlockPlaceEvent event) {
+	public void onBlockPlace(final BlockPlaceEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		// Ok so a player places near a portal block
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromPortalAndSurround(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromPortalAndSurround(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -128,15 +128,15 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+	public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
 		if (event.isCancelled())
 			return;
 
-		for (Block block : event.getBlocks()) {
+		for (final Block block : event.getBlocks()) {
 			// Ok so a block is pushed into a frame block
 			// Find the nearest gate!
-			WorldCoord blockCoord = new WorldCoord(block);
-			Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
+			final WorldCoord blockCoord = new WorldCoord(block);
+			final Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
 
 			if (nearestGate != null) {
 				event.setCancelled(true);
@@ -147,16 +147,16 @@ public class PluginBlockListener implements Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+	public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getRetractLocation().getBlock();
+		final Block block = event.getRetractLocation().getBlock();
 
 		// Ok so a block is pulled from a frame block
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromFrameAndSurround(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -165,19 +165,19 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerBucketEmpty(PlayerBucketEmptyEvent event) {
+	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlockClicked();
-		Block blockUp = block.getRelative(BlockFace.UP);
+		final Block block = event.getBlockClicked();
+		final Block blockUp = block.getRelative(BlockFace.UP);
 
 		// Ok so a player empties a bucket near on portal/frame block
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		WorldCoord blockCoordUp = new WorldCoord(blockUp);
-		Gate nearestGate = Gates.gateFromAll(blockCoord);
-		Gate nearestGateUp = Gates.gateFromAll(blockCoordUp);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final WorldCoord blockCoordUp = new WorldCoord(blockUp);
+		final Gate nearestGate = Gates.gateFromAll(blockCoord);
+		final Gate nearestGateUp = Gates.gateFromAll(blockCoordUp);
 
 		if (nearestGate != null || nearestGateUp != null) {
 			event.setCancelled(true);
@@ -185,19 +185,19 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onPlayerBucketFill(PlayerBucketFillEvent event) {
+	public void onPlayerBucketFill(final PlayerBucketFillEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlockClicked();
-		Block blockUp = block.getRelative(BlockFace.UP);
+		final Block block = event.getBlockClicked();
+		final Block blockUp = block.getRelative(BlockFace.UP);
 
 		// Ok so a player fills a bucket on a portal block
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		WorldCoord blockCoordUp = new WorldCoord(blockUp);
-		Gate nearestGate = Gates.gateFromPortal(blockCoord);
-		Gate nearestGateUp = Gates.gateFromPortal(blockCoordUp);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final WorldCoord blockCoordUp = new WorldCoord(blockUp);
+		final Gate nearestGate = Gates.gateFromPortal(blockCoord);
+		final Gate nearestGateUp = Gates.gateFromPortal(blockCoordUp);
 
 		if (nearestGate != null || nearestGateUp != null) {
 			event.setCancelled(true);
@@ -205,17 +205,17 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH)
-	public void onEntityExplode(EntityExplodeEvent event) {
-		List<Block> destroyed = event.blockList();
-		Iterator<Block> it = destroyed.iterator();
+	public void onEntityExplode(final EntityExplodeEvent event) {
+		final List<Block> destroyed = event.blockList();
+		final Iterator<Block> it = destroyed.iterator();
 
 		while (it.hasNext()) {
-			Block block = it.next();
+			final Block block = it.next();
 
 			// Ok so an explosion happens near a portal block
 			// Find the nearest gate!
-			WorldCoord blockCoord = new WorldCoord(block);
-			Gate nearestGate = Gates.gateFromAll(blockCoord);
+			final WorldCoord blockCoord = new WorldCoord(block);
+			final Gate nearestGate = Gates.gateFromAll(blockCoord);
 
 			// If a gate block, remove from explosion
 			if (nearestGate != null) {
@@ -225,12 +225,12 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockPhysics(BlockPhysicsEvent event) {
+	public void onBlockPhysics(final BlockPhysicsEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
-		WorldCoord coord = new WorldCoord(block);
+		final Block block = event.getBlock();
+		final WorldCoord coord = new WorldCoord(block);
 
 		// Stop portal blocks from breaking
 		if (BlockUtil.isStandableGateMaterial(block.getType()) && Gates.gateFromPortal(coord) != null) {
@@ -246,19 +246,19 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockFromTo(BlockFromToEvent event) {
+	public void onBlockFromTo(final BlockFromToEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		if (!block.getType().equals(Material.STATIONARY_WATER) && !block.getType().equals(Material.STATIONARY_LAVA))
 			return;
 
 		// Ok so water/lava starts flowing within a portal frame
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromPortal(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromPortal(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -266,16 +266,16 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockForm(BlockFormEvent event) {
+	public void onBlockForm(final BlockFormEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getBlock();
+		final Block block = event.getBlock();
 
 		// Ok so blocks starts forming within a portal frame
 		// Find the nearest gate!
-		WorldCoord blockCoord = new WorldCoord(block);
-		Gate nearestGate = Gates.gateFromPortal(blockCoord);
+		final WorldCoord blockCoord = new WorldCoord(block);
+		final Gate nearestGate = Gates.gateFromPortal(blockCoord);
 
 		if (nearestGate != null) {
 			event.setCancelled(true);
@@ -283,12 +283,12 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onBlockGrow(BlockGrowEvent event) {
+	public void onBlockGrow(final BlockGrowEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getNewState().getBlock();
-		WorldCoord coord = new WorldCoord(block);
+		final Block block = event.getNewState().getBlock();
+		final WorldCoord coord = new WorldCoord(block);
 
 		// Stop sugarcane blocks from growing
 		if (BlockUtil.isStandableGateMaterial(event.getNewState().getType()) && Gates.gateFromPortalSurround(coord) != null) {
@@ -297,15 +297,15 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(final PlayerInteractEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Block block = event.getClickedBlock();
+		final Block block = event.getClickedBlock();
 		if (block == null)
 			return;
 
-		WorldCoord coord = new WorldCoord(block);
+		final WorldCoord coord = new WorldCoord(block);
 
 		// Stop piston moving pieces (false air) disappearing
 		if (BlockUtil.isStandableGateMaterial(event.getClickedBlock().getType()) && Gates.gateFromPortal(coord) != null) {
@@ -314,17 +314,17 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL)
-	public void onItemSpawn(ItemSpawnEvent event) {
+	public void onItemSpawn(final ItemSpawnEvent event) {
 		if (event.isCancelled())
 			return;
 
-		Entity item = event.getEntity();
+		final Entity item = event.getEntity();
 		if (item.getType() != EntityType.DROPPED_ITEM || ((Item) item).getItemStack().getType() != Material.SUGAR_CANE)
 			return;
 
 		// Stop sugarcane block from decaying (workaround for lack of 1.7.2-R0.1 physics support)
 		final WorldCoord coord = new WorldCoord((Item) item);
-		Gate nearestGate = Gates.gateFromPortal(coord);
+		final Gate nearestGate = Gates.gateFromPortal(coord);
 
 		if (nearestGate != null) {
 			if (nearestGate.getMaterial() != Material.SUGAR_CANE_BLOCK)

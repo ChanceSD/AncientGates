@@ -28,19 +28,19 @@ public enum GateMaterial {
 	private static final Map<String, GateMaterial> nameToMaterial = new HashMap<String, GateMaterial>();
 
 	static {
-		for (GateMaterial value : EnumSet.allOf(GateMaterial.class)) {
+		for (final GateMaterial value : EnumSet.allOf(GateMaterial.class)) {
 			nameToMaterial.put(value.name(), value);
 		}
 	}
 
-	public static GateMaterial fromName(String name) {
+	public static GateMaterial fromName(final String name) {
 		return nameToMaterial.get(name);
 	}
 
 	public static final String[] names = new String[values().length];
 
 	static {
-		GateMaterial[] values = values();
+		final GateMaterial[] values = values();
 		for (int i = 0; i < values.length; i++)
 			names[i] = values[i].name();
 	}

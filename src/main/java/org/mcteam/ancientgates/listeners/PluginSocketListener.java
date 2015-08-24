@@ -18,23 +18,23 @@ import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginSocketListener implements SocketServerEventListener {
 
-	public void onClientRecieve(ClientRecieveEvent event) {
+	public void onClientRecieve(final ClientRecieveEvent event) {
 		if (!Conf.bungeeCordSupport || !Conf.useSocketComms) {
 			return;
 		}
 
 		// Get command from message
-		String command = event.getCommand();
+		final String command = event.getCommand();
 
 		// Parse "setto" command
 		if (command.toLowerCase().equals("setto")) {
 			// Data should be player, server, id and command data
-			String[] parts = event.getArguments();
-			String player = parts[0];
-			String server = parts[1];
-			String gateid = parts[2];
-			String location = parts[3];
-			String fromserver = parts[4];
+			final String[] parts = event.getArguments();
+			final String player = parts[0];
+			final String server = parts[1];
+			final String gateid = parts[2];
+			final String location = parts[3];
+			final String fromserver = parts[4];
 
 			// Message response
 			String response;
@@ -48,7 +48,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 				// Get gate
 			} else {
-				Gate gate = Gate.get(gateid);
+				final Gate gate = Gate.get(gateid);
 
 				// Set gate location
 				if (gate.getBungeeTos() == null || gate.getBungeeTos().size() <= 1) {
@@ -66,8 +66,8 @@ public class PluginSocketListener implements SocketServerEventListener {
 			}
 
 			// Build the packet, format is <message>
-			String[] args = { response };
-			Packet packet = new Packet("sendmsg", "setto", args);
+			final String[] args = { response };
+			final Packet packet = new Packet("sendmsg", "setto", args);
 
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
@@ -76,12 +76,12 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Parse "addto" command
 		} else if (command.toLowerCase().equals("addto")) {
 			// Data should be player, server, id and command data
-			String[] parts = event.getArguments();
-			String player = parts[0];
-			String server = parts[1];
-			String gateid = parts[2];
-			String location = parts[3];
-			String fromserver = parts[4];
+			final String[] parts = event.getArguments();
+			final String player = parts[0];
+			final String server = parts[1];
+			final String gateid = parts[2];
+			final String location = parts[3];
+			final String fromserver = parts[4];
 
 			// Message response
 			String response;
@@ -95,7 +95,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 				// Get gate
 			} else {
-				Gate gate = Gate.get(gateid);
+				final Gate gate = Gate.get(gateid);
 
 				// Add gate location
 				if (gate.getBungeeTos() != null && gate.getBungeeTos().size() >= 1) {
@@ -112,8 +112,8 @@ public class PluginSocketListener implements SocketServerEventListener {
 			}
 
 			// Build the packet, format is <message>
-			String[] args = { response };
-			Packet packet = new Packet("sendmsg", "addto", args);
+			final String[] args = { response };
+			final Packet packet = new Packet("sendmsg", "addto", args);
 
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
@@ -122,12 +122,12 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Parse "remto" command
 		} else if (command.toLowerCase().equals("remto")) {
 			// Data should be player, server, id and command data
-			String[] parts = event.getArguments();
-			String player = parts[0];
-			String server = parts[1];
-			String gateid = parts[2];
-			String location = parts[3];
-			String fromserver = parts[4];
+			final String[] parts = event.getArguments();
+			final String player = parts[0];
+			final String server = parts[1];
+			final String gateid = parts[2];
+			final String location = parts[3];
+			final String fromserver = parts[4];
 
 			// Message response
 			String response;
@@ -141,7 +141,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 				// Get gate
 			} else {
-				Gate gate = Gate.get(gateid);
+				final Gate gate = Gate.get(gateid);
 
 				// Display no to exists response
 				if (gate.getBungeeTos() == null) {
@@ -150,7 +150,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 					// Remove gate location
 				} else {
-					String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(location));
+					final String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(location));
 
 					if (nearestBungeeTo.isEmpty()) {
 						response = "No nearby \"to\" location for gate \"" + gateid + "\" on server \"" + fromserver + "\".";
@@ -163,8 +163,8 @@ public class PluginSocketListener implements SocketServerEventListener {
 			}
 
 			// Build the packet, format is <message>
-			String[] args = { response };
-			Packet packet = new Packet("sendmsg", "remto", args);
+			final String[] args = { response };
+			final Packet packet = new Packet("sendmsg", "remto", args);
 
 			// Sent to querying server
 			Plugin.serv.sendToClient(event.getID(), packet);
@@ -173,16 +173,16 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Parse "spawnentity" command
 		} else if (command.toLowerCase().equals("spawnentity")) {
 			// Data should be entity id, entity world, entitytype id and destination location
-			String[] parts = event.getArguments();
-			String entityId = parts[0];
-			String entityWorld = parts[1];
-			String entityTypeName = parts[2];
-			String entityTypeData = parts[3];
-			String destination = parts[4];
+			final String[] parts = event.getArguments();
+			final String entityId = parts[0];
+			final String entityWorld = parts[1];
+			final String entityTypeName = parts[2];
+			final String entityTypeData = parts[3];
+			final String destination = parts[4];
 
 			// Build the packet, format is <message>
-			String[] args = { entityWorld, entityId };
-			Packet packet = new Packet("removeentity", "spawnentity", args);
+			final String[] args = { entityWorld, entityId };
+			final Packet packet = new Packet("removeentity", "spawnentity", args);
 
 			if (EntityUtil.entityType(entityTypeName).isSpawnable() || EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
 				// Add entity to spawn queue
@@ -204,12 +204,12 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Data should be vehicle id, vehicle world, vehicletype id, velocity and destination
 			// location
 			// [additionally entity id, entitytype id and entitytype data]
-			String[] parts = event.getArguments();
-			String vehicleId = parts[0];
-			String vehicleWorld = parts[1];
-			String vehicleTypeName = parts[2];
-			double velocity = Double.parseDouble(parts[3]);
-			String destination = parts[4];
+			final String[] parts = event.getArguments();
+			final String vehicleId = parts[0];
+			final String vehicleWorld = parts[1];
+			final String vehicleTypeName = parts[2];
+			final double velocity = Double.parseDouble(parts[3]);
+			final String destination = parts[4];
 
 			// Initialise spawn queue
 			BungeeQueue queue;
@@ -217,9 +217,9 @@ public class PluginSocketListener implements SocketServerEventListener {
 			// Parse passenger info
 			String[] args = null;
 			if (parts[6] != null) {
-				String entityId = parts[5];
-				String entityTypeName = parts[6];
-				String entityTypeData = parts[7];
+				final String entityId = parts[5];
+				final String entityTypeName = parts[6];
+				final String entityTypeData = parts[7];
 
 				// Build spawn queue (incl. passenger info)
 				queue = new BungeeQueue(vehicleTypeName, velocity, destination, entityTypeName, entityTypeData);
@@ -228,7 +228,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				args = new String[] { vehicleWorld, vehicleId, entityId };
 				// Parse contents info
 			} else if (parts[5] != null) {
-				String entityItemStack = parts[5];
+				final String entityItemStack = parts[5];
 
 				// Build spawn queue (incl. contents info)
 				queue = new BungeeQueue(vehicleTypeName, velocity, destination, entityItemStack);
@@ -242,7 +242,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 				// Build the packet, format is <message>
 				args = new String[] { vehicleWorld, vehicleId };
 			}
-			Packet packet = new Packet("removevehicle", "spawnvehicle", args);
+			final Packet packet = new Packet("removevehicle", "spawnvehicle", args);
 
 			// Add entity to spawn queue
 			Plugin.bungeeCordVehicleInQueue.add(queue);
@@ -259,7 +259,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			Plugin.serv.removeClient(event.getID());
 			// Parse "ping" command
 		} else if (command.toLowerCase().equals("ping")) {
-			Packet packet = new Packet("pong", "ping", new String[] {});
+			final Packet packet = new Packet("pong", "ping", new String[] {});
 
 			// Send pong command back to client
 			Plugin.serv.sendToClient(event.getID(), packet);
@@ -267,12 +267,12 @@ public class PluginSocketListener implements SocketServerEventListener {
 		}
 	}
 
-	public void onClientConnect(ClientConnectionEvent event) {
+	public void onClientConnect(final ClientConnectionEvent event) {
 		if (Conf.debug)
 			Plugin.log("Socket client connected " + event.getClientID() + ".");
 	}
 
-	public void onClientDisconnect(ClientConnectionEvent event) {
+	public void onClientDisconnect(final ClientConnectionEvent event) {
 		if (Conf.debug)
 			Plugin.log("Socket client disconnected " + event.getClientID() + ".");
 	}

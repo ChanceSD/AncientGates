@@ -20,8 +20,8 @@ public class CommandRename extends BaseCommand {
 
 	@Override
 	public void perform() {
-		String id = parameters.get(0);
-		String newid = parameters.get(1);
+		final String id = parameters.get(0);
+		final String newid = parameters.get(1);
 
 		gate.rename(id, newid);
 		sendMessage("Gate with id \"" + id + "\" was renamed to \"" + newid + "\".");

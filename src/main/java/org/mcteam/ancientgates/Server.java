@@ -28,7 +28,7 @@ public class Server {
 	// Getters And Setters
 	// -------------------------------------------- //
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -36,7 +36,7 @@ public class Server {
 		return name;
 	}
 
-	public void setAddress(String address) {
+	public void setAddress(final String address) {
 		this.address = address;
 	}
 
@@ -44,7 +44,7 @@ public class Server {
 		return address;
 	}
 
-	public void setPort(int port) {
+	public void setPort(final int port) {
 		this.port = port;
 	}
 
@@ -52,7 +52,7 @@ public class Server {
 		return port;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -60,7 +60,7 @@ public class Server {
 		return password;
 	}
 
-	public void setState(ConnectionState state) {
+	public void setState(final ConnectionState state) {
 		this.state = state;
 	}
 
@@ -71,16 +71,16 @@ public class Server {
 	// ----------------------------------------------//
 	// Persistance and entity management
 	// ----------------------------------------------//
-	public static Server get(String name) {
+	public static Server get(final String name) {
 		return instances.get(name);
 	}
 
-	public static boolean exists(String name) {
+	public static boolean exists(final String name) {
 		return instances.containsKey(name);
 	}
 
-	public static Server add(String name, String address, int port, String password) {
-		Server server = new Server();
+	public static Server add(final String name, final String address, final int port, final String password) {
+		final Server server = new Server();
 		server.name = name;
 		instances.put(server.name, server);
 
@@ -93,24 +93,24 @@ public class Server {
 		return server;
 	}
 
-	public static void remove(String name) {
+	public static void remove(final String name) {
 		// Remove the server
 		instances.remove(name);
 	}
 
 	public static boolean save() {
 		// Clear connection states before saving
-		for (Server server : Server.getAll()) {
+		for (final Server server : Server.getAll()) {
 			server.state = null;
 		}
 
 		try {
 			DiscUtil.write(file, Plugin.gson.toJson(instances));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Plugin.log("Failed to save the servers to disk due to I/O exception.");
 			e.printStackTrace();
 			return false;
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			Plugin.log("Failed to save the servers to disk due to NPE.");
 			e.printStackTrace();
 			return false;
@@ -124,7 +124,7 @@ public class Server {
 		if (!file.exists()) {
 			Plugin.log("No servers to load from disk. Creating new file.");
 
-			Server server = new Server();
+			final Server server = new Server();
 			server.name = (Plugin.bungeeServerName != null) ? Plugin.bungeeServerName : "server1";
 			instances.put(server.name, server);
 			server.address = "localhost";
@@ -136,12 +136,12 @@ public class Server {
 		}
 
 		try {
-			Type type = new TypeToken<Map<String, Server>>() {
+			final Type type = new TypeToken<Map<String, Server>>() {
 			}.getType();
-			Map<String, Server> instancesFromFile = Plugin.gson.fromJson(DiscUtil.read(file), type);
+			final Map<String, Server> instancesFromFile = Plugin.gson.fromJson(DiscUtil.read(file), type);
 			instances.clear();
 			instances.putAll(instancesFromFile);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -157,7 +157,7 @@ public class Server {
 	}
 
 	public static void fillNames() {
-		for (Entry<String, Server> entry : instances.entrySet()) {
+		for (final Entry<String, Server> entry : instances.entrySet()) {
 			entry.getValue().setName(entry.getKey());
 		}
 	}

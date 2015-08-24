@@ -33,8 +33,8 @@ public class CommandAddFrom extends BaseCommand {
 
 		// The player might stand in a half-block or a sign or whatever
 		// Therefore we load some extra locations and blocks
-		Block playerBlock = player.getLocation().getBlock();
-		Block upBlock = playerBlock.getRelative(BlockFace.UP);
+		final Block playerBlock = player.getLocation().getBlock();
+		final Block upBlock = playerBlock.getRelative(BlockFace.UP);
 
 		if (playerBlock.getType() == Material.AIR) {
 			gate.addFrom(playerBlock.getLocation());

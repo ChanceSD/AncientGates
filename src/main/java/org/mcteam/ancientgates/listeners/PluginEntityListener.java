@@ -23,12 +23,12 @@ public class PluginEntityListener implements Listener {
 
 	public Plugin plugin;
 
-	public PluginEntityListener(Plugin plugin) {
+	public PluginEntityListener(final Plugin plugin) {
 		this.plugin = plugin;
 	}
 
 	@EventHandler
-	public void onEntityPortal(EntityPortalEvent event) {
+	public void onEntityPortal(final EntityPortalEvent event) {
 		if (event.isCancelled()) {
 			return;
 		}
@@ -36,8 +36,8 @@ public class PluginEntityListener implements Listener {
 		if (!(event.getEntity() instanceof Player) && !(event.getEntity().getPassenger() instanceof Player)) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
-			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
-			Gate nearestGate = GateUtil.nearestGate(entityCoord, true);
+			final WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			final Gate nearestGate = GateUtil.nearestGate(entityCoord, true);
 
 			if (nearestGate != null) {
 				event.setCancelled(true);
@@ -68,13 +68,13 @@ public class PluginEntityListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-	public void onCreatureSpawn(CreatureSpawnEvent event) {
+	public void onCreatureSpawn(final CreatureSpawnEvent event) {
 
 		if (event.getEntity() instanceof PigZombie) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
-			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
-			Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
+			final WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			final Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
 
 			if (nearestGate != null) {
 				event.setCancelled(true);
@@ -83,16 +83,16 @@ public class PluginEntityListener implements Listener {
 	}
 
 	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event) {
+	public void onEntityDamage(final EntityDamageEvent event) {
 
 		if (event.getCause() == DamageCause.DROWNING || event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.LAVA) {
 
 			// Ok so an entity damage event begins
 			// Find the nearest gate!
-			WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
-			WorldCoord entityCoordUp = new WorldCoord(event.getEntity().getLocation().getBlock().getRelative(BlockFace.UP));
-			Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
-			Gate nearestGateUp = GateUtil.nearestGate(entityCoordUp, false);
+			final WorldCoord entityCoord = new WorldCoord(event.getEntity().getLocation());
+			final WorldCoord entityCoordUp = new WorldCoord(event.getEntity().getLocation().getBlock().getRelative(BlockFace.UP));
+			final Gate nearestGate = GateUtil.nearestGate(entityCoord, false);
+			final Gate nearestGateUp = GateUtil.nearestGate(entityCoordUp, false);
 
 			if (nearestGate != null || nearestGateUp != null) {
 				event.setCancelled(true);

@@ -38,45 +38,45 @@ public class Gates {
 	// -------------------------------------------- //
 	// Getters And Setters
 	// -------------------------------------------- //
-	public static Gate gateFromPortal(WorldCoord coord) {
+	public static Gate gateFromPortal(final WorldCoord coord) {
 		return portalBlockToGate.get(coord);
 	}
 
-	public static Gate gateFromPortalSurround(WorldCoord coord) {
+	public static Gate gateFromPortalSurround(final WorldCoord coord) {
 		return surroundingPortalBlockToGate.get(coord);
 	}
 
-	public static Gate gateFromPortalAndSurround(WorldCoord coord) {
-		Gate gate = gateFromPortalSurround(coord);
+	public static Gate gateFromPortalAndSurround(final WorldCoord coord) {
+		final Gate gate = gateFromPortalSurround(coord);
 		if (gate != null)
 			return gate;
 		return gateFromPortal(coord);
 	}
 
-	public static Gate gateFromFrame(WorldCoord coord) {
+	public static Gate gateFromFrame(final WorldCoord coord) {
 		return frameBlockToGate.get(coord);
 	}
 
-	public static Gate gateFromFrameSurround(WorldCoord coord) {
+	public static Gate gateFromFrameSurround(final WorldCoord coord) {
 		return surroundingFrameBlockToGate.get(coord);
 	}
 
-	public static Gate gateFromFrameAndSurround(WorldCoord coord) {
-		Gate gate = gateFromFrameSurround(coord);
+	public static Gate gateFromFrameAndSurround(final WorldCoord coord) {
+		final Gate gate = gateFromFrameSurround(coord);
 		if (gate != null)
 			return gate;
 		return gateFromFrame(coord);
 	}
 
-	public static Gate gateFromAll(WorldCoord coord) {
-		Gate gate = gateFromFrame(coord);
+	public static Gate gateFromAll(final WorldCoord coord) {
+		final Gate gate = gateFromFrame(coord);
 		if (gate != null)
 			return gate;
 		return gateFromPortalAndSurround(coord);
 	}
 
-	public static Gate gateFromAllWithSurround(WorldCoord coord) {
-		Gate gate = gateFromFrameAndSurround(coord);
+	public static Gate gateFromAllWithSurround(final WorldCoord coord) {
+		final Gate gate = gateFromFrameAndSurround(coord);
 		if (gate != null)
 			return gate;
 		return gateFromPortalAndSurround(coord);
@@ -85,7 +85,7 @@ public class Gates {
 	// ----------------------------------------------//
 	// The Open & Close Methods
 	// ----------------------------------------------//
-	public static boolean open(Gate gate) {
+	public static boolean open(final Gate gate) {
 		// Re-populate data
 		if (!gate.dataPopulate())
 			return false;
@@ -95,16 +95,16 @@ public class Gates {
 		// This is not to do an effect
 		// It is to stop portalblocks from destroying themselves as they can't rely on air blocks
 		if (BlockUtil.isPortalGateMaterial(gate.getMaterial())) {
-			for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+			for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 				coord.getBlock().setType(Material.GLOWSTONE);
 			}
 		}
 
-		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			Material material = gate.getMaterial();
 
 			// Force vertical PORTALs and horizontal ENDER_PORTALs
-			FloodOrientation orientation = gate.getPortalBlocks().get(coord);
+			final FloodOrientation orientation = gate.getPortalBlocks().get(coord);
 			if (orientation == FloodOrientation.HORIZONTAL && material == Material.PORTAL) {
 				material = Material.ENDER_PORTAL;
 			} else if (orientation != FloodOrientation.HORIZONTAL && material == Material.ENDER_PORTAL) {
@@ -122,17 +122,17 @@ public class Gates {
 		return true;
 	}
 
-	public static void close(Gate gate) {
+	public static void close(final Gate gate) {
 		if (!isOpen(gate))
 			return;
 
-		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			coord.getBlock().breakNaturally(); // Break naturally - Fix portal orientation
 		}
 
-		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			// Revert biome back to gate frame biome
-			FloodOrientation orientation = gate.getPortalBlocks().get(coord);
+			final FloodOrientation orientation = gate.getPortalBlocks().get(coord);
 			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == Material.STATIONARY_WATER) {
 				coord.getBlock().setBiome(((WorldCoord) gate.getFrameBlocks().toArray()[0]).getBlock().getBiome());
 			}
@@ -142,7 +142,7 @@ public class Gates {
 		clearIndexFor(gate);
 	}
 
-	public static boolean isOpen(Gate gate) {
+	public static boolean isOpen(final Gate gate) {
 		if (gate.getFroms() == null)
 			return false;
 		return BlockUtil.isStandableGateMaterial(gate.getFroms().get(0).getBlock().getType());
@@ -156,7 +156,7 @@ public class Gates {
 		Gate.load();
 
 		Plugin.log("Loading gates into memory");
-		for (Gate gate : Gate.getAll()) {
+		for (final Gate gate : Gate.getAll()) {
 			// Populate block data
 			gate.dataPopulate();
 
@@ -167,32 +167,32 @@ public class Gates {
 		}
 	}
 
-	public static void clearIndexFor(Gate gate) {
-		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+	public static void clearIndexFor(final Gate gate) {
+		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			portalBlockToGate.remove(coord);
 		}
-		for (WorldCoord coord : gate.getSurroundingPortalBlocks()) {
+		for (final WorldCoord coord : gate.getSurroundingPortalBlocks()) {
 			surroundingPortalBlockToGate.remove(coord);
 		}
-		for (WorldCoord coord : gate.getFrameBlocks()) {
+		for (final WorldCoord coord : gate.getFrameBlocks()) {
 			frameBlockToGate.remove(coord);
 		}
-		for (WorldCoord coord : gate.getSurroundingFrameBlocks()) {
+		for (final WorldCoord coord : gate.getSurroundingFrameBlocks()) {
 			surroundingFrameBlockToGate.remove(coord);
 		}
 	}
 
-	public static void buildIndexFor(Gate gate) {
-		for (WorldCoord coord : gate.getPortalBlocks().keySet()) {
+	public static void buildIndexFor(final Gate gate) {
+		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			portalBlockToGate.put(coord, gate);
 		}
-		for (WorldCoord coord : gate.getSurroundingPortalBlocks()) {
+		for (final WorldCoord coord : gate.getSurroundingPortalBlocks()) {
 			surroundingPortalBlockToGate.put(coord, gate);
 		}
-		for (WorldCoord coord : gate.getFrameBlocks()) {
+		for (final WorldCoord coord : gate.getFrameBlocks()) {
 			frameBlockToGate.put(coord, gate);
 		}
-		for (WorldCoord coord : gate.getSurroundingFrameBlocks()) {
+		for (final WorldCoord coord : gate.getSurroundingFrameBlocks()) {
 			surroundingFrameBlockToGate.put(coord, gate);
 		}
 	}

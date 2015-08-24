@@ -17,19 +17,19 @@ public enum InvBoolean {
 	private static final Map<String, InvBoolean> nameToInvBool = new HashMap<String, InvBoolean>();
 
 	static {
-		for (InvBoolean value : EnumSet.allOf(InvBoolean.class)) {
+		for (final InvBoolean value : EnumSet.allOf(InvBoolean.class)) {
 			nameToInvBool.put(value.name(), value);
 		}
 	}
 
-	public static InvBoolean fromName(String name) {
+	public static InvBoolean fromName(final String name) {
 		return nameToInvBool.get(name);
 	}
 
 	public static final String[] names = new String[values().length];
 
 	static {
-		InvBoolean[] values = values();
+		final InvBoolean[] values = values();
 		for (int i = 0; i < values.length; i++)
 			names[i] = values[i].name();
 	}

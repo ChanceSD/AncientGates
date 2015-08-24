@@ -31,17 +31,17 @@ public class CommandSetConf extends BaseCommand {
 
 	@Override
 	public void perform() {
-		String item = parameters.get(0);
+		final String item = parameters.get(0);
 		String value = "";
 
 		parameters.remove(0);
-		for (String parameter : parameters) {
+		for (final String parameter : parameters) {
 			value += " " + parameter;
 		}
 		value = value.trim();
 
-		Field[] fields = Conf.class.getDeclaredFields();
-		for (Field f : fields) {
+		final Field[] fields = Conf.class.getDeclaredFields();
+		for (final Field f : fields) {
 			f.setAccessible(true); // Modify private fields
 			if (Modifier.isStatic(f.getModifiers()) && item.equalsIgnoreCase(f.getName())) {
 				try {
@@ -65,10 +65,10 @@ public class CommandSetConf extends BaseCommand {
 						f.set(null, value);
 						value = "\"" + value + "\"";
 					}
-				} catch (IllegalArgumentException e) {
+				} catch (final IllegalArgumentException e) {
 					sendMessage("Config option \"" + f.getName() + "\" does not accept the value " + value + ".");
 					return;
-				} catch (IllegalAccessException e) {
+				} catch (final IllegalAccessException e) {
 					continue;
 				}
 				sendMessage("Config option \"" + f.getName() + "\" is now " + value + ".");

@@ -27,7 +27,7 @@ public class CommandSetExec extends BaseCommand {
 	@Override
 	public void perform() {
 		String command = "";
-		String commandType = parameters.get(1).toUpperCase();
+		final String commandType = parameters.get(1).toUpperCase();
 
 		if (CommandType.fromName(commandType) == null) {
 			sendMessage("This is not a valid command type. Valid types:");
@@ -37,7 +37,7 @@ public class CommandSetExec extends BaseCommand {
 
 		parameters.remove(0);
 		parameters.remove(0);
-		for (String parameter : parameters) {
+		for (final String parameter : parameters) {
 			command += " " + parameter;
 		}
 

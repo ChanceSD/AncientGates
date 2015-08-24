@@ -6,11 +6,11 @@ import org.mcteam.ancientgates.sockets.types.ConnectionState;
 
 public class ClientConnectionEvent {
 
-	private Socket socket;
-	private ConnectionState state;
-	private int ID;
+	private final Socket socket;
+	private final ConnectionState state;
+	private final int ID;
 
-	public ClientConnectionEvent(Socket socket, int clientID, ConnectionState state) {
+	public ClientConnectionEvent(final Socket socket, final int clientID, final ConnectionState state) {
 		this.socket = socket;
 		this.state = state;
 		this.ID = clientID;

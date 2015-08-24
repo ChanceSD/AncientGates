@@ -79,7 +79,7 @@ public class Conf {
 	public static boolean save() {
 		try {
 			DiscUtil.write(file, Plugin.gson.toJson(new Conf()));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			Plugin.log("Failed to save the config to disk.");
 			return false;
@@ -100,7 +100,7 @@ public class Conf {
 
 		try {
 			Plugin.gson.fromJson(DiscUtil.read(file), Conf.class);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			Plugin.log("Failed to load the config from disk.");
 			return false;

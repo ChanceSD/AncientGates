@@ -33,7 +33,7 @@ public class CommandOpen extends BaseCommand {
 			sendMessage("To fix that: " + new CommandSetTo().getUsageTemplate(true, true));
 		}
 
-		for (Location from : gate.getFroms()) {
+		for (final Location from : gate.getFroms()) {
 			if (from.getBlock().getType() != Material.AIR && !BlockUtil.isStandableGateMaterial(from.getBlock().getType())) {
 				sendMessage("The gate could not open. The from location is not air.");
 				return;

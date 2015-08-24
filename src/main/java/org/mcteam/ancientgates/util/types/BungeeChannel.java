@@ -23,7 +23,7 @@ public enum BungeeChannel {
 		return this.channelName;
 	}
 
-	private BungeeChannel(String channelName) {
+	private BungeeChannel(final String channelName) {
 		this.channelName = channelName;
 	}
 

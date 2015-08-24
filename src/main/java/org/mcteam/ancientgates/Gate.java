@@ -75,7 +75,7 @@ public class Gate {
 	// -------------------------------------------- //
 	// Getters And Setters
 	// -------------------------------------------- //
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -83,7 +83,7 @@ public class Gate {
 		return id;
 	}
 
-	public void addFrom(Location from) {
+	public void addFrom(final Location from) {
 		if (this.froms == null) {
 			this.froms = new ArrayList<Location>();
 		}
@@ -94,7 +94,7 @@ public class Gate {
 		}
 	}
 
-	public void delFrom(Location from) {
+	public void delFrom(final Location from) {
 		this.froms.remove(from);
 	}
 
@@ -102,7 +102,7 @@ public class Gate {
 		return froms;
 	}
 
-	public void addTo(Location to) {
+	public void addTo(final Location to) {
 		if (this.tos == null) {
 			this.tos = new ArrayList<Location>();
 		}
@@ -113,7 +113,7 @@ public class Gate {
 		}
 	}
 
-	public void delTo(Location to) {
+	public void delTo(final Location to) {
 		this.tos.remove(to);
 		if (this.tos.size() == 0)
 			this.tos = null;
@@ -126,11 +126,11 @@ public class Gate {
 	public Location getTo() {
 		if (tos == null)
 			return null;
-		Random randomizer = new Random();
+		final Random randomizer = new Random();
 		return tos.get(randomizer.nextInt(tos.size()));
 	}
 
-	public void addBungeeTo(String server, String to) {
+	public void addBungeeTo(final String server, final String to) {
 		if (this.bungeetos == null) {
 			this.bungeetos = new ArrayList<Map<String, String>>();
 		}
@@ -138,8 +138,8 @@ public class Gate {
 			this.bungeetos = null;
 			this.bungeetype = null;
 		} else {
-			String[] parts = to.split(",");
-			Map<String, String> bungeeto = new HashMap<String, String>();
+			final String[] parts = to.split(",");
+			final Map<String, String> bungeeto = new HashMap<String, String>();
 			bungeeto.put(SERVER, server);
 			bungeeto.put(WORLD, parts[0]);
 			bungeeto.put(X, parts[1]);
@@ -153,9 +153,9 @@ public class Gate {
 		}
 	}
 
-	public void delBungeeTo(String server, String to) {
-		String[] parts = to.split(",");
-		Map<String, String> bungeeto = new HashMap<String, String>();
+	public void delBungeeTo(final String server, final String to) {
+		final String[] parts = to.split(",");
+		final Map<String, String> bungeeto = new HashMap<String, String>();
 		bungeeto.put(SERVER, server);
 		bungeeto.put(WORLD, parts[0]);
 		bungeeto.put(X, parts[1]);
@@ -175,11 +175,11 @@ public class Gate {
 	public Map<String, String> getBungeeTo() {
 		if (bungeetos == null)
 			return null;
-		Random randomizer = new Random();
+		final Random randomizer = new Random();
 		return bungeetos.get(randomizer.nextInt(bungeetos.size()));
 	}
 
-	public void setBungeeType(String bungeeType) {
+	public void setBungeeType(final String bungeeType) {
 		this.bungeetype = TeleportType.fromName(bungeeType.toUpperCase());
 	}
 
@@ -187,7 +187,7 @@ public class Gate {
 		return bungeetype;
 	}
 
-	public void setMessage(String msg) {
+	public void setMessage(final String msg) {
 		this.msg = (msg.isEmpty()) ? null : msg;
 	}
 
@@ -195,7 +195,7 @@ public class Gate {
 		return msg;
 	}
 
-	public void setCommand(String command) {
+	public void setCommand(final String command) {
 		this.command = (command.isEmpty()) ? null : command;
 		if (command.isEmpty())
 			this.commandtype = null;
@@ -205,7 +205,7 @@ public class Gate {
 		return command;
 	}
 
-	public void setCommandType(String commandType) {
+	public void setCommandType(final String commandType) {
 		this.commandtype = CommandType.fromName(commandType.toUpperCase());
 	}
 
@@ -213,7 +213,7 @@ public class Gate {
 		return commandtype;
 	}
 
-	public void setCost(Double cost) {
+	public void setCost(final Double cost) {
 		this.cost = cost;
 	}
 
@@ -221,7 +221,7 @@ public class Gate {
 		return cost;
 	}
 
-	public void setTeleportEntities(Boolean teleportEntities) {
+	public void setTeleportEntities(final Boolean teleportEntities) {
 		this.entities = teleportEntities;
 	}
 
@@ -229,7 +229,7 @@ public class Gate {
 		return entities;
 	}
 
-	public void setTeleportVehicles(Boolean teleportVehicles) {
+	public void setTeleportVehicles(final Boolean teleportVehicles) {
 		this.vehicles = teleportVehicles;
 	}
 
@@ -237,7 +237,7 @@ public class Gate {
 		return vehicles;
 	}
 
-	public void setTeleportInventory(String teleportInventory) {
+	public void setTeleportInventory(final String teleportInventory) {
 		this.inventory = InvBoolean.fromName(teleportInventory.toUpperCase());
 	}
 
@@ -245,7 +245,7 @@ public class Gate {
 		return inventory;
 	}
 
-	public void setMaterial(String material) {
+	public void setMaterial(final String material) {
 		this.material = GateMaterial.fromName(material.toUpperCase());
 	}
 
@@ -257,8 +257,8 @@ public class Gate {
 		return material.name();
 	}
 
-	public void rename(String id, String newid) {
-		Gate gate = instances.remove(id);
+	public void rename(final String id, final String newid) {
+		final Gate gate = instances.remove(id);
 		instances.put(newid, gate);
 		this.id = newid;
 	}
@@ -282,23 +282,23 @@ public class Gate {
 	// ----------------------------------------------//
 	// Persistance and entity management
 	// ----------------------------------------------//
-	public static Gate get(String id) {
+	public static Gate get(final String id) {
 		return instances.get(id);
 	}
 
-	public static boolean exists(String id) {
+	public static boolean exists(final String id) {
 		return instances.containsKey(id);
 	}
 
-	public static Gate create(String id) {
-		Gate gate = new Gate();
+	public static Gate create(final String id) {
+		final Gate gate = new Gate();
 		gate.id = id;
 		instances.put(gate.id, gate);
 		Plugin.log("created new gate " + gate.id);
 		return gate;
 	}
 
-	public static void delete(String id) {
+	public static void delete(final String id) {
 		// Remove the gate
 		instances.remove(id);
 	}
@@ -306,11 +306,11 @@ public class Gate {
 	public static boolean save() {
 		try {
 			DiscUtil.write(file, Plugin.gson.toJson(instances));
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Plugin.log("Failed to save the gates to disk due to I/O exception.");
 			e.printStackTrace();
 			return false;
-		} catch (NullPointerException e) {
+		} catch (final NullPointerException e) {
 			Plugin.log("Failed to save the gates to disk due to NPE.");
 			e.printStackTrace();
 			return false;
@@ -328,12 +328,12 @@ public class Gate {
 		}
 
 		try {
-			Type type = new TypeToken<Map<String, Gate>>() {
+			final Type type = new TypeToken<Map<String, Gate>>() {
 			}.getType();
-			Map<String, Gate> instancesFromFile = Plugin.gson.fromJson(DiscUtil.read(file), type);
+			final Map<String, Gate> instancesFromFile = Plugin.gson.fromJson(DiscUtil.read(file), type);
 			instances.clear();
 			instances.putAll(instancesFromFile);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -341,7 +341,7 @@ public class Gate {
 		fillIds();
 
 		// Check enum values
-		for (Gate gate : Gate.getAll()) {
+		for (final Gate gate : Gate.getAll()) {
 			if (gate.material == null) {
 				gate.material = GateMaterial.PORTAL;
 				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"material\" } is invalid. Valid materials are: " + TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
@@ -361,7 +361,7 @@ public class Gate {
 		}
 
 		// Migrate old format
-		for (Gate gate : Gate.getAll()) {
+		for (final Gate gate : Gate.getAll()) {
 			if (gate.from != null) {
 				gate.addFrom(gate.from);
 				gate.from = null;
@@ -384,11 +384,11 @@ public class Gate {
 		}
 
 		// Cleanup non-existent worlds
-		for (Gate gate : Gate.getAll()) {
+		for (final Gate gate : Gate.getAll()) {
 			if (gate.froms != null) {
-				Iterator<Location> it = gate.froms.iterator();
+				final Iterator<Location> it = gate.froms.iterator();
 				while (it.hasNext()) {
-					Location from = it.next();
+					final Location from = it.next();
 					if (from == null)
 						it.remove();
 				}
@@ -397,9 +397,9 @@ public class Gate {
 			}
 
 			if (gate.tos != null) {
-				Iterator<Location> it = gate.tos.iterator();
+				final Iterator<Location> it = gate.tos.iterator();
 				while (it.hasNext()) {
-					Location from = it.next();
+					final Location from = it.next();
 					if (from == null)
 						it.remove();
 				}
@@ -418,7 +418,7 @@ public class Gate {
 	}
 
 	public static void fillIds() {
-		for (Entry<String, Gate> entry : instances.entrySet()) {
+		for (final Entry<String, Gate> entry : instances.entrySet()) {
 			entry.getValue().setId(entry.getKey());
 		}
 	}
@@ -434,36 +434,36 @@ public class Gate {
 			return false;
 
 		// Loop through all from locations
-		for (Location from : froms) {
-			Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), FloodOrientation.values());
+		for (final Location from : froms) {
+			final Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), FloodOrientation.values());
 			if (flood == null)
 				return false;
 
 			// Force vertical PORTALs and horizontal ENDER_PORTALs
-			FloodOrientation orientation = flood.getKey();
+			final FloodOrientation orientation = flood.getKey();
 
 			// Now we add the portal blocks as world coords to the lookup maps.
-			Set<Block> portalBlocks = FloodUtil.getPortalBlocks(from.getBlock(), orientation);
+			final Set<Block> portalBlocks = FloodUtil.getPortalBlocks(from.getBlock(), orientation);
 			if (portalBlocks == null)
 				return false;
 
-			for (Block portalBlock : portalBlocks) {
+			for (final Block portalBlock : portalBlocks) {
 				portalBlockCoords.put(new WorldCoord(portalBlock), orientation);
 			}
 
 			// Now we add the frame blocks as world coords to the lookup maps.
-			Set<Block> frameBlocks = FloodUtil.getFrameBlocks(portalBlocks, orientation);
-			for (Block frameBlock : frameBlocks) {
+			final Set<Block> frameBlocks = FloodUtil.getFrameBlocks(portalBlocks, orientation);
+			for (final Block frameBlock : frameBlocks) {
 				frameBlockCoords.add(new WorldCoord(frameBlock));
 			}
 
 			// Now we add the surrounding blocks as world coords to the lookup maps.
 			Set<Block> surroundingBlocks = FloodUtil.getSurroundingBlocks(portalBlocks, frameBlocks, orientation);
-			for (Block surroundingBlock : surroundingBlocks) {
+			for (final Block surroundingBlock : surroundingBlocks) {
 				surroundingPortalBlockCoords.add(new WorldCoord(surroundingBlock));
 			}
 			surroundingBlocks = FloodUtil.getSurroundingBlocks(frameBlocks, portalBlocks, orientation);
-			for (Block surroundingBlock : surroundingBlocks) {
+			for (final Block surroundingBlock : surroundingBlocks) {
 				surroundingFrameBlockCoords.add(new WorldCoord(surroundingBlock));
 			}
 		}

@@ -19,7 +19,7 @@ public class CommandCloseAll extends BaseCommand {
 
 	@Override
 	public void perform() {
-		for (Gate gate : Gate.getAll()) {
+		for (final Gate gate : Gate.getAll()) {
 			Gates.close(gate);
 		}
 

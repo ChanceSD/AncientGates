@@ -47,12 +47,12 @@ public class CommandAddServer extends BaseCommand {
 			return;
 		}
 
-		String parts[] = parameters.get(1).split(":");
+		final String parts[] = parameters.get(1).split(":");
 		final String address = parts[0];
 		final int port;
 		try {
 			port = Integer.parseInt(parts[1]);
-		} catch (NumberFormatException e) {
+		} catch (final NumberFormatException e) {
 			sendMessage("The port must be a number.");
 			return;
 		}
@@ -68,13 +68,13 @@ public class CommandAddServer extends BaseCommand {
 		}
 
 		// Ping the server
-		Packet packet = new Packet("ping", new String[] {});
+		final Packet packet = new Packet("ping", new String[] {});
 
 		// Setup socket client and listener
-		SocketClient client = new SocketClient(address, port, password);
+		final SocketClient client = new SocketClient(address, port, password);
 		client.setListener(new SocketClientEventListener() {
-			public void onServerMessageRecieve(SocketClient client, Packets packets) {
-				for (Packet packet : packets.packets) {
+			public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
+				for (final Packet packet : packets.packets) {
 					if (packet.command.toLowerCase().equals("pong")) {
 						// Add server on valid ping response
 						Server.add(name, address, port, password);
@@ -95,7 +95,7 @@ public class CommandAddServer extends BaseCommand {
 		try {
 			client.connect();
 			client.send(packet);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			sendMessage("Could not find server on \"" + address + ":" + port + "\". Try again.");
 		}
 	}

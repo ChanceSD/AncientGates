@@ -35,7 +35,7 @@ public class CommandHelp extends BaseCommand {
 		if (parameters.size() > 0) {
 			try {
 				page = Integer.parseInt(parameters.get(0));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				// wasn't an integer
 			}
 		}

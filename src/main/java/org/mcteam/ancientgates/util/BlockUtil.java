@@ -84,19 +84,19 @@ public class BlockUtil {
 			standableMaterials.put(Material.ACTIVATOR_RAIL, true); // 157 Activator Rail
 			standableMaterials.put(Material.CARPET, true); // 171 Carpet
 			standableMaterials.put(Material.DOUBLE_PLANT, true); // double_plant Double Plants
-		} catch (NoSuchFieldError e) {
+		} catch (final NoSuchFieldError e) {
 		} // Support previous MC versions
 	}
 
-	public static boolean isPortalGateMaterial(Material material) {
+	public static boolean isPortalGateMaterial(final Material material) {
 		return material.equals(Material.PORTAL) || material.equals(Material.ENDER_PORTAL);
 	}
 
-	public static boolean isStandableGateMaterial(Material material) {
+	public static boolean isStandableGateMaterial(final Material material) {
 		return standableGateMaterials.contains(material);
 	}
 
-	public static boolean canPlayerStandInGateBlock(Block block, Boolean fullHeight) {
+	public static boolean canPlayerStandInGateBlock(final Block block, final Boolean fullHeight) {
 		if (fullHeight) {
 			return isStandableGateMaterial(block.getType()) && isStandableGateMaterial(block.getRelative(BlockFace.UP).getType());
 		} else {
@@ -104,11 +104,11 @@ public class BlockUtil {
 		}
 	}
 
-	public static boolean isStandableMaterial(Material material) {
+	public static boolean isStandableMaterial(final Material material) {
 		return standableMaterials.containsKey(material);
 	}
 
-	public static boolean canPassThroughMaterial(Material material) {
+	public static boolean canPassThroughMaterial(final Material material) {
 		return (standableMaterials.get(material) == null) ? false : standableMaterials.get(material);
 	}
 

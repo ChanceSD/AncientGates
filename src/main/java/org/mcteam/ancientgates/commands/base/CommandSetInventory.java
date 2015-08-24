@@ -25,7 +25,7 @@ public class CommandSetInventory extends BaseCommand {
 
 	@Override
 	public void perform() {
-		String extFlag = parameters.get(1).toUpperCase();
+		final String extFlag = parameters.get(1).toUpperCase();
 
 		if (InvBoolean.fromName(extFlag) == null) {
 			sendMessage("This is not a valid option type. Options are:");

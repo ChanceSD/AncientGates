@@ -61,8 +61,8 @@ public class CommandAddTo extends BaseCommand {
 			// Send command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Build the message, format is <command>#@#<player>#@#<server>#@#<gateid>#@#<data>
-				String[] args = new String[] { parameters.get(0), TeleportUtil.locationToString(player.getLocation()), Plugin.bungeeServerName };
-				PluginMessage msg = new PluginMessage("addto", player, serverName, args);
+				final String[] args = new String[] { parameters.get(0), TeleportUtil.locationToString(player.getLocation()), Plugin.bungeeServerName };
+				final PluginMessage msg = new PluginMessage("addto", player, serverName, args);
 
 				// Send over the AGBungeeCom BungeeCord channel
 				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
@@ -80,14 +80,14 @@ public class CommandAddTo extends BaseCommand {
 				final Server server = Server.get(serverName);
 
 				// Build the packet, format is <player>,<server>,<gateid>,<data>,<fromserver>
-				String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0), TeleportUtil.locationToString(player.getLocation()), serverName };
-				Packet packet = new Packet("addto", args);
+				final String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0), TeleportUtil.locationToString(player.getLocation()), serverName };
+				final Packet packet = new Packet("addto", args);
 
 				// Setup socket client and listener
-				SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
+				final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 				client.setListener(new SocketClientEventListener() {
-					public void onServerMessageRecieve(SocketClient client, Packets packets) {
-						for (Packet packet : packets.packets) {
+					public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
+						for (final Packet packet : packets.packets) {
 							if (packet.command.toLowerCase().equals("sendmsg")) {
 								sendMessage(packet.args[0]);
 							}
@@ -105,7 +105,7 @@ public class CommandAddTo extends BaseCommand {
 				try {
 					client.connect();
 					client.send(packet);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					sendMessage("Could not connect to server \"" + serverName + "\".");
 					Plugin.log("There was an error connection to the server.");
 				}

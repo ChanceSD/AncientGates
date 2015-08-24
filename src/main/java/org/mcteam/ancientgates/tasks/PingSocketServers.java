@@ -20,13 +20,13 @@ public class PingSocketServers extends BukkitRunnable {
 
 		// Ping all socket comms servers
 		for (final Server server : Server.getAll()) {
-			Packet packet = new Packet("ping", new String[] {});
+			final Packet packet = new Packet("ping", new String[] {});
 
 			// Setup socket client and listener
-			SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
+			final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 			client.setListener(new SocketClientEventListener() {
-				public void onServerMessageRecieve(SocketClient client, Packets packets) {
-					for (Packet packet : packets.packets) {
+				public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
+					for (final Packet packet : packets.packets) {
 						if (packet.command.toLowerCase().equals("pong")) {
 							// Set state as connected
 							server.setState(ConnectionState.CONNECTED);
@@ -45,7 +45,7 @@ public class PingSocketServers extends BukkitRunnable {
 			try {
 				client.connect();
 				client.send(packet);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// Set state as disconnected
 				server.setState(ConnectionState.DISCONNECTED);
 			}

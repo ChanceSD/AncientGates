@@ -32,15 +32,15 @@ public class CommandList extends BaseCommand {
 		if (parameters.size() > 0) {
 			try {
 				page = Integer.parseInt(parameters.get(0));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				// wasn't an integer
 			}
 		}
 
-		List<String> ids = new ArrayList<String>();
-		List<String> states = new ArrayList<String>();
-		List<String> costs = new ArrayList<String>();
-		for (Gate gate : Gate.getAll()) {
+		final List<String> ids = new ArrayList<String>();
+		final List<String> states = new ArrayList<String>();
+		final List<String> costs = new ArrayList<String>();
+		for (final Gate gate : Gate.getAll()) {
 			ids.add(Conf.colorValue + gate.getId());
 			states.add((Gates.isOpen(gate) ? Conf.colorCommand + "open" : Conf.colorParameter + "closed"));
 			if (Conf.useEconomy && Plugin.econ != null) {

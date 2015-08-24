@@ -51,7 +51,7 @@ public class TeleportUtil {
 	private static final String PITCH = "pitch";
 
 	// Normal player teleport & BungeeCord player teleport in
-	public static void teleportPlayer(final Player player, Location location, Boolean teleportEntities, InvBoolean teleportInventory) {
+	public static void teleportPlayer(final Player player, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
 		checkChunkLoad(location.getBlock());
 
 		// Handle player inventory
@@ -60,7 +60,7 @@ public class TeleportUtil {
 			player.getInventory().clear();
 
 			if (teleportInventory.equals(InvBoolean.FALSE)) {
-				for (ItemStack itemStack : contents) {
+				for (final ItemStack itemStack : contents) {
 					if (itemStack != null)
 						player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
 				}
@@ -93,12 +93,12 @@ public class TeleportUtil {
 	}
 
 	// BungeeCord player teleport out
-	public static void teleportPlayer(Player player, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, InvBoolean teleportInventory, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {
+	public static void teleportPlayer(final Player player, final Map<String, String> location, final TeleportType tpType, final Boolean teleportEntities, final InvBoolean teleportInventory, final Boolean fullHeight, String tpCmd, final CommandType tpCmdType, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
 				// Get current time
-				Long now = Calendar.getInstance().getTimeInMillis();
+				final Long now = Calendar.getInstance().getTimeInMillis();
 				// Display error message
 				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					Plugin.log("Error not yet connected to BungeeCord proxy.");
@@ -115,7 +115,7 @@ public class TeleportUtil {
 
 			// Imitate teleport by spinning player 180 deg
 			if (fullHeight) {
-				Location position = player.getLocation();
+				final Location position = player.getLocation();
 				float yaw = position.getYaw();
 				if ((yaw += 180) > 360) {
 					yaw -= 360;
@@ -135,7 +135,7 @@ public class TeleportUtil {
 				player.getInventory().clear();
 
 				if (teleportInventory.equals(InvBoolean.FALSE)) {
-					for (ItemStack itemStack : contents) {
+					for (final ItemStack itemStack : contents) {
 						if (itemStack != null)
 							player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
 					}
@@ -172,7 +172,7 @@ public class TeleportUtil {
 	}
 
 	// Entity teleport
-	public static void teleportEntity(EntityPortalEvent event, Location location) {
+	public static void teleportEntity(final EntityPortalEvent event, final Location location) {
 		checkChunkLoad(location.getBlock());
 
 		// Remove entity
@@ -181,25 +181,25 @@ public class TeleportUtil {
 
 		// Clone entity - Spawnable (excl. EchoPet)
 		if (entity.getType().isSpawnable() && !EntityUtil.isEchoPet(entity)) {
-			Entity e = location.getWorld().spawn(location, entity.getClass());
+			final Entity e = location.getWorld().spawn(location, entity.getClass());
 			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity));
 
 			// Clone entity - Itemstack
 		} else if (entity.getType() == EntityType.DROPPED_ITEM) {
-			Item i = location.getWorld().dropItemNaturally(location, ((Item) entity).getItemStack());
+			final Item i = location.getWorld().dropItemNaturally(location, ((Item) entity).getItemStack());
 			i.teleport(location);
 		}
 
 	}
 
 	// BungeeCord entity spawn out (excl. EchoPet)
-	public static void teleportEntity(EntityPortalEvent event, Map<String, String> location) {
+	public static void teleportEntity(final EntityPortalEvent event, final Map<String, String> location) {
 		if (Conf.bungeeCordSupport && ((event.getEntityType().isSpawnable() && !EntityUtil.isEchoPet(event.getEntity())) || event.getEntityType() == EntityType.DROPPED_ITEM)) {
 
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Send AGBungeeSpawn packet
-				PluginMessage msg = new PluginMessage(event.getEntityType(), event.getEntity(), location);
+				final PluginMessage msg = new PluginMessage(event.getEntityType(), event.getEntity(), location);
 				// Send over the AGBungeeTele BungeeCord channel
 				if (Plugin.instance.getServer().getOnlinePlayers().size() > 0) {
 					// Use any player to send the plugin message
@@ -211,23 +211,23 @@ public class TeleportUtil {
 				// Send spawn command packet via client socket
 			} else {
 				// Get server
-				Server server = Server.get(location.get(SERVER));
+				final Server server = Server.get(location.get(SERVER));
 				// Construct spawn entity packet
-				Packet packet = new Packet(event.getEntity(), event.getEntityType(), location);
+				final Packet packet = new Packet(event.getEntity(), event.getEntityType(), location);
 				// Setup socket client and listener
-				SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
+				final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 				client.setListener(new SocketClientEventListener() {
-					public void onServerMessageRecieve(SocketClient client, Packets packets) {
-						for (Packet packet : packets.packets) {
+					public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
+						for (final Packet packet : packets.packets) {
 							if (packet.command.toLowerCase().equals("removeentity")) {
 								// Extract receiving packet arguments
-								String world = String.valueOf(packet.args[0]);
-								int entityId = Integer.parseInt(packet.args[1]);
+								final String world = String.valueOf(packet.args[0]);
+								final int entityId = Integer.parseInt(packet.args[1]);
 								// Iterate and remove teleported entity
-								List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
-								Iterator<Entity> it = entities.iterator();
+								final List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
+								final Iterator<Entity> it = entities.iterator();
 								while (it.hasNext()) {
-									Entity entity = it.next();
+									final Entity entity = it.next();
 									if (entity.getEntityId() == entityId) {
 										entity.remove();
 										break;
@@ -245,7 +245,7 @@ public class TeleportUtil {
 				try {
 					client.connect();
 					client.send(packet);
-				} catch (Exception e) {
+				} catch (final Exception e) {
 					Plugin.log.severe("Error sending spawn packet to the server.");
 				}
 
@@ -255,23 +255,23 @@ public class TeleportUtil {
 
 	// BungeeCord entity spawn in
 	public static void teleportEntity() {
-		List<BungeeQueue> entityQueue = Plugin.bungeeCordEntityInQueue;
-		Iterator<BungeeQueue> it = entityQueue.iterator();
+		final List<BungeeQueue> entityQueue = Plugin.bungeeCordEntityInQueue;
+		final Iterator<BungeeQueue> it = entityQueue.iterator();
 
 		while (it.hasNext()) {
-			BungeeQueue queue = it.next();
+			final BungeeQueue queue = it.next();
 
 			// Spawn incoming BungeeCord entity
-			Location destination = queue.getDestination();
-			World world = destination.getWorld();
+			final Location destination = queue.getDestination();
+			final World world = destination.getWorld();
 			checkChunkLoad(destination.getBlock());
 
 			if (queue.getEntityType().isSpawnable()) {
-				Entity entity = world.spawnEntity(destination, queue.getEntityType()); // Entity
+				final Entity entity = world.spawnEntity(destination, queue.getEntityType()); // Entity
 				EntityUtil.setEntityTypeData(entity, queue.getEntityTypeData());
 				entity.teleport(destination);
 			} else if (queue.getEntityType() == EntityType.DROPPED_ITEM) {
-				Item item = world.dropItemNaturally(destination, ItemStackUtil.stringToItemStack(queue.getEntityTypeData())[0]); // Dropped
+				final Item item = world.dropItemNaturally(destination, ItemStackUtil.stringToItemStack(queue.getEntityTypeData())[0]); // Dropped
 				                                                                                                                 // ItemStack
 				item.teleport(destination);
 			}
@@ -282,11 +282,11 @@ public class TeleportUtil {
 	}
 
 	// Normal vehicle teleport
-	public static void teleportVehicle(final Vehicle vehicle, Location location, Boolean teleportEntities, InvBoolean teleportInventory) {
+	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
 		final Location destination = GeometryUtil.addHeightToLocation(location, 0.5); // Fix vehicle
 		                                                                              // spawn
 		                                                                              // glitch
-		double velocity = vehicle.getVelocity().length();
+		final double velocity = vehicle.getVelocity().length();
 		checkChunkLoad(destination.getBlock());
 
 		// Stop and teleport
@@ -305,7 +305,7 @@ public class TeleportUtil {
 					((Player) passenger).getInventory().clear();
 
 					if (teleportInventory.equals(InvBoolean.FALSE)) {
-						for (ItemStack itemStack : contents) {
+						for (final ItemStack itemStack : contents) {
 							if (itemStack != null)
 								((Player) passenger).getWorld().dropItemNaturally(((Player) passenger).getLocation(), itemStack);
 						}
@@ -330,16 +330,16 @@ public class TeleportUtil {
 			}, 2);
 		} else {
 			ItemStack[] contents;
-			Vehicle mc = destination.getWorld().spawn(destination, vehicle.getClass());
+			final Vehicle mc = destination.getWorld().spawn(destination, vehicle.getClass());
 			if (mc instanceof StorageMinecart) {
 				contents = ((StorageMinecart) vehicle).getInventory().getContents();
 				// Teleport contents
 				if (teleportEntities) {
-					StorageMinecart smc = (StorageMinecart) mc;
+					final StorageMinecart smc = (StorageMinecart) mc;
 					smc.getInventory().setContents(contents);
 					// Drop contents
 				} else {
-					for (ItemStack itemStack : contents) {
+					for (final ItemStack itemStack : contents) {
 						if (itemStack != null)
 							vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
 					}
@@ -348,11 +348,11 @@ public class TeleportUtil {
 				contents = ((HopperMinecart) vehicle).getInventory().getContents();
 				// Teleport contents
 				if (teleportEntities) {
-					HopperMinecart hmc = (HopperMinecart) mc;
+					final HopperMinecart hmc = (HopperMinecart) mc;
 					hmc.getInventory().setContents(contents);
 					// Drop contents
 				} else {
-					for (ItemStack itemStack : contents) {
+					for (final ItemStack itemStack : contents) {
 						if (itemStack != null)
 							vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
 					}
@@ -364,19 +364,19 @@ public class TeleportUtil {
 	}
 
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, Map<String, String> location, TeleportType tpType, Boolean teleportEntities, InvBoolean teleportInventory, Boolean fullHeight, String tpCmd, CommandType tpCmdType, String tpMsg) {
+	public static void teleportVehicle(final Vehicle vehicle, final Map<String, String> location, final TeleportType tpType, final Boolean teleportEntities, final InvBoolean teleportInventory, final Boolean fullHeight, String tpCmd, final CommandType tpCmdType, String tpMsg) {
 		if (Conf.bungeeCordSupport) {
-			double velocity = vehicle.getVelocity().length();
+			final double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();
 
 			// Player vehicle teleport
 			if (passenger instanceof Player) {
-				Player player = (Player) passenger;
+				final Player player = (Player) passenger;
 
 				// Check bungeeServerName found
 				if (Plugin.bungeeServerName == null) {
 					// Get current time
-					Long now = Calendar.getInstance().getTimeInMillis();
+					final Long now = Calendar.getInstance().getTimeInMillis();
 					// Display error message
 					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						Plugin.log("Error not yet connected to BungeeCord proxy.");
@@ -392,7 +392,7 @@ public class TeleportUtil {
 				vehicle.remove();
 				// and spinning player 180 deg
 				if (fullHeight) {
-					Location position = player.getLocation();
+					final Location position = player.getLocation();
 					float yaw = position.getYaw();
 					if ((yaw += 180) > 360) {
 						yaw -= 360;
@@ -408,7 +408,7 @@ public class TeleportUtil {
 					player.getInventory().clear();
 
 					if (teleportInventory.equals(InvBoolean.FALSE)) {
-						for (ItemStack itemStack : contents) {
+						for (final ItemStack itemStack : contents) {
 							if (itemStack != null)
 								player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
 						}
@@ -444,7 +444,7 @@ public class TeleportUtil {
 				// Send vehicle spawn command packet via BungeeCord
 				if (!Conf.useSocketComms || Plugin.serv == null) {
 					// Send AGBungeeVehicleSpawn packet
-					PluginMessage msg = new PluginMessage(vehicle.getType(), velocity, location);
+					final PluginMessage msg = new PluginMessage(vehicle.getType(), velocity, location);
 
 					// Append passenger info (excl. EchoPet)
 					if (passenger != null && !EntityUtil.isEchoPet(passenger)) {
@@ -459,7 +459,7 @@ public class TeleportUtil {
 							msg.addItemStack(contents);
 							// Drop contents
 						} else {
-							for (ItemStack itemStack : contents) {
+							for (final ItemStack itemStack : contents) {
 								if (itemStack != null)
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
 							}
@@ -471,7 +471,7 @@ public class TeleportUtil {
 							msg.addItemStack(((HopperMinecart) vehicle).getInventory().getContents());
 							// Drop contents
 						} else {
-							for (ItemStack itemStack : contents) {
+							for (final ItemStack itemStack : contents) {
 								if (itemStack != null)
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
 							}
@@ -492,9 +492,9 @@ public class TeleportUtil {
 					// Send vehicle spawn command packet via client socket
 				} else {
 					// Get server
-					Server server = Server.get(location.get(SERVER));
+					final Server server = Server.get(location.get(SERVER));
 					// Construct spawn vehicle packet
-					Packet packet = new Packet(vehicle, velocity, location);
+					final Packet packet = new Packet(vehicle, velocity, location);
 					// Append passenger info (excl. EchoPet)
 					if (passenger != null && !EntityUtil.isEchoPet(passenger)) {
 						if (passenger.getType().isSpawnable()) {
@@ -508,7 +508,7 @@ public class TeleportUtil {
 							packet.addItemStack(contents);
 							// Drop contents
 						} else {
-							for (ItemStack itemStack : contents) {
+							for (final ItemStack itemStack : contents) {
 								if (itemStack != null)
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
 							}
@@ -520,7 +520,7 @@ public class TeleportUtil {
 							packet.addItemStack(((HopperMinecart) vehicle).getInventory().getContents());
 							// Drop contents
 						} else {
-							for (ItemStack itemStack : contents) {
+							for (final ItemStack itemStack : contents) {
 								if (itemStack != null)
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
 							}
@@ -528,19 +528,19 @@ public class TeleportUtil {
 					}
 
 					// Setup socket client and listener
-					SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
+					final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 					client.setListener(new SocketClientEventListener() {
-						public void onServerMessageRecieve(SocketClient client, Packets packets) {
-							for (Packet packet : packets.packets) {
+						public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
+							for (final Packet packet : packets.packets) {
 								if (packet.command.toLowerCase().equals("removevehicle")) {
 									// Extract receiving packet arguments
-									String world = String.valueOf(packet.args[0]);
-									int vehicleId = Integer.parseInt(packet.args[1]);
+									final String world = String.valueOf(packet.args[0]);
+									final int vehicleId = Integer.parseInt(packet.args[1]);
 									// Iterate and remove teleported vehicle
-									List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
-									Iterator<Entity> it = entities.iterator();
+									final List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
+									final Iterator<Entity> it = entities.iterator();
 									while (it.hasNext()) {
-										Entity vehicle = it.next();
+										final Entity vehicle = it.next();
 										if (vehicle.getEntityId() == vehicleId) {
 											vehicle.eject();
 											vehicle.remove();
@@ -549,9 +549,9 @@ public class TeleportUtil {
 									}
 									// Iterate and remove teleported passenger
 									if (packet.args.length > 2) {
-										int entityId = Integer.parseInt(packet.args[2]);
+										final int entityId = Integer.parseInt(packet.args[2]);
 										while (it.hasNext()) {
-											Entity entity = it.next();
+											final Entity entity = it.next();
 											if (entity.getEntityId() == entityId) {
 												entity.remove();
 												break;
@@ -570,7 +570,7 @@ public class TeleportUtil {
 					try {
 						client.connect();
 						client.send(packet);
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						Plugin.log.severe("Error sending vehicle spawn packet to the server.");
 					}
 				}
@@ -581,7 +581,7 @@ public class TeleportUtil {
 	}
 
 	// Bungee vehicle teleport in
-	public static void teleportVehicle(final Player player, String vehicleTypeName, double velocity, Location location) {
+	public static void teleportVehicle(final Player player, final String vehicleTypeName, final double velocity, final Location location) {
 		checkChunkLoad(location.getBlock());
 
 		// Crete new velocity
@@ -600,15 +600,15 @@ public class TeleportUtil {
 
 	// BungeeCord vehicle spawn in
 	public static void teleportVehicle() {
-		List<BungeeQueue> vehicleQueue = Plugin.bungeeCordVehicleInQueue;
-		Iterator<BungeeQueue> it = vehicleQueue.iterator();
+		final List<BungeeQueue> vehicleQueue = Plugin.bungeeCordVehicleInQueue;
+		final Iterator<BungeeQueue> it = vehicleQueue.iterator();
 
 		while (it.hasNext()) {
-			BungeeQueue queue = it.next();
+			final BungeeQueue queue = it.next();
 
 			// Spawn incoming BungeeCord vehicle
-			Location destination = queue.getDestination();
-			World world = destination.getWorld();
+			final Location destination = queue.getDestination();
+			final World world = destination.getWorld();
 			checkChunkLoad(destination.getBlock());
 
 			Entity entity = null;
@@ -640,12 +640,12 @@ public class TeleportUtil {
 					}
 				}, 2);
 			} else {
-				Vehicle mc = (Vehicle) world.spawnEntity(destination, queue.getVehicleType());
+				final Vehicle mc = (Vehicle) world.spawnEntity(destination, queue.getVehicleType());
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
-					StorageMinecart smc = (StorageMinecart) mc;
+					final StorageMinecart smc = (StorageMinecart) mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				} else if (mc instanceof HopperMinecart && entityItemStack != null) {
-					HopperMinecart hmc = (HopperMinecart) mc;
+					final HopperMinecart hmc = (HopperMinecart) mc;
 					hmc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				}
 				mc.setVelocity(newVelocity);
@@ -657,9 +657,9 @@ public class TeleportUtil {
 	}
 
 	// Pre-load chuck before teleport/spawn
-	private static void checkChunkLoad(Block b) {
-		World w = b.getWorld();
-		Chunk c = b.getChunk();
+	private static void checkChunkLoad(final Block b) {
+		final World w = b.getWorld();
+		final Chunk c = b.getChunk();
 
 		if (!w.isChunkLoaded(c)) {
 			Plugin.log(Level.FINE, "Loading chunk: " + c.toString() + " on: " + w.toString());
@@ -668,47 +668,47 @@ public class TeleportUtil {
 	}
 
 	// Convert string to world
-	public static World stringToWorld(String str) {
-		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(str.trim().split(",")));
-		World world = Plugin.instance.getServer().getWorld(parts.get(0));
+	public static World stringToWorld(final String str) {
+		final ArrayList<String> parts = new ArrayList<String>(Arrays.asList(str.trim().split(",")));
+		final World world = Plugin.instance.getServer().getWorld(parts.get(0));
 
 		return world;
 	}
 
 	// Convert string to location
-	public static Location stringToLocation(String str) {
-		ArrayList<String> parts = new ArrayList<String>(Arrays.asList(str.trim().split(",")));
+	public static Location stringToLocation(final String str) {
+		final ArrayList<String> parts = new ArrayList<String>(Arrays.asList(str.trim().split(",")));
 
-		World world = Plugin.instance.getServer().getWorld(parts.get(0));
-		double x = Double.parseDouble(parts.get(1));
-		double y = Double.parseDouble(parts.get(2));
-		double z = Double.parseDouble(parts.get(3));
-		float yaw = Float.parseFloat(parts.get(4));
-		float pitch = Float.parseFloat(parts.get(5));
+		final World world = Plugin.instance.getServer().getWorld(parts.get(0));
+		final double x = Double.parseDouble(parts.get(1));
+		final double y = Double.parseDouble(parts.get(2));
+		final double z = Double.parseDouble(parts.get(3));
+		final float yaw = Float.parseFloat(parts.get(4));
+		final float pitch = Float.parseFloat(parts.get(5));
 
 		return new Location(world, x, y, z, yaw, pitch);
 	}
 
 	// Convert location to string
-	public static String locationToString(Location location) {
-		String world = location.getWorld().getName();
-		String x = String.valueOf(location.getX());
-		String y = String.valueOf(location.getY());
-		String z = String.valueOf(location.getZ());
-		String yaw = String.valueOf(location.getYaw());
-		String pitch = String.valueOf(location.getPitch());
+	public static String locationToString(final Location location) {
+		final String world = location.getWorld().getName();
+		final String x = String.valueOf(location.getX());
+		final String y = String.valueOf(location.getY());
+		final String z = String.valueOf(location.getZ());
+		final String yaw = String.valueOf(location.getYaw());
+		final String pitch = String.valueOf(location.getPitch());
 
 		return world + "," + x + "," + y + "," + z + "," + yaw + "," + pitch;
 	}
 
 	// Convert location to string (BungeeCord location)
-	public static String locationToString(Map<String, String> location) {
-		String world = location.get(WORLD);
-		String x = location.get(X);
-		String y = location.get(Y);
-		String z = location.get(Z);
-		String yaw = location.get(YAW);
-		String pitch = location.get(PITCH);
+	public static String locationToString(final Map<String, String> location) {
+		final String world = location.get(WORLD);
+		final String x = location.get(X);
+		final String y = location.get(Y);
+		final String z = location.get(Z);
+		final String yaw = location.get(YAW);
+		final String pitch = location.get(PITCH);
 
 		return world + "," + x + "," + y + "," + z + "," + yaw + "," + pitch;
 	}

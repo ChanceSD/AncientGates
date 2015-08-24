@@ -48,9 +48,9 @@ public class CommandInfo extends BaseCommand {
 			// Find gate based on the player's line of sight
 			// NB :- getTargetBlock deprecation warnings suppressed until Bukkit API provides an
 			// alternative method
-			WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock((Set<Material>) null, 20));
+			final WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock((Set<Material>) null, 20));
 			gate = GateUtil.nearestGate(playerTargetCoord, false);
-			String from = GateUtil.nearestFrom(playerTargetCoord);
+			final String from = GateUtil.nearestFrom(playerTargetCoord);
 
 			if (gate == null || from.isEmpty()) {
 				sendMessage("No gate in sight. Ensure you are looking at a gate, or use:");
@@ -79,7 +79,7 @@ public class CommandInfo extends BaseCommand {
 		} else {
 			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorParameter + " closed");
 		}
-		for (Location from : gate.getFroms()) {
+		for (final Location from : gate.getFroms()) {
 			if (from != null) {//
 				if (nearestFrom != null) {
 					if (GeometryUtil.distanceBetweenLocations(from, nearestFrom) < 1.0) {
@@ -95,13 +95,13 @@ public class CommandInfo extends BaseCommand {
 			}
 		}
 		if (gate.getTos() != null) {
-			for (Location to : gate.getTos()) {
+			for (final Location to : gate.getTos()) {
 				if (to != null) {
 					sendMessage("to:    " + Conf.colorChrome + new WorldCoord(to).toString());
 				}
 			}
 		} else if (gate.getBungeeTos() != null) {
-			for (Map<String, String> bungeeto : gate.getBungeeTos()) {
+			for (final Map<String, String> bungeeto : gate.getBungeeTos()) {
 				if (bungeeto != null) {
 					if (gate.getBungeeType() == TeleportType.LOCATION) {
 						sendMessage("to:    " + Conf.colorChrome + new WorldCoord(bungeeto).toString() + " on " + bungeeto.get(SERVER));

@@ -38,7 +38,7 @@ import com.google.common.collect.Iterables;
 
 public class PluginMessengerListener implements PluginMessageListener {
 
-	public void onPluginMessageReceived(String channel, Player unused, byte[] message) {
+	public void onPluginMessageReceived(final String channel, final Player unused, final byte[] message) {
 		if (!Conf.bungeeCordSupport || !channel.equals("BungeeCord")) {
 			return;
 		}
@@ -47,12 +47,12 @@ public class PluginMessengerListener implements PluginMessageListener {
 		String inChannel;
 		byte[] data;
 		try {
-			DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
+			final DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
 			inChannel = in.readUTF();
-			short len = in.readShort();
+			final short len = in.readShort();
 			data = new byte[len];
 			in.readFully(data);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Plugin.log.severe("Error receiving BungeeCord message");
 			e.printStackTrace();
 			return;
@@ -61,15 +61,15 @@ public class PluginMessengerListener implements PluginMessageListener {
 		// Parse BungeeCord teleport packet
 		if (inChannel.equals("AGBungeeTele")) {
 			// Data should be player name, and destination location
-			String msg = new String(data);
-			String[] parts = msg.split("#@#");
+			final String msg = new String(data);
+			final String[] parts = msg.split("#@#");
 
-			String playerName = parts[0];
-			String destination = parts[1];
-			String fromServer = parts[2];
-			String tpCmd = parts[3];
-			CommandType tpCmdType = CommandType.fromName(parts[4]);
-			String tpMsg = parts[5];
+			final String playerName = parts[0];
+			final String destination = parts[1];
+			final String fromServer = parts[2];
+			final String tpCmd = parts[3];
+			final CommandType tpCmdType = CommandType.fromName(parts[4]);
+			final String tpMsg = parts[5];
 
 			String entityTypeName = null;
 			String entityTypeData = null;
@@ -81,21 +81,21 @@ public class PluginMessengerListener implements PluginMessageListener {
 			}
 
 			// Check if the player is online, if so, teleport, otherwise, queue
-			Player player = Bukkit.getPlayer(playerName);
+			final Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
 				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
 				// Get current time
-				Long now = Calendar.getInstance().getTimeInMillis();
+				final Long now = Calendar.getInstance().getTimeInMillis();
 
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
-					Location location = TeleportUtil.stringToLocation(destination);
+					final Location location = TeleportUtil.stringToLocation(destination);
 
 					// Handle player riding entity
 					Entity entity = null;
 					if (entityTypeName != null) {
-						World world = TeleportUtil.stringToWorld(destination);
+						final World world = TeleportUtil.stringToWorld(destination);
 						if (EntityUtil.entityType(entityTypeName).isSpawnable()) {
 							// Spawn incoming BungeeCord player's entity
 							entity = world.spawnEntity(location, EntityUtil.entityType(entityTypeName));
@@ -118,26 +118,26 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Parse BungeeCord vehicle teleport packet
 		} else if (inChannel.equals("AGBungeeVehicleTele")) {
 			// Data should be player name, vehicle typeId, velocity and destination location
-			String msg = new String(data);
-			String[] parts = msg.split("#@#");
+			final String msg = new String(data);
+			final String[] parts = msg.split("#@#");
 
-			String playerName = parts[0];
-			String vehicleTypeName = parts[1];
-			double velocity = Double.parseDouble(parts[2]);
-			String destination = parts[3];
-			String fromServer = parts[4];
-			String tpCmd = parts[5];
-			CommandType tpCmdType = CommandType.fromName(parts[6]);
-			String tpMsg = parts[7];
+			final String playerName = parts[0];
+			final String vehicleTypeName = parts[1];
+			final double velocity = Double.parseDouble(parts[2]);
+			final String destination = parts[3];
+			final String fromServer = parts[4];
+			final String tpCmd = parts[5];
+			final CommandType tpCmdType = CommandType.fromName(parts[6]);
+			final String tpMsg = parts[7];
 
 			// Check if the player is online, if so, teleport, otherwise, queue
-			Player player = Bukkit.getPlayer(playerName);
+			final Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
 				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeName, velocity, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {
-					Location location = TeleportUtil.stringToLocation(destination);
+					final Location location = TeleportUtil.stringToLocation(destination);
 					TeleportUtil.teleportVehicle(player, vehicleTypeName, velocity, location);
 				}
 
@@ -149,23 +149,23 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Parse BungeeCord spawn packet
 		} else if (inChannel.equals("AGBungeeSpawn")) {
 			// Data should be entitytype id, entitytype data and destination location
-			String msg = new String(data);
-			String[] parts = msg.split("#@#");
+			final String msg = new String(data);
+			final String[] parts = msg.split("#@#");
 
-			String entityTypeName = parts[0];
-			String entityTypeData = parts[1];
-			String destination = parts[2];
+			final String entityTypeName = parts[0];
+			final String entityTypeData = parts[1];
+			final String destination = parts[2];
 
 			// Spawn incoming BungeeCord entity
-			Location location = TeleportUtil.stringToLocation(destination);
-			World world = TeleportUtil.stringToWorld(destination);
+			final Location location = TeleportUtil.stringToLocation(destination);
+			final World world = TeleportUtil.stringToWorld(destination);
 
 			if (EntityUtil.entityType(entityTypeName).isSpawnable()) {
-				Entity entity = world.spawnEntity(location, EntityUtil.entityType(entityTypeName)); // Entity
+				final Entity entity = world.spawnEntity(location, EntityUtil.entityType(entityTypeName)); // Entity
 				EntityUtil.setEntityTypeData(entity, entityTypeData);
 				entity.teleport(location);
 			} else if (EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
-				Item item = world.dropItemNaturally(location, ItemStackUtil.stringToItemStack(entityTypeData)[0]); // Dropped
+				final Item item = world.dropItemNaturally(location, ItemStackUtil.stringToItemStack(entityTypeData)[0]); // Dropped
 				                                                                                                   // ItemStack
 				item.teleport(location);
 			}
@@ -173,23 +173,23 @@ public class PluginMessengerListener implements PluginMessageListener {
 		} else if (inChannel.equals("AGBungeeVehicleSpawn")) {
 			// Data should be vehicletype id, velocity, destination location, entitytype id and
 			// entitytype data
-			String msg = new String(data);
-			String[] parts = msg.split("#@#");
+			final String msg = new String(data);
+			final String[] parts = msg.split("#@#");
 
-			String vehicleTypeName = parts[0];
-			double velocity = Double.parseDouble(parts[1]);
-			String destination = parts[2];
+			final String vehicleTypeName = parts[0];
+			final double velocity = Double.parseDouble(parts[1]);
+			final String destination = parts[2];
 
-			Location location = TeleportUtil.stringToLocation(destination);
-			World world = TeleportUtil.stringToWorld(destination);
+			final Location location = TeleportUtil.stringToLocation(destination);
+			final World world = TeleportUtil.stringToWorld(destination);
 
 			Entity passenger = null;
 			String entityItemStack = null;
 
 			// Parse passenger info
 			if (parts.length > 4) {
-				String entityTypeName = parts[3];
-				String entityTypeData = parts[4];
+				final String entityTypeName = parts[3];
+				final String entityTypeData = parts[4];
 
 				if (EntityUtil.entityType(entityTypeName).isSpawnable()) {
 					// Spawn incoming BungeeCord entity
@@ -218,12 +218,12 @@ public class PluginMessengerListener implements PluginMessageListener {
 					}
 				}, 2);
 			} else {
-				Vehicle mc = (Vehicle) location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
+				final Vehicle mc = (Vehicle) location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
-					StorageMinecart smc = (StorageMinecart) mc;
+					final StorageMinecart smc = (StorageMinecart) mc;
 					smc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				} else if (mc instanceof HopperMinecart && entityItemStack != null) {
-					HopperMinecart hmc = (HopperMinecart) mc;
+					final HopperMinecart hmc = (HopperMinecart) mc;
 					hmc.getInventory().setContents(ItemStackUtil.stringToItemStack(entityItemStack));
 				}
 				mc.setVelocity(newVelocity);
@@ -231,14 +231,14 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Parse BungeeCord command packet
 		} else if (inChannel.equals("AGBungeeCom")) {
 			// Data should be server, command, id and command data
-			String msg = new String(data);
-			String[] parts = msg.split("#@#");
+			final String msg = new String(data);
+			final String[] parts = msg.split("#@#");
 
-			String command = parts[0];
-			String player = parts[1];
-			String gateid = parts[2];
-			String comdata = parts[3];
-			String server = parts[4];
+			final String command = parts[0];
+			final String player = parts[1];
+			final String gateid = parts[2];
+			final String comdata = parts[3];
+			final String server = parts[4];
 
 			// Message response
 			String response = null;
@@ -254,7 +254,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 					// Get gate
 				} else {
-					Gate gate = Gate.get(gateid);
+					final Gate gate = Gate.get(gateid);
 
 					// Set gate location
 					if (gate.getBungeeTos() == null || gate.getBungeeTos().size() <= 1) {
@@ -281,7 +281,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 					// Get gate
 				} else {
-					Gate gate = Gate.get(gateid);
+					final Gate gate = Gate.get(gateid);
 
 					// Add gate location
 					if (gate.getBungeeTos() != null && gate.getBungeeTos().size() >= 1) {
@@ -307,7 +307,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 					// Get gate
 				} else {
-					Gate gate = Gate.get(gateid);
+					final Gate gate = Gate.get(gateid);
 
 					// Display no to exists response
 					if (gate.getBungeeTos() == null) {
@@ -316,7 +316,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 						// Remove gate location
 					} else {
-						String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(comdata));
+						final String nearestBungeeTo = GateUtil.nearestBungeeTo(new WorldCoord(comdata));
 
 						if (nearestBungeeTo.isEmpty()) {
 							response = "No nearby \"to\" location for gate \"" + gateid + "\" on server \"" + server + "\".";
@@ -331,7 +331,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 			// Send response back if a player is online, otherwise queue
 			if (response != null) {
-				PluginMessage rMsg = new PluginMessage("Message", player, Conf.colorSystem + response);
+				final PluginMessage rMsg = new PluginMessage("Message", player, Conf.colorSystem + response);
 				if (Plugin.instance.getServer().getOnlinePlayers().size() == 0) {
 					Plugin.bungeeMsgQueue.add(rMsg);
 				} else {
@@ -342,7 +342,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 		} else if (inChannel.equals("GetServer")) {
 			if (Conf.debug)
 				Plugin.log("Getting BungeeCord server name");
-			String server = new String(data);
+			final String server = new String(data);
 			Plugin.bungeeServerName = server;
 			// Parse BungeeCord server list packet
 		} else if (inChannel.equals("GetServers")) {

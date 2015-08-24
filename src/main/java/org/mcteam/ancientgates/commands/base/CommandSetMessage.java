@@ -23,7 +23,7 @@ public class CommandSetMessage extends BaseCommand {
 	public void perform() {
 		String msg = "";
 		parameters.remove(0);
-		for (String parameter : parameters) {
+		for (final String parameter : parameters) {
 			msg += " " + parameter;
 		}
 

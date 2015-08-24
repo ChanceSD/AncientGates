@@ -152,7 +152,7 @@ public class Plugin extends JavaPlugin {
 		}
 
 		// Register events
-		PluginManager pm = this.getServer().getPluginManager();
+		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new PluginBlockListener(this), this);
 		pm.registerEvents(new PluginEntityListener(this), this);
 		pm.registerEvents(new PluginPlayerListener(this), this);
@@ -161,7 +161,7 @@ public class Plugin extends JavaPlugin {
 		reload(null);
 
 		// Submit Stats
-		MetricsStarter metrics = new MetricsStarter(this);
+		final MetricsStarter metrics = new MetricsStarter(this);
 		metrics.setupMetrics();
 
 		// Load gates from disc (1 tick ensures worlds are loaded)
@@ -176,7 +176,7 @@ public class Plugin extends JavaPlugin {
 	// -------------------------------------------- //
 	// Auto-reload config
 	// -------------------------------------------- //
-	public void reload(CommandSender sender) {
+	public void reload(final CommandSender sender) {
 		// Takedown BungeeCord support
 		if (!Conf.bungeeCordSupport && pluginMessengerListener != null)
 			takedownBungeeCord();
@@ -234,7 +234,7 @@ public class Plugin extends JavaPlugin {
 		// Register/Unregister events
 		if (!Conf.useVanillaPortals && pluginMovementListener == null) {
 			pluginMovementListener = new PluginMovementListener(this);
-			PluginManager pm = this.getServer().getPluginManager();
+			final PluginManager pm = this.getServer().getPluginManager();
 			pm.registerEvents(pluginMovementListener, this);
 		} else if (Conf.useVanillaPortals && pluginMovementListener != null) {
 			HandlerList.unregisterAll(pluginMovementListener);
@@ -258,7 +258,7 @@ public class Plugin extends JavaPlugin {
 		}
 	}
 
-	private void setupSocketComms(CommandSender sender) {
+	private void setupSocketComms(final CommandSender sender) {
 		// Load servers list
 		Server.load();
 
@@ -274,7 +274,7 @@ public class Plugin extends JavaPlugin {
 		Plugin.log("Enabling comms channel");
 		try {
 			serv = new SocketServer(0, Conf.socketCommsPort, Conf.socketCommsPass);
-		} catch (BindException e) {
+		} catch (final BindException e) {
 			Plugin.log("socketCommsPort already in use. Using generic BungeeCord messaging.");
 			if (sender != null)
 				sender.sendMessage(Conf.colorSystem + "\"socketCommsPort\" " + Conf.socketCommsPort + " is already in use. Try another port.");
@@ -300,7 +300,7 @@ public class Plugin extends JavaPlugin {
 	}
 
 	private boolean setupPermissions() {
-		RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		final RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null) {
 			perms = permissionProvider.getProvider();
 		}
@@ -308,7 +308,7 @@ public class Plugin extends JavaPlugin {
 	}
 
 	private boolean setupEconomy() {
-		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		final RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null) {
 			econ = economyProvider.getProvider();
 		}
@@ -319,11 +319,11 @@ public class Plugin extends JavaPlugin {
 	// -------------------------------------------- //
 	// Check rights (online player)
 	// -------------------------------------------- //
-	public static boolean hasPermManage(CommandSender sender, String requiredPermission) {
+	public static boolean hasPermManage(final CommandSender sender, final String requiredPermission) {
 		if (!(sender instanceof Player))
 			return true;
 
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
 
 		if (perms == null) {
 			return sender.hasPermission(requiredPermission);
@@ -336,7 +336,7 @@ public class Plugin extends JavaPlugin {
 	// Check rights (bungeeCord player)
 	// -------------------------------------------- //
 	@SuppressWarnings("deprecation")
-	public static boolean hasPermManage(String player, String requiredPermission) {
+	public static boolean hasPermManage(final String player, final String requiredPermission) {
 		if (perms == null) {
 			return Bukkit.getServer().getOfflinePlayer(player).isOp();
 		} else {
@@ -348,18 +348,18 @@ public class Plugin extends JavaPlugin {
 	// Handle economy
 	// -------------------------------------------- //
 	@SuppressWarnings("deprecation")
-	public static boolean handleEconManage(CommandSender sender, Double requiredCost) {
+	public static boolean handleEconManage(final CommandSender sender, final Double requiredCost) {
 		if (!(sender instanceof Player))
 			return true;
 
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
 
 		if (econ == null || !Conf.useEconomy || hasPermManage(sender, "ancientgates.econbypass") || requiredCost == 0.00) {
 			return true;
 		} else {
-			Double balance = econ.getBalance(player.getName());
+			final Double balance = econ.getBalance(player.getName());
 			if (requiredCost <= balance) {
-				EconomyResponse r = econ.withdrawPlayer(player.getName(), requiredCost);
+				final EconomyResponse r = econ.withdrawPlayer(player.getName(), requiredCost);
 				if (r.transactionSuccess()) {
 					sender.sendMessage(String.format("You were charged %s and now have %s.", econ.format(r.amount), econ.format(r.balance)));
 					return true;
@@ -381,28 +381,28 @@ public class Plugin extends JavaPlugin {
 			return this.baseCommand;
 		}
 
-		Map<String, Map<String, Object>> Commands = this.getDescription().getCommands();
+		final Map<String, Map<String, Object>> Commands = this.getDescription().getCommands();
 		this.baseCommand = Commands.keySet().iterator().next();
 		return this.baseCommand;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		List<String> parameters = new ArrayList<String>(Arrays.asList(args));
+	public boolean onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
+		final List<String> parameters = new ArrayList<String>(Arrays.asList(args));
 		this.handleCommand(sender, parameters);
 		return true;
 	}
 
-	public void handleCommand(CommandSender sender, List<String> parameters) {
+	public void handleCommand(final CommandSender sender, final List<String> parameters) {
 		if (parameters.size() == 0) {
 			this.commands.get(0).execute(sender, parameters);
 			return;
 		}
 
-		String commandName = parameters.get(0).toLowerCase();
+		final String commandName = parameters.get(0).toLowerCase();
 		parameters.remove(0);
 
-		for (BaseCommand fcommand : this.commands) {
+		for (final BaseCommand fcommand : this.commands) {
 			if (fcommand.getAliases().contains(commandName)) {
 				fcommand.execute(sender, parameters);
 				return;
@@ -415,11 +415,11 @@ public class Plugin extends JavaPlugin {
 	// -------------------------------------------- //
 	// Logging
 	// -------------------------------------------- //
-	public static void log(String msg) {
+	public static void log(final String msg) {
 		log(Level.INFO, msg);
 	}
 
-	public static void log(Level level, String msg) {
+	public static void log(final Level level, final String msg) {
 		Logger.getLogger("Minecraft").log(level, "[" + instance.getDescription().getFullName() + "] " + msg);
 	}
 

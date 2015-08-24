@@ -48,7 +48,7 @@ public class BaseCommand {
 		return aliases;
 	}
 
-	public void execute(CommandSender sender, List<String> parameters) {
+	public void execute(final CommandSender sender, final List<String> parameters) {
 		this.sender = sender;
 		this.parameters = parameters;
 
@@ -66,12 +66,12 @@ public class BaseCommand {
 	public void perform() {
 	}
 
-	public void sendMessage(String message) {
+	public void sendMessage(final String message) {
 		sender.sendMessage(Conf.colorSystem + message);
 	}
 
-	public void sendMessage(List<String> messages) {
-		for (String message : messages) {
+	public void sendMessage(final List<String> messages) {
+		for (final String message : messages) {
 			this.sendMessage(message);
 		}
 	}
@@ -97,7 +97,7 @@ public class BaseCommand {
 		}
 
 		if (this.hasGateParam) {
-			String id = parameters.get(0);
+			final String id = parameters.get(0);
 			if (!Gate.exists(id)) {
 				// Ignore id for "to" on external BungeeCord gates
 				if (Conf.bungeeCordSupport && TextUtil.containsSubString(aliases, "to") && parameters.size() > 1)
@@ -110,7 +110,7 @@ public class BaseCommand {
 		}
 
 		if (this.hasServerParam) {
-			String name = parameters.get(0);
+			final String name = parameters.get(0);
 			if (!Server.exists(name)) {
 				sendMessage("There exists no server with name " + name);
 				return false;
@@ -122,14 +122,14 @@ public class BaseCommand {
 
 	}
 
-	public boolean hasPermission(CommandSender sender) {
+	public boolean hasPermission(final CommandSender sender) {
 		return Plugin.hasPermManage(sender, requiredPermission);
 	}
 
 	// -------------------------------------------- //
 	// Help and usage description
 	// -------------------------------------------- //
-	public String getUsageTemplate(boolean withColor, boolean withDescription) {
+	public String getUsageTemplate(final boolean withColor, final boolean withDescription) {
 		String ret = "";
 
 		if (withColor) {
@@ -138,13 +138,13 @@ public class BaseCommand {
 
 		ret += "/" + Plugin.instance.getBaseCommand() + " " + TextUtil.implode(this.getAliases(), ",") + " ";
 
-		List<String> parts = new ArrayList<String>();
+		final List<String> parts = new ArrayList<String>();
 
-		for (String requiredParameter : this.requiredParameters) {
+		for (final String requiredParameter : this.requiredParameters) {
 			parts.add("[" + requiredParameter + "]");
 		}
 
-		for (String optionalParameter : this.optionalParameters) {
+		for (final String optionalParameter : this.optionalParameters) {
 			parts.add("*[" + optionalParameter + "]");
 		}
 
@@ -160,7 +160,7 @@ public class BaseCommand {
 		return ret;
 	}
 
-	public String getUsageTemplate(boolean withColor) {
+	public String getUsageTemplate(final boolean withColor) {
 		return getUsageTemplate(withColor, false);
 	}
 

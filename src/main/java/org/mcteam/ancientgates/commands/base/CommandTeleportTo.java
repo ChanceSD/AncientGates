@@ -24,7 +24,7 @@ public class CommandTeleportTo extends BaseCommand {
 		if (parameters.size() > 1) {
 			try {
 				to = Integer.parseInt(parameters.get(1));
-			} catch (NumberFormatException e) {
+			} catch (final NumberFormatException e) {
 				// wasn't an integer
 			}
 		}

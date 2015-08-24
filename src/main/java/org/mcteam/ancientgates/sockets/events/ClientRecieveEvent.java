@@ -8,11 +8,11 @@ import com.google.gson.Gson;
 
 public class ClientRecieveEvent {
 
-	private int id;
-	private Socket client;
-	private Packet packetData;
+	private final int id;
+	private final Socket client;
+	private final Packet packetData;
 
-	public ClientRecieveEvent(int id, Socket client, Packet packet) {
+	public ClientRecieveEvent(final int id, final Socket client, final Packet packet) {
 		this.id = id;
 		this.client = client;
 		this.packetData = packet;
@@ -39,7 +39,7 @@ public class ClientRecieveEvent {
 	}
 
 	public String getRawData() {
-		Gson gson = new Gson();
+		final Gson gson = new Gson();
 		return gson.toJson(this.packetData, Packet.class);
 	}
 

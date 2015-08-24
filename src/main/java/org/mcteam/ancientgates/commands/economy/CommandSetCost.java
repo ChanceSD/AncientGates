@@ -20,7 +20,7 @@ public class CommandSetCost extends BaseCommand {
 
 	@Override
 	public void perform() {
-		Double cost = Double.valueOf(parameters.get(1));
+		final Double cost = Double.valueOf(parameters.get(1));
 
 		gate.setCost(cost);
 		sendMessage("Cost for gate \"" + gate.getId() + "\" is now " + cost + ".");

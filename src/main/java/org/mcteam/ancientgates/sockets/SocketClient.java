@@ -19,9 +19,9 @@ import com.google.gson.Gson;
 
 public class SocketClient implements Runnable {
 
-	private String serverIP;
-	private int serverPort;
-	private String serverPass;
+	private final String serverIP;
+	private final int serverPort;
+	private final String serverPass;
 	private Socket socket;
 	private boolean listening = false;
 	private SocketClientEventListener listener;
@@ -29,13 +29,13 @@ public class SocketClient implements Runnable {
 	private DataOutputStream writer;
 	private DataInputStream reader;
 
-	public SocketClient(String inServerIP, int inServerPort, String inServerPass) {
+	public SocketClient(final String inServerIP, final int inServerPort, final String inServerPass) {
 		this.serverIP = inServerIP;
 		this.serverPort = inServerPort;
 		this.serverPass = TextUtil.md5(inServerPass);
 	}
 
-	public void setListener(SocketClientEventListener inListener) {
+	public void setListener(final SocketClientEventListener inListener) {
 		this.listener = inListener;
 	}
 
@@ -46,12 +46,12 @@ public class SocketClient implements Runnable {
 				return;
 			}
 
-			long timeoutExpired = System.currentTimeMillis() + Conf.socketCommsTimeout;
+			final long timeoutExpired = System.currentTimeMillis() + Conf.socketCommsTimeout;
 			try {
 				byte[] buffer = new byte[1024];
 				String out = "";
 				while (this.listening) {
-					int encRecievedLen = this.reader.readInt();
+					final int encRecievedLen = this.reader.readInt();
 					if (encRecievedLen == -1 || System.currentTimeMillis() >= timeoutExpired) {
 						this.listener.onServerMessageError();
 						this.stopListening();
@@ -64,11 +64,11 @@ public class SocketClient implements Runnable {
 					this.reader.read(buffer);
 					byte[] encInput = new byte[encRecievedLen];
 					System.arraycopy(buffer, 0, encInput, 0, encInput.length);
-					byte[] decInput = this.de_encrypt(this.serverPass, encInput);
+					final byte[] decInput = this.de_encrypt(this.serverPass, encInput);
 
-					DataInputStream data = new DataInputStream(new ByteArrayInputStream(decInput));
-					int contentLen = data.readInt();
-					byte[] contentData = new byte[contentLen];
+					final DataInputStream data = new DataInputStream(new ByteArrayInputStream(decInput));
+					final int contentLen = data.readInt();
+					final byte[] contentData = new byte[contentLen];
 					data.readFully(contentData);
 					data.close();
 
@@ -83,7 +83,7 @@ public class SocketClient implements Runnable {
 				if (Conf.debug)
 					Plugin.log("End recieve");
 
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				this.listener.onServerMessageError();
 				this.stopListening();
 				this.close();
@@ -117,53 +117,53 @@ public class SocketClient implements Runnable {
 		this.stopListening();
 		try {
 			this.socket.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Plugin.log("Error stopping client:");
 			e.printStackTrace();
 		}
 	}
 
-	private Packets parse(String input) {
+	private Packets parse(final String input) {
 		Packets p = new Packets();
-		Gson g = new Gson();
+		final Gson g = new Gson();
 		p = g.fromJson(input, Packets.class);
 		return p;
 	}
 
-	public void send(String packets) {
-		Gson g = new Gson();
+	public void send(final String packets) {
+		final Gson g = new Gson();
 		try {
 			this.send(g.fromJson(packets, Packets.class));
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			Plugin.log("There was an error pasing message to send.");
 		}
 	}
 
-	public void send(Packet p) {
-		Packets ps = new Packets();
+	public void send(final Packet p) {
+		final Packets ps = new Packets();
 		ps.packets = new Packet[] { p };
 		this.send(ps);
 	}
 
-	public void send(Packets p) {
+	public void send(final Packets p) {
 		if (this.writer != null) {
 			try {
-				Gson gson = new Gson();
-				String json = gson.toJson(p, Packets.class);
+				final Gson gson = new Gson();
+				final String json = gson.toJson(p, Packets.class);
 
-				byte[] content = json.getBytes("UTF-8");
+				final byte[] content = json.getBytes("UTF-8");
 
-				ByteArrayOutputStream enb = new ByteArrayOutputStream();
-				DataOutputStream enOut = new DataOutputStream(enb);
+				final ByteArrayOutputStream enb = new ByteArrayOutputStream();
+				final DataOutputStream enOut = new DataOutputStream(enb);
 				enOut.writeInt(content.length);
 				enOut.write(content);
 				enOut.close();
-				byte[] encData = de_encrypt(this.serverPass, enb.toByteArray());
+				final byte[] encData = de_encrypt(this.serverPass, enb.toByteArray());
 
 				this.writer.writeInt(encData.length);
 				this.writer.write(encData);
 				this.writer.flush();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				Plugin.log("Error while trying to send message.");
 				e.printStackTrace();
 				this.close();
@@ -171,9 +171,9 @@ public class SocketClient implements Runnable {
 		}
 	}
 
-	private byte[] de_encrypt(String password, byte[] data) {
-		byte[] result = new byte[data.length];
-		byte[] pB = password.getBytes();
+	private byte[] de_encrypt(final String password, final byte[] data) {
+		final byte[] result = new byte[data.length];
+		final byte[] pB = password.getBytes();
 		for (int i = 0; i < data.length; i++) {
 			result[i] = ((byte) (data[i] ^ pB[(i % pB.length)]));
 		}
