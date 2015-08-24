@@ -21,13 +21,13 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 	private static final String Z = "z";
 	private static final String YAW = "yaw";
 	private static final String PITCH = "pitch";
-	
+
 	public Location deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		JsonObject obj = json.getAsJsonObject();
-		
+
 		Location location = null;
 		World world = this.getWorld(obj.get(WORLD).getAsString());
-		
+
 		if (world != null) {
 			double x = obj.get(X).getAsDouble();
 			double y = obj.get(Y).getAsDouble();
@@ -36,7 +36,7 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 			float pitch = obj.get(PITCH).getAsFloat();
 			location = new Location(world, x, y, z, yaw, pitch);
 		}
-		
+
 		return location;
 	}
 
@@ -57,13 +57,13 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 		obj.addProperty(Z, src.getZ());
 		obj.addProperty(YAW, src.getYaw());
 		obj.addProperty(PITCH, src.getPitch());
-		
+
 		return obj;
 	}
-	
+
 	private World getWorld(String name) {
 		World world = Plugin.instance.getServer().getWorld(name);
 		return world;
-    }
+	}
 
 }

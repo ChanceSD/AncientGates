@@ -5,19 +5,20 @@ import org.mcteam.ancientgates.util.TeleportUtil;
 import org.mcteam.ancientgates.util.types.InvBoolean;
 
 public class CommandTeleportTo extends BaseCommand {
-	
+
 	public CommandTeleportTo() {
 		aliases.add("tpto");
-		
+
 		requiredParameters.add("id");
 		optionalParameters.add("no");
-		
+
 		requiredPermission = "ancientgates.tpto";
 		senderMustBePlayer = true;
-		
+
 		helpDescription = "Teleport to gate destination";
 	}
-	
+
+	@Override
 	public void perform() {
 		int to = 1;
 		if (parameters.size() > 1) {
@@ -27,9 +28,10 @@ public class CommandTeleportTo extends BaseCommand {
 				// wasn't an integer
 			}
 		}
-		
-		if (to > 0) to -= 1;
-		
+
+		if (to > 0)
+			to -= 1;
+
 		if (gate.getTos() == null && gate.getBungeeTos() == null) {
 			player.sendMessage(String.format("This gate does not have a location :P"));
 		} else if ((gate.getTos() != null && gate.getTos().size() <= to) || (gate.getBungeeTos() != null && gate.getBungeeTos().size() <= to)) {
@@ -40,5 +42,5 @@ public class CommandTeleportTo extends BaseCommand {
 			TeleportUtil.teleportPlayer(player, gate.getBungeeTos().get(to), gate.getBungeeType(), false, InvBoolean.TRUE, true, null, null, null);
 		}
 	}
-	
+
 }

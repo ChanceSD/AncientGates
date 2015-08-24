@@ -11,22 +11,22 @@ import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.types.CommandType;
 
 public class ExecuteUtil {
-	
+
 	// Execute command as player or console
 	public static void execCommand(Player player, String command, CommandType commandType) {
 		// Insert any player substitution variables
 		command = command.replace("%p", player.getName());
-		
+
 		// Execute command as player
 		if (commandType.equals(CommandType.PLAYER)) {
 			player.performCommand(command);
-			
-		// Execute command as console
+
+			// Execute command as console
 		} else if (commandType.equals(CommandType.CONSOLE)) {
 			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
 		}
 	}
-	
+
 	// Teleport player back from gate and execute command
 	public static void execCommand(Player player, String command, CommandType commandType, Boolean teleport) {
 		// Spin player 180 deg
@@ -38,7 +38,7 @@ public class ExecuteUtil {
 			}
 			position.setYaw(yaw);
 			position.add(position.getDirection().multiply(2));
-			
+
 			// Handle player riding an entity
 			final Entity e = player.getVehicle();
 			if (player.isInsideVehicle() && e instanceof LivingEntity) {
@@ -46,20 +46,21 @@ public class ExecuteUtil {
 				e.teleport(position);
 				e.setFireTicks(0); // Cancel lava fire
 			}
-				
+
 			player.teleport(position);
 			player.setFireTicks(0); // Cancel lava fire
-			if (e != null) e.setPassenger(player);
+			if (e != null)
+				e.setPassenger(player);
 		}
-		
+
 		// Execute command as player or console
 		execCommand(player, command, commandType);
 	}
-	
+
 	// Teleport vehicle back from gate and execute command
 	public static void execCommand(Vehicle vehicle, final String command, final CommandType commandType, Boolean teleport) {
 		final Entity passenger = vehicle.getPassenger();
-		
+
 		// Spin player 180 deg
 		if (teleport) {
 			Location position = vehicle.getLocation();
@@ -69,7 +70,7 @@ public class ExecuteUtil {
 			}
 			position.setYaw(yaw);
 			position.add(position.getDirection().multiply(2));
-			
+
 			final Vehicle v = position.getWorld().spawn(position, vehicle.getClass());
 			vehicle.eject();
 			vehicle.remove();
@@ -81,13 +82,13 @@ public class ExecuteUtil {
 				}
 			}, 2);
 		}
-		
+
 		// Execute command as player or console
 		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 			public void run() {
-				execCommand((Player)passenger, command, commandType);
+				execCommand((Player) passenger, command, commandType);
 			}
 		}, 3);
 	}
-	
+
 }

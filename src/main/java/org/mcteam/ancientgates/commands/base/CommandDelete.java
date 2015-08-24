@@ -9,22 +9,23 @@ public class CommandDelete extends BaseCommand {
 		aliases.add("delete");
 		aliases.add("del");
 		aliases.add("remove");
-		
+
 		requiredParameters.add("id");
-		
+
 		requiredPermission = "ancientgates.delete";
-		
+
 		senderMustBePlayer = false;
 		helpDescription = "Delete a gate";
 	}
-	
-	public void perform() { 
-		if (gate.getFroms() != null) Gates.close(gate);
-		
+
+	@Override
+	public void perform() {
+		if (gate.getFroms() != null)
+			Gates.close(gate);
+
 		sendMessage("Gate with id \"" + gate.getId() + "\" was deleted.");
 		Gate.delete(gate.getId());
 		Gate.save();
 	}
-	
-}
 
+}

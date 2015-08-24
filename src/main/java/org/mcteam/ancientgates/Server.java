@@ -14,16 +14,16 @@ import org.mcteam.ancientgates.util.DiscUtil;
 import com.google.gson.reflect.TypeToken;
 
 public class Server {
-	
+
 	private static transient TreeMap<String, Server> instances = new TreeMap<String, Server>(String.CASE_INSENSITIVE_ORDER);
 	private static transient File file = new File(Plugin.instance.getDataFolder(), "servers.json");
-	
+
 	private transient String name;
 	private String address;
 	private int port;
 	private String password;
 	private ConnectionState state = null;
-	
+
 	// -------------------------------------------- //
 	// Getters And Setters
 	// -------------------------------------------- //
@@ -31,11 +31,11 @@ public class Server {
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
@@ -43,56 +43,56 @@ public class Server {
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public void setPort(int port) {
 		this.port = port;
 	}
-	
+
 	public int getPort() {
 		return port;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setState(ConnectionState state) {
 		this.state = state;
 	}
-	
+
 	public ConnectionState getState() {
 		return state;
 	}
-	
-	//----------------------------------------------//
+
+	// ----------------------------------------------//
 	// Persistance and entity management
-	//----------------------------------------------//
+	// ----------------------------------------------//
 	public static Server get(String name) {
 		return instances.get(name);
 	}
-	
+
 	public static boolean exists(String name) {
 		return instances.containsKey(name);
 	}
-	
+
 	public static Server add(String name, String address, int port, String password) {
 		Server server = new Server();
 		server.name = name;
 		instances.put(server.name, server);
-		
+
 		server.setAddress(address);
 		server.setPort(port);
 		server.setPassword(password);
-		
-		Plugin.log("Added new server "+server.name);
-		
+
+		Plugin.log("Added new server " + server.name);
+
 		return server;
 	}
-	
+
 	public static void remove(String name) {
 		// Remove the server
 		instances.remove(name);
@@ -103,7 +103,7 @@ public class Server {
 		for (Server server : Server.getAll()) {
 			server.state = null;
 		}
-		
+
 		try {
 			DiscUtil.write(file, Plugin.gson.toJson(instances));
 		} catch (IOException e) {
@@ -115,28 +115,29 @@ public class Server {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public static boolean load() {
 		Plugin.log("Loading servers from disk");
-		if ( ! file.exists()) {
+		if (!file.exists()) {
 			Plugin.log("No servers to load from disk. Creating new file.");
-			
+
 			Server server = new Server();
 			server.name = (Plugin.bungeeServerName != null) ? Plugin.bungeeServerName : "server1";
 			instances.put(server.name, server);
 			server.address = "localhost";
 			server.port = Conf.socketCommsPort;
 			server.password = Conf.socketCommsPass;
-			
+
 			save();
 			return true;
 		}
-		
+
 		try {
-			Type type = new TypeToken<Map<String, Server>>(){}.getType();
+			Type type = new TypeToken<Map<String, Server>>() {
+			}.getType();
 			Map<String, Server> instancesFromFile = Plugin.gson.fromJson(DiscUtil.read(file), type);
 			instances.clear();
 			instances.putAll(instancesFromFile);
@@ -144,21 +145,21 @@ public class Server {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		fillNames();
 		save();
-			
+
 		return true;
 	}
-	
+
 	public static Collection<Server> getAll() {
 		return instances.values();
 	}
-	
+
 	public static void fillNames() {
-		for(Entry<String, Server> entry : instances.entrySet()) {
+		for (Entry<String, Server> entry : instances.entrySet()) {
 			entry.getValue().setName(entry.getKey());
 		}
 	}
-	
+
 }

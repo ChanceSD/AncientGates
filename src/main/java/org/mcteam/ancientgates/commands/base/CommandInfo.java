@@ -19,59 +19,61 @@ import org.mcteam.ancientgates.util.types.TeleportType;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class CommandInfo extends BaseCommand {
-	
+
 	private static final String SERVER = "server";
-	
+
 	public CommandInfo() {
 		aliases.add("info");
-		
+
 		optionalParameters.add("id");
-		
+
 		requiredPermission = "ancientgates.info";
-		
+
 		hasGateParam = false;
-		
+
 		helpDescription = "Display info about a gate";
 	}
-	
-	public void perform() {		
+
+	@Override
+	public void perform() {
 		// Check if optional parameter exists
 		String id = null;
 		if (parameters.size() > 0) {
 			id = parameters.get(0);
 		}
 		Location nearestFrom = null;
-		
+
 		// Info based on sight
 		if (id == null) {
 			// Find gate based on the player's line of sight
-			// NB :- getTargetBlock deprecation warnings suppressed until Bukkit API provides an alternative method
-			WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock((Set<Material>)null, 20));
+			// NB :- getTargetBlock deprecation warnings suppressed until Bukkit API provides an
+			// alternative method
+			WorldCoord playerTargetCoord = new WorldCoord(player.getTargetBlock((Set<Material>) null, 20));
 			gate = GateUtil.nearestGate(playerTargetCoord, false);
 			String from = GateUtil.nearestFrom(playerTargetCoord);
-			
+
 			if (gate == null || from.isEmpty()) {
 				sendMessage("No gate in sight. Ensure you are looking at a gate, or use:");
 				sendMessage(new CommandInfo().getUsageTemplate(true, true));
 				return;
 			}
-			
+
 			nearestFrom = TeleportUtil.stringToLocation(from);
-			
-		// Info based on id
+
+			// Info based on id
 		} else {
 			// Find gate based on id
-			if (!Gate.exists(id)) {		
-				sendMessage("There exists no gate with id "+id);
+			if (!Gate.exists(id)) {
+				sendMessage("There exists no gate with id " + id);
 				return;
 			}
-			
+
 			gate = Gate.get(id);
-			
+
 		}
-		
+
 		// Display gate info
-		sendMessage(TextUtil.titleize("Gate: "+ Conf.colorValue + gate.getId()));
+		sendMessage(TextUtil.titleize("Gate: " + Conf.colorValue + gate.getId()));
 		if (Gates.isOpen(gate)) {
 			sendMessage(Conf.colorSystem + "This gate is" + Conf.colorCommand + " open");
 		} else {
@@ -79,7 +81,7 @@ public class CommandInfo extends BaseCommand {
 		}
 		for (Location from : gate.getFroms()) {
 			if (from != null) {//
-				if (nearestFrom != null){
+				if (nearestFrom != null) {
 					if (GeometryUtil.distanceBetweenLocations(from, nearestFrom) < 1.0) {
 						sendMessage("from: " + Conf.colorCommand + new WorldCoord(from).toString());
 					} else {
@@ -91,20 +93,20 @@ public class CommandInfo extends BaseCommand {
 			} else {
 				sendMessage("NOTE: this gate has no 'from' location");
 			}
-		}	
+		}
 		if (gate.getTos() != null) {
 			for (Location to : gate.getTos()) {
 				if (to != null) {
-					sendMessage("to:    " + Conf.colorChrome  + new WorldCoord(to).toString());
+					sendMessage("to:    " + Conf.colorChrome + new WorldCoord(to).toString());
 				}
 			}
 		} else if (gate.getBungeeTos() != null) {
 			for (Map<String, String> bungeeto : gate.getBungeeTos()) {
 				if (bungeeto != null) {
 					if (gate.getBungeeType() == TeleportType.LOCATION) {
-						sendMessage("to:    " + Conf.colorChrome + new WorldCoord(bungeeto).toString() + " on " + bungeeto.get(SERVER));	
+						sendMessage("to:    " + Conf.colorChrome + new WorldCoord(bungeeto).toString() + " on " + bungeeto.get(SERVER));
 					} else {
-						sendMessage("to:    " + Conf.colorChrome + bungeeto.get(SERVER));	
+						sendMessage("to:    " + Conf.colorChrome + bungeeto.get(SERVER));
 					}
 				}
 			}
@@ -139,7 +141,7 @@ public class CommandInfo extends BaseCommand {
 		if (gate.getTeleportInventory() == InvBoolean.TRUE) {
 			sendMessage("inventory" + Conf.colorCommand + " allowed");
 		} else if (gate.getTeleportInventory() == InvBoolean.CLEAR) {
-				sendMessage("inventory" + Conf.colorValue + " cleared");	
+			sendMessage("inventory" + Conf.colorValue + " cleared");
 		} else {
 			sendMessage("inventory" + Conf.colorParameter + " not allowed");
 		}
@@ -149,7 +151,7 @@ public class CommandInfo extends BaseCommand {
 			} else {
 				sendMessage("cost" + Conf.colorValue + " " + String.valueOf(gate.getCost()));
 			}
-		}	
+		}
 	}
 
 }

@@ -12,7 +12,7 @@ public class BlockUtil {
 
 	public static HashSet<Material> standableGateMaterials;
 	public static Map<Material, Boolean> standableMaterials;
-	
+
 	static {
 		standableGateMaterials = new HashSet<Material>();
 		standableGateMaterials.add(Material.PISTON_MOVING_PIECE);
@@ -25,7 +25,7 @@ public class BlockUtil {
 		standableGateMaterials.add(Material.WATER);
 		standableGateMaterials.add(Material.WEB);
 	}
-	
+
 	static {
 		standableMaterials = new HashMap<Material, Boolean>();
 		try {
@@ -73,26 +73,29 @@ public class BlockUtil {
 			standableMaterials.put(Material.TRIPWIRE, true); // 132 Tripwire
 			standableMaterials.put(Material.FLOWER_POT, true); // 140 Flower Pot
 			standableMaterials.put(Material.CARROT, true); // 141 Carrot
-			standableMaterials.put(Material.POTATO, true); // 142 Potatoes	
+			standableMaterials.put(Material.POTATO, true); // 142 Potatoes
 			standableMaterials.put(Material.GOLD_PLATE, true); // 147 Gold Pressure Plate
 			standableMaterials.put(Material.IRON_PLATE, true); // 148 Iron Pressure Plate
-			standableMaterials.put(Material.REDSTONE_COMPARATOR_OFF, true); // 149 Redstone Comparator (Off)
-			standableMaterials.put(Material.REDSTONE_COMPARATOR_ON, true); // 150 Redstone Comparator (On)	
+			standableMaterials.put(Material.REDSTONE_COMPARATOR_OFF, true); // 149 Redstone
+			                                                                // Comparator (Off)
+			standableMaterials.put(Material.REDSTONE_COMPARATOR_ON, true); // 150 Redstone
+			                                                               // Comparator (On)
 			standableMaterials.put(Material.DAYLIGHT_DETECTOR, false); // 151 Daylight Sensor
 			standableMaterials.put(Material.ACTIVATOR_RAIL, true); // 157 Activator Rail
 			standableMaterials.put(Material.CARPET, true); // 171 Carpet
 			standableMaterials.put(Material.DOUBLE_PLANT, true); // double_plant Double Plants
-		} catch (NoSuchFieldError e) {} // Support previous MC versions
+		} catch (NoSuchFieldError e) {
+		} // Support previous MC versions
 	}
-	
+
 	public static boolean isPortalGateMaterial(Material material) {
 		return material.equals(Material.PORTAL) || material.equals(Material.ENDER_PORTAL);
 	}
-	
+
 	public static boolean isStandableGateMaterial(Material material) {
 		return standableGateMaterials.contains(material);
 	}
-	
+
 	public static boolean canPlayerStandInGateBlock(Block block, Boolean fullHeight) {
 		if (fullHeight) {
 			return isStandableGateMaterial(block.getType()) && isStandableGateMaterial(block.getRelative(BlockFace.UP).getType());
@@ -100,11 +103,11 @@ public class BlockUtil {
 			return isStandableGateMaterial(block.getType());
 		}
 	}
-	
+
 	public static boolean isStandableMaterial(Material material) {
 		return standableMaterials.containsKey(material);
 	}
-	
+
 	public static boolean canPassThroughMaterial(Material material) {
 		return (standableMaterials.get(material) == null) ? false : standableMaterials.get(material);
 	}
