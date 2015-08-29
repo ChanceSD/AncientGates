@@ -55,9 +55,6 @@ public class Conf {
 	public static String socketCommsPass = "";
 	public static int socketCommsTimeout = 10000;
 
-	// Enable auto-update
-	public static boolean autoUpdate = true;
-
 	// Enable debug msgs
 	public static boolean debug = false;
 

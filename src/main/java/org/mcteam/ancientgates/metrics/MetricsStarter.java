@@ -106,13 +106,13 @@ public class MetricsStarter {
 			serverGraph.addPlotter(new Metrics.Plotter("Bungee Servers") {
 				@Override
 				public int getValue() {
-					return (Conf.bungeeCordSupport) ? 1 : 0;
+					return Conf.bungeeCordSupport ? 1 : 0;
 				}
 			});
 			serverGraph.addPlotter(new Metrics.Plotter("Normal Servers") {
 				@Override
 				public int getValue() {
-					return (Conf.bungeeCordSupport) ? 0 : 1;
+					return Conf.bungeeCordSupport ? 0 : 1;
 				}
 			});
 			serverGraph.addPlotter(new Metrics.Plotter("Total") {
@@ -127,31 +127,25 @@ public class MetricsStarter {
 			featureGraph.addPlotter(new Metrics.Plotter("BungeeCord Support") {
 				@Override
 				public int getValue() {
-					return (Conf.bungeeCordSupport) ? 1 : 0;
+					return Conf.bungeeCordSupport ? 1 : 0;
 				}
 			});
 			featureGraph.addPlotter(new Metrics.Plotter("Socket Comms Enabled") {
 				@Override
 				public int getValue() {
-					return (Conf.useSocketComms) ? 1 : 0;
-				}
-			});
-			featureGraph.addPlotter(new Metrics.Plotter("Auto-update Enabled") {
-				@Override
-				public int getValue() {
-					return (Conf.autoUpdate) ? 1 : 0;
+					return Conf.useSocketComms ? 1 : 0;
 				}
 			});
 			featureGraph.addPlotter(new Metrics.Plotter("Economy Enabled") {
 				@Override
 				public int getValue() {
-					return (Conf.useEconomy) ? 1 : 0;
+					return Conf.useEconomy ? 1 : 0;
 				}
 			});
 			featureGraph.addPlotter(new Metrics.Plotter("Enforce Access Enabled") {
 				@Override
 				public int getValue() {
-					return (Conf.enforceAccess) ? 1 : 0;
+					return Conf.enforceAccess ? 1 : 0;
 				}
 			});
 
@@ -160,13 +154,13 @@ public class MetricsStarter {
 			methodGraph.addPlotter(new Metrics.Plotter("Movement Hook") {
 				@Override
 				public int getValue() {
-					return (Conf.useVanillaPortals) ? 0 : 1;
+					return Conf.useVanillaPortals ? 0 : 1;
 				}
 			});
 			methodGraph.addPlotter(new Metrics.Plotter("Vanilla Portal") {
 				@Override
 				public int getValue() {
-					return (Conf.useVanillaPortals) ? 1 : 0;
+					return Conf.useVanillaPortals ? 1 : 0;
 				}
 			});
 
