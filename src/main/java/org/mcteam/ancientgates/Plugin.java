@@ -146,11 +146,6 @@ public class Plugin extends JavaPlugin {
 		// Load config from disc
 		Conf.load();
 
-		// Check for updates
-		if (Conf.autoUpdate) {
-			new Updater(this, 51406, this.getFile(), Updater.UpdateType.DEFAULT, false);
-		}
-
 		// Register events
 		final PluginManager pm = this.getServer().getPluginManager();
 		pm.registerEvents(new PluginBlockListener(this), this);
@@ -304,7 +299,7 @@ public class Plugin extends JavaPlugin {
 		if (permissionProvider != null) {
 			perms = permissionProvider.getProvider();
 		}
-		return (perms != null);
+		return perms != null;
 	}
 
 	private boolean setupEconomy() {
@@ -313,7 +308,7 @@ public class Plugin extends JavaPlugin {
 			econ = economyProvider.getProvider();
 		}
 
-		return (econ != null);
+		return econ != null;
 	}
 
 	// -------------------------------------------- //
