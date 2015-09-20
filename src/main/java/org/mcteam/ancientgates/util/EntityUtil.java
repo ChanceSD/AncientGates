@@ -160,8 +160,8 @@ public class EntityUtil {
 
 		final String parts[] = data.split(",");
 		if (entity instanceof LivingEntity) {
-			((LivingEntity) entity).setHealth(Double.parseDouble(parts[0]));
 			((LivingEntity) entity).setMaxHealth(Double.parseDouble(parts[1]));
+			((LivingEntity) entity).setHealth(Double.parseDouble(parts[0]));
 			if (!parts[2].equals("null"))
 				((LivingEntity) entity).setCustomName(parts[2]);
 			if (entity instanceof Animals) {
