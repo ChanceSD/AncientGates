@@ -11,7 +11,7 @@ public enum CommandType {
 	// Player command
 	PLAYER;
 
-	private static final Map<String, CommandType> nameToCmdType = new HashMap<String, CommandType>();
+	private static final Map<String, CommandType> nameToCmdType = new HashMap<>();
 
 	static {
 		for (final CommandType value : EnumSet.allOf(CommandType.class)) {

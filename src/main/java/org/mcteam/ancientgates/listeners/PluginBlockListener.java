@@ -332,6 +332,7 @@ public class PluginBlockListener implements Listener {
 
 			event.getEntity().remove();
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				@Override
 				public void run() {
 					coord.getBlock().setType(Material.SUGAR_CANE_BLOCK);
 				}

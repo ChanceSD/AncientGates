@@ -25,7 +25,7 @@ public enum GateMaterial {
 	// WEB
 	WEB("spiders web blocks", Material.WEB);
 
-	private static final Map<String, GateMaterial> nameToMaterial = new HashMap<String, GateMaterial>();
+	private static final Map<String, GateMaterial> nameToMaterial = new HashMap<>();
 
 	static {
 		for (final GateMaterial value : EnumSet.allOf(GateMaterial.class)) {

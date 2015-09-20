@@ -148,24 +148,21 @@ public class BungeeQueue {
 	// Converters
 	// ----------------------------------------------//
 	public Location getDestination() {
-		final String destination = this.destination;
-		if (destination == null)
-			return null;
-		return TeleportUtil.stringToLocation(destination);
+		if (destination != null)
+			return TeleportUtil.stringToLocation(destination);
+		return null;
 	}
 
 	public EntityType getEntityType() {
-		final String entityTypeName = this.entityTypeName;
-		if (entityTypeName == null)
-			return null;
-		return EntityUtil.entityType(entityTypeName);
+		if (entityTypeName != null)
+			return EntityUtil.entityType(entityTypeName);
+		return null;
 	}
 
 	public EntityType getVehicleType() {
-		final String vehicleTypeName = this.vehicleTypeName;
-		if (vehicleTypeName == null)
-			return null;
-		return EntityUtil.entityType(vehicleTypeName);
+		if (vehicleTypeName != null)
+			return EntityUtil.entityType(vehicleTypeName);
+		return null;
 	}
 
 }

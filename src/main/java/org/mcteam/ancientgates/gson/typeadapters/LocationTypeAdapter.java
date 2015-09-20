@@ -22,6 +22,7 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 	private static final String YAW = "yaw";
 	private static final String PITCH = "pitch";
 
+	@Override
 	public Location deserialize(final JsonElement json, final Type typeOfT, final JsonDeserializationContext context) throws JsonParseException {
 		final JsonObject obj = json.getAsJsonObject();
 
@@ -40,6 +41,7 @@ public class LocationTypeAdapter implements JsonDeserializer<Location>, JsonSeri
 		return location;
 	}
 
+	@Override
 	public JsonElement serialize(final Location src, final Type typeOfSrc, final JsonSerializationContext context) {
 		final JsonObject obj = new JsonObject();
 

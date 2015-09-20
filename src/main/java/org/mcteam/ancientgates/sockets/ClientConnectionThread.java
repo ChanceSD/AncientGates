@@ -37,6 +37,7 @@ public class ClientConnectionThread implements Runnable {
 		return this.clientSocket;
 	}
 
+	@SuppressWarnings("resource")
 	public void send(final String message) {
 		try {
 			final byte[] content = message.getBytes("UTF-8");
@@ -104,6 +105,8 @@ public class ClientConnectionThread implements Runnable {
 		this.stop();
 	}
 
+	@SuppressWarnings("resource")
+	@Override
 	public void run() {
 		try {
 			byte[] buffer = new byte[1024];
@@ -151,7 +154,7 @@ public class ClientConnectionThread implements Runnable {
 		final byte[] result = new byte[data.length];
 		final byte[] pB = password.getBytes();
 		for (int i = 0; i < data.length; i++) {
-			result[i] = ((byte) (data[i] ^ pB[(i % pB.length)]));
+			result[i] = (byte) (data[i] ^ pB[i % pB.length]);
 		}
 		return result;
 	}

@@ -35,7 +35,7 @@ public class PluginPlayerListener implements Listener {
 
 	public Plugin plugin;
 
-	private final HashMap<Player, Location> playerLocationAtEvent = new HashMap<Player, Location>();
+	private final HashMap<Player, Location> playerLocationAtEvent = new HashMap<>();
 
 	public PluginPlayerListener(final Plugin plugin) {
 		this.plugin = plugin;

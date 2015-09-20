@@ -15,6 +15,7 @@ public class BungeeServerList extends BukkitRunnable {
 		this.plugin = plugin;
 	}
 
+	@Override
 	public void run() {
 		if (plugin.getServer().getOnlinePlayers().size() == 0)
 			return;

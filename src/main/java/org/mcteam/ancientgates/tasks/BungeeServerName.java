@@ -15,6 +15,7 @@ public class BungeeServerName extends BukkitRunnable {
 		this.plugin = plugin;
 	}
 
+	@Override
 	public void run() {
 		if (Plugin.bungeeServerName != null)
 			return;

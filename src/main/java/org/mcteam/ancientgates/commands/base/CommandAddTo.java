@@ -77,26 +77,28 @@ public class CommandAddTo extends BaseCommand {
 				}
 
 				// Get server
-				final Server server = Server.get(serverName);
+				final Server server1 = Server.get(serverName);
 
 				// Build the packet, format is <player>,<server>,<gateid>,<data>,<fromserver>
 				final String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0), TeleportUtil.locationToString(player.getLocation()), serverName };
 				final Packet packet = new Packet("addto", args);
 
 				// Setup socket client and listener
-				final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
+				final SocketClient client = new SocketClient(server1.getAddress(), server1.getPort(), server1.getPassword());
 				client.setListener(new SocketClientEventListener() {
-					public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
-						for (final Packet packet : packets.packets) {
-							if (packet.command.toLowerCase().equals("sendmsg")) {
-								sendMessage(packet.args[0]);
+					@Override
+					public void onServerMessageRecieve(final SocketClient client1, final Packets packets) {
+						for (final Packet packet1 : packets.packets) {
+							if (packet1.command.toLowerCase().equals("sendmsg")) {
+								sendMessage(packet1.args[0]);
 							}
 						}
-						client.close();
+						client1.close();
 					}
 
+					@Override
 					public void onServerMessageError() {
-						sendMessage("Could not connect to server \"" + server.getName() + "\".");
+						sendMessage("Could not connect to server \"" + server1.getName() + "\".");
 						Plugin.log("There was an error connection to the server.");
 					}
 				});

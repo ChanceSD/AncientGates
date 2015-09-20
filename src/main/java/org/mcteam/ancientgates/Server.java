@@ -15,7 +15,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class Server {
 
-	private static transient TreeMap<String, Server> instances = new TreeMap<String, Server>(String.CASE_INSENSITIVE_ORDER);
+	private static transient TreeMap<String, Server> instances = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private static transient File file = new File(Plugin.instance.getDataFolder(), "servers.json");
 
 	private transient String name;

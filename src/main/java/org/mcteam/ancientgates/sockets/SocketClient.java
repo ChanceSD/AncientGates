@@ -39,6 +39,8 @@ public class SocketClient implements Runnable {
 		this.listener = inListener;
 	}
 
+	@SuppressWarnings("resource")
+	@Override
 	public void run() {
 		if (this.socket != null && this.socket.isConnected()) {
 			if (this.reader == null) {
@@ -145,6 +147,7 @@ public class SocketClient implements Runnable {
 		this.send(ps);
 	}
 
+	@SuppressWarnings("resource")
 	public void send(final Packets p) {
 		if (this.writer != null) {
 			try {
@@ -175,7 +178,7 @@ public class SocketClient implements Runnable {
 		final byte[] result = new byte[data.length];
 		final byte[] pB = password.getBytes();
 		for (int i = 0; i < data.length; i++) {
-			result[i] = ((byte) (data[i] ^ pB[(i % pB.length)]));
+			result[i] = (byte) (data[i] ^ pB[i % pB.length]);
 		}
 		return result;
 	}

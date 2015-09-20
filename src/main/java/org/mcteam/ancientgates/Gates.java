@@ -11,10 +11,10 @@ import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class Gates {
 
-	protected static Map<WorldCoord, Gate> portalBlockToGate = new HashMap<WorldCoord, Gate>();
-	protected static Map<WorldCoord, Gate> surroundingPortalBlockToGate = new HashMap<WorldCoord, Gate>();
-	protected static Map<WorldCoord, Gate> frameBlockToGate = new HashMap<WorldCoord, Gate>();
-	protected static Map<WorldCoord, Gate> surroundingFrameBlockToGate = new HashMap<WorldCoord, Gate>();
+	protected static Map<WorldCoord, Gate> portalBlockToGate = new HashMap<>();
+	protected static Map<WorldCoord, Gate> surroundingPortalBlockToGate = new HashMap<>();
+	protected static Map<WorldCoord, Gate> frameBlockToGate = new HashMap<>();
+	protected static Map<WorldCoord, Gate> surroundingFrameBlockToGate = new HashMap<>();
 
 	public Map<WorldCoord, Gate> portalBlockToGate() {
 		return portalBlockToGate;

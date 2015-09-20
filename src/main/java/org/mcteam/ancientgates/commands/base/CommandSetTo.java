@@ -88,6 +88,7 @@ public class CommandSetTo extends BaseCommand {
 				// Setup socket client and listener
 				final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 				client.setListener(new SocketClientEventListener() {
+					@Override
 					public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
 						for (final Packet packet : packets.packets) {
 							if (packet.command.toLowerCase().equals("sendmsg")) {
@@ -97,6 +98,7 @@ public class CommandSetTo extends BaseCommand {
 						client.close();
 					}
 
+					@Override
 					public void onServerMessageError() {
 						sendMessage("Could not connect to server \"" + server.getName() + "\".");
 						Plugin.log("There was an error connection to the server.");

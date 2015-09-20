@@ -14,7 +14,7 @@ public enum InvBoolean {
 	// Disallow invnetory
 	FALSE;
 
-	private static final Map<String, InvBoolean> nameToInvBool = new HashMap<String, InvBoolean>();
+	private static final Map<String, InvBoolean> nameToInvBool = new HashMap<>();
 
 	static {
 		for (final InvBoolean value : EnumSet.allOf(InvBoolean.class)) {

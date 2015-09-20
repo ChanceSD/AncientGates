@@ -18,6 +18,7 @@ import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginSocketListener implements SocketServerEventListener {
 
+	@Override
 	public void onClientRecieve(final ClientRecieveEvent event) {
 		if (!Conf.bungeeCordSupport || !Conf.useSocketComms) {
 			return;
@@ -190,6 +191,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 				// Schedule synchronous task to process spawn queue
 				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+					@Override
 					public void run() {
 						TeleportUtil.teleportEntity();
 					}
@@ -249,6 +251,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 
 			// Schedule synchronous task to process spawn queue
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				@Override
 				public void run() {
 					TeleportUtil.teleportVehicle();
 				}
@@ -267,11 +270,13 @@ public class PluginSocketListener implements SocketServerEventListener {
 		}
 	}
 
+	@Override
 	public void onClientConnect(final ClientConnectionEvent event) {
 		if (Conf.debug)
 			Plugin.log("Socket client connected " + event.getClientID() + ".");
 	}
 
+	@Override
 	public void onClientDisconnect(final ClientConnectionEvent event) {
 		if (Conf.debug)
 			Plugin.log("Socket client disconnected " + event.getClientID() + ".");

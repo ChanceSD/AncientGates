@@ -21,7 +21,7 @@ public class TextUtil {
 	public static Map<String, ChatColor> chatColors;
 
 	static {
-		chatColors = new HashMap<String, ChatColor>();
+		chatColors = new HashMap<>();
 		for (final ChatColor c : ChatColor.values()) {
 			chatColors.put(c.name(), c);
 		}
@@ -39,12 +39,11 @@ public class TextUtil {
 	public static String repeat(final String s, final int times) {
 		if (times <= 0)
 			return "";
-		else
-			return s + repeat(s, times - 1);
+		return s + repeat(s, times - 1);
 	}
 
 	public static ArrayList<String> split(final String str, final String delim) {
-		return new ArrayList<String>(Arrays.asList(str.split(delim)));
+		return new ArrayList<>(Arrays.asList(str.split(delim)));
 	}
 
 	public static Boolean containsSubString(final List<String> strList, final String subStr) {
@@ -71,7 +70,7 @@ public class TextUtil {
 	}
 
 	public static ArrayList<String> concatenate(final List<String> list1, final List<String> list2, final List<String> list3) {
-		final ArrayList<String> ret = new ArrayList<String>();
+		final ArrayList<String> ret = new ArrayList<>();
 		for (int i = 0; i < list1.size(); i++) {
 			ret.add(list1.get(i) + " " + Conf.colorChrome + "(" + list2.get(i) + " - " + list3.get(i) + Conf.colorChrome + ")");
 		}
@@ -79,7 +78,7 @@ public class TextUtil {
 	}
 
 	public static ArrayList<String> concatenate(final List<String> list1, final List<String> list2) {
-		final ArrayList<String> ret = new ArrayList<String>();
+		final ArrayList<String> ret = new ArrayList<>();
 		for (int i = 0; i < list1.size(); i++) {
 			ret.add(list1.get(i) + Conf.colorChrome + "(" + list2.get(i) + Conf.colorChrome + ")");
 		}
@@ -115,13 +114,13 @@ public class TextUtil {
 	}
 
 	public static ArrayList<String> getPage(final List<String> lines, final int pageHumanBased, final String title, final CommandSender sender) {
-		return getPage(lines, pageHumanBased, title, (sender instanceof Player) ? PAGEHEIGHT_PLAYER : PAGEHEIGHT_CONSOLE);
+		return getPage(lines, pageHumanBased, title, sender instanceof Player ? PAGEHEIGHT_PLAYER : PAGEHEIGHT_CONSOLE);
 	}
 
 	public static ArrayList<String> getPage(final List<String> lines, final int pageHumanBased, final String title, final int pageheight) {
-		final ArrayList<String> ret = new ArrayList<String>();
+		final ArrayList<String> ret = new ArrayList<>();
 		final int pageZeroBased = pageHumanBased - 1;
-		final int pagecount = (int) Math.ceil(((double) lines.size()) / pageheight);
+		final int pagecount = (int) Math.ceil((double) lines.size() / pageheight);
 
 		ret.add(titleize(title + " " + pageHumanBased + "/" + pagecount));
 

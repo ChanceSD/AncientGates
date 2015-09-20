@@ -37,9 +37,9 @@ public class CommandList extends BaseCommand {
 			}
 		}
 
-		final List<String> ids = new ArrayList<String>();
-		final List<String> states = new ArrayList<String>();
-		final List<String> costs = new ArrayList<String>();
+		final List<String> ids = new ArrayList<>();
+		final List<String> states = new ArrayList<>();
+		final List<String> costs = new ArrayList<>();
 		for (final Gate gate : Gate.getAll()) {
 			ids.add(Conf.colorValue + gate.getId());
 			states.add((Gates.isOpen(gate) ? Conf.colorCommand + "open" : Conf.colorParameter + "closed"));

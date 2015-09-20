@@ -206,12 +206,13 @@ public class Metrics {
 
 				private boolean firstPost = true;
 
+				@Override
 				public void run() {
 					try {
 						// This has to be synchronized or it can collide with the disable method.
 						synchronized (optOutLock) {
 							// Disable Task, if it is running and the server owner decided to
-			                // opt-out
+							// opt-out
 							if (isOptOut() && task != null) {
 								task.cancel();
 								task = null;
@@ -223,13 +224,13 @@ public class Metrics {
 						}
 
 						// We use the inverse of firstPost because if it is the first time we are
-			            // posting,
-			            // it is not a interval ping, so it evaluates to FALSE
-			            // Each time thereafter it will evaluate to TRUE, i.e PING!
+						// posting,
+						// it is not a interval ping, so it evaluates to FALSE
+						// Each time thereafter it will evaluate to TRUE, i.e PING!
 						postPlugin(!firstPost);
 
 						// After the first post we set firstPost to false
-			            // Each post thereafter will be a ping
+						// Each post thereafter will be a ping
 						firstPost = false;
 					} catch (final IOException e) {
 						if (debug) {
@@ -335,6 +336,7 @@ public class Metrics {
 	/**
 	 * Generic method that posts a plugin to the metrics website
 	 */
+	@SuppressWarnings("resource")
 	private void postPlugin(final boolean isPing) throws IOException {
 		// Server software specific section
 		final PluginDescriptionFile description = plugin.getDescription();
@@ -477,18 +479,17 @@ public class Metrics {
 			}
 
 			throw new IOException(response);
-		} else {
-			// Is this the first update this hour?
-			if (response.equals("1") || response.contains("This is your first update this hour")) {
-				synchronized (graphs) {
-					final Iterator<Graph> iter = graphs.iterator();
+		}
+		// Is this the first update this hour?
+		if (response.equals("1") || response.contains("This is your first update this hour")) {
+			synchronized (graphs) {
+				final Iterator<Graph> iter = graphs.iterator();
 
-					while (iter.hasNext()) {
-						final Graph graph = iter.next();
+				while (iter.hasNext()) {
+					final Graph graph = iter.next();
 
-						for (final Plotter plotter : graph.getPlotters()) {
-							plotter.reset();
-						}
+					for (final Plotter plotter : graph.getPlotters()) {
+						plotter.reset();
 					}
 				}
 			}
@@ -640,7 +641,7 @@ public class Metrics {
 		/**
 		 * The set of plotters that are contained within this graph
 		 */
-		private final Set<Plotter> plotters = new LinkedHashSet<Plotter>();
+		private final Set<Plotter> plotters = new LinkedHashSet<>();
 
 		private Graph(final String name) {
 			this.name = name;

@@ -44,9 +44,9 @@ public class SocketServer implements Runnable {
 			Plugin.log("Error starting listener on port " + port + ".");
 			e.printStackTrace();
 		}
-		this.clients = new ArrayList<ClientConnectionThread>();
-		this.clientListeners = new ArrayList<SocketServerEventListener>();
-		this.ids = new HashSet<Integer>();
+		this.clients = new ArrayList<>();
+		this.clientListeners = new ArrayList<>();
+		this.ids = new HashSet<>();
 	}
 
 	public synchronized void removeClient(final int id) {
@@ -58,6 +58,7 @@ public class SocketServer implements Runnable {
 		this.ids.remove(id);
 	}
 
+	@Override
 	public void run() {
 		while (thread != null && this.isRunning) {
 			try {
@@ -131,7 +132,7 @@ public class SocketServer implements Runnable {
 		int found = -1;
 		int current = 0;
 		do {
-			current = (this.maxClient > 0) ? (int) (Math.random() * (this.maxClient)) : (int) (Math.random() * ((this.clients.size() + 1) * 2));
+			current = this.maxClient > 0 ? (int) (Math.random() * this.maxClient) : (int) (Math.random() * ((this.clients.size() + 1) * 2));
 			if (this.isIDAvaible(current)) {
 				found = current;
 			}
@@ -167,29 +168,29 @@ public class SocketServer implements Runnable {
 	}
 
 	private void fireClientConnectEvent(final ClientConnectionEvent event) {
-		for (final SocketServerEventListener listener : this.clientListeners) {
-			listener.onClientConnect(event);
+		for (final SocketServerEventListener listener1 : this.clientListeners) {
+			listener1.onClientConnect(event);
 		}
 	}
 
 	private void fireClientDisconnectEvent(final ClientConnectionEvent event) {
-		for (final SocketServerEventListener listener : this.clientListeners) {
-			listener.onClientDisconnect(event);
+		for (final SocketServerEventListener listener1 : this.clientListeners) {
+			listener1.onClientDisconnect(event);
 		}
 	}
 
 	private void fireClientRecieveEvent(final ClientRecieveEvent event) {
-		for (final SocketServerEventListener listener : this.clientListeners) {
-			listener.onClientRecieve(event);
+		for (final SocketServerEventListener listener1 : this.clientListeners) {
+			listener1.onClientRecieve(event);
 		}
 	}
 
-	public void addClientListener(final SocketServerEventListener listener) {
-		this.clientListeners.add(listener);
+	public void addClientListener(final SocketServerEventListener listener1) {
+		this.clientListeners.add(listener1);
 	}
 
-	public void removeClientListener(final SocketServerEventListener listener) {
-		this.clientListeners.remove(listener);
+	public void removeClientListener(final SocketServerEventListener listener1) {
+		this.clientListeners.remove(listener1);
 	}
 
 	public String getPassword() {

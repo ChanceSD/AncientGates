@@ -83,8 +83,9 @@ public class TeleportUtil {
 		if (entity != null && teleportEntities && entity instanceof LivingEntity && !(entity instanceof Player) && !EntityUtil.isEchoPet(entity)) {
 			final Entity e = location.getWorld().spawn(location, entity.getClass());
 			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity)); // Clone entity
-			                                                                       // data
+			// data
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				@Override
 				public void run() {
 					e.setPassenger(player);
 				}
@@ -143,8 +144,8 @@ public class TeleportUtil {
 			}
 
 			// Send AGBungeeTele packet first
-			tpCmd = (tpCmd == null) ? "null" : tpCmd;
-			tpMsg = (tpMsg == null) ? "null" : tpMsg;
+			tpCmd = tpCmd == null ? "null" : tpCmd;
+			tpMsg = tpMsg == null ? "null" : tpMsg;
 			PluginMessage msg;
 			// Player server teleport
 			if (tpType.equals(TeleportType.SERVER)) {
@@ -194,7 +195,7 @@ public class TeleportUtil {
 
 	// BungeeCord entity spawn out (excl. EchoPet)
 	public static void teleportEntity(final EntityPortalEvent event, final Map<String, String> location) {
-		if (Conf.bungeeCordSupport && ((event.getEntityType().isSpawnable() && !EntityUtil.isEchoPet(event.getEntity())) || event.getEntityType() == EntityType.DROPPED_ITEM)) {
+		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() && !EntityUtil.isEchoPet(event.getEntity()) || event.getEntityType() == EntityType.DROPPED_ITEM)) {
 
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
@@ -217,12 +218,13 @@ public class TeleportUtil {
 				// Setup socket client and listener
 				final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 				client.setListener(new SocketClientEventListener() {
-					public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
-						for (final Packet packet : packets.packets) {
-							if (packet.command.toLowerCase().equals("removeentity")) {
+					@Override
+					public void onServerMessageRecieve(final SocketClient client1, final Packets packets) {
+						for (final Packet packet1 : packets.packets) {
+							if (packet1.command.toLowerCase().equals("removeentity")) {
 								// Extract receiving packet arguments
-								final String world = String.valueOf(packet.args[0]);
-								final int entityId = Integer.parseInt(packet.args[1]);
+								final String world = String.valueOf(packet1.args[0]);
+								final int entityId = Integer.parseInt(packet1.args[1]);
 								// Iterate and remove teleported entity
 								final List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
 								final Iterator<Entity> it = entities.iterator();
@@ -235,9 +237,10 @@ public class TeleportUtil {
 								}
 							}
 						}
-						client.close();
+						client1.close();
 					}
 
+					@Override
 					public void onServerMessageError() {
 					}
 				});
@@ -272,7 +275,7 @@ public class TeleportUtil {
 				entity.teleport(destination);
 			} else if (queue.getEntityType() == EntityType.DROPPED_ITEM) {
 				final Item item = world.dropItemNaturally(destination, ItemStackUtil.stringToItemStack(queue.getEntityTypeData())[0]); // Dropped
-				                                                                                                                 // ItemStack
+				// ItemStack
 				item.teleport(destination);
 			}
 
@@ -284,8 +287,8 @@ public class TeleportUtil {
 	// Normal vehicle teleport
 	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
 		final Location destination = GeometryUtil.addHeightToLocation(location, 0.5); // Fix vehicle
-		                                                                              // spawn
-		                                                                              // glitch
+		// spawn
+		// glitch
 		final double velocity = vehicle.getVelocity().length();
 		checkChunkLoad(destination.getBlock());
 
@@ -316,12 +319,14 @@ public class TeleportUtil {
 			vehicle.eject();
 			vehicle.remove();
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				@Override
 				public void run() {
 					passenger.teleport(destination);
 					passenger.setFireTicks(0); // Cancel lava fire
 				}
 			}, 0);
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				@Override
 				public void run() {
 					if (!EntityUtil.isEchoPet(passenger))
 						v.setPassenger(passenger);
@@ -416,8 +421,8 @@ public class TeleportUtil {
 				}
 
 				// Send AGBungeeTele/AGBungeeVehicleTele packet first
-				tpCmd = (tpCmd == null) ? "null" : tpCmd;
-				tpMsg = (tpMsg == null) ? "null" : tpMsg;
+				tpCmd = tpCmd == null ? "null" : tpCmd;
+				tpMsg = tpMsg == null ? "null" : tpMsg;
 				PluginMessage msg;
 				if (tpType.equals(TeleportType.SERVER)) {
 					msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
@@ -530,26 +535,27 @@ public class TeleportUtil {
 					// Setup socket client and listener
 					final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 					client.setListener(new SocketClientEventListener() {
-						public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
-							for (final Packet packet : packets.packets) {
-								if (packet.command.toLowerCase().equals("removevehicle")) {
+						@Override
+						public void onServerMessageRecieve(final SocketClient client1, final Packets packets) {
+							for (final Packet packet1 : packets.packets) {
+								if (packet1.command.toLowerCase().equals("removevehicle")) {
 									// Extract receiving packet arguments
-									final String world = String.valueOf(packet.args[0]);
-									final int vehicleId = Integer.parseInt(packet.args[1]);
+									final String world = String.valueOf(packet1.args[0]);
+									final int vehicleId = Integer.parseInt(packet1.args[1]);
 									// Iterate and remove teleported vehicle
 									final List<Entity> entities = Bukkit.getServer().getWorld(world).getEntities();
 									final Iterator<Entity> it = entities.iterator();
 									while (it.hasNext()) {
-										final Entity vehicle = it.next();
-										if (vehicle.getEntityId() == vehicleId) {
-											vehicle.eject();
-											vehicle.remove();
+										final Entity vehicle1 = it.next();
+										if (vehicle1.getEntityId() == vehicleId) {
+											vehicle1.eject();
+											vehicle1.remove();
 											break;
 										}
 									}
 									// Iterate and remove teleported passenger
-									if (packet.args.length > 2) {
-										final int entityId = Integer.parseInt(packet.args[2]);
+									if (packet1.args.length > 2) {
+										final int entityId = Integer.parseInt(packet1.args[2]);
 										while (it.hasNext()) {
 											final Entity entity = it.next();
 											if (entity.getEntityId() == entityId) {
@@ -560,9 +566,10 @@ public class TeleportUtil {
 									}
 								}
 							}
-							client.close();
+							client1.close();
 						}
 
+						@Override
 						public void onServerMessageError() {
 						}
 					});
@@ -591,6 +598,7 @@ public class TeleportUtil {
 		final Vehicle v = (Vehicle) location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
 		player.teleport(location);
 		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+			@Override
 			public void run() {
 				v.setPassenger(player);
 				v.setVelocity(newVelocity);
@@ -634,6 +642,7 @@ public class TeleportUtil {
 			if (passenger != null) {
 				final Vehicle v = (Vehicle) world.spawnEntity(destination, queue.getVehicleType());
 				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+					@Override
 					public void run() {
 						v.setPassenger(passenger);
 						v.setVelocity(newVelocity);
@@ -669,7 +678,7 @@ public class TeleportUtil {
 
 	// Convert string to world
 	public static World stringToWorld(final String str) {
-		final ArrayList<String> parts = new ArrayList<String>(Arrays.asList(str.trim().split(",")));
+		final ArrayList<String> parts = new ArrayList<>(Arrays.asList(str.trim().split(",")));
 		final World world = Plugin.instance.getServer().getWorld(parts.get(0));
 
 		return world;
@@ -677,7 +686,7 @@ public class TeleportUtil {
 
 	// Convert string to location
 	public static Location stringToLocation(final String str) {
-		final ArrayList<String> parts = new ArrayList<String>(Arrays.asList(str.trim().split(",")));
+		final ArrayList<String> parts = new ArrayList<>(Arrays.asList(str.trim().split(",")));
 
 		final World world = Plugin.instance.getServer().getWorld(parts.get(0));
 		final double x = Double.parseDouble(parts.get(1));

@@ -34,7 +34,7 @@ import com.google.gson.reflect.TypeToken;
 
 public class Gate {
 
-	private static transient TreeMap<String, Gate> instances = new TreeMap<String, Gate>(String.CASE_INSENSITIVE_ORDER);
+	private static transient TreeMap<String, Gate> instances = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private static transient File file = new File(Plugin.instance.getDataFolder(), "gates.json");
 	private static transient String SERVER = "server";
 	private static transient String WORLD = "world";
@@ -83,38 +83,38 @@ public class Gate {
 		return id;
 	}
 
-	public void addFrom(final Location from) {
+	public void addFrom(final Location from1) {
 		if (this.froms == null) {
-			this.froms = new ArrayList<Location>();
+			this.froms = new ArrayList<>();
 		}
-		if (from == null) {
+		if (from1 == null) {
 			this.froms = null;
 		} else {
-			this.froms.add(from);
+			this.froms.add(from1);
 		}
 	}
 
-	public void delFrom(final Location from) {
-		this.froms.remove(from);
+	public void delFrom(final Location from1) {
+		this.froms.remove(from1);
 	}
 
 	public List<Location> getFroms() {
 		return froms;
 	}
 
-	public void addTo(final Location to) {
+	public void addTo(final Location to1) {
 		if (this.tos == null) {
-			this.tos = new ArrayList<Location>();
+			this.tos = new ArrayList<>();
 		}
-		if (to == null) {
+		if (to1 == null) {
 			this.tos = null;
 		} else {
-			this.tos.add(to);
+			this.tos.add(to1);
 		}
 	}
 
-	public void delTo(final Location to) {
-		this.tos.remove(to);
+	public void delTo(final Location to1) {
+		this.tos.remove(to1);
 		if (this.tos.size() == 0)
 			this.tos = null;
 	}
@@ -130,40 +130,40 @@ public class Gate {
 		return tos.get(randomizer.nextInt(tos.size()));
 	}
 
-	public void addBungeeTo(final String server, final String to) {
+	public void addBungeeTo(final String server, final String to1) {
 		if (this.bungeetos == null) {
-			this.bungeetos = new ArrayList<Map<String, String>>();
+			this.bungeetos = new ArrayList<>();
 		}
-		if (to == null) {
+		if (to1 == null) {
 			this.bungeetos = null;
 			this.bungeetype = null;
 		} else {
-			final String[] parts = to.split(",");
-			final Map<String, String> bungeeto = new HashMap<String, String>();
-			bungeeto.put(SERVER, server);
-			bungeeto.put(WORLD, parts[0]);
-			bungeeto.put(X, parts[1]);
-			bungeeto.put(Y, parts[2]);
-			bungeeto.put(Z, parts[3]);
-			bungeeto.put(YAW, parts[4]);
-			bungeeto.put(PITCH, parts[5]);
-			this.bungeetos.add(bungeeto);
+			final String[] parts = to1.split(",");
+			final Map<String, String> bungeeto1 = new HashMap<>();
+			bungeeto1.put(SERVER, server);
+			bungeeto1.put(WORLD, parts[0]);
+			bungeeto1.put(X, parts[1]);
+			bungeeto1.put(Y, parts[2]);
+			bungeeto1.put(Z, parts[3]);
+			bungeeto1.put(YAW, parts[4]);
+			bungeeto1.put(PITCH, parts[5]);
+			this.bungeetos.add(bungeeto1);
 			if (this.bungeetype == null)
 				this.bungeetype = Conf.bungeeTeleportDefault;
 		}
 	}
 
-	public void delBungeeTo(final String server, final String to) {
-		final String[] parts = to.split(",");
-		final Map<String, String> bungeeto = new HashMap<String, String>();
-		bungeeto.put(SERVER, server);
-		bungeeto.put(WORLD, parts[0]);
-		bungeeto.put(X, parts[1]);
-		bungeeto.put(Y, parts[2]);
-		bungeeto.put(Z, parts[3]);
-		bungeeto.put(YAW, parts[4]);
-		bungeeto.put(PITCH, parts[5]);
-		this.bungeetos.remove(bungeeto);
+	public void delBungeeTo(final String server, final String to1) {
+		final String[] parts = to1.split(",");
+		final Map<String, String> bungeeto1 = new HashMap<>();
+		bungeeto1.put(SERVER, server);
+		bungeeto1.put(WORLD, parts[0]);
+		bungeeto1.put(X, parts[1]);
+		bungeeto1.put(Y, parts[2]);
+		bungeeto1.put(Z, parts[3]);
+		bungeeto1.put(YAW, parts[4]);
+		bungeeto1.put(PITCH, parts[5]);
+		this.bungeetos.remove(bungeeto1);
 		if (this.bungeetos.size() == 0)
 			this.bungeetos = null;
 	}
@@ -188,7 +188,7 @@ public class Gate {
 	}
 
 	public void setMessage(final String msg) {
-		this.msg = (msg.isEmpty()) ? null : msg;
+		this.msg = msg.isEmpty() ? null : msg;
 	}
 
 	public String getMessage() {
@@ -196,7 +196,7 @@ public class Gate {
 	}
 
 	public void setCommand(final String command) {
-		this.command = (command.isEmpty()) ? null : command;
+		this.command = command.isEmpty() ? null : command;
 		if (command.isEmpty())
 			this.commandtype = null;
 	}
@@ -257,8 +257,8 @@ public class Gate {
 		return material.name();
 	}
 
-	public void rename(final String id, final String newid) {
-		final Gate gate = instances.remove(id);
+	public void rename(final String id1, final String newid) {
+		final Gate gate = instances.remove(id1);
 		instances.put(newid, gate);
 		this.id = newid;
 	}
@@ -373,7 +373,7 @@ public class Gate {
 			}
 
 			if (gate.bungeeto != null) {
-				gate.bungeetos = new ArrayList<Map<String, String>>();
+				gate.bungeetos = new ArrayList<>();
 				gate.bungeetos.add(gate.bungeeto);
 				gate.bungeeto = null;
 			}
@@ -434,8 +434,8 @@ public class Gate {
 			return false;
 
 		// Loop through all from locations
-		for (final Location from : froms) {
-			final Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from.getBlock(), FloodOrientation.values());
+		for (final Location from1 : froms) {
+			final Entry<FloodOrientation, Set<Block>> flood = FloodUtil.getBestAirFlood(from1.getBlock(), FloodOrientation.values());
 			if (flood == null)
 				return false;
 
@@ -443,7 +443,7 @@ public class Gate {
 			final FloodOrientation orientation = flood.getKey();
 
 			// Now we add the portal blocks as world coords to the lookup maps.
-			final Set<Block> portalBlocks = FloodUtil.getPortalBlocks(from.getBlock(), orientation);
+			final Set<Block> portalBlocks = FloodUtil.getPortalBlocks(from1.getBlock(), orientation);
 			if (portalBlocks == null)
 				return false;
 
@@ -471,10 +471,10 @@ public class Gate {
 	}
 
 	public void dataClear() {
-		portalBlockCoords = new HashMap<WorldCoord, FloodOrientation>();
-		frameBlockCoords = new HashSet<WorldCoord>();
-		surroundingPortalBlockCoords = new HashSet<WorldCoord>();
-		surroundingFrameBlockCoords = new HashSet<WorldCoord>();
+		portalBlockCoords = new HashMap<>();
+		frameBlockCoords = new HashSet<>();
+		surroundingPortalBlockCoords = new HashSet<>();
+		surroundingFrameBlockCoords = new HashSet<>();
 	}
 
 }

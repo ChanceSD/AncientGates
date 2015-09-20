@@ -73,9 +73,10 @@ public class CommandAddServer extends BaseCommand {
 		// Setup socket client and listener
 		final SocketClient client = new SocketClient(address, port, password);
 		client.setListener(new SocketClientEventListener() {
-			public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
-				for (final Packet packet : packets.packets) {
-					if (packet.command.toLowerCase().equals("pong")) {
+			@Override
+			public void onServerMessageRecieve(final SocketClient client1, final Packets packets) {
+				for (final Packet packet1 : packets.packets) {
+					if (packet1.command.toLowerCase().equals("pong")) {
 						// Add server on valid ping response
 						Server.add(name, address, port, password);
 						sendMessage("The server \"" + name + "\" was added, with address \"" + address + ":" + port + "\".");
@@ -83,9 +84,10 @@ public class CommandAddServer extends BaseCommand {
 						Server.save();
 					}
 				}
-				client.close();
+				client1.close();
 			}
 
+			@Override
 			public void onServerMessageError() {
 				sendMessage("Could not connect to server. Check port and password.");
 			}

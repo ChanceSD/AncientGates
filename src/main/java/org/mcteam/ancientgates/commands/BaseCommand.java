@@ -31,9 +31,9 @@ public class BaseCommand {
 	public List<String> parameters;
 
 	public BaseCommand() {
-		aliases = new ArrayList<String>();
-		requiredParameters = new ArrayList<String>();
-		optionalParameters = new ArrayList<String>();
+		aliases = new ArrayList<>();
+		requiredParameters = new ArrayList<>();
+		optionalParameters = new ArrayList<>();
 
 		requiredPermission = "ancientgates.admin";
 
@@ -48,16 +48,16 @@ public class BaseCommand {
 		return aliases;
 	}
 
-	public void execute(final CommandSender sender, final List<String> parameters) {
-		this.sender = sender;
-		this.parameters = parameters;
+	public void execute(final CommandSender sender1, final List<String> parameters1) {
+		this.sender = sender1;
+		this.parameters = parameters1;
 
 		if (!validateCall()) {
 			return;
 		}
 
 		if (this.senderMustBePlayer) {
-			this.player = (Player) sender;
+			this.player = (Player) sender1;
 		}
 
 		perform();
@@ -122,8 +122,8 @@ public class BaseCommand {
 
 	}
 
-	public boolean hasPermission(final CommandSender sender) {
-		return Plugin.hasPermManage(sender, requiredPermission);
+	public boolean hasPermission(final CommandSender sender1) {
+		return Plugin.hasPermManage(sender1, requiredPermission);
 	}
 
 	// -------------------------------------------- //
@@ -138,7 +138,7 @@ public class BaseCommand {
 
 		ret += "/" + Plugin.instance.getBaseCommand() + " " + TextUtil.implode(this.getAliases(), ",") + " ";
 
-		final List<String> parts = new ArrayList<String>();
+		final List<String> parts = new ArrayList<>();
 
 		for (final String requiredParameter : this.requiredParameters) {
 			parts.add("[" + requiredParameter + "]");

@@ -56,12 +56,13 @@ public class CommandServerList extends BaseCommand {
 		// Send waiting message (delay output by 1s)
 		sendMessage("Checking servers...");
 		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+			@Override
 			public void run() {
 				// Create list of SocketComms servers
-				final List<String> servers = new ArrayList<String>();
-				for (final Server server : Server.getAll()) {
-					servers.add(Conf.colorValue + server.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: " + ((Plugin.bungeeServerList.contains(server.getName())) ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorSystem + ", SC: "
-		                    + Conf.colorParameter + ((server.getState() == ConnectionState.CONNECTED) ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorChrome + ")");
+				final List<String> servers = new ArrayList<>();
+				for (final Server server1 : Server.getAll()) {
+					servers.add(Conf.colorValue + server1.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: " + (Plugin.bungeeServerList.contains(server1.getName()) ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorSystem + ", SC: "
+							+ Conf.colorParameter + (server1.getState() == ConnectionState.CONNECTED ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorChrome + ")");
 				}
 
 				if (servers.size() == 0) {

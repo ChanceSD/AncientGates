@@ -50,7 +50,7 @@ public class CommandHelp extends BaseCommand {
 	public static ArrayList<String> lines;
 
 	static {
-		lines = new ArrayList<String>();
+		lines = new ArrayList<>();
 		lines.add(new CommandCreate().getUsageTemplate(true, true));
 		lines.add(new CommandSetFrom().getUsageTemplate(true, true));
 		lines.add(new CommandSetTo().getUsageTemplate(true, true));

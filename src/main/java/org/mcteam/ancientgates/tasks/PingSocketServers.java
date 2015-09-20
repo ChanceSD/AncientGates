@@ -14,6 +14,7 @@ public class PingSocketServers extends BukkitRunnable {
 	public PingSocketServers() {
 	}
 
+	@Override
 	public void run() {
 		if (!Conf.bungeeCordSupport || !Conf.useSocketComms)
 			return;
@@ -25,16 +26,18 @@ public class PingSocketServers extends BukkitRunnable {
 			// Setup socket client and listener
 			final SocketClient client = new SocketClient(server.getAddress(), server.getPort(), server.getPassword());
 			client.setListener(new SocketClientEventListener() {
-				public void onServerMessageRecieve(final SocketClient client, final Packets packets) {
-					for (final Packet packet : packets.packets) {
-						if (packet.command.toLowerCase().equals("pong")) {
+				@Override
+				public void onServerMessageRecieve(final SocketClient client1, final Packets packets) {
+					for (final Packet packet1 : packets.packets) {
+						if (packet1.command.toLowerCase().equals("pong")) {
 							// Set state as connected
 							server.setState(ConnectionState.CONNECTED);
 						}
 					}
-					client.close();
+					client1.close();
 				}
 
+				@Override
 				public void onServerMessageError() {
 					// Set state as disconnected
 					server.setState(ConnectionState.DISCONNECTED);

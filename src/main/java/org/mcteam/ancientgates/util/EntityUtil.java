@@ -43,56 +43,56 @@ public class EntityUtil {
 	public static Map<String, DyeColor> sheepColors;
 
 	static {
-		entityTypes = new HashMap<String, EntityType>();
+		entityTypes = new HashMap<>();
 		for (final EntityType e : EntityType.values()) {
 			entityTypes.put(e.name(), e);
 		}
 	}
 
 	static {
-		skeletonTypes = new HashMap<String, SkeletonType>();
+		skeletonTypes = new HashMap<>();
 		for (final SkeletonType e : SkeletonType.values()) {
 			skeletonTypes.put(e.name(), e);
 		}
 	}
 
 	static {
-		catTypes = new HashMap<String, Ocelot.Type>();
+		catTypes = new HashMap<>();
 		for (final Ocelot.Type e : Ocelot.Type.values()) {
 			catTypes.put(e.name(), e);
 		}
 	}
 
 	static {
-		horseVariants = new HashMap<String, Horse.Variant>();
+		horseVariants = new HashMap<>();
 		for (final Horse.Variant e : Horse.Variant.values()) {
 			horseVariants.put(e.name(), e);
 		}
 	}
 
 	static {
-		horseStyles = new HashMap<String, Horse.Style>();
+		horseStyles = new HashMap<>();
 		for (final Horse.Style e : Horse.Style.values()) {
 			horseStyles.put(e.name(), e);
 		}
 	}
 
 	static {
-		horseColors = new HashMap<String, Horse.Color>();
+		horseColors = new HashMap<>();
 		for (final Horse.Color e : Horse.Color.values()) {
 			horseColors.put(e.name(), e);
 		}
 	}
 
 	static {
-		villagerProfessions = new HashMap<String, Villager.Profession>();
+		villagerProfessions = new HashMap<>();
 		for (final Villager.Profession e : Villager.Profession.values()) {
 			villagerProfessions.put(e.name(), e);
 		}
 	}
 
 	static {
-		sheepColors = new HashMap<String, DyeColor>();
+		sheepColors = new HashMap<>();
 		for (final DyeColor e : DyeColor.values()) {
 			sheepColors.put(e.name(), e);
 		}

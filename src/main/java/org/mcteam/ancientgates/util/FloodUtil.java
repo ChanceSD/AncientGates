@@ -41,7 +41,7 @@ public class FloodUtil {
 
 	// Multi-flood all orientations
 	public static LinkedHashMap<FloodOrientation, Set<Block>> getAllAirFloods(final Block startBlock, final FloodOrientation[] orientations, final int limit) {
-		final LinkedHashMap<FloodOrientation, Set<Block>> ret = new LinkedHashMap<FloodOrientation, Set<Block>>();
+		final LinkedHashMap<FloodOrientation, Set<Block>> ret = new LinkedHashMap<>();
 		for (final FloodOrientation orientation : orientations) {
 			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), new HashSet<Block>(), orientation, limit));
 		}
@@ -83,7 +83,7 @@ public class FloodUtil {
 
 	// Get gate frame blocks
 	public static Set<Block> getFrameBlocks(final Set<Block> portalBlocks, final FloodOrientation orientation) {
-		final Set<Block> frame = new HashSet<Block>();
+		final Set<Block> frame = new HashSet<>();
 		for (final Block currentBlock : portalBlocks) {
 			for (final BlockFace face : orientation.getDirections()) {
 				final Block potentialBlock = currentBlock.getRelative(face);
@@ -98,11 +98,11 @@ public class FloodUtil {
 
 	// Get surrounding blocks
 	public static Set<Block> getSurroundingBlocks(final Set<Block> blocks, final Set<Block> remainingBlocks, final FloodOrientation orientation) {
-		final Set<Block> allBlocks = new HashSet<Block>();
+		final Set<Block> allBlocks = new HashSet<>();
 		blocks.addAll(blocks);
 		blocks.addAll(remainingBlocks);
 
-		final Set<Block> surrounding = new HashSet<Block>();
+		final Set<Block> surrounding = new HashSet<>();
 		for (final Block currentBlock : blocks) {
 			for (final BlockFace face : orientation.getAllDirections()) {
 				final Block potentialBlock = currentBlock.getRelative(face);

@@ -14,7 +14,7 @@ public class BlockUtil {
 	public static Map<Material, Boolean> standableMaterials;
 
 	static {
-		standableGateMaterials = new HashSet<Material>();
+		standableGateMaterials = new HashSet<>();
 		standableGateMaterials.add(Material.PISTON_MOVING_PIECE);
 		standableGateMaterials.add(Material.ENDER_PORTAL);
 		standableGateMaterials.add(Material.LAVA);
@@ -27,7 +27,7 @@ public class BlockUtil {
 	}
 
 	static {
-		standableMaterials = new HashMap<Material, Boolean>();
+		standableMaterials = new HashMap<>();
 		try {
 			standableMaterials.put(Material.AIR, true); // 0 Air
 			standableMaterials.put(Material.SAPLING, true); // 6 Saplings
@@ -77,9 +77,9 @@ public class BlockUtil {
 			standableMaterials.put(Material.GOLD_PLATE, true); // 147 Gold Pressure Plate
 			standableMaterials.put(Material.IRON_PLATE, true); // 148 Iron Pressure Plate
 			standableMaterials.put(Material.REDSTONE_COMPARATOR_OFF, true); // 149 Redstone
-			                                                                // Comparator (Off)
+			// Comparator (Off)
 			standableMaterials.put(Material.REDSTONE_COMPARATOR_ON, true); // 150 Redstone
-			                                                               // Comparator (On)
+			// Comparator (On)
 			standableMaterials.put(Material.DAYLIGHT_DETECTOR, false); // 151 Daylight Sensor
 			standableMaterials.put(Material.ACTIVATOR_RAIL, true); // 157 Activator Rail
 			standableMaterials.put(Material.CARPET, true); // 171 Carpet
@@ -99,9 +99,8 @@ public class BlockUtil {
 	public static boolean canPlayerStandInGateBlock(final Block block, final Boolean fullHeight) {
 		if (fullHeight) {
 			return isStandableGateMaterial(block.getType()) && isStandableGateMaterial(block.getRelative(BlockFace.UP).getType());
-		} else {
-			return isStandableGateMaterial(block.getType());
 		}
+		return isStandableGateMaterial(block.getType());
 	}
 
 	public static boolean isStandableMaterial(final Material material) {
@@ -109,7 +108,7 @@ public class BlockUtil {
 	}
 
 	public static boolean canPassThroughMaterial(final Material material) {
-		return (standableMaterials.get(material) == null) ? false : standableMaterials.get(material);
+		return standableMaterials.get(material) == null ? false : standableMaterials.get(material);
 	}
 
 }

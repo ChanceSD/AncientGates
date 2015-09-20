@@ -47,11 +47,11 @@ public enum FloodOrientation {
 	}
 
 	private FloodOrientation(final String desc, final BlockFace opDir1, final BlockFace opDir2, final BlockFace... directions) {
-		this.directions = new LinkedHashSet<BlockFace>(Arrays.asList(directions));
-		this.oppositeDirections = new LinkedHashSet<BlockFace>(Arrays.asList(opDir1, opDir2));
+		this.directions = new LinkedHashSet<>(Arrays.asList(directions));
+		this.oppositeDirections = new LinkedHashSet<>(Arrays.asList(opDir1, opDir2));
 		this.desc = desc;
 
-		this.allDirections = new LinkedHashSet<BlockFace>(Arrays.asList(directions));
+		this.allDirections = new LinkedHashSet<>(Arrays.asList(directions));
 		this.allDirections.addAll(this.oppositeDirections);
 	}
 

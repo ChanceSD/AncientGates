@@ -76,6 +76,7 @@ public class ExecuteUtil {
 			passenger.teleport(position);
 			passenger.setFireTicks(0); // Cancel lava fire
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+				@Override
 				public void run() {
 					v.setPassenger(passenger);
 				}
@@ -84,6 +85,7 @@ public class ExecuteUtil {
 
 		// Execute command as player or console
 		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+			@Override
 			public void run() {
 				execCommand((Player) passenger, command, commandType);
 			}

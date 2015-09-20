@@ -91,23 +91,23 @@ public class Plugin extends JavaPlugin {
 	public final static Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE).registerTypeAdapter(Location.class, new LocationTypeAdapter()).create();
 
 	// HashMap of incoming BungeeCord players & passengers
-	public static Map<String, BungeeQueue> bungeeCordInQueue = new HashMap<String, BungeeQueue>();
+	public static Map<String, BungeeQueue> bungeeCordInQueue = new HashMap<>();
 
 	// ArrayList of incoming BungeeCord entities & vehicles
-	public static ArrayList<BungeeQueue> bungeeCordEntityInQueue = new ArrayList<BungeeQueue>();
-	public static ArrayList<BungeeQueue> bungeeCordVehicleInQueue = new ArrayList<BungeeQueue>();
+	public static ArrayList<BungeeQueue> bungeeCordEntityInQueue = new ArrayList<>();
+	public static ArrayList<BungeeQueue> bungeeCordVehicleInQueue = new ArrayList<>();
 
 	// HashMap of outgoing BungeeCord players & passengers
-	public static Map<String, String> bungeeCordOutQueue = new HashMap<String, String>();
+	public static Map<String, String> bungeeCordOutQueue = new HashMap<>();
 
 	// ArrayList of outgoing BungeeCord messages
-	public static ArrayList<PluginMessage> bungeeMsgQueue = new ArrayList<PluginMessage>();
+	public static ArrayList<PluginMessage> bungeeMsgQueue = new ArrayList<>();
 
-	public static HashMap<String, Long> lastTeleportTime = new HashMap<String, Long>();
-	public static HashMap<String, Long> lastMessageTime = new HashMap<String, Long>();
+	public static HashMap<String, Long> lastTeleportTime = new HashMap<>();
+	public static HashMap<String, Long> lastMessageTime = new HashMap<>();
 
 	// Commands
-	public List<BaseCommand> commands = new ArrayList<BaseCommand>();
+	public List<BaseCommand> commands = new ArrayList<>();
 
 	public Plugin() {
 		instance = this;
@@ -161,6 +161,7 @@ public class Plugin extends JavaPlugin {
 
 		// Load gates from disc (1 tick ensures worlds are loaded)
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+			@Override
 			public void run() {
 				Gates.load();
 				log("Enabled");
@@ -322,9 +323,8 @@ public class Plugin extends JavaPlugin {
 
 		if (perms == null) {
 			return sender.hasPermission(requiredPermission);
-		} else {
-			return perms.has(player, requiredPermission);
 		}
+		return perms.has(player, requiredPermission);
 	}
 
 	// -------------------------------------------- //
@@ -334,9 +334,8 @@ public class Plugin extends JavaPlugin {
 	public static boolean hasPermManage(final String player, final String requiredPermission) {
 		if (perms == null) {
 			return Bukkit.getServer().getOfflinePlayer(player).isOp();
-		} else {
-			return perms.playerHas(Bukkit.getWorlds().get(0), player, requiredPermission) | Bukkit.getServer().getOfflinePlayer(player).isOp();
 		}
+		return perms.playerHas(Bukkit.getWorlds().get(0), player, requiredPermission) | Bukkit.getServer().getOfflinePlayer(player).isOp();
 	}
 
 	// -------------------------------------------- //
@@ -351,21 +350,18 @@ public class Plugin extends JavaPlugin {
 
 		if (econ == null || !Conf.useEconomy || hasPermManage(sender, "ancientgates.econbypass") || requiredCost == 0.00) {
 			return true;
-		} else {
-			final Double balance = econ.getBalance(player.getName());
-			if (requiredCost <= balance) {
-				final EconomyResponse r = econ.withdrawPlayer(player.getName(), requiredCost);
-				if (r.transactionSuccess()) {
-					sender.sendMessage(String.format("You were charged %s and now have %s.", econ.format(r.amount), econ.format(r.balance)));
-					return true;
-				} else {
-					sender.sendMessage(String.format("An error occured: %s.", r.errorMessage));
-					return false;
-				}
-			} else {
-				return false;
-			}
 		}
+		final Double balance = econ.getBalance(player.getName());
+		if (requiredCost <= balance) {
+			final EconomyResponse r = econ.withdrawPlayer(player.getName(), requiredCost);
+			if (r.transactionSuccess()) {
+				sender.sendMessage(String.format("You were charged %s and now have %s.", econ.format(r.amount), econ.format(r.balance)));
+				return true;
+			}
+			sender.sendMessage(String.format("An error occured: %s.", r.errorMessage));
+			return false;
+		}
+		return false;
 	}
 
 	// -------------------------------------------- //
@@ -383,7 +379,7 @@ public class Plugin extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
-		final List<String> parameters = new ArrayList<String>(Arrays.asList(args));
+		final List<String> parameters = new ArrayList<>(Arrays.asList(args));
 		this.handleCommand(sender, parameters);
 		return true;
 	}

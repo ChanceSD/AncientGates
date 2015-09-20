@@ -14,7 +14,7 @@ public enum TeleportType {
 	// Server based teleport
 	SERVER;
 
-	private static final Map<String, TeleportType> nameToTpType = new HashMap<String, TeleportType>();
+	private static final Map<String, TeleportType> nameToTpType = new HashMap<>();
 
 	static {
 		for (final TeleportType value : EnumSet.allOf(TeleportType.class)) {
