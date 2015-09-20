@@ -85,6 +85,7 @@ public class Gates {
 	// ----------------------------------------------//
 	// The Open & Close Methods
 	// ----------------------------------------------//
+	@SuppressWarnings("deprecation")
 	public static boolean open(final Gate gate) {
 		// Re-populate data
 		if (!gate.dataPopulate())
@@ -116,6 +117,9 @@ public class Gates {
 			// Stop ice forming based on biome (horizontal water portals)
 			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == Material.STATIONARY_WATER) {
 				coord.getBlock().setBiome(Biome.FOREST);
+			}
+			if (orientation == FloodOrientation.VERTICAL1 && material == Material.PORTAL) {
+				coord.getBlock().setData((byte) 2);
 			}
 		}
 
