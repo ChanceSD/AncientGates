@@ -1,5 +1,5 @@
 name: AncientGates
-version: 1.9.8
+version: 2.0
 description: Easily create portals with any custom design.
 main: org.mcteam.ancientgates.Plugin
 load: postworld
