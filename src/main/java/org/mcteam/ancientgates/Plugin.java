@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -410,7 +409,7 @@ public class Plugin extends JavaPlugin {
 	}
 
 	public static void log(final Level level, final String msg) {
-		Logger.getLogger("Minecraft").log(level, "[" + instance.getDescription().getFullName() + "] " + msg);
+		instance.getLogger().log(level, msg);
 	}
 
 }
