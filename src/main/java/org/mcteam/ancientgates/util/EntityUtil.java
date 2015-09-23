@@ -131,7 +131,7 @@ public class EntityUtil {
 					data += String.valueOf(((Horse) entity).getMaxDomestication()) + ",";
 					data += String.valueOf(((Horse) entity).getJumpStrength()) + ",";
 					if (((Horse) entity).isTamed()) {
-						data += ((Tameable) entity).getOwner().getName() + ",";
+						data += (((Tameable) entity).getOwner() != null ? ((Tameable) entity).getOwner().getName() : null) + ",";
 						data += ItemStackUtil.itemStackToString(((Horse) entity).getInventory().getSaddle()) + ",";
 						data += ItemStackUtil.itemStackToString(((Horse) entity).getInventory().getArmor()) + ",";
 						if (((Horse) entity).isCarryingChest()) {
@@ -194,7 +194,8 @@ public class EntityUtil {
 					((Horse) entity).setJumpStrength(Double.parseDouble(parts[9]));
 					if (parts.length > 10) {
 						((Tameable) entity).setTamed(true);
-						((Tameable) entity).setOwner(getPlayer(parts[10]));
+						if (!parts[10].equals("null"))
+							((Tameable) entity).setOwner(getPlayer(parts[10]));
 						((Horse) entity).getInventory().setSaddle(ItemStackUtil.stringToItemStack(parts[11])[0]);
 						((Horse) entity).getInventory().setArmor(ItemStackUtil.stringToItemStack(parts[12])[0]);
 						if (parts.length > 13) {
