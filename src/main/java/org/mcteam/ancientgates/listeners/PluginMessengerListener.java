@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -54,7 +55,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 			data = new byte[len];
 			in.readFully(data);
 		} catch (final IOException e) {
-			Plugin.log.severe("Error receiving BungeeCord message");
+			Plugin.log(Level.SEVERE, "Error receiving BungeeCord message");
 			e.printStackTrace();
 			return;
 		}
@@ -167,7 +168,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				entity.teleport(location);
 			} else if (EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
 				final Item item = world.dropItemNaturally(location, ItemStackUtil.stringToItemStack(entityTypeData)[0]); // Dropped
-				                                                                                                   // ItemStack
+				// ItemStack
 				item.teleport(location);
 			}
 			// Parse BungeeCord vehicle spawn packet

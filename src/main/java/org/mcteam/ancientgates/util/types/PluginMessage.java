@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -52,7 +53,7 @@ public class PluginMessage {
 		this.playerName = player.getName();
 		this.fromServer = fromServer;
 		this.command = command;
-		this.commandType = (commandType == null) ? "null" : commandType.name();
+		this.commandType = commandType == null ? "null" : commandType.name();
 		this.message = message;
 	}
 
@@ -79,7 +80,7 @@ public class PluginMessage {
 		this.velocity = String.valueOf(velocity);
 		this.fromServer = fromServer;
 		this.command = command;
-		this.commandType = (commandType == null) ? "null" : commandType.name();
+		this.commandType = commandType == null ? "null" : commandType.name();
 		this.message = message;
 	}
 
@@ -91,7 +92,7 @@ public class PluginMessage {
 		this.entityTypeName = entityType.name();
 		if (entityType.equals(EntityType.DROPPED_ITEM)) {
 			this.entityTypeData = ItemStackUtil.itemStackToString(((Item) entity).getItemStack()); // Dropped
-			                                                                                       // ItemStack
+			// ItemStack
 		} else {
 			this.entityTypeData = EntityUtil.getEntityTypeData(entity); // Entity
 		}
@@ -136,8 +137,8 @@ public class PluginMessage {
 	}
 
 	// Append item stack info
-	public void addItemStack(final ItemStack[] itemStack) {
-		this.itemStack = ItemStackUtil.itemStackToString(itemStack);
+	public void addItemStack(final ItemStack[] itemStack1) {
+		this.itemStack = ItemStackUtil.itemStackToString(itemStack1);
 	}
 
 	// ----------------------------------------------//
@@ -194,26 +195,25 @@ public class PluginMessage {
 			} catch (final IOException ex) {
 				if (this.channel == BungeeChannel.AGBungeeCom)
 					Bukkit.getPlayer(this.playerName).sendMessage("Error sending command externally via BungeeCord.");
-				Plugin.log.severe("Error sending BungeeCord " + this.channel.toString() + " packet");
+				Plugin.log(Level.SEVERE, "Error sending BungeeCord " + this.channel.toString() + " packet");
 				ex.printStackTrace();
 				return null;
 			}
 			// BungeeCord command message
-		} else {
-			final ByteArrayOutputStream b = new ByteArrayOutputStream();
-			final DataOutputStream out = new DataOutputStream(b);
-			try {
-				out.writeUTF(this.command);
-				if (this.parameters != null) {
-					for (final String parameter : this.parameters)
-						out.writeUTF(parameter);
-				}
-				return b.toByteArray();
-			} catch (final IOException ex) {
-				Plugin.log.severe("Error sending BungeeCord " + this.command + " packet");
-				ex.printStackTrace();
-				return null;
+		}
+		final ByteArrayOutputStream b = new ByteArrayOutputStream();
+		final DataOutputStream out = new DataOutputStream(b);
+		try {
+			out.writeUTF(this.command);
+			if (this.parameters != null) {
+				for (final String parameter : this.parameters)
+					out.writeUTF(parameter);
 			}
+			return b.toByteArray();
+		} catch (final IOException ex) {
+			Plugin.log(Level.SEVERE, "Error sending BungeeCord " + this.command + " packet");
+			ex.printStackTrace();
+			return null;
 		}
 	}
 

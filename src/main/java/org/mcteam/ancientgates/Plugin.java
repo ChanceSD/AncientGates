@@ -75,7 +75,6 @@ import net.milkbowl.vault.permission.Permission;
 public class Plugin extends JavaPlugin {
 
 	public static Plugin instance;
-	public static Logger log;
 
 	public static SocketServer serv = null;
 	public static Permission perms = null;

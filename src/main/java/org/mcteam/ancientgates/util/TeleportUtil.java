@@ -249,7 +249,7 @@ public class TeleportUtil {
 					client.connect();
 					client.send(packet);
 				} catch (final Exception e) {
-					Plugin.log.severe("Error sending spawn packet to the server.");
+					Plugin.log(Level.SEVERE, "Error sending spawn packet to the server.");
 				}
 
 			}
@@ -578,7 +578,7 @@ public class TeleportUtil {
 						client.connect();
 						client.send(packet);
 					} catch (final Exception e) {
-						Plugin.log.severe("Error sending vehicle spawn packet to the server.");
+						Plugin.log(Level.SEVERE, "Error sending vehicle spawn packet to the server.");
 					}
 				}
 			}
