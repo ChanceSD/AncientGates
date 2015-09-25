@@ -1,10 +1,6 @@
 package org.mcteam.ancientgates.listeners;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.Calendar;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -36,6 +32,8 @@ import org.mcteam.ancientgates.util.types.PluginMessage;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 import com.google.common.collect.Iterables;
+import com.google.common.io.ByteArrayDataInput;
+import com.google.common.io.ByteStreams;
 
 public class PluginMessengerListener implements PluginMessageListener {
 
@@ -46,19 +44,11 @@ public class PluginMessengerListener implements PluginMessageListener {
 		}
 
 		// Get data from message
-		String inChannel;
-		byte[] data;
-		try {
-			final DataInputStream in = new DataInputStream(new ByteArrayInputStream(message));
-			inChannel = in.readUTF();
-			final short len = in.readShort();
-			data = new byte[len];
-			in.readFully(data);
-		} catch (final IOException e) {
-			Plugin.log(Level.SEVERE, "Error receiving BungeeCord message");
-			e.printStackTrace();
-			return;
-		}
+		final ByteArrayDataInput in = ByteStreams.newDataInput(message);
+		final String inChannel = in.readUTF();
+		final short len = in.readShort();
+		final byte[] data = new byte[len];
+		in.readFully(data);
 
 		// Parse BungeeCord teleport packet
 		if (inChannel.equals("AGBungeeTele")) {
