@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -38,6 +39,8 @@ import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.PluginMessage;
 import org.mcteam.ancientgates.util.types.TeleportType;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
 
 public class TeleportUtil {
@@ -49,6 +52,7 @@ public class TeleportUtil {
 	private static final String Z = "z";
 	private static final String YAW = "yaw";
 	private static final String PITCH = "pitch";
+	private static final Cache<Integer, Entity> entityCache = CacheBuilder.newBuilder().softValues().expireAfterWrite(10, TimeUnit.SECONDS).build();
 
 	// Normal player teleport & BungeeCord player teleport in
 	public static void teleportPlayer(final Player player, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
@@ -196,7 +200,6 @@ public class TeleportUtil {
 	// BungeeCord entity spawn out (excl. EchoPet)
 	public static void teleportEntity(final EntityPortalEvent event, final Map<String, String> location) {
 		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() && !EntityUtil.isEchoPet(event.getEntity()) || event.getEntityType() == EntityType.DROPPED_ITEM)) {
-
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Send AGBungeeSpawn packet
@@ -210,7 +213,9 @@ public class TeleportUtil {
 				}
 
 				// Send spawn command packet via client socket
-			} else {
+			} else if (!entityCache.asMap().containsKey(event.getEntity().getEntityId())) {
+				// Put entity in cache so we don't end up with duplicate entities
+				entityCache.put(event.getEntity().getEntityId(), event.getEntity());
 				// Get server
 				final Server server = Server.get(location.get(SERVER));
 				// Construct spawn entity packet
@@ -231,6 +236,7 @@ public class TeleportUtil {
 								while (it.hasNext()) {
 									final Entity entity = it.next();
 									if (entity.getEntityId() == entityId) {
+										entityCache.invalidate(entityId);
 										entity.remove();
 										break;
 									}
@@ -495,7 +501,8 @@ public class TeleportUtil {
 						}
 					}
 					// Send vehicle spawn command packet via client socket
-				} else {
+				} else if (!entityCache.asMap().containsKey(vehicle.getEntityId())) {
+					entityCache.put(vehicle.getEntityId(), vehicle);
 					// Get server
 					final Server server = Server.get(location.get(SERVER));
 					// Construct spawn vehicle packet
@@ -548,6 +555,7 @@ public class TeleportUtil {
 									while (it.hasNext()) {
 										final Entity vehicle1 = it.next();
 										if (vehicle1.getEntityId() == vehicleId) {
+											entityCache.invalidate(vehicleId);
 											vehicle1.eject();
 											vehicle1.remove();
 											break;

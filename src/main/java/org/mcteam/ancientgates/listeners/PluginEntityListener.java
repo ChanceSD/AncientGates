@@ -32,7 +32,6 @@ public class PluginEntityListener implements Listener {
 		if (event.isCancelled()) {
 			return;
 		}
-
 		if (!(event.getEntity() instanceof Player) && !(event.getEntity().getPassenger() instanceof Player)) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
@@ -46,7 +45,7 @@ public class PluginEntityListener implements Listener {
 				 * Teleport non-living vehicles - Only when useVanillaPortals is enabled Boolean
 				 * Expression: Rtrn = VanilFlag' InstVeh InstLiv';
 				 */
-				if (!Conf.useVanillaPortals && (event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity))) {
+				if (!Conf.useVanillaPortals && event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity)) {
 					return;
 				}
 
@@ -55,8 +54,8 @@ public class PluginEntityListener implements Listener {
 				 * non-living vehicles if they're allowed Boolean Expression: Tele = EntFlag
 				 * InstVeh' + EntFlag InstLiv + VehFlag InstVeh InstLiv';
 				 */
-				if (nearestGate.getTeleportEntities() && !(event.getEntity() instanceof Vehicle) || (nearestGate.getTeleportEntities() && event.getEntity() instanceof LivingEntity)
-				        || (nearestGate.getTeleportVehicles() && event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity))) {
+				if (nearestGate.getTeleportEntities() && !(event.getEntity() instanceof Vehicle) || nearestGate.getTeleportEntities() && event.getEntity() instanceof LivingEntity
+						|| nearestGate.getTeleportVehicles() && event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity)) {
 					if (nearestGate.getBungeeTo() == null) {
 						TeleportUtil.teleportEntity(event, nearestGate.getTo());
 					} else {

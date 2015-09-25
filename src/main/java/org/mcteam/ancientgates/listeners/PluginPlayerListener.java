@@ -147,7 +147,6 @@ public class PluginPlayerListener implements Listener {
 		if (event.isCancelled()) {
 			return;
 		}
-
 		final Player player = event.getPlayer();
 
 		// Ok so a player portal event begins
@@ -177,7 +176,7 @@ public class PluginPlayerListener implements Listener {
 			}
 
 			// Check player has permission to enter the gate.
-			if ((!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*")) && Conf.enforceAccess) {
+			if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*") && Conf.enforceAccess) {
 				player.sendMessage("You lack the permissions to enter this gate.");
 				return;
 			}
@@ -189,7 +188,7 @@ public class PluginPlayerListener implements Listener {
 			}
 
 			// Handle BungeeCord gates (BungeeCord support disabled)
-			if (nearestGate.getBungeeTo() != null && (Conf.bungeeCordSupport == false)) {
+			if (nearestGate.getBungeeTo() != null && Conf.bungeeCordSupport == false) {
 				player.sendMessage(String.format("BungeeCord support not enabled."));
 				return;
 			}
@@ -208,7 +207,7 @@ public class PluginPlayerListener implements Listener {
 				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(),
-				        nearestGate.getMessage());
+						nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 				Plugin.lastTeleportTime.put(player.getName(), now);
