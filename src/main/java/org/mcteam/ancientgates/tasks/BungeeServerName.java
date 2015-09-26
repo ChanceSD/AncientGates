@@ -24,7 +24,7 @@ public class BungeeServerName extends BukkitRunnable {
 
 		// Send BungeeCord "GetServer" command
 		final PluginMessage msg = new PluginMessage("GetServer");
-		Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(plugin, "BungeeCord", msg.toByteArray());
+		Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(plugin, "AncientGates", msg.toByteArray());
 
 		// Re-schedule task to check bungeeServerName set
 		if (Plugin.bungeeServerName == null)

@@ -243,8 +243,8 @@ public class Plugin extends JavaPlugin {
 		// Enable required plugin channels
 		Plugin.log("Enabling bungeecord channels");
 		pluginMessengerListener = new PluginMessengerListener();
-		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
+		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "AncientGates");
+		Bukkit.getMessenger().registerIncomingPluginChannel(this, "AncientGates", pluginMessengerListener);
 
 		if (!Conf.useSocketComms) {
 			Plugin.log("Socket comms disabled. Using generic BungeeCord messaging.");
@@ -280,8 +280,8 @@ public class Plugin extends JavaPlugin {
 	private void takedownBungeeCord() {
 		// Disable required plugin channels
 		Plugin.log("Disabling bungeecord channels");
-		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
-		Bukkit.getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
+		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, "AncientGates");
+		Bukkit.getMessenger().unregisterIncomingPluginChannel(this, "AncientGates", pluginMessengerListener);
 		pluginMessengerListener = null;
 	}
 
