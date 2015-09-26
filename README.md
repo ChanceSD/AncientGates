@@ -1,5 +1,4 @@
 <p align="center">
-<img src="http://cdn.elliotcraft.net/styles/minecraft/xenforo/logo.png" />
 </p>
 Ancient Gates Reloaded by peewi96
 ==================================================================
