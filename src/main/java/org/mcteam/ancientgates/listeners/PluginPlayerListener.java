@@ -206,7 +206,7 @@ public class PluginPlayerListener implements Listener {
 
 				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), event.getFrom().getBlockY() == event.getTo().getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(),
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), false, nearestGate.getCommand(), nearestGate.getCommandType(),
 						nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
