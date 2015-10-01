@@ -5,10 +5,10 @@
 	<artifactId>AncientGates</artifactId>
 	<version>2.0.5</version>
 	<name>AncientGates</name>
-	<url>https://github.com/peewi96/AncientGates</url>
+	<url>https://github.com/NoChanceSD/AncientGates</url>
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/peewi96/AncientGates/issues</url>
+		<url>https://github.com/NoChanceSD/AncientGates/issues</url>
 	</issueManagement>
 
 	<build>
@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>Vault</artifactId>
-			<version>1.5.6</version>
+			<version>LATEST</version>
 			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
