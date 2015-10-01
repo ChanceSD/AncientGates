@@ -162,7 +162,7 @@ public class TeleportUtil {
 				msg = new PluginMessage(player, e, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			}
 			// Send message over the AGBungeeTele BungeeCord channel
-			player.sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 			// Imitate teleport by removing entity
 			if (e != null && teleportEntities && tpType.equals(TeleportType.LOCATION) && !(e instanceof Player))
 				e.remove();
@@ -172,7 +172,7 @@ public class TeleportUtil {
 
 			// Connect player to new server
 			msg = new PluginMessage("Connect", location.get(SERVER));
-			player.sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 		}
 	}
 
@@ -207,7 +207,7 @@ public class TeleportUtil {
 				// Send over the AGBungeeTele BungeeCord channel
 				if (Plugin.instance.getServer().getOnlinePlayers().size() > 0) {
 					// Use any player to send the plugin message
-					Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+					Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 					// Imitate teleport by removing entity
 					event.getEntity().remove();
 				}
@@ -436,14 +436,14 @@ public class TeleportUtil {
 					msg = new PluginMessage(player, vehicle.getType(), velocity, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 				}
 				// Sent over the AGBungeeVehicleTele BungeeCord channel
-				player.sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 
 				// Replace quit message is with BungeeCord teleport message
 				Plugin.bungeeCordOutQueue.put(player.getName().toLowerCase(), location.get(SERVER));
 
 				// Connect player to new server
 				msg = new PluginMessage("Connect", location.get(SERVER));
-				player.sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 
 				// Entity vehicle teleport
 			} else {
@@ -492,7 +492,7 @@ public class TeleportUtil {
 					// Build the message data, sent over the AGBungeeTele BungeeCord channel
 					if (Plugin.instance.getServer().getOnlinePlayers().size() > 0) {
 						// Use any player to send the plugin message
-						Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+						Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 						// Imitate teleport by removing entity and vehicle
 						vehicle.eject();
 						vehicle.remove();

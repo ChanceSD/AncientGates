@@ -65,7 +65,7 @@ public class CommandAddTo extends BaseCommand {
 				final PluginMessage msg = new PluginMessage("addto", player, serverName, args);
 
 				// Send over the AGBungeeCom BungeeCord channel
-				player.sendPluginMessage(Plugin.instance, "AncientGates", msg.toByteArray());
+				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 				sendMessage("Another \"to\" location for gate \"" + parameters.get(0) + "\" on server \"" + serverName + "\" has been sent.");
 
 				// Send command packet via client socket

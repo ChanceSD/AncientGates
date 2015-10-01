@@ -39,7 +39,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(final String channel, final Player unused, final byte[] message) {
-		if (!Conf.bungeeCordSupport || !channel.equals("AncientGates")) {
+		if (!Conf.bungeeCordSupport || !channel.equals("BungeeCord")) {
 			return;
 		}
 
@@ -328,7 +328,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				if (Plugin.instance.getServer().getOnlinePlayers().size() == 0) {
 					Plugin.bungeeMsgQueue.add(rMsg);
 				} else {
-					Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "AncientGates", rMsg.toByteArray());
+					Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "BungeeCord", rMsg.toByteArray());
 				}
 			}
 			// Parse BungeeCord server name packet
