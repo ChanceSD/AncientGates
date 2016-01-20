@@ -1,9 +1,9 @@
-name: ${project.name}
-version: ${project.version}
-description: ${project.description}
-main: org.mcteam.ancientgates.Plugin
+name: '${project.name}'
+version: '${project.version}'
+description: '${project.description}'
+main: 'org.mcteam.ancientgates.Plugin'
 load: postworld
-author: NoChanceSD
+author: 'NoChanceSD'
 softdepend:
     - Vault
     - Multiverse-Core
