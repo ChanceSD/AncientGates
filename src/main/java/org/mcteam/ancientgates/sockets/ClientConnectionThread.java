@@ -37,7 +37,6 @@ public class ClientConnectionThread implements Runnable {
 		return this.clientSocket;
 	}
 
-	@SuppressWarnings("resource")
 	public void send(final String message) {
 		try {
 			final byte[] content = message.getBytes("UTF-8");
@@ -105,7 +104,6 @@ public class ClientConnectionThread implements Runnable {
 		this.stop();
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void run() {
 		try {
