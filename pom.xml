@@ -6,7 +6,7 @@
 
 	<groupId>org.mcteam.ancientgates</groupId>
 	<artifactId>ancientgates</artifactId>
-	<version>2.0.7</version>
+	<version>2.0.7-SNAPSHOT</version>
 
 	<name>AncientGates</name>
     <description>Easily create portals with any custom design.</description>
@@ -95,8 +95,12 @@
 					<minimizeJar>true</minimizeJar>
 					<relocations>
 						<relocation>
+							<pattern>com.google.common</pattern>
+							<shadedPattern>org.mcteam.ancientgates.libs.guava</shadedPattern>
+						</relocation>
+						<relocation>
 							<pattern>com.google.gson</pattern>
-							<shadedPattern>org.mcteam.ancientgates.libs</shadedPattern>
+							<shadedPattern>org.mcteam.ancientgates.libs.gson</shadedPattern>
 						</relocation>
 					</relocations>
 				</configuration>
@@ -124,6 +128,14 @@
 	</repositories>
 
 	<dependencies>
+		<!-- Guava (required to provide 1.7.10 and below compatibility) -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 		<!-- GSON (required to provide 1.7.10 and below compatibility) -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -155,6 +167,14 @@
 				<exclusion>
 					<artifactId>persistence-api</artifactId>
 					<groupId>javax.persistence</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>commons-lang</artifactId>
+					<groupId>commons-lang</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>guava</artifactId>
+					<groupId>com.google.guava</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
