@@ -1,9 +1,3 @@
-### Others ###
-*.bat
-*.cmd
-*.sh
-*.prefs
-
 ### Maven ###
 target/
 pom.xml.tag
@@ -23,7 +17,7 @@ buildNumber.properties
 .mtj.tmp/
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
 
