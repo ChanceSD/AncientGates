@@ -59,7 +59,7 @@ import org.mcteam.ancientgates.listeners.PluginMessengerListener;
 import org.mcteam.ancientgates.listeners.PluginMovementListener;
 import org.mcteam.ancientgates.listeners.PluginPlayerListener;
 import org.mcteam.ancientgates.listeners.PluginSocketListener;
-import org.mcstats.Metrics;
+import org.mcteam.ancientgates.MetricsStarter;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.SocketServer;
 import org.mcteam.ancientgates.util.types.PluginMessage;
@@ -154,12 +154,8 @@ public class Plugin extends JavaPlugin {
 		reload(null);
 
 		// Submit Stats
-        try {
-            Metrics metrics;
-            metrics = new Metrics(this);
-            metrics.start();
-        } catch (Exception e) {
-        };
+        final MetricsStarter metrics = new MetricsStarter(this);
+        metrics.setupMetrics();
 
 		// Load gates from disc (1 tick ensures worlds are loaded)
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
