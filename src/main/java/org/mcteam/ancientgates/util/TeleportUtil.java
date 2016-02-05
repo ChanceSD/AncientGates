@@ -65,8 +65,9 @@ public class TeleportUtil {
 
 			if (teleportInventory.equals(InvBoolean.FALSE)) {
 				for (final ItemStack itemStack : contents) {
-					if (itemStack != null)
+					if (itemStack != null) {
 						player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+					}
 				}
 			}
 		}
@@ -75,8 +76,9 @@ public class TeleportUtil {
 		final Entity entity = player.getVehicle();
 		if (player.isInsideVehicle() && entity instanceof LivingEntity) {
 			entity.eject();
-			if (teleportEntities && !(entity instanceof Player) && !EntityUtil.isEchoPet(entity))
+			if (teleportEntities && !(entity instanceof Player) && !EntityUtil.isEchoPet(entity)) {
 				entity.remove();
+			}
 		}
 
 		// Teleport player
@@ -115,8 +117,9 @@ public class TeleportUtil {
 
 			// Handle player riding an entity
 			final Entity e = player.getVehicle();
-			if (player.isInsideVehicle() && e instanceof LivingEntity)
+			if (player.isInsideVehicle() && e instanceof LivingEntity) {
 				e.eject();
+			}
 
 			// Imitate teleport by spinning player 180 deg
 			if (fullHeight) {
@@ -126,12 +129,14 @@ public class TeleportUtil {
 					yaw -= 360;
 				}
 				position.setYaw(yaw);
-				if (e != null)
+				if (e != null) {
 					e.teleport(position);
+				}
 				player.teleport(position);
 			}
-			if (e != null)
+			if (e != null) {
 				e.setFireTicks(0); // Cancel lava fire
+			}
 			player.setFireTicks(0); // Cancel lava fire
 
 			// Handle player inventory
@@ -141,8 +146,9 @@ public class TeleportUtil {
 
 				if (teleportInventory.equals(InvBoolean.FALSE)) {
 					for (final ItemStack itemStack : contents) {
-						if (itemStack != null)
+						if (itemStack != null) {
 							player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+						}
 					}
 				}
 			}
@@ -164,8 +170,9 @@ public class TeleportUtil {
 			// Send message over the AGBungeeTele BungeeCord channel
 			player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
 			// Imitate teleport by removing entity
-			if (e != null && teleportEntities && tpType.equals(TeleportType.LOCATION) && !(e instanceof Player))
+			if (e != null && teleportEntities && tpType.equals(TeleportType.LOCATION) && !(e instanceof Player)) {
 				e.remove();
+			}
 
 			// Replace quit message is with BungeeCord teleport message
 			Plugin.bungeeCordOutQueue.put(player.getName().toLowerCase(), location.get(SERVER));
@@ -292,7 +299,7 @@ public class TeleportUtil {
 
 	// Normal vehicle teleport
 	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
-		final Location destination = GeometryUtil.addHeightToLocation(location, 0.5); // Fix vehicle
+		final Location destination = GeometryUtil.addHeightToLocation(location.clone(), 0.5); // Fix vehicle
 		// spawn
 		// glitch
 		final double velocity = vehicle.getVelocity().length();
@@ -315,8 +322,9 @@ public class TeleportUtil {
 
 					if (teleportInventory.equals(InvBoolean.FALSE)) {
 						for (final ItemStack itemStack : contents) {
-							if (itemStack != null)
+							if (itemStack != null) {
 								((Player) passenger).getWorld().dropItemNaturally(((Player) passenger).getLocation(), itemStack);
+							}
 						}
 					}
 				}
@@ -334,8 +342,9 @@ public class TeleportUtil {
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				@Override
 				public void run() {
-					if (!EntityUtil.isEchoPet(passenger))
+					if (!EntityUtil.isEchoPet(passenger)) {
 						v.setPassenger(passenger);
+					}
 					v.setVelocity(newVelocity);
 				}
 			}, 2);
@@ -351,8 +360,9 @@ public class TeleportUtil {
 					// Drop contents
 				} else {
 					for (final ItemStack itemStack : contents) {
-						if (itemStack != null)
+						if (itemStack != null) {
 							vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+						}
 					}
 				}
 			} else if (mc instanceof HopperMinecart) {
@@ -364,8 +374,9 @@ public class TeleportUtil {
 					// Drop contents
 				} else {
 					for (final ItemStack itemStack : contents) {
-						if (itemStack != null)
+						if (itemStack != null) {
 							vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+						}
 					}
 				}
 			}
@@ -420,8 +431,9 @@ public class TeleportUtil {
 
 					if (teleportInventory.equals(InvBoolean.FALSE)) {
 						for (final ItemStack itemStack : contents) {
-							if (itemStack != null)
+							if (itemStack != null) {
 								player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+							}
 						}
 					}
 				}
@@ -471,8 +483,9 @@ public class TeleportUtil {
 							// Drop contents
 						} else {
 							for (final ItemStack itemStack : contents) {
-								if (itemStack != null)
+								if (itemStack != null) {
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+								}
 							}
 						}
 					} else if (vehicle instanceof HopperMinecart) {
@@ -483,8 +496,9 @@ public class TeleportUtil {
 							// Drop contents
 						} else {
 							for (final ItemStack itemStack : contents) {
-								if (itemStack != null)
+								if (itemStack != null) {
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+								}
 							}
 						}
 					}
@@ -521,8 +535,9 @@ public class TeleportUtil {
 							// Drop contents
 						} else {
 							for (final ItemStack itemStack : contents) {
-								if (itemStack != null)
+								if (itemStack != null) {
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+								}
 							}
 						}
 					} else if (vehicle instanceof HopperMinecart) {
@@ -533,8 +548,9 @@ public class TeleportUtil {
 							// Drop contents
 						} else {
 							for (final ItemStack itemStack : contents) {
-								if (itemStack != null)
+								if (itemStack != null) {
 									vehicle.getWorld().dropItemNaturally(vehicle.getLocation(), itemStack);
+								}
 							}
 						}
 					}
