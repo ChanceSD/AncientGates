@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-@SuppressWarnings("resource")
 // Hard disc related methods such as read and write.
 public class DiscUtil {
 
