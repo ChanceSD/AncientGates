@@ -39,7 +39,6 @@ public class SocketClient implements Runnable {
 		this.listener = inListener;
 	}
 
-	@SuppressWarnings("resource")
 	@Override
 	public void run() {
 		if (this.socket != null && this.socket.isConnected()) {
@@ -147,7 +146,6 @@ public class SocketClient implements Runnable {
 		this.send(ps);
 	}
 
-	@SuppressWarnings("resource")
 	public void send(final Packets p) {
 		if (this.writer != null) {
 			try {
