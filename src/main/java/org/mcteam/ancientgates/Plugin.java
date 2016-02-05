@@ -59,7 +59,7 @@ import org.mcteam.ancientgates.listeners.PluginMessengerListener;
 import org.mcteam.ancientgates.listeners.PluginMovementListener;
 import org.mcteam.ancientgates.listeners.PluginPlayerListener;
 import org.mcteam.ancientgates.listeners.PluginSocketListener;
-import org.mcteam.ancientgates.MetricsStarter;
+import org.mcteam.ancientgates.metrics.MetricsStarter;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.SocketServer;
 import org.mcteam.ancientgates.util.types.PluginMessage;
