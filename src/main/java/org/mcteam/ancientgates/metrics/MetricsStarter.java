@@ -1,4 +1,4 @@
-package org.mcteam.ancientgates;
+package org.mcteam.ancientgates.metrics;
 
 import java.io.IOException;
 
