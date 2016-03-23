@@ -7,3 +7,5 @@ general:
 test:
   override:
     - mvn clean install -B
+  post:
+    - cp ./target/*.jar $CIRCLE_ARTIFACTS
