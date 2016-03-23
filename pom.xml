@@ -6,7 +6,8 @@
 
     <groupId>org.mcteam.ancientgates</groupId>
     <artifactId>ancientgates</artifactId>
-    <version>2.0.8</version>
+    <version>2.0.8-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
     <name>AncientGates</name>
     <description>Easily create portals with any custom design.</description>
@@ -30,8 +31,8 @@
 
     <licenses>
         <license>
-            <name>The GNU General Public Licence version 2 (GPLv2)</name>
-            <url>http://www.gnu.org/licenses/gpl-2.0.html</url>
+            <name>The GNU General Public Licence version 3 (GPLv3)</name>
+            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
         </license>
     </licenses>
 
@@ -40,13 +41,13 @@
     </prerequisites>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <!-- Change Compiler Version (JDK) HERE! -->
-        <javaVersion>1.7</javaVersion>
+        <projectEncoding>UTF-8</projectEncoding>
+        <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
+        <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
+        <jdkVersion>1.7</jdkVersion>
 
         <!-- Change Bukkit Version HERE! -->
-        <bukkitVersion>1.9-R0.1-SNAPSHOT</bukkitVersion>
+        <bukkitVersion>1.9-SNAPSHOT</bukkitVersion>
     </properties>
 
     <build>
@@ -56,22 +57,19 @@
         <resources>
             <resource>
                 <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>src/main/resources/</directory>
+                <filtering>false</filtering>
+                <directory>.</directory>
                 <includes>
-                    <include>plugin.yml</include>
+                    <include>LICENSE</include>
                 </includes>
             </resource>
             <resource>
                 <targetPath>.</targetPath>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
                 <directory>src/main/resources/</directory>
                 <includes>
                     <include>*</include>
                 </includes>
-                <excludes>
-                    <exclude>plugin.yml</exclude>
-                </excludes>
             </resource>
         </resources>
 
@@ -79,17 +77,17 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
+                <version>3.5.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>${javaVersion}</target>
+                    <source>${jdkVersion}</source>
+                    <target>${jdkVersion}</target>
                     <optimize>true</optimize>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.2</version>
+                <version>2.4.3</version>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <minimizeJar>true</minimizeJar>
@@ -97,14 +95,6 @@
                         <relocation>
                             <pattern>org.mcstats</pattern>
                             <shadedPattern>org.mcteam.ancientgates</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.google.common</pattern>
-                            <shadedPattern>org.mcteam.ancientgates.libs.guava</shadedPattern>
-                        </relocation>
-                        <relocation>
-                            <pattern>com.google.gson</pattern>
-                            <shadedPattern>org.mcteam.ancientgates.libs.gson</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -136,22 +126,6 @@
     </repositories>
 
     <dependencies>
-        <!-- Guava (required to provide 1.7.10 and below compatibility) -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>19.0</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
-        <!-- GSON (required to provide 1.7.10 and below compatibility) -->
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.5</version>
-            <scope>compile</scope>
-            <optional>true</optional>
-        </dependency>
         <!-- Bukkit API, http://www.spigotmc.org/ or http://bukkit.org/ -->
         <dependency>
             <groupId>org.bukkit</groupId>
@@ -169,10 +143,6 @@
                     <groupId>com.googlecode.json-simple</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>gson</artifactId>
-                    <groupId>com.google.code.gson</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>persistence-api</artifactId>
                     <groupId>javax.persistence</groupId>
                 </exclusion>
@@ -180,12 +150,9 @@
                     <artifactId>commons-lang</artifactId>
                     <groupId>commons-lang</groupId>
                 </exclusion>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
             </exclusions>
         </dependency>
+
         <!-- Metrics -->
         <dependency>
             <groupId>org.mcstats.bukkit</groupId>
@@ -200,6 +167,7 @@
             </exclusions>
             <optional>true</optional>
         </dependency>
+
         <!-- Vault, http://dev.bukkit.org/bukkit-plugins/vault/ -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -211,13 +179,10 @@
                     <groupId>org.bukkit</groupId>
                     <artifactId>bukkit</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
-                </exclusion>
             </exclusions>
             <optional>true</optional>
         </dependency>
+
         <!-- TODO: fix EchoPet maven and add it to a working maven server -->
         <dependency>
             <groupId>com.dsh105</groupId>
