@@ -1,55 +1,58 @@
-name: '${project.name}'
-version: '${project.version}'
-description: '${project.description}'
-main: 'org.mcteam.ancientgates.Plugin'
-load: postworld
-author: 'NoChanceSD'
+name:        ${project.name}
+version:     ${project.version}
+description: ${project.description}
+main:        org.mcteam.ancientgates.Plugin
+load:        PostWorld
+author:      NoChanceSD
 softdepend:
-    - Vault
-    - Multiverse-Core
-    - MultiWorld
+- Vault
+- Multiverse-Core
+- MultiWorld
+
 commands:
   gate:
     description: All of the Ancient Gates commands.
     usage: See documentation.
+
 permissions:
   ancientgates.*:
     description: Gives access to all Ancient Gates and commands.
+    default: op
     children:
-      ancientgates.addserver: true
-      ancientgates.addto: true
-      ancientgates.close: true
-      ancientgates.closeall: true
-      ancientgates.create: true
-      ancientgates.delete: true
-      ancientgates.help: true
-      ancientgates.info: true
-      ancientgates.info.exec: true
-      ancientgates.list: true
-      ancientgates.listserver: true
-      ancientgates.open: true
-      ancientgates.openall: true
-      ancientgates.remexec: true
-      ancientgates.remserver: true
-      ancientgates.remto: true
-      ancientgates.rename: true
+      ancientgates.addserver:     true
+      ancientgates.addto:         true
+      ancientgates.close:         true
+      ancientgates.closeall:      true
+      ancientgates.create:        true
+      ancientgates.delete:        true
+      ancientgates.help:          true
+      ancientgates.info:          true
+      ancientgates.info.exec:     true
+      ancientgates.list:          true
+      ancientgates.listserver:    true
+      ancientgates.open:          true
+      ancientgates.openall:       true
+      ancientgates.remexec:       true
+      ancientgates.remserver:     true
+      ancientgates.remto:         true
+      ancientgates.rename:        true
       ancientgates.setbungeetype: true
-      ancientgates.setconf: true
-      ancientgates.setcost: true
-      ancientgates.setentities: true
-      ancientgates.setexec: true
-      ancientgates.setfrom: true
-      ancientgates.setinv: true
-      ancientgates.setmaterial: true
-      ancientgates.setmessage: true
-      ancientgates.setvehicles: true
-      ancientgates.tpfrom: true
-      ancientgates.tpto: true
-      ancientgates.addfrom.*: true
-      ancientgates.remfrom.*: true
-      ancientgates.setto.*: true
-      ancientgates.use.*: true
-      ancientgates.econbypass: true
+      ancientgates.setconf:       true
+      ancientgates.setcost:       true
+      ancientgates.setentities:   true
+      ancientgates.setexec:       true
+      ancientgates.setfrom:       true
+      ancientgates.setinv:        true
+      ancientgates.setmaterial:   true
+      ancientgates.setmessage:    true
+      ancientgates.setvehicles:   true
+      ancientgates.tpfrom:        true
+      ancientgates.tpto:          true
+      ancientgates.addfrom.*:     true
+      ancientgates.remfrom.*:     true
+      ancientgates.setto.*:       true
+      ancientgates.use.*:         true
+      ancientgates.econbypass:    true
   ancientgates.close:
     description: Allows the use of Ancient Gates close command.
     default: op
