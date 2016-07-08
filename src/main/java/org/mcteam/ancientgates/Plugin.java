@@ -70,6 +70,7 @@ import com.google.gson.GsonBuilder;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.permission.Permission;
+import org.bukkit.OfflinePlayer;
 
 public class Plugin extends JavaPlugin {
 
@@ -108,7 +109,7 @@ public class Plugin extends JavaPlugin {
 	public List<BaseCommand> commands = new ArrayList<>();
 
 	public Plugin() {
-		instance = this;
+		instance = (Plugin)this;
 	}
 
 	@Override
@@ -297,6 +298,7 @@ public class Plugin extends JavaPlugin {
 		final RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null) {
 			perms = permissionProvider.getProvider();
+			Plugin.log("Using " + perms.getName() + " as permissions manager.");
 		}
 		return perms != null;
 	}
@@ -318,11 +320,7 @@ public class Plugin extends JavaPlugin {
 			return true;
 
 		final Player player = (Player) sender;
-
-		if (perms == null) {
-			return sender.hasPermission(requiredPermission);
-		}
-		return perms.has(player, requiredPermission);
+		return player.hasPermission(requiredPermission);
 	}
 
 	// -------------------------------------------- //
@@ -330,10 +328,21 @@ public class Plugin extends JavaPlugin {
 	// -------------------------------------------- //
 	@SuppressWarnings("deprecation")
 	public static boolean hasPermManage(final String player, final String requiredPermission) {
-		if (perms == null) {
-			return Bukkit.getServer().getOfflinePlayer(player).isOp();
+		final OfflinePlayer offline = Bukkit.getServer().getOfflinePlayer(player);
+		if(offline.isOp()) {
+			return true;
 		}
-		return perms.playerHas(Bukkit.getWorlds().get(0), player, requiredPermission) | Bukkit.getServer().getOfflinePlayer(player).isOp();
+		
+		final Player online = offline.getPlayer();
+		if(online != null) {
+			return online.hasPermission(requiredPermission);
+		}
+
+		if (perms != null) {
+			return perms.playerHas(Bukkit.getWorlds().get(0), player, requiredPermission);
+		}
+		
+		return false;
 	}
 
 	// -------------------------------------------- //
