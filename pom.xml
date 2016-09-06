@@ -45,9 +45,6 @@
         <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
         <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
         <jdkVersion>1.7</jdkVersion>
-
-        <!-- Change Bukkit Version HERE! -->
-        <bukkitVersion>1.9-SNAPSHOT</bukkitVersion>
     </properties>
 
     <build>
@@ -128,29 +125,27 @@
     <dependencies>
         <!-- Bukkit API, http://www.spigotmc.org/ or http://bukkit.org/ -->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>${bukkitVersion}</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-            <exclusions>
-                <exclusion>
-                    <artifactId>junit</artifactId>
-                    <groupId>junit</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>json-simple</artifactId>
-                    <groupId>com.googlecode.json-simple</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>persistence-api</artifactId>
-                    <groupId>javax.persistence</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>commons-lang</artifactId>
-                    <groupId>commons-lang</groupId>
-                </exclusion>
-            </exclusions>
+        	<groupId>org.spigotmc</groupId>
+        	<artifactId>spigot-api</artifactId>
+        	<version>1.10.2-R0.1-SNAPSHOT</version>
+        	<exclusions>
+        		<exclusion>
+        			<groupId>commons-lang</groupId>
+        			<artifactId>commons-lang</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>org.yaml</groupId>
+        			<artifactId>snakeyaml</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>com.googlecode.json-simple</groupId>
+        			<artifactId>json-simple</artifactId>
+        		</exclusion>
+        		<exclusion>
+        			<groupId>net.md-5</groupId>
+        			<artifactId>bungeecord-chat</artifactId>
+        		</exclusion>
+        	</exclusions>
         </dependency>
 
         <!-- Metrics -->
@@ -172,7 +167,7 @@
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>VaultAPI</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
