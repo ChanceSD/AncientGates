@@ -114,7 +114,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://nexus.theyeticave.net/content/repositories/pub_releases</url>
+            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
             <id>xephi-repo</id>
@@ -128,6 +128,7 @@
         	<groupId>org.spigotmc</groupId>
         	<artifactId>spigot-api</artifactId>
         	<version>1.10.2-R0.1-SNAPSHOT</version>
+        	<scope>provided</scope>
         	<exclusions>
         		<exclusion>
         			<groupId>commons-lang</groupId>
