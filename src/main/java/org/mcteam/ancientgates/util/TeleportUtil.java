@@ -187,19 +187,13 @@ public class TeleportUtil {
 	public static void teleportEntity(final EntityPortalEvent event, final Location location) {
 		checkChunkLoad(location.getBlock());
 
-		// Remove entity
 		final Entity entity = event.getEntity();
-		entity.remove();
 
-		// Clone entity - Spawnable (excl. EchoPet)
 		if (entity.getType().isSpawnable() && !EntityUtil.isEchoPet(entity)) {
-			final Entity e = location.getWorld().spawn(location, entity.getClass());
-			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity));
-
-			// Clone entity - Itemstack
+			entity.teleport(location);
 		} else if (entity.getType() == EntityType.DROPPED_ITEM) {
-			final Item i = location.getWorld().dropItemNaturally(location, ((Item) entity).getItemStack());
-			i.teleport(location);
+			entity.remove();
+			location.getWorld().dropItemNaturally(location, ((Item) entity).getItemStack());
 		}
 
 	}
