@@ -84,7 +84,7 @@ public class PluginEntityListener implements Listener {
 	@EventHandler
 	public void onEntityDamage(final EntityDamageEvent event) {
 
-		if (event.getCause() == DamageCause.DROWNING || event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.LAVA) {
+		if (event.getCause() == DamageCause.DROWNING || event.getCause() == DamageCause.SUFFOCATION || event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.LAVA) {
 
 			// Ok so an entity damage event begins
 			// Find the nearest gate!
