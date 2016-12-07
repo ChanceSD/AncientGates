@@ -77,26 +77,21 @@ public class TeleportUtil {
 		if (player.isInsideVehicle() && entity instanceof LivingEntity) {
 			entity.eject();
 			if (teleportEntities && !(entity instanceof Player) && !EntityUtil.isEchoPet(entity)) {
-				entity.remove();
+				entity.teleport(location);
+				entity.setFireTicks(0);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
+					@Override
+					public void run() {
+						entity.setPassenger(player);
+					}
+				}, 2);
+
 			}
+		} else {
+			player.teleport(location);
+			player.setFireTicks(0); // Cancel lava fire
 		}
 
-		// Teleport player
-		player.teleport(location);
-		player.setFireTicks(0); // Cancel lava fire
-
-		// Re-mount player on entity (excl. EchoPet)
-		if (entity != null && teleportEntities && entity instanceof LivingEntity && !(entity instanceof Player) && !EntityUtil.isEchoPet(entity)) {
-			final Entity e = location.getWorld().spawn(location, entity.getClass());
-			EntityUtil.setEntityTypeData(e, EntityUtil.getEntityTypeData(entity)); // Clone entity
-			// data
-			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-				@Override
-				public void run() {
-					e.setPassenger(player);
-				}
-			}, 2);
-		}
 	}
 
 	// BungeeCord player teleport out
@@ -186,7 +181,6 @@ public class TeleportUtil {
 	// Entity teleport
 	public static void teleportEntity(final EntityPortalEvent event, final Location location) {
 		checkChunkLoad(location.getBlock());
-
 		final Entity entity = event.getEntity();
 
 		if (entity.getType().isSpawnable() && !EntityUtil.isEchoPet(entity)) {
@@ -293,7 +287,8 @@ public class TeleportUtil {
 
 	// Normal vehicle teleport
 	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
-		final Location destination = GeometryUtil.addHeightToLocation(location.clone(), 0.5); // Fix vehicle
+		final Location destination = GeometryUtil.addHeightToLocation(location.clone(), 0.5); // Fix
+		                                                                                      // vehicle
 		// spawn
 		// glitch
 		final double velocity = vehicle.getVelocity().length();

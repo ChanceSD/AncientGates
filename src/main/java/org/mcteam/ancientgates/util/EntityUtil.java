@@ -124,7 +124,7 @@ public class EntityUtil {
 				} else if (entity instanceof Pig) {
 					data += String.valueOf(((Pig) entity).hasSaddle()) + ",";
 				} else if (entity instanceof Horse) {
-					data += String.valueOf(((Horse) entity).getVariant().name()) + ",";
+					data += "deprecated" + ",";
 					data += String.valueOf(((Horse) entity).getStyle().name()) + ",";
 					data += String.valueOf(((Horse) entity).getColor().name()) + ",";
 					data += String.valueOf(((Horse) entity).getDomestication()) + ",";
@@ -186,7 +186,7 @@ public class EntityUtil {
 				} else if (entity instanceof Pig) {
 					((Pig) entity).setSaddle(Boolean.parseBoolean(parts[4]));
 				} else if (entity instanceof Horse) {
-					((Horse) entity).setVariant(horseVariants.get(parts[4]));
+					// ((Horse) entity).setVariant(horseVariants.get(parts[4]));
 					((Horse) entity).setStyle(horseStyles.get(parts[5]));
 					((Horse) entity).setColor(horseColors.get(parts[6]));
 					((Horse) entity).setDomestication(Integer.parseInt(parts[7]));
