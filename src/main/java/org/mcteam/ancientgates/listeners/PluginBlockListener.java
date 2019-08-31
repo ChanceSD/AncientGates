@@ -252,7 +252,8 @@ public class PluginBlockListener implements Listener {
 
 		final Block block = event.getBlock();
 
-		if (!block.getType().equals(Material.STATIONARY_WATER) && !block.getType().equals(Material.STATIONARY_LAVA))
+		// Fixes leaking water on 1.13 and doesn't seem to cause issues <1.13
+		if (!block.getType().equals(Material.WATER) && !block.getType().equals(Material.LAVA))
 			return;
 
 		// Ok so water/lava starts flowing within a portal frame
