@@ -126,6 +126,7 @@ public class PluginPlayerListener implements Listener {
 		// Clear player hashmaps
 		Plugin.lastMessageTime.remove(playerName);
 		Plugin.lastTeleportTime.remove(playerName);
+		playerLocationAtEvent.remove(event.getPlayer());
 
 		if (!Conf.bungeeCordSupport) {
 			return;
