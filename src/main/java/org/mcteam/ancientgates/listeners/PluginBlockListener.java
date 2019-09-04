@@ -230,15 +230,17 @@ public class PluginBlockListener implements Listener {
 			return;
 
 		final Block block = event.getBlock();
+		// Avoid calling getType twice since it's an heavy call on 1.13+ while being in legacy mode
+		final Material type = block.getType();
 		final WorldCoord coord = new WorldCoord(block);
 
 		// Stop portal blocks from breaking
-		if (BlockUtil.isStandableGateMaterial(block.getType()) && Gates.gateFromPortal(coord) != null) {
+		if (BlockUtil.isStandableGateMaterial(type) && Gates.gateFromPortal(coord) != null) {
 			event.setCancelled(true);
 		}
 
 		// Stop sand falling when part of the frame
-		if (block.getType() == Material.SAND && Gates.gateFromFrame(coord) != null) {
+		if (type == Material.SAND && Gates.gateFromFrame(coord) != null) {
 			event.setCancelled(true);
 		}
 
