@@ -24,11 +24,6 @@
         <url>https://github.com/NoChanceSD/AncientGates/issues</url>
     </issueManagement>
 
-    <ciManagement>
-        <system>jenkins</system>
-        <url>http://ci.xephi.fr/job/AncientGates/</url>
-    </ciManagement>
-
     <licenses>
         <license>
             <name>The GNU General Public Licence version 3 (GPLv3)</name>
