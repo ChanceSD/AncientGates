@@ -1,82 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.mcteam.ancientgates</groupId>
-    <artifactId>ancientgates</artifactId>
-    <version>2.2</version>
-    <packaging>jar</packaging>
+	<groupId>org.mcteam.ancientgates</groupId>
+	<artifactId>ancientgates</artifactId>
+	<version>2.2.1</version>
+	<packaging>jar</packaging>
 
-    <name>AncientGates</name>
-    <description>Easily create portals with any custom design.</description>
-    <url>https://www.spigotmc.org/resources/ancient-gates.6583/</url>
+	<name>AncientGates</name>
+	<description>Easily create portals with any custom design.</description>
+	<url>https://www.spigotmc.org/resources/ancient-gates.6583/</url>
 
-    <scm>
-        <connection>scm:git:https://github.com/NoChanceSD/AncientGates.git</connection>
-        <developerConnection>scm:git:git@github.com:NoChanceSD/AncientGates.git</developerConnection>
-        <url>https://github.com/NoChanceSD/AncientGates</url>
-    </scm>
+	<scm>
+		<connection>scm:git:https://github.com/NoChanceSD/AncientGates.git</connection>
+		<developerConnection>scm:git:git@github.com:NoChanceSD/AncientGates.git</developerConnection>
+		<url>https://github.com/NoChanceSD/AncientGates</url>
+	</scm>
 
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/NoChanceSD/AncientGates/issues</url>
-    </issueManagement>
+	<issueManagement>
+		<system>GitHub</system>
+		<url>https://github.com/NoChanceSD/AncientGates/issues</url>
+	</issueManagement>
 
-    <licenses>
-        <license>
-            <name>The GNU General Public Licence version 3 (GPLv3)</name>
-            <url>http://www.gnu.org/licenses/gpl-3.0.html</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>The GNU General Public Licence version 3 (GPLv3)</name>
+			<url>http://www.gnu.org/licenses/gpl-3.0.html</url>
+		</license>
+	</licenses>
 
-    <prerequisites>
-        <maven>3.3.3</maven>
-    </prerequisites>
+	<prerequisites>
+		<maven>3.3.3</maven>
+	</prerequisites>
 
-    <properties>
-        <projectEncoding>UTF-8</projectEncoding>
-        <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
-        <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
-        <jdkVersion>1.8</jdkVersion>
-    </properties>
+	<properties>
+		<projectEncoding>UTF-8</projectEncoding>
+		<project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
+		<project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
+		<jdkVersion>1.8</jdkVersion>
+	</properties>
 
-    <build>
-        <finalName>${project.name}-${project.version}</finalName>
-        <sourceDirectory>src/main/java</sourceDirectory>
+	<build>
+		<finalName>${project.name}-${project.version}</finalName>
+		<sourceDirectory>src/main/java</sourceDirectory>
 
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>false</filtering>
-                <directory>.</directory>
-                <includes>
-                    <include>LICENSE</include>
-                </includes>
-            </resource>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>src/main/resources/</directory>
-                <includes>
-                    <include>*</include>
-                </includes>
-            </resource>
-        </resources>
+		<resources>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>false</filtering>
+				<directory>.</directory>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+			<resource>
+				<targetPath>.</targetPath>
+				<filtering>true</filtering>
+				<directory>src/main/resources/</directory>
+				<includes>
+					<include>*</include>
+				</includes>
+			</resource>
+		</resources>
 
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${jdkVersion}</source>
-                    <target>${jdkVersion}</target>
-                    <optimize>true</optimize>
-                </configuration>
-            </plugin>
-            <plugin>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${jdkVersion}</source>
+					<target>${jdkVersion}</target>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
 				<version>3.1.0</version>
@@ -99,85 +98,81 @@
 					</execution>
 				</executions>
 			</plugin>
-        </plugins>
-    </build>
+		</plugins>
+	</build>
 
-    <repositories>
-        <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
-        </repository>
-        <repository>
-  			<id>CodeMC</id>
-  			<url>https://repo.codemc.org/repository/maven-public</url>
+	<repositories>
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
 		</repository>
-        <repository>
-            <id>xephi-repo</id>
-            <url>http://ci.xephi.fr/plugin/repository/everything/</url>
-        </repository>
-    </repositories>
+		<repository>
+			<id>vault-repo</id>
+			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+		</repository>
+		<repository>
+			<id>CodeMC</id>
+			<url>https://repo.codemc.org/repository/maven-public</url>
+		</repository>
+	</repositories>
 
-    <dependencies>
-        <!-- Bukkit API, http://www.spigotmc.org/ or http://bukkit.org/ -->
-        <dependency>
-        	<groupId>org.spigotmc</groupId>
-        	<artifactId>spigot-api</artifactId>
-        	<version>1.12.2-R0.1-SNAPSHOT</version>
-        	<scope>provided</scope>
-        	<exclusions>
-        		<exclusion>
-        			<groupId>commons-lang</groupId>
-        			<artifactId>commons-lang</artifactId>
-        		</exclusion>
-        		<exclusion>
-        			<groupId>org.yaml</groupId>
-        			<artifactId>snakeyaml</artifactId>
-        		</exclusion>
-        		<exclusion>
-        			<groupId>com.googlecode.json-simple</groupId>
-        			<artifactId>json-simple</artifactId>
-        		</exclusion>
-        		<exclusion>
-        			<groupId>net.md-5</groupId>
-        			<artifactId>bungeecord-chat</artifactId>
-        		</exclusion>
-        	</exclusions>
-        </dependency>
-
-        <!-- Metrics -->
-        <dependency>
- 			<groupId>org.bstats</groupId>
-  			<artifactId>bstats-bukkit</artifactId>
- 			<version>1.5</version>
-  			<scope>compile</scope>
+	<dependencies>
+		<!-- Bukkit API, http://www.spigotmc.org/ or http://bukkit.org/ -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.12.2-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-lang</groupId>
+					<artifactId>commons-lang</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.yaml</groupId>
+					<artifactId>snakeyaml</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.googlecode.json-simple</groupId>
+					<artifactId>json-simple</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>net.md-5</groupId>
+					<artifactId>bungeecord-chat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
-        <!-- Vault, http://dev.bukkit.org/bukkit-plugins/vault/ -->
-        <dependency>
-            <groupId>net.milkbowl.vault</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.6</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>bukkit</artifactId>
-                </exclusion>
-            </exclusions>
-            <optional>true</optional>
-        </dependency>
+		<!-- Metrics -->
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit</artifactId>
+			<version>1.5</version>
+			<scope>compile</scope>
+		</dependency>
 
-        <!-- TODO: fix EchoPet maven and add it to a working maven server -->
-        <dependency>
-            <groupId>com.dsh105</groupId>
-            <artifactId>EchoPet</artifactId>
-            <version>2.8.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/EchoPet_v2.8.0.jar</systemPath>
-        </dependency>
-    </dependencies>
+		<!-- Vault, http://dev.bukkit.org/bukkit-plugins/vault/ -->
+		<dependency>
+			<groupId>net.milkbowl.vault</groupId>
+			<artifactId>VaultAPI</artifactId>
+			<version>1.7</version>
+			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.bukkit</groupId>
+					<artifactId>bukkit</artifactId>
+				</exclusion>
+			</exclusions>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- TODO: fix EchoPet maven and add it to a working maven server -->
+		<dependency>
+			<groupId>com.dsh105</groupId>
+			<artifactId>EchoPet</artifactId>
+			<version>2.8.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/libs/EchoPet_v2.8.0.jar</systemPath>
+		</dependency>
+	</dependencies>
 </project>
