@@ -6,7 +6,7 @@
 
     <groupId>org.mcteam.ancientgates</groupId>
     <artifactId>ancientgates</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
     <packaging>jar</packaging>
 
     <name>AncientGates</name>
@@ -44,7 +44,7 @@
         <projectEncoding>UTF-8</projectEncoding>
         <project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
         <project.build.outputEncoding>${projectEncoding}</project.build.outputEncoding>
-        <jdkVersion>1.7</jdkVersion>
+        <jdkVersion>1.8</jdkVersion>
     </properties>
 
     <build>
