@@ -43,9 +43,8 @@ public class PluginPlayerListener implements Listener {
 
 	@EventHandler
 	public void onPlayerJoin(final PlayerJoinEvent event) {
-		if (!Conf.bungeeCordSupport) {
+		if (!Conf.bungeeCordSupport)
 			return;
-		}
 
 		final Player player = event.getPlayer();
 		final String playerName = player.getName();
@@ -64,8 +63,9 @@ public class PluginPlayerListener implements Listener {
 
 			// Display teleport message
 			final String message = queue.getMessage();
-			if (!message.equals("null"))
+			if (!message.equals("null")) {
 				player.sendMessage(message);
+			}
 
 			if (queue.getDestination() != null) {
 				// Teleport incoming BungeeCord player
@@ -85,8 +85,9 @@ public class PluginPlayerListener implements Listener {
 					}
 
 					TeleportUtil.teleportPlayer(player, location, false, InvBoolean.TRUE);
-					if (entity != null)
+					if (entity != null) {
 						entity.setPassenger(player);
+					}
 
 					return;
 					// Teleport incoming BungeeCord passenger
@@ -99,8 +100,9 @@ public class PluginPlayerListener implements Listener {
 			// Execute teleport command
 			final String command = queue.getCommand();
 			final CommandType commandType = queue.getCommandType();
-			if (!command.equals("null"))
+			if (!command.equals("null")) {
 				ExecuteUtil.execCommand(player, command, commandType);
+			}
 
 			// Activate cooldown period
 			final Long now = Calendar.getInstance().getTimeInMillis();
@@ -108,14 +110,17 @@ public class PluginPlayerListener implements Listener {
 		}
 
 		// Process BungeeCord message queue
-		if (Plugin.bungeeMsgQueue.size() > 0)
+		if (Plugin.bungeeMsgQueue.size() > 0) {
 			new BungeeMessage(plugin).runTaskLater(plugin, 20L);
+		}
 
 		// Schedule task to check bungeeServerName & bungeeServerList is set
-		if (Plugin.bungeeServerName == null)
+		if (Plugin.bungeeServerName == null) {
 			new BungeeServerName(plugin).runTaskLater(plugin, 20L);
-		if (Plugin.bungeeServerList == null)
+		}
+		if (Plugin.bungeeServerList == null) {
 			new BungeeServerList(plugin).runTaskLater(plugin, 20L);
+		}
 
 	}
 
@@ -128,26 +133,23 @@ public class PluginPlayerListener implements Listener {
 		Plugin.lastTeleportTime.remove(playerName);
 		playerLocationAtEvent.remove(event.getPlayer());
 
-		if (!Conf.bungeeCordSupport) {
+		if (!Conf.bungeeCordSupport)
 			return;
-		}
 
 		// Ok so a player quits the server
 		// If it's a BungeeCord teleport, display a custom quit message
 		final String server = Plugin.bungeeCordOutQueue.remove(playerName.toLowerCase());
 		if (server != null) {
 			String msg = null;
-			if (Conf.useBungeeMessages)
+			if (Conf.useBungeeMessages) {
 				msg = ChatColor.translateAlternateColorCodes('&', Conf.bungeeQuitMessage.replace("%p", playerName).replace("%s", server));
+			}
 			event.setQuitMessage(msg);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerPortal(final PlayerPortalEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
 		final Player player = event.getPlayer();
 
 		// Ok so a player portal event begins
@@ -159,22 +161,19 @@ public class PluginPlayerListener implements Listener {
 			event.setCancelled(true);
 
 			// Check teleportation method
-			if (!Conf.useVanillaPortals) {
+			if (!Conf.useVanillaPortals)
 				return;
-			}
 
 			// Check player is not carrying a passenger
-			if (player.getPassenger() != null) {
+			if (player.getPassenger() != null)
 				return;
-			}
 
 			// Get current time
 			final Long now = Calendar.getInstance().getTimeInMillis();
 
 			// Check player has passed cooldown period
-			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis()) {
+			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
 				return;
-			}
 
 			// Check player has permission to enter the gate.
 			if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*") && Conf.enforceAccess) {
@@ -200,10 +199,12 @@ public class PluginPlayerListener implements Listener {
 			} else if (nearestGate.getTo() != null) {
 				TeleportUtil.teleportPlayer(player, nearestGate.getTo(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory());
 
-				if (nearestGate.getCommand() != null)
+				if (nearestGate.getCommand() != null) {
 					ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType());
-				if (nearestGate.getMessage() != null)
+				}
+				if (nearestGate.getMessage() != null) {
 					player.sendMessage(nearestGate.getMessage());
+				}
 
 				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {

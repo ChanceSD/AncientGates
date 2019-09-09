@@ -42,11 +42,8 @@ public class PluginBlockListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBreak(final BlockBreakEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Ok so a player breaks a portal/frame block
@@ -59,11 +56,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockBurn(final BlockBurnEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Ok so a frame block is burning
@@ -76,11 +70,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockIgnite(final BlockIgniteEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Ok so a frame block ignites
@@ -93,11 +84,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockSpread(final BlockSpreadEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Ok so a frame block fire spreads
@@ -110,11 +98,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPlace(final BlockPlaceEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Ok so a player places near a portal block
@@ -127,11 +112,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
-		if (event.isCancelled())
-			return;
-
 		for (final Block block : event.getBlocks()) {
 			// Ok so a block is pushed into a frame block
 			// Find the nearest gate!
@@ -146,11 +128,8 @@ public class PluginBlockListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getRetractLocation().getBlock();
 
 		// Ok so a block is pulled from a frame block
@@ -164,11 +143,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlockClicked();
 		final Block blockUp = block.getRelative(BlockFace.UP);
 
@@ -184,11 +160,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerBucketFill(final PlayerBucketFillEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlockClicked();
 		final Block blockUp = block.getRelative(BlockFace.UP);
 
@@ -224,11 +197,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockPhysics(final BlockPhysicsEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 		// Avoid calling getType twice since it's an heavy call on 1.13+ while being in legacy mode
 		final Material type = block.getType();
@@ -247,11 +217,8 @@ public class PluginBlockListener implements Listener {
 		return;
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockFromTo(final BlockFromToEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Fixes leaking water on 1.13 and doesn't seem to cause issues <1.13
@@ -268,11 +235,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockForm(final BlockFormEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getBlock();
 
 		// Ok so blocks starts forming within a portal frame
@@ -285,11 +249,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockGrow(final BlockGrowEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getNewState().getBlock();
 		final WorldCoord coord = new WorldCoord(block);
 
@@ -299,11 +260,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Block block = event.getClickedBlock();
 		if (block == null)
 			return;
@@ -316,11 +274,8 @@ public class PluginBlockListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.NORMAL)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemSpawn(final ItemSpawnEvent event) {
-		if (event.isCancelled())
-			return;
-
 		final Entity item = event.getEntity();
 		if (item.getType() != EntityType.DROPPED_ITEM || ((Item) item).getItemStack().getType() != Material.SUGAR_CANE)
 			return;

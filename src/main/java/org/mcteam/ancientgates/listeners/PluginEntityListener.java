@@ -27,11 +27,9 @@ public class PluginEntityListener implements Listener {
 		this.plugin = plugin;
 	}
 
-	@EventHandler
+	@SuppressWarnings("deprecation")
+	@EventHandler(ignoreCancelled = true)
 	public void onEntityPortal(final EntityPortalEvent event) {
-		if (event.isCancelled()) {
-			return;
-		}
 		if (!(event.getEntity() instanceof Player) && !(event.getEntity().getPassenger() instanceof Player)) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
@@ -45,9 +43,8 @@ public class PluginEntityListener implements Listener {
 				 * Teleport non-living vehicles - Only when useVanillaPortals is enabled Boolean
 				 * Expression: Rtrn = VanilFlag' InstVeh InstLiv';
 				 */
-				if (!Conf.useVanillaPortals && event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity)) {
+				if (!Conf.useVanillaPortals && event.getEntity() instanceof Vehicle && !(event.getEntity() instanceof LivingEntity))
 					return;
-				}
 
 				/*
 				 * Teleport entities (incl. living vehicles) - If they're allowed Teleport
@@ -68,7 +65,6 @@ public class PluginEntityListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onCreatureSpawn(final CreatureSpawnEvent event) {
-
 		if (event.getEntity() instanceof PigZombie) {
 			// Ok so an entity portal event begins
 			// Find the nearest gate!
@@ -83,7 +79,6 @@ public class PluginEntityListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamage(final EntityDamageEvent event) {
-
 		if (event.getCause() == DamageCause.DROWNING || event.getCause() == DamageCause.SUFFOCATION || event.getCause() == DamageCause.FIRE || event.getCause() == DamageCause.FIRE_TICK || event.getCause() == DamageCause.LAVA) {
 
 			// Ok so an entity damage event begins
