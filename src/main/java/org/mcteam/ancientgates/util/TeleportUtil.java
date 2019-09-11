@@ -76,7 +76,7 @@ public class TeleportUtil {
 		final Entity entity = player.getVehicle();
 		if (player.isInsideVehicle() && entity instanceof LivingEntity) {
 			entity.eject();
-			if (teleportEntities && !(entity instanceof Player) && !EntityUtil.isEchoPet(entity)) {
+			if (teleportEntities && !(entity instanceof Player)) {
 				entity.teleport(location);
 				entity.setFireTicks(0);
 				Bukkit.getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
@@ -156,9 +156,9 @@ public class TeleportUtil {
 			if (tpType.equals(TeleportType.SERVER)) {
 				msg = new PluginMessage(player, location.get(SERVER), Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 				// Player location teleport
-			} else if (e == null || !teleportEntities || e instanceof Player || EntityUtil.isEchoPet(e)) {
+			} else if (e == null || !teleportEntities || e instanceof Player) {
 				msg = new PluginMessage(player, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
-				// Player riding entity teleport (excl. EchoPet)
+				// Player riding entity teleport
 			} else {
 				msg = new PluginMessage(player, e, location, Plugin.bungeeServerName, tpCmd, tpCmdType, tpMsg);
 			}
@@ -183,7 +183,7 @@ public class TeleportUtil {
 		checkChunkLoad(location.getBlock());
 		final Entity entity = event.getEntity();
 
-		if (entity.getType().isSpawnable() && !EntityUtil.isEchoPet(entity)) {
+		if (entity.getType().isSpawnable()) {
 			entity.teleport(location);
 		} else if (entity.getType() == EntityType.DROPPED_ITEM) {
 			entity.remove();
@@ -192,9 +192,9 @@ public class TeleportUtil {
 
 	}
 
-	// BungeeCord entity spawn out (excl. EchoPet)
+	// BungeeCord entity spawn out
 	public static void teleportEntity(final EntityPortalEvent event, final Map<String, String> location) {
-		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() && !EntityUtil.isEchoPet(event.getEntity()) || event.getEntityType() == EntityType.DROPPED_ITEM)) {
+		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() || event.getEntityType() == EntityType.DROPPED_ITEM)) {
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Send AGBungeeSpawn packet
@@ -287,10 +287,7 @@ public class TeleportUtil {
 
 	// Normal vehicle teleport
 	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
-		final Location destination = GeometryUtil.addHeightToLocation(location.clone(), 0.5); // Fix
-		                                                                                      // vehicle
-		// spawn
-		// glitch
+		final Location destination = GeometryUtil.addHeightToLocation(location.clone(), 0.5); // Fix vehicle spawn glitch
 		final double velocity = vehicle.getVelocity().length();
 		checkChunkLoad(destination.getBlock());
 
@@ -331,9 +328,7 @@ public class TeleportUtil {
 			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				@Override
 				public void run() {
-					if (!EntityUtil.isEchoPet(passenger)) {
-						v.setPassenger(passenger);
-					}
+					v.setPassenger(passenger);
 					v.setVelocity(newVelocity);
 				}
 			}, 2);
@@ -458,8 +453,8 @@ public class TeleportUtil {
 					// Send AGBungeeVehicleSpawn packet
 					final PluginMessage msg = new PluginMessage(vehicle.getType(), velocity, location);
 
-					// Append passenger info (excl. EchoPet)
-					if (passenger != null && !EntityUtil.isEchoPet(passenger)) {
+					// Append passenger info
+					if (passenger != null) {
 						if (passenger.getType().isSpawnable()) {
 							msg.addEntity(passenger);
 						}
@@ -510,8 +505,8 @@ public class TeleportUtil {
 					final Server server = Server.get(location.get(SERVER));
 					// Construct spawn vehicle packet
 					final Packet packet = new Packet(vehicle, velocity, location);
-					// Append passenger info (excl. EchoPet)
-					if (passenger != null && !EntityUtil.isEchoPet(passenger)) {
+					// Append passenger info
+					if (passenger != null) {
 						if (passenger.getType().isSpawnable()) {
 							packet.addPassenger(passenger);
 						}
