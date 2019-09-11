@@ -30,10 +30,6 @@
 		</license>
 	</licenses>
 
-	<prerequisites>
-		<maven>3.3.3</maven>
-	</prerequisites>
-
 	<properties>
 		<projectEncoding>UTF-8</projectEncoding>
 		<project.build.sourceEncoding>${projectEncoding}</project.build.sourceEncoding>
