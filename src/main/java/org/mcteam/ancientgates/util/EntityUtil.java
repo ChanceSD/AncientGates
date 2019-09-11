@@ -25,9 +25,6 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.mcteam.ancientgates.Plugin;
 
-import com.dsh105.echopet.compat.api.entity.IEntityPet;
-import com.dsh105.echopet.compat.api.util.ReflectionUtil;
-
 public class EntityUtil {
 
 	public static Map<String, EntityType> entityTypes;
@@ -162,8 +159,9 @@ public class EntityUtil {
 		if (entity instanceof LivingEntity) {
 			((LivingEntity) entity).setMaxHealth(Double.parseDouble(parts[1]));
 			((LivingEntity) entity).setHealth(Double.parseDouble(parts[0]));
-			if (!parts[2].equals("null"))
+			if (!parts[2].equals("null")) {
 				((LivingEntity) entity).setCustomName(parts[2]);
+			}
 			if (entity instanceof Animals) {
 				((Animals) entity).setAge(Integer.parseInt(parts[3]));
 				if (entity instanceof Sheep) {
@@ -194,8 +192,9 @@ public class EntityUtil {
 					((Horse) entity).setJumpStrength(Double.parseDouble(parts[9]));
 					if (parts.length > 10) {
 						((Tameable) entity).setTamed(true);
-						if (!parts[10].equals("null"))
+						if (!parts[10].equals("null")) {
 							((Tameable) entity).setOwner(getPlayer(parts[10]));
+						}
 						((Horse) entity).getInventory().setSaddle(ItemStackUtil.stringToItemStack(parts[11])[0]);
 						((Horse) entity).getInventory().setArmor(ItemStackUtil.stringToItemStack(parts[12])[0]);
 						if (parts.length > 13) {
@@ -235,20 +234,10 @@ public class EntityUtil {
 			player = Plugin.instance.getServer().getPlayer(name);
 		} else {
 			player = Plugin.instance.getServer().getOfflinePlayer(name);
-			if (!player.hasPlayedBefore()) {
+			if (!player.hasPlayedBefore())
 				return null;
-			}
 		}
 		return player;
-	}
-
-	public static boolean isEchoPet(final Entity entity) {
-		// If EchoPet plugin present, check if entity is a pet
-		try {
-			return ReflectionUtil.getEntityHandle(entity) instanceof IEntityPet;
-		} catch (final NoClassDefFoundError e) {
-			return false;
-		}
 	}
 
 }
