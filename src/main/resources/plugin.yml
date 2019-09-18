@@ -4,6 +4,7 @@ description: '${project.description}'
 main: 'org.mcteam.ancientgates.Plugin'
 load: postworld
 author: 'NoChanceSD'
+api-version: 1.13
 softdepend:
     - Vault
     - Multiverse-Core

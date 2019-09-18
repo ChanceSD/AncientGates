@@ -32,6 +32,7 @@ import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.BlockUtil;
+import org.mcteam.ancientgates.util.XMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginBlockListener implements Listener {
@@ -285,14 +286,14 @@ public class PluginBlockListener implements Listener {
 		final Gate nearestGate = Gates.gateFromPortal(coord);
 
 		if (nearestGate != null) {
-			if (nearestGate.getMaterial() != Material.SUGAR_CANE_BLOCK)
+			if (nearestGate.getMaterial() != XMaterial.SUGAR_CANE.parseMaterial())
 				return;
 
 			event.getEntity().remove();
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				@Override
 				public void run() {
-					coord.getBlock().setType(Material.SUGAR_CANE_BLOCK);
+					coord.getBlock().setType(XMaterial.SUGAR_CANE.parseMaterial());
 				}
 			}, 1);
 		}

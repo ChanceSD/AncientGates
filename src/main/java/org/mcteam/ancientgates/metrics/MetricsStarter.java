@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
+import org.mcteam.ancientgates.util.XMaterial;
+import org.mcteam.ancientgates.util.types.GateMaterial;
 
 public class MetricsStarter {
 
@@ -92,13 +94,13 @@ public class MetricsStarter {
 			@Override
 			public Map<String, Integer> call() throws Exception {
 				final Map<String, Integer> valueMap = new HashMap<>();
-				valueMap.put("Web", getGateCountByMaterial(Material.WEB));
-				valueMap.put("Water", getGateCountByMaterial(Material.STATIONARY_WATER));
-				valueMap.put("Sugar Cane", getGateCountByMaterial(Material.SUGAR_CANE_BLOCK));
-				valueMap.put("Portal", getGateCountByMaterial(Material.PORTAL));
-				valueMap.put("Lava", getGateCountByMaterial(Material.STATIONARY_LAVA));
-				valueMap.put("End Portal", getGateCountByMaterial(Material.ENDER_PORTAL));
-				valueMap.put("Air", getGateCountByMaterial(Material.PISTON_MOVING_PIECE));
+				valueMap.put("Web", getGateCountByMaterial(GateMaterial.WEB.getMaterial()));
+				valueMap.put("Water", getGateCountByMaterial(GateMaterial.WATER.getMaterial()));
+				valueMap.put("Sugar Cane", getGateCountByMaterial(GateMaterial.SUGARCANE.getMaterial()));
+				valueMap.put("Portal", getGateCountByMaterial(GateMaterial.PORTAL.getMaterial()));
+				valueMap.put("Lava", getGateCountByMaterial(GateMaterial.LAVA.getMaterial()));
+				valueMap.put("End Portal", getGateCountByMaterial(XMaterial.END_PORTAL.parseMaterial()));
+				valueMap.put("Air", getGateCountByMaterial(GateMaterial.AIR.getMaterial()));
 				return valueMap;
 			}
 
