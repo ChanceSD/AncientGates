@@ -5,25 +5,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.Material;
+import org.mcteam.ancientgates.util.XMaterial;
 
 public enum GateMaterial {
 	// AIR
-	AIR("psudeo air blocks", Material.PISTON_MOVING_PIECE),
+	AIR("pseudo air blocks", XMaterial.MOVING_PISTON.parseMaterial()),
 
 	// LAVA
-	LAVA("stationary lava blocks", Material.STATIONARY_LAVA),
+	LAVA("stationary lava blocks", XMaterial.LAVA.parseMaterial()),
 
 	// NETHER/ENDER PORTAL
-	PORTAL("nether/ender portal blocks", Material.PORTAL),
+	PORTAL("nether/ender portal blocks", XMaterial.NETHER_PORTAL.parseMaterial()),
 
 	// SUGARCANE
-	SUGARCANE("sugarcane blocks", Material.SUGAR_CANE_BLOCK),
+	SUGARCANE("sugarcane blocks", XMaterial.SUGAR_CANE.parseMaterial()),
 
 	// WATER
-	WATER("stationary water blocks", Material.STATIONARY_WATER),
+	WATER("stationary water blocks", XMaterial.WATER.parseMaterial()),
 
 	// WEB
-	WEB("spiders web blocks", Material.WEB);
+	WEB("spiders web blocks", XMaterial.COBWEB.parseMaterial());
 
 	private static final Map<String, GateMaterial> nameToMaterial = new HashMap<>();
 
@@ -41,8 +42,9 @@ public enum GateMaterial {
 
 	static {
 		final GateMaterial[] values = values();
-		for (int i = 0; i < values.length; i++)
+		for (int i = 0; i < values.length; i++) {
 			names[i] = values[i].name();
+		}
 	}
 
 	protected final String desc;

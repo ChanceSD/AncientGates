@@ -114,7 +114,7 @@ public class EntityUtil {
 						data += String.valueOf(((Wolf) entity).getCollarColor()) + ",";
 					}
 				} else if (entity instanceof Ocelot) {
-					if (((Ocelot) entity).isTamed()) {
+					if (((Tameable) entity).isTamed()) {
 						data += ((Tameable) entity).getOwner().getName() + ",";
 						data += String.valueOf(((Ocelot) entity).getCatType().name()) + ",";
 					}
@@ -218,7 +218,7 @@ public class EntityUtil {
 					((Skeleton) entity).getEquipment().setItemInHand(new ItemStack(Material.BOW));
 				}
 			} else if (entity instanceof PigZombie) {
-				((LivingEntity) entity).getEquipment().setItemInHand(new ItemStack(Material.GOLD_SWORD));
+				((LivingEntity) entity).getEquipment().setItemInHand(new ItemStack(XMaterial.GOLDEN_SWORD.parseMaterial()));
 			}
 		}
 	}

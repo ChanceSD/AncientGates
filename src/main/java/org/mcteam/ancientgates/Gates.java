@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
+import org.bukkit.block.BlockState;
 import org.mcteam.ancientgates.util.BlockUtil;
+import org.mcteam.ancientgates.util.XMaterial;
 import org.mcteam.ancientgates.util.types.FloodOrientation;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
@@ -106,20 +108,22 @@ public class Gates {
 
 			// Force vertical PORTALs and horizontal ENDER_PORTALs
 			final FloodOrientation orientation = gate.getPortalBlocks().get(coord);
-			if (orientation == FloodOrientation.HORIZONTAL && material == Material.PORTAL) {
-				material = Material.ENDER_PORTAL;
-			} else if (orientation != FloodOrientation.HORIZONTAL && material == Material.ENDER_PORTAL) {
-				material = Material.PORTAL;
+			if (orientation == FloodOrientation.HORIZONTAL && material == XMaterial.NETHER_PORTAL.parseMaterial()) {
+				material = XMaterial.END_PORTAL.parseMaterial();
+			} else if (orientation != FloodOrientation.HORIZONTAL && material == XMaterial.END_PORTAL.parseMaterial()) {
+				material = XMaterial.NETHER_PORTAL.parseMaterial();
 			}
 
 			coord.getBlock().setType(material);
 
 			// Stop ice forming based on biome (horizontal water portals)
-			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == Material.STATIONARY_WATER) {
+			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == XMaterial.WATER.parseMaterial()) {
 				coord.getBlock().setBiome(Biome.FOREST);
 			}
-			if (orientation == FloodOrientation.VERTICAL1 && material == Material.PORTAL) {
-				coord.getBlock().setData((byte) 2);
+			if (orientation == FloodOrientation.VERTICAL1 && material == XMaterial.NETHER_PORTAL.parseMaterial()) {
+				final BlockState state = coord.getBlock().getState();
+				state.setRawData((byte) 2);
+				//state.update();
 			}
 		}
 
@@ -137,7 +141,7 @@ public class Gates {
 		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			// Revert biome back to gate frame biome
 			final FloodOrientation orientation = gate.getPortalBlocks().get(coord);
-			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == Material.STATIONARY_WATER) {
+			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == XMaterial.WATER.parseMaterial()) {
 				coord.getBlock().setBiome(((WorldCoord) gate.getFrameBlocks().toArray()[0]).getBlock().getBiome());
 			}
 		}
