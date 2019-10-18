@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 
 import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
