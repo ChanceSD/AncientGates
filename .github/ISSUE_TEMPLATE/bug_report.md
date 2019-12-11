@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help improve the plugin
+about: Create a bug report to help improve the plugin
 title: ''
 labels: bug
 assignees: NoChanceSD
@@ -17,13 +17,13 @@ Steps to reproduce the behavior:
 3. See error
 
 **Expected behavior**
-A clear and concise description of what you expected to happen.
+A description of what you expected to happen.
 
 **Plugin and Server version**
 Use '/ver AncientGates' and '/ver' to get both versions
 
-**Screenshots**
+**Screenshots (Optional)**
 If applicable, add screenshots to help explain your problem.
 
-**Additional context**
+**Additional context (Optional)**
 Add any other context about the problem here.
