@@ -3,27 +3,25 @@ package org.mcteam.ancientgates.util;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.mcteam.ancientgates.util.types.GateMaterial;
 
 public class BlockUtil {
 
-	public static HashSet<Material> standableGateMaterials;
+	public static Set<Material> standableGateMaterials;
 	public static Map<Material, Boolean> standableMaterials;
 
 	static {
 		standableGateMaterials = new HashSet<>();
-		standableGateMaterials.add(XMaterial.MOVING_PISTON.parseMaterial());
+		for (final GateMaterial gateMat : GateMaterial.values()) {
+			standableGateMaterials.add(gateMat.getMaterial());
+		}
+		// TODO possibly add this one to GateMaterial?
 		standableGateMaterials.add(XMaterial.END_PORTAL.parseMaterial());
-		standableGateMaterials.add(Material.LAVA);
-		standableGateMaterials.add(XMaterial.NETHER_PORTAL.parseMaterial());
-		standableGateMaterials.add(XMaterial.LAVA.parseMaterial());
-		standableGateMaterials.add(XMaterial.WATER.parseMaterial());
-		standableGateMaterials.add(XMaterial.SUGAR_CANE.parseMaterial());
-		standableGateMaterials.add(Material.WATER);
-		standableGateMaterials.add(XMaterial.COBWEB.parseMaterial());
 	}
 
 	static {
@@ -32,9 +30,9 @@ public class BlockUtil {
 			standableMaterials.put(Material.AIR, true); // 0 Air
 			standableMaterials.put(XMaterial.OAK_SAPLING.parseMaterial(), true); // 6 Saplings
 			standableMaterials.put(Material.WATER, true); // 8 Water
-			standableMaterials.put(XMaterial.WATER.parseMaterial(), true); // 9 Stationary water
+			standableMaterials.put(GateMaterial.WATER.getMaterial(), true); // 9 Stationary water
 			standableMaterials.put(Material.LAVA, true); // 10 Lava
-			standableMaterials.put(XMaterial.LAVA.parseMaterial(), true); // 11 Stationary lava
+			standableMaterials.put(GateMaterial.LAVA.getMaterial(), true); // 11 Stationary lava
 			standableMaterials.put(Material.POWERED_RAIL, true); // 27 Powered Rail
 			standableMaterials.put(Material.DETECTOR_RAIL, true); // 28 Detector Rail
 			standableMaterials.put(XMaterial.COBWEB.parseMaterial(), true); // 30 Cobweb

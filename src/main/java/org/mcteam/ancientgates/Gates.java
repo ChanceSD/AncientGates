@@ -7,10 +7,12 @@ import org.bukkit.Axis;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Orientable;
 import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.XMaterial;
 import org.mcteam.ancientgates.util.types.FloodOrientation;
+import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class Gates {
@@ -124,13 +126,13 @@ public class Gates {
 			}
 			if (orientation == FloodOrientation.VERTICAL1 && material == XMaterial.NETHER_PORTAL.parseMaterial()) {
 				if (XMaterial.isNewVersion()) {
-					final Orientable orientable = (Orientable) coord.getBlock().getBlockData();
-					orientable.setAxis(Axis.Z);
+					final BlockData orientable = coord.getBlock().getBlockData();
+					((Orientable) orientable).setAxis(Axis.Z);
 					coord.getBlock().setBlockData(orientable);
 				} else { // needs testing for 1.13-
 					final BlockState state = coord.getBlock().getState();
 					state.setRawData((byte) 2);
-					//state.update();
+					state.update();
 				}
 			}
 		}
@@ -149,7 +151,7 @@ public class Gates {
 		for (final WorldCoord coord : gate.getPortalBlocks().keySet()) {
 			// Revert biome back to gate frame biome
 			final FloodOrientation orientation = gate.getPortalBlocks().get(coord);
-			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == XMaterial.WATER.parseMaterial()) {
+			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == GateMaterial.WATER.getMaterial()) {
 				coord.getBlock().setBiome(((WorldCoord) gate.getFrameBlocks().toArray()[0]).getBlock().getBiome());
 			}
 		}
