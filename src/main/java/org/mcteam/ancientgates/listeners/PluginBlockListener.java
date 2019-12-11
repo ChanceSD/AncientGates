@@ -214,8 +214,6 @@ public class PluginBlockListener implements Listener {
 		if (type == Material.SAND && Gates.gateFromFrame(coord) != null) {
 			event.setCancelled(true);
 		}
-
-		return;
 	}
 
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
