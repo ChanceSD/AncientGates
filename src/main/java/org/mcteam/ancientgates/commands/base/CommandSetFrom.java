@@ -3,8 +3,10 @@ package org.mcteam.ancientgates.commands.base;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
+import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
 
 public class CommandSetFrom extends BaseCommand {
@@ -44,6 +46,9 @@ public class CommandSetFrom extends BaseCommand {
 			gate.addFrom(upBlock.getLocation());
 		} else {
 			sendMessage("There is not enough room for a gate to open here");
+			if (Conf.debug) {
+				Plugin.log("Couldn't create gate at player location. Material types: " + playerBlock.getType() + " and " + upBlock.getType());
+			}
 			return;
 		}
 

@@ -38,7 +38,7 @@
 	</properties>
 
 	<build>
-		<finalName>${project.name}-${project.version}</finalName>
+		<finalName>${project.name}</finalName>
 		<sourceDirectory>src/main/java</sourceDirectory>
 
 		<resources>
