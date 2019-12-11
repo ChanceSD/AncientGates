@@ -33,6 +33,7 @@ import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.XMaterial;
+import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
 public class PluginBlockListener implements Listener {
@@ -219,9 +220,9 @@ public class PluginBlockListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onBlockFromTo(final BlockFromToEvent event) {
 		final Block block = event.getBlock();
+		final Material type = block.getType();
 
-		// Fixes leaking water on 1.13 and doesn't seem to cause issues <1.13
-		if (!block.getType().equals(Material.WATER) && !block.getType().equals(Material.LAVA))
+		if (type != GateMaterial.WATER.getMaterial() && type != GateMaterial.LAVA.getMaterial())
 			return;
 
 		// Ok so water/lava starts flowing within a portal frame
