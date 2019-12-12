@@ -126,6 +126,7 @@ public class Plugin extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		long start = System.currentTimeMillis();
 		// Enable permissions and economy
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {
 			if (!setupPermissions()) {
@@ -154,17 +155,12 @@ public class Plugin extends JavaPlugin {
 		reload(null);
 
 		// Submit Stats
-        final MetricsStarter metrics = new MetricsStarter(this);
-        metrics.setupMetrics();
+		final MetricsStarter metrics = new MetricsStarter(this);
+		metrics.setupMetrics();
 
-		// Load gates from disc (1 tick ensures worlds are loaded)
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-			@Override
-			public void run() {
-				Gates.load();
-				log("Enabled");
-			}
-		}, 1);
+		// Load gates from disc 
+		Gates.load();
+		log("Enabled (" + (System.currentTimeMillis() - start) + " ms)");
 	}
 
 	// -------------------------------------------- //
