@@ -129,7 +129,7 @@ public class Gates {
 					final BlockData orientable = coord.getBlock().getBlockData();
 					((Orientable) orientable).setAxis(Axis.Z);
 					coord.getBlock().setBlockData(orientable);
-				} else { // needs testing for 1.13-
+				} else {
 					final BlockState state = coord.getBlock().getState();
 					state.setRawData((byte) 2);
 					state.update();
