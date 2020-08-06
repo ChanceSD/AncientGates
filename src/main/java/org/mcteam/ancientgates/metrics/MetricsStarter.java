@@ -8,8 +8,9 @@ import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
-import org.mcteam.ancientgates.util.XMaterial;
 import org.mcteam.ancientgates.util.types.GateMaterial;
+
+import com.cryptomorin.xseries.XMaterial;
 
 public class MetricsStarter {
 
@@ -21,7 +22,7 @@ public class MetricsStarter {
 
 	public void setupMetrics() {
 		// Initialise metics
-		final Metrics metrics = new Metrics(plugin);
+		final Metrics metrics = new Metrics(plugin, 5548);
 
 		// It seems bstats doesn't support multi line or bar charts currently, leaving this here for when it does
 //			metrics.addCustomChart(new Metrics.MultiLineChart("number_of_gates", new Callable<Map<String, Integer>>() {
