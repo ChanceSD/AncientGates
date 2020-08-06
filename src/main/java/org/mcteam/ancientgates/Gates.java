@@ -10,10 +10,11 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Orientable;
 import org.mcteam.ancientgates.util.BlockUtil;
-import org.mcteam.ancientgates.util.XMaterial;
 import org.mcteam.ancientgates.util.types.FloodOrientation;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
+
+import com.cryptomorin.xseries.XMaterial;
 
 public class Gates {
 

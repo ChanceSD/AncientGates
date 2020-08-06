@@ -3,27 +3,27 @@ package org.mcteam.ancientgates.util.types;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Material;
-import org.mcteam.ancientgates.util.XMaterial;
 
 public enum GateMaterial {
-	// AIR
+    // AIR
 	AIR("pseudo air blocks", XMaterial.MOVING_PISTON.parseMaterial()),
 
-	// LAVA
+    // LAVA
 	LAVA("stationary lava blocks", XMaterial.isNewVersion() ? Material.LAVA : Material.getMaterial("STATIONARY_LAVA")),
 
-	// NETHER/ENDER PORTAL
+    // NETHER/ENDER PORTAL
 	PORTAL("nether/ender portal blocks", XMaterial.NETHER_PORTAL.parseMaterial()),
 
-	// SUGARCANE
+    // SUGARCANE
 	SUGARCANE("sugarcane blocks", XMaterial.SUGAR_CANE.parseMaterial()),
 
-	// WATER
+    // WATER
 	WATER("stationary water blocks", XMaterial.isNewVersion() ? Material.WATER : Material.getMaterial("STATIONARY_WATER")),
 
-	// WEB
+    // WEB
 	WEB("spiders web blocks", XMaterial.COBWEB.parseMaterial());
 
 	private static final Map<String, GateMaterial> nameToMaterial = new HashMap<>();

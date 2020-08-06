@@ -10,6 +10,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 
+import com.cryptomorin.xseries.XMaterial;
+
 public class BlockUtil {
 
 	public static Set<Material> standableGateMaterials;

@@ -25,6 +25,8 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.inventory.ItemStack;
 import org.mcteam.ancientgates.Plugin;
 
+import com.cryptomorin.xseries.XMaterial;
+
 public class EntityUtil {
 
 	public static Map<String, EntityType> entityTypes;

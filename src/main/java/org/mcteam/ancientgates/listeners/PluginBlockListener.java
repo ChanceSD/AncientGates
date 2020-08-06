@@ -32,9 +32,10 @@ import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.BlockUtil;
-import org.mcteam.ancientgates.util.XMaterial;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
+
+import com.cryptomorin.xseries.XMaterial;
 
 public class PluginBlockListener implements Listener {
 
