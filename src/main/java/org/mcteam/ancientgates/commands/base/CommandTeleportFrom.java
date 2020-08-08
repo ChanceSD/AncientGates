@@ -1,7 +1,10 @@
 package org.mcteam.ancientgates.commands.base;
 
 import java.util.Calendar;
+import java.util.List;
 
+import org.bukkit.command.CommandSender;
+import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.util.TeleportUtil;
@@ -46,6 +49,14 @@ public class CommandTeleportFrom extends BaseCommand {
 			final Long now = Calendar.getInstance().getTimeInMillis() + 1000;
 			Plugin.lastTeleportTime.put(player.getName(), now);
 		}
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1)
+			return Gate.getAllIDs();
+
+		return super.onTabComplete(sender, parameters);
 	}
 
 }

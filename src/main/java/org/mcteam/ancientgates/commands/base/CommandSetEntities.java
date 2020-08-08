@@ -1,7 +1,12 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.commands.BaseCommand;
+
+import com.google.common.collect.Lists;
 
 public class CommandSetEntities extends BaseCommand {
 
@@ -26,6 +31,16 @@ public class CommandSetEntities extends BaseCommand {
 		sendMessage("Entity teleportation for gate \"" + gate.getId() + "\" is now " + String.valueOf(flag) + ".");
 
 		Gate.save();
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1) {
+			return Gate.getAllIDs();
+		} else if (parameters.size() == 2) {
+			return Lists.newArrayList("True", "False");
+		}
+		return super.onTabComplete(sender, parameters);
 	}
 
 }

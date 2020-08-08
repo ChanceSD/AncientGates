@@ -2,7 +2,10 @@ package org.mcteam.ancientgates.commands.base;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.commands.BaseCommand;
@@ -12,6 +15,8 @@ import org.mcteam.ancientgates.util.TextUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.TeleportType;
+
+import com.google.common.collect.Lists;
 
 public class CommandSetConf extends BaseCommand {
 
@@ -88,6 +93,13 @@ public class CommandSetConf extends BaseCommand {
 		}
 
 		sendMessage("Config option \"" + item + "\" does not exist.");
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1)
+			return Lists.newArrayList(Conf.class.getDeclaredFields()).stream().filter(f -> Modifier.isPublic(f.getModifiers())).map(Field::getName).collect(Collectors.toList());
+		return super.onTabComplete(sender, parameters);
 	}
 
 }

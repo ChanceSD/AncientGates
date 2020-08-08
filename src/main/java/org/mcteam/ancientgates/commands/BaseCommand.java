@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
@@ -64,6 +65,10 @@ public class BaseCommand {
 	}
 
 	public void perform() {
+	}
+
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		return Collections.emptyList();
 	}
 
 	public void sendMessage(final String message) {

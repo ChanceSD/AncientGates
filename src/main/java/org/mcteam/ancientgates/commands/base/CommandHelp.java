@@ -1,7 +1,9 @@
 package org.mcteam.ancientgates.commands.base;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.bungee.CommandSetBungeeType;
@@ -11,6 +13,8 @@ import org.mcteam.ancientgates.commands.sockets.CommandRemServer;
 import org.mcteam.ancientgates.commands.sockets.CommandServerList;
 //import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.util.TextUtil;
+
+import com.google.common.collect.Lists;
 
 public class CommandHelp extends BaseCommand {
 
@@ -86,6 +90,16 @@ public class CommandHelp extends BaseCommand {
 			lines.add(new CommandRemServer().getUsageTemplate(true, true));
 			lines.add(new CommandServerList().getUsageTemplate(true, true));
 		}
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		final int pagecount = (int) Math.ceil((double) lines.size() / TextUtil.PAGEHEIGHT_PLAYER);
+		final List<String> list = Lists.newArrayList();
+		for (int i = 1; i <= pagecount; i++) {
+			list.add(String.valueOf(i));
+		}
+		return list;
 	}
 
 }

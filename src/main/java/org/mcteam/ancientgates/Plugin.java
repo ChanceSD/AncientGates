@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,6 +21,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.bukkit.util.StringUtil;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.base.CommandAddFrom;
 import org.mcteam.ancientgates.commands.base.CommandAddTo;
@@ -403,6 +405,26 @@ public class Plugin extends JavaPlugin {
 		}
 
 		sender.sendMessage(Conf.colorSystem + "Unknown gate-command \"" + commandName + "\". Try " + Conf.colorCommand + "/" + getBaseCommand() + " help");
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
+		final List<String> parameters = new ArrayList<>(Arrays.asList(args));
+		return this.handleTabComplete(sender, parameters);
+	}
+
+	public List<String> handleTabComplete(final CommandSender sender, final List<String> parameters) {
+		final String commandName = parameters.get(0).toLowerCase();
+		parameters.remove(0);
+		if (parameters.size() >= 1) {
+			for (final BaseCommand fcommand : this.commands) {
+				if (fcommand.getAliases().contains(commandName)) {
+					return fcommand.onTabComplete(sender, parameters);
+				}
+			}
+		}
+
+		return StringUtil.copyPartialMatches(commandName, commands.stream().map(c -> c.getAliases().get(0)).collect(Collectors.toList()), new ArrayList<String>());
 	}
 
 	// -------------------------------------------- //

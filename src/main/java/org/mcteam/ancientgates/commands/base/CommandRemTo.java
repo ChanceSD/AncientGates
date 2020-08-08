@@ -1,6 +1,9 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.List;
+
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
@@ -120,6 +123,14 @@ public class CommandRemTo extends BaseCommand {
 			}
 		}
 
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1)
+			return Gate.getAllIDs();
+
+		return super.onTabComplete(sender, parameters);
 	}
 
 }
