@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -415,6 +416,10 @@ public class Gate {
 
 	public static Collection<Gate> getAll() {
 		return instances.values();
+	}
+
+	public static List<String> getAllIDs() {
+		return getAll().stream().map(Gate::getId).collect(Collectors.toList());
 	}
 
 	public static void fillIds() {

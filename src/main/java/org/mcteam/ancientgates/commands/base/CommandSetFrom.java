@@ -1,8 +1,11 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
@@ -57,6 +60,14 @@ public class CommandSetFrom extends BaseCommand {
 		sendMessage(new CommandOpen().getUsageTemplate(true, true));
 
 		Gate.save();
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1)
+			return Gate.getAllIDs();
+
+		return super.onTabComplete(sender, parameters);
 	}
 
 }

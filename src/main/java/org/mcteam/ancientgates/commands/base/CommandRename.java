@@ -1,5 +1,8 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.List;
+
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.commands.BaseCommand;
 
@@ -27,6 +30,14 @@ public class CommandRename extends BaseCommand {
 		sendMessage("Gate with id \"" + id + "\" was renamed to \"" + newid + "\".");
 
 		Gate.save();
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1)
+			return Gate.getAllIDs();
+
+		return super.onTabComplete(sender, parameters);
 	}
 
 }

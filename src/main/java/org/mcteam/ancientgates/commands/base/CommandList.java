@@ -2,7 +2,6 @@ package org.mcteam.ancientgates.commands.base;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
@@ -42,7 +41,7 @@ public class CommandList extends BaseCommand {
 		final List<String> costs = new ArrayList<>();
 		for (final Gate gate : Gate.getAll()) {
 			ids.add(Conf.colorValue + gate.getId());
-			states.add((Gates.isOpen(gate) ? Conf.colorCommand + "open" : Conf.colorParameter + "closed"));
+			states.add(Gates.isOpen(gate) ? Conf.colorCommand + "open" : Conf.colorParameter + "closed");
 			if (Conf.useEconomy && Plugin.econ != null) {
 				costs.add(Conf.colorSystem + String.valueOf(gate.getCost()));
 			}

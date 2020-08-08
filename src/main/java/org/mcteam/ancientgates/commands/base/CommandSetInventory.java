@@ -1,7 +1,9 @@
 package org.mcteam.ancientgates.commands.base;
 
 import java.util.Arrays;
+import java.util.List;
 
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.commands.BaseCommand;
@@ -37,6 +39,16 @@ public class CommandSetInventory extends BaseCommand {
 		sendMessage("Inventory teleportation for gate \"" + gate.getId() + "\" is now " + String.valueOf(extFlag) + ".");
 
 		Gate.save();
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1) {
+			return Gate.getAllIDs();
+		} else if (parameters.size() == 2) {
+			return Arrays.asList(InvBoolean.names);
+		}
+		return super.onTabComplete(sender, parameters);
 	}
 
 }

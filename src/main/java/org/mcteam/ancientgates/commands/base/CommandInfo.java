@@ -1,10 +1,12 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
@@ -152,6 +154,14 @@ public class CommandInfo extends BaseCommand {
 				sendMessage("cost" + Conf.colorValue + " " + String.valueOf(gate.getCost()));
 			}
 		}
+	}
+
+	@Override
+	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
+		if (parameters.size() == 1)
+			return Gate.getAllIDs();
+
+		return super.onTabComplete(sender, parameters);
 	}
 
 }
