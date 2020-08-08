@@ -69,6 +69,14 @@ public class MetricsStarter {
 			}
 		}));
 
+		//Plot update checking
+		metrics.addCustomChart(new Metrics.SimplePie("update_check", new Callable<String>() {
+			@Override
+			public String call() throws Exception {
+				return Conf.updateCheck ? "Enabled" : "Disabled";
+			}
+		}));
+
 		// Plot features
 		metrics.addCustomChart(new Metrics.AdvancedPie("features", new Callable<Map<String, Integer>>() {
 			@Override
