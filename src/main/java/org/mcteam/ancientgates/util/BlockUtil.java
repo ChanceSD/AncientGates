@@ -84,6 +84,7 @@ public class BlockUtil {
 			standableMaterials.put(XMaterial.WHITE_CARPET.parseMaterial(), true); // 171 Carpet
 			standableMaterials.put(XMaterial.LARGE_FERN.parseMaterial(), true); // double_plant Double Plants
 		} catch (final NoSuchFieldError e) {
+			e.printStackTrace();
 		} // Support previous MC versions
 	}
 
