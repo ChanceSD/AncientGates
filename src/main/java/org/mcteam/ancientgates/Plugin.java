@@ -21,6 +21,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.base.CommandAddFrom;
@@ -64,6 +65,10 @@ import org.mcteam.ancientgates.listeners.PluginSocketListener;
 import org.mcteam.ancientgates.metrics.MetricsStarter;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.SocketServer;
+import org.mcteam.ancientgates.updater.Updater;
+import org.mcteam.ancientgates.updater.SpigotUpdater;
+import org.mcteam.ancientgates.updater.Updater.UpdateResult;
+import org.mcteam.ancientgates.updater.Updater.UpdateType;
 import org.mcteam.ancientgates.util.types.PluginMessage;
 
 import com.google.gson.Gson;
@@ -146,6 +151,20 @@ public class Plugin extends JavaPlugin {
 
 		// Load config from disc
 		Conf.load();
+
+		// Check for updates
+		if (Conf.updateCheck) {
+			new BukkitRunnable() {
+				@Override
+				public void run() {
+					final Updater updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK);
+					if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+						Bukkit.broadcast("§e[§7AncientGates§e] Update Available: §6" + updater.getLatestName(), "ancientgates.setconf");
+						Bukkit.broadcast("§e[§7AncientGates§e] Spigot Link: §7https://www.spigotmc.org/resources/ancient-gates.6583/", "ancientgates.setconf");
+					}
+				}
+			}.runTaskTimerAsynchronously(this, 0, 360000);
+		}
 
 		// Register events
 		final PluginManager pm = this.getServer().getPluginManager();
