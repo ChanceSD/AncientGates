@@ -13,13 +13,13 @@ import org.mcteam.ancientgates.util.types.FloodOrientation;
 public class FloodUtil {
 
 	// Base air flood block algorithm
-	public static Set<Block> getFloodBlocks(final Block startBlock, final Set<Block> foundBlocks, Set<Block> validBlocks, final FloodOrientation orientation, final int limit) {
+	public static Set<Block> getFloodBlocks(final Block startBlock, Set<Block> foundBlocks, final FloodOrientation orientation, final int limit) {
 		if (foundBlocks == null)
 			return null;
 		if (foundBlocks.size() > limit)
 			return null;
 		if (foundBlocks.contains(startBlock))
-			return validBlocks;
+			return foundBlocks;
 
 		if (BlockUtil.isStandableMaterial(startBlock.getType())) {
 			// Found a block
@@ -27,23 +27,27 @@ public class FloodUtil {
 
 			// Only allow materials you can pass through, unless horizontal in which case accept all
 			// standable materials
-			if (BlockUtil.canPassThroughMaterial(startBlock.getType()) || orientation == FloodOrientation.HORIZONTAL)
-				validBlocks.add(startBlock);
+			// This always returns true, so removing it for now, will restore if needed
+//			if (BlockUtil.canPassThroughMaterial(type) || orientation == FloodOrientation.HORIZONTAL)
+//				validBlocks.add(startBlock);
 
 			// Flood away
 			for (final BlockFace face : orientation.getDirections()) {
+				if (foundBlocks == null)
+					return foundBlocks;
+
 				final Block potentialBlock = startBlock.getRelative(face);
-				validBlocks = getFloodBlocks(potentialBlock, foundBlocks, validBlocks, orientation, limit);
+				foundBlocks = getFloodBlocks(potentialBlock, foundBlocks, orientation, limit);
 			}
 		}
-		return validBlocks;
+		return foundBlocks;
 	}
 
 	// Multi-flood all orientations
 	public static LinkedHashMap<FloodOrientation, Set<Block>> getAllAirFloods(final Block startBlock, final FloodOrientation[] orientations, final int limit) {
 		final LinkedHashMap<FloodOrientation, Set<Block>> ret = new LinkedHashMap<>();
 		for (final FloodOrientation orientation : orientations) {
-			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), new HashSet<Block>(), orientation, limit));
+			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), orientation, limit));
 		}
 		return ret;
 	}
@@ -67,7 +71,7 @@ public class FloodUtil {
 
 	// Get gate portal blocks
 	public static Set<Block> getPortalBlocks(final Block block, final FloodOrientation orientation) {
-		final Set<Block> blocks = getFloodBlocks(block, new HashSet<Block>(), new HashSet<Block>(), orientation, Conf.getGateMaxArea());
+		final Set<Block> blocks = getFloodBlocks(block, new HashSet<Block>(), orientation, Conf.getGateMaxArea());
 		return blocks;
 	}
 

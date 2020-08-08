@@ -162,8 +162,9 @@ public class Plugin extends JavaPlugin {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
 			@Override
 			public void run() {
+				final long startload = System.currentTimeMillis();
 				Gates.load();
-				log("Finished");
+				log("Finished - " + (System.currentTimeMillis() - startload) + " ms");
 			}
 		}, 1);
 

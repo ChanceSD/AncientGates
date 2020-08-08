@@ -63,7 +63,7 @@ public class Conf {
 	private static Boolean customBungeeMessages = null;
 
 	public static int getGateMaxArea() {
-		return gateMaxArea * 10;
+		return gateMaxArea;
 	}
 
 	public static long getGateCooldownMillis() {
