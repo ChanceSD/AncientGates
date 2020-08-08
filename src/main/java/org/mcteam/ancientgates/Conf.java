@@ -14,7 +14,7 @@ import org.mcteam.ancientgates.util.types.TeleportType;
 
 public class Conf {
 
-	public static transient File file = new File(Plugin.instance.getDataFolder(), "conf.json");
+	private static transient File file = new File(Plugin.instance.getDataFolder(), "conf.json");
 
 	// Colors
 	public static ChatColor colorValue = ChatColor.LIGHT_PURPLE;
@@ -57,10 +57,6 @@ public class Conf {
 
 	// Enable debug msgs
 	public static boolean debug = false;
-
-	// Legacy entries
-	private static Boolean useInstantNether = null;
-	private static Boolean customBungeeMessages = null;
 
 	public static int getGateMaxArea() {
 		return gateMaxArea;
@@ -123,16 +119,6 @@ public class Conf {
 		if (bungeeTeleportDefault == null) {
 			bungeeTeleportDefault = TeleportType.LOCATION;
 			Plugin.log(Level.WARNING, "\"bungeeTeleportDefault\" is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(TeleportType.names), ", ") + ".");
-		}
-
-		// Migrate old format
-		if (useInstantNether != null) {
-			useVanillaPortals = !useInstantNether;
-			useInstantNether = null;
-		}
-		if (customBungeeMessages != null) {
-			useBungeeMessages = customBungeeMessages;
-			customBungeeMessages = null;
 		}
 
 		save();
