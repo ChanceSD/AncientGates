@@ -119,7 +119,7 @@ public class Gates {
 				material = XMaterial.NETHER_PORTAL.parseMaterial();
 			}
 
-			coord.getBlock().setType(material);
+			coord.getBlock().setType(material, false);
 
 			// Stop ice forming based on biome (horizontal water portals)
 			if (orientation == FloodOrientation.HORIZONTAL && gate.getMaterial() == XMaterial.WATER.parseMaterial()) {
