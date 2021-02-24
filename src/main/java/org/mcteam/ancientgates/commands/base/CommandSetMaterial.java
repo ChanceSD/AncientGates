@@ -50,8 +50,8 @@ public class CommandSetMaterial extends BaseCommand {
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
-		if (parameters.size() == 1) {
-			return Gate.getAllIDs();
+		if (parameters.size() == 1){
+			return TextUtil.getMatchingEntries(parameters.get(0), Gate.getAllIDs());
 		} else if (parameters.size() == 2) {
 			return Arrays.asList(GateMaterial.names);
 		}
