@@ -142,4 +142,8 @@ public class TextUtil {
 		return ret;
 	}
 
+	public static List<String> getMatchingEntries(String token, List<String> toFilter){
+		toFilter.removeIf(s -> !s.toLowerCase().contains(token.toLowerCase()));
+		return toFilter;
+	}
 }
