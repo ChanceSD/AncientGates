@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.commands.BaseCommand;
+import org.mcteam.ancientgates.util.TextUtil;
 
 public class CommandDelete extends BaseCommand {
 	public CommandDelete() {
@@ -34,7 +35,7 @@ public class CommandDelete extends BaseCommand {
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
 		if (parameters.size() == 1)
-			return Gate.getAllIDs();
+			return TextUtil.getMatchingEntries(parameters.get(0), Gate.getAllIDs());
 
 		return super.onTabComplete(sender, parameters);
 	}
