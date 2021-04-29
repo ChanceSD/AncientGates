@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.github.cryptomorin:XSeries
+    versions:
+    - 7.9.0
+    - 7.9.1
+  - dependency-name: org.bstats:bstats-bukkit
+    versions:
+    - 2.1.0
