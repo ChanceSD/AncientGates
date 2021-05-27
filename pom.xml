@@ -13,14 +13,14 @@
 	<url>https://www.spigotmc.org/resources/ancient-gates.6583/</url>
 
 	<scm>
-		<connection>scm:git:https://github.com/NoChanceSD/AncientGates.git</connection>
-		<developerConnection>scm:git:git@github.com:NoChanceSD/AncientGates.git</developerConnection>
-		<url>https://github.com/NoChanceSD/AncientGates</url>
+		<connection>scm:git:https://github.com/ChanceSD/AncientGates.git</connection>
+		<developerConnection>scm:git:git@github.com:ChanceSD/AncientGates.git</developerConnection>
+		<url>https://github.com/ChanceSD/AncientGates</url>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub</system>
-		<url>https://github.com/NoChanceSD/AncientGates/issues</url>
+		<url>https://github.com/ChanceSD/AncientGates/issues</url>
 	</issueManagement>
 
 	<distributionManagement>
@@ -132,7 +132,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.16.1-R0.1-SNAPSHOT</version>
+			<version>1.16.5-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
