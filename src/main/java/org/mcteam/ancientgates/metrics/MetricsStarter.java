@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
@@ -38,7 +40,7 @@ public class MetricsStarter {
 //			}));
 
 		// Plot number of gates
-		metrics.addCustomChart(new Metrics.AdvancedPie("number_of_gates", new Callable<Map<String, Integer>>() {
+		metrics.addCustomChart(new AdvancedPie("number_of_gates", new Callable<Map<String, Integer>>() {
 			@Override
 			public Map<String, Integer> call() throws Exception {
 				final Map<String, Integer> valueMap = new HashMap<>();
@@ -50,7 +52,7 @@ public class MetricsStarter {
 		}));
 
 		// Plot gate entity access
-		metrics.addCustomChart(new Metrics.AdvancedPie("gate_access", new Callable<Map<String, Integer>>() {
+		metrics.addCustomChart(new AdvancedPie("gate_access", new Callable<Map<String, Integer>>() {
 			@Override
 			public Map<String, Integer> call() throws Exception {
 				final Map<String, Integer> valueMap = new HashMap<>();
@@ -62,7 +64,7 @@ public class MetricsStarter {
 		}));
 
 		// Plot number of servers
-		metrics.addCustomChart(new Metrics.SimplePie("number_of_servers", new Callable<String>() {
+		metrics.addCustomChart(new SimplePie("number_of_servers", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return Conf.bungeeCordSupport ? "Bungee Servers" : "Normal Servers";
@@ -70,7 +72,7 @@ public class MetricsStarter {
 		}));
 
 		//Plot update checking
-		metrics.addCustomChart(new Metrics.SimplePie("update_check", new Callable<String>() {
+		metrics.addCustomChart(new SimplePie("update_check", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return Conf.updateCheck ? "Enabled" : "Disabled";
@@ -78,7 +80,7 @@ public class MetricsStarter {
 		}));
 
 		// Plot features
-		metrics.addCustomChart(new Metrics.AdvancedPie("features", new Callable<Map<String, Integer>>() {
+		metrics.addCustomChart(new AdvancedPie("features", new Callable<Map<String, Integer>>() {
 			@Override
 			public Map<String, Integer> call() throws Exception {
 				final Map<String, Integer> valueMap = new HashMap<>();
@@ -91,7 +93,7 @@ public class MetricsStarter {
 		}));
 
 		// Plot teleportation method
-		metrics.addCustomChart(new Metrics.SimplePie("teleportation_method", new Callable<String>() {
+		metrics.addCustomChart(new SimplePie("teleportation_method", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
 				return Conf.useVanillaPortals ? "Vanilla Portal" : "Movement Hook";
@@ -99,7 +101,7 @@ public class MetricsStarter {
 		}));
 
 		// Plot gate portal materials
-		metrics.addCustomChart(new Metrics.AdvancedPie("gate_materials", new Callable<Map<String, Integer>>() {
+		metrics.addCustomChart(new AdvancedPie("gate_materials", new Callable<Map<String, Integer>>() {
 			@Override
 			public Map<String, Integer> call() throws Exception {
 				final Map<String, Integer> valueMap = new HashMap<>();
