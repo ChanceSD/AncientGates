@@ -46,6 +46,10 @@ public enum FloodOrientation {
 		return this.desc;
 	}
 
+	public boolean isDiagonal() {
+		return this == VERTICAL3 || this == VERTICAL4;
+	}
+
 	private FloodOrientation(final String desc, final BlockFace opDir1, final BlockFace opDir2, final BlockFace... directions) {
 		this.directions = new LinkedHashSet<>(Arrays.asList(directions));
 		this.oppositeDirections = new LinkedHashSet<>(Arrays.asList(opDir1, opDir2));

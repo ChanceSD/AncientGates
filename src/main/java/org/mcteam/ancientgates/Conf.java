@@ -27,6 +27,7 @@ public class Conf {
 	public static boolean enforceAccess = false;
 	public static boolean useEconomy = false;
 	public static boolean useVanillaPortals = false;
+	public static boolean useDiagonalPortals = false;
 	public static boolean teleportEntitiesDefault = true;
 	public static boolean teleportVehiclesDefault = false;
 
@@ -103,11 +104,11 @@ public class Conf {
 		}
 
 		// Check gateMaxArea
-		if (gateMaxArea > 100)
+		if (gateMaxArea > 500)
 			Plugin.log(Level.WARNING, "\"gateMaxArea\" high! May cause stack overflow.");
-		if (gateMaxArea > 500) {
-			gateMaxArea = 500;
-			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 500.");
+		if (gateMaxArea > 1000) {
+			gateMaxArea = 1000;
+			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 1000.");
 		}
 
 		// Check enum values

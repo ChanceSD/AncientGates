@@ -3,8 +3,11 @@ package org.mcteam.ancientgates.util;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.mcteam.ancientgates.Conf;
@@ -47,7 +50,9 @@ public class FloodUtil {
 	public static LinkedHashMap<FloodOrientation, Set<Block>> getAllAirFloods(final Block startBlock, final FloodOrientation[] orientations, final int limit) {
 		final LinkedHashMap<FloodOrientation, Set<Block>> ret = new LinkedHashMap<>();
 		for (final FloodOrientation orientation : orientations) {
-			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<Block>(), orientation, limit));
+			if (!Conf.useDiagonalPortals && orientation.isDiagonal())
+				continue;
+			ret.put(orientation, getFloodBlocks(startBlock, new HashSet<>(), orientation, limit));
 		}
 		return ret;
 	}

@@ -185,7 +185,7 @@ public class Plugin extends JavaPlugin {
 			public void run() {
 				final long startload = System.currentTimeMillis();
 				Gates.load();
-				log("Finished - " + (System.currentTimeMillis() - startload) + " ms");
+				log("Finished loading gates - " + (System.currentTimeMillis() - startload) + " ms");
 			}
 		}, 1);
 
