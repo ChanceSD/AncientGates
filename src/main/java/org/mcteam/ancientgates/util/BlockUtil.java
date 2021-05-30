@@ -1,9 +1,11 @@
 package org.mcteam.ancientgates.util;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Arrays;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,20 +16,15 @@ import com.cryptomorin.xseries.XMaterial;
 
 public class BlockUtil {
 
-	public static Set<Material> standableGateMaterials;
-	public static Map<Material, Boolean> standableMaterials;
+	private static final Set<Material> standableGateMaterials;
+	private static final Map<Material, Boolean> standableMaterials;
 
 	static {
-		standableGateMaterials = new HashSet<>();
-		for (final GateMaterial gateMat : GateMaterial.values()) {
-			standableGateMaterials.add(gateMat.getMaterial());
-		}
-		// TODO possibly add this one to GateMaterial?
-		standableGateMaterials.add(XMaterial.END_PORTAL.parseMaterial());
+		standableGateMaterials = EnumSet.copyOf(Arrays.asList(GateMaterial.values()).stream().map(GateMaterial::getMaterial).collect(Collectors.toSet()));
 	}
 
 	static {
-		standableMaterials = new HashMap<>();
+		standableMaterials = new EnumMap<>(Material.class);
 		try {
 			standableMaterials.put(Material.AIR, true); // 0 Air
 			standableMaterials.put(XMaterial.OAK_SAPLING.parseMaterial(), true); // 6 Saplings
@@ -96,7 +93,7 @@ public class BlockUtil {
 		return standableGateMaterials.contains(material);
 	}
 
-	public static boolean canPlayerStandInGateBlock(final Block block, final Boolean fullHeight) {
+	public static boolean canPlayerStandInGateBlock(final Block block, final boolean fullHeight) {
 		if (fullHeight)
 			return isStandableGateMaterial(block.getType()) && isStandableGateMaterial(block.getRelative(BlockFace.UP).getType());
 		return isStandableGateMaterial(block.getType());
@@ -107,7 +104,7 @@ public class BlockUtil {
 	}
 
 	public static boolean canPassThroughMaterial(final Material material) {
-		return standableMaterials.get(material) == null ? false : standableMaterials.get(material);
+		return standableMaterials.get(material) != null && standableMaterials.get(material);
 	}
 
 }

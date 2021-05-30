@@ -11,10 +11,10 @@ import org.mcteam.ancientgates.util.TeleportUtil;
 
 public class WorldCoord {
 
-	public String worldName = "world";
-	public int x = 0;
-	public int y = 0;
-	public int z = 0;
+	public final String worldName;
+	public final int x;
+	public final int y;
+	public final int z;
 
 	private static final String WORLD = "world";
 	private static final String X = "x";

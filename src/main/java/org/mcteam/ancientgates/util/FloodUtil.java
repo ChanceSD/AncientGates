@@ -2,12 +2,10 @@ package org.mcteam.ancientgates.util;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.mcteam.ancientgates.Conf;
@@ -47,7 +45,7 @@ public class FloodUtil {
 	}
 
 	// Multi-flood all orientations
-	public static LinkedHashMap<FloodOrientation, Set<Block>> getAllAirFloods(final Block startBlock, final FloodOrientation[] orientations, final int limit) {
+	public static Map<FloodOrientation, Set<Block>> getAllAirFloods(final Block startBlock, final FloodOrientation[] orientations, final int limit) {
 		final LinkedHashMap<FloodOrientation, Set<Block>> ret = new LinkedHashMap<>();
 		for (final FloodOrientation orientation : orientations) {
 			if (!Conf.useDiagonalPortals && orientation.isDiagonal())
@@ -59,7 +57,7 @@ public class FloodUtil {
 
 	// Multi-flood best orientation
 	public static Entry<FloodOrientation, Set<Block>> getBestAirFlood(final Block startBlock, final FloodOrientation[] orientations) {
-		final LinkedHashMap<FloodOrientation, Set<Block>> floods = getAllAirFloods(startBlock, orientations, Conf.getGateMaxArea());
+		final Map<FloodOrientation, Set<Block>> floods = getAllAirFloods(startBlock, orientations, Conf.getGateMaxArea());
 		Entry<FloodOrientation, Set<Block>> ret = null;
 		Integer bestSize = null;
 		for (final Entry<FloodOrientation, Set<Block>> entry : floods.entrySet()) {
@@ -76,8 +74,7 @@ public class FloodUtil {
 
 	// Get gate portal blocks
 	public static Set<Block> getPortalBlocks(final Block block, final FloodOrientation orientation) {
-		final Set<Block> blocks = getFloodBlocks(block, new HashSet<Block>(), orientation, Conf.getGateMaxArea());
-		return blocks;
+		return getFloodBlocks(block, new HashSet<Block>(), orientation, Conf.getGateMaxArea());
 	}
 
 	public static Set<Block> getPortalBlocks(final Block block) {
@@ -86,8 +83,7 @@ public class FloodUtil {
 			return null;
 
 		final FloodOrientation orientation = flood.getKey();
-		final Set<Block> blocks = getPortalBlocks(block, orientation);
-		return blocks;
+		return getPortalBlocks(block, orientation);
 	}
 
 	// Get gate frame blocks
@@ -107,8 +103,6 @@ public class FloodUtil {
 
 	// Get surrounding blocks
 	public static Set<Block> getSurroundingBlocks(final Set<Block> blocks, final Set<Block> remainingBlocks, final FloodOrientation orientation) {
-		final Set<Block> allBlocks = new HashSet<>();
-		blocks.addAll(blocks);
 		blocks.addAll(remainingBlocks);
 
 		final Set<Block> surrounding = new HashSet<>();
@@ -116,9 +110,7 @@ public class FloodUtil {
 			for (final BlockFace face : orientation.getAllDirections()) {
 				final Block potentialBlock = currentBlock.getRelative(face);
 				// Found a block
-				if (!allBlocks.contains(potentialBlock)) {
-					surrounding.add(potentialBlock);
-				}
+				surrounding.add(potentialBlock);
 			}
 		}
 		return surrounding;

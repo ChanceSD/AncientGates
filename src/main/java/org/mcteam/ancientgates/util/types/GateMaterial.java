@@ -11,11 +11,14 @@ public enum GateMaterial {
     // AIR
 	AIR("pseudo air blocks", XMaterial.MOVING_PISTON.parseMaterial()),
 
+    // ENDER PORTAL
+	ENDPORTAL("ender portal blocks", XMaterial.END_PORTAL.parseMaterial()),
+
     // LAVA
 	LAVA("stationary lava blocks", XMaterial.isNewVersion() ? Material.LAVA : Material.getMaterial("STATIONARY_LAVA")),
 
-    // NETHER/ENDER PORTAL
-	PORTAL("nether/ender portal blocks", XMaterial.NETHER_PORTAL.parseMaterial()),
+    // NETHER
+	PORTAL("nether blocks", XMaterial.NETHER_PORTAL.parseMaterial()),
 
     // SUGARCANE
 	SUGARCANE("sugarcane blocks", XMaterial.SUGAR_CANE.parseMaterial()),
