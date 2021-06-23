@@ -47,6 +47,7 @@ public class CommandOpen extends BaseCommand {
 
 		if (Gates.open(gate)) {
 			sendMessage("The gate was opened.");
+			Gate.save();
 		} else {
 			sendMessage("Failed to open the gate. Have you built a frame?");
 			sendMessage("More info here: " + new CommandHelp().getUsageTemplate(true, true));

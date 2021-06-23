@@ -74,7 +74,7 @@ public class FloodUtil {
 
 	// Get gate portal blocks
 	public static Set<Block> getPortalBlocks(final Block block, final FloodOrientation orientation) {
-		return getFloodBlocks(block, new HashSet<Block>(), orientation, Conf.getGateMaxArea());
+		return getFloodBlocks(block, new HashSet<>(), orientation, Conf.getGateMaxArea());
 	}
 
 	public static Set<Block> getPortalBlocks(final Block block) {

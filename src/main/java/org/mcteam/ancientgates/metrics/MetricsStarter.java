@@ -105,18 +105,19 @@ public class MetricsStarter {
 			@Override
 			public Map<String, Integer> call() throws Exception {
 				final Map<String, Integer> valueMap = new HashMap<>();
-				valueMap.put("Web", getGateCountByMaterial(GateMaterial.WEB.getMaterial()));
-				valueMap.put("Water", getGateCountByMaterial(GateMaterial.WATER.getMaterial()));
-				valueMap.put("Sugar Cane", getGateCountByMaterial(GateMaterial.SUGARCANE.getMaterial()));
-				valueMap.put("Portal", getGateCountByMaterial(GateMaterial.PORTAL.getMaterial()));
-				valueMap.put("Lava", getGateCountByMaterial(GateMaterial.LAVA.getMaterial()));
-				valueMap.put("End Portal", getGateCountByMaterial(XMaterial.END_PORTAL.parseMaterial()));
-				valueMap.put("Air", getGateCountByMaterial(GateMaterial.AIR.getMaterial()));
+				valueMap.put("Web", getGateCountByMaterial(GateMaterial.WEB));
+				valueMap.put("Water", getGateCountByMaterial(GateMaterial.WATER));
+				valueMap.put("Sugar Cane", getGateCountByMaterial(GateMaterial.SUGARCANE));
+				valueMap.put("Portal", getGateCountByMaterial(GateMaterial.PORTAL));
+				valueMap.put("Lava", getGateCountByMaterial(GateMaterial.LAVA));
+				valueMap.put("End Portal", getGateCountByMaterial(GateMaterial.ENDPORTAL));
+				valueMap.put("End Gateway", getGateCountByMaterial(GateMaterial.ENDGATEWAY));
+				valueMap.put("Air", getGateCountByMaterial(GateMaterial.AIR));
 				return valueMap;
 			}
 
-			private int getGateCountByMaterial(final Material material) {
-				return (int) Gate.getAll().stream().filter(g -> g.getMaterial() == material).count();
+			private int getGateCountByMaterial(final GateMaterial material) {
+				return (int) Gate.getAll().stream().filter(g -> g.getGateMaterial() == material).count();
 			}
 		}));
 

@@ -26,12 +26,14 @@ public class BlockUtil {
 	static {
 		standableMaterials = new EnumMap<>(Material.class);
 		try {
+			Arrays.asList(GateMaterial.values()).stream().forEach(x -> {
+				standableMaterials.put(x.getMaterial(), true);
+				System.out.println(x.getMaterial());
+			});
 			standableMaterials.put(Material.AIR, true); // 0 Air
 			standableMaterials.put(XMaterial.OAK_SAPLING.parseMaterial(), true); // 6 Saplings
-			standableMaterials.put(Material.WATER, true); // 8 Water
-			standableMaterials.put(GateMaterial.WATER.getMaterial(), true); // 9 Stationary water
-			standableMaterials.put(Material.LAVA, true); // 10 Lava
-			standableMaterials.put(GateMaterial.LAVA.getMaterial(), true); // 11 Stationary lava
+			standableMaterials.put(Material.WATER, true); // 8 Water - leave even though its in gate materials for stationary
+			standableMaterials.put(Material.LAVA, true); // 10 Lava - leave even though its in gate materials for stationary
 			standableMaterials.put(Material.POWERED_RAIL, true); // 27 Powered Rail
 			standableMaterials.put(Material.DETECTOR_RAIL, true); // 28 Detector Rail
 			standableMaterials.put(XMaterial.COBWEB.parseMaterial(), true); // 30 Cobweb
@@ -58,13 +60,10 @@ public class BlockUtil {
 			// standableMaterials.put(Material.REDSTONE_TORCH_ON, true); // 76 Redstone Torch (On)
 			standableMaterials.put(Material.STONE_BUTTON, true); // 77 Stone Button
 			standableMaterials.put(Material.SNOW, true); // 78 Snow
-			standableMaterials.put(XMaterial.SUGAR_CANE.parseMaterial(), true); // 83 Sugar Cane
-			standableMaterials.put(XMaterial.NETHER_PORTAL.parseMaterial(), true); // 90 Portal
 			standableMaterials.put(XMaterial.REPEATER.parseMaterial(), true); // 93 Redstone Repeater (Off)
 			// standableMaterials.put(Material.DIODE_BLOCK_ON, true); // 94 Redstone Repeater (On)
 			standableMaterials.put(Material.VINE, true); // 106 Vines
 			standableMaterials.put(XMaterial.LILY_PAD.parseMaterial(), true); // 111 Lily Pad
-			standableMaterials.put(XMaterial.END_PORTAL.parseMaterial(), true); // 119 End Portal
 			standableMaterials.put(XMaterial.OAK_SLAB.parseMaterial(), false); // 126 Wooden Slab
 			standableMaterials.put(Material.TRIPWIRE_HOOK, true); // 131 Tripwire Hook
 			standableMaterials.put(Material.TRIPWIRE, true); // 132 Tripwire
@@ -85,8 +84,8 @@ public class BlockUtil {
 		} // Support previous MC versions
 	}
 
-	public static boolean isPortalGateMaterial(final Material material) {
-		return material.equals(XMaterial.NETHER_PORTAL.parseMaterial()) || material.equals(XMaterial.END_PORTAL.parseMaterial());
+	public static boolean isPortalGateMaterial(final GateMaterial material) {
+		return material == GateMaterial.PORTAL || material == GateMaterial.ENDPORTAL;
 	}
 
 	public static boolean isStandableGateMaterial(final Material material) {

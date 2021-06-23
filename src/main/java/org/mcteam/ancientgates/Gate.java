@@ -246,10 +246,19 @@ public class Gate {
 		return inventory;
 	}
 
+	public void setGateMaterial(final GateMaterial material) {
+		this.material = material;
+	}
+
 	public void setMaterial(final String material) {
 		this.material = GateMaterial.fromName(material.toUpperCase());
 	}
 
+	public GateMaterial getGateMaterial() {
+		return material;
+	}
+
+	@Deprecated
 	public Material getMaterial() {
 		return material.getMaterial();
 	}

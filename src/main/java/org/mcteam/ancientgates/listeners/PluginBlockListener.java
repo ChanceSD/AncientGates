@@ -286,14 +286,14 @@ public class PluginBlockListener implements Listener {
 		final Gate nearestGate = Gates.gateFromPortal(coord);
 
 		if (nearestGate != null) {
-			if (nearestGate.getMaterial() != XMaterial.SUGAR_CANE.parseMaterial())
+			if (nearestGate.getGateMaterial() != GateMaterial.SUGARCANE)
 				return;
 
 			event.getEntity().remove();
 			plugin.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
 				@Override
 				public void run() {
-					coord.getBlock().setType(XMaterial.SUGAR_CANE.parseMaterial());
+					coord.getBlock().setType(GateMaterial.SUGARCANE.getMaterial());
 				}
 			}, 1);
 		}

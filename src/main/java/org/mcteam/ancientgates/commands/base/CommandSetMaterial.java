@@ -1,5 +1,6 @@
 package org.mcteam.ancientgates.commands.base;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class CommandSetMaterial extends BaseCommand {
 		if (parameters.size() == 1){
 			return TextUtil.getMatchingEntries(parameters.get(0), Gate.getAllIDs());
 		} else if (parameters.size() == 2) {
-			return Arrays.asList(GateMaterial.names);
+			return TextUtil.getMatchingEntries(parameters.get(1), new ArrayList<>(Arrays.asList(GateMaterial.names)));
 		}
 		return super.onTabComplete(sender, parameters);
 	}

@@ -11,6 +11,9 @@ public enum GateMaterial {
     // AIR
 	AIR("pseudo air blocks", XMaterial.MOVING_PISTON.parseMaterial()),
 
+    // END GATEWAY
+	ENDGATEWAY("end gateway blocks", XMaterial.END_GATEWAY.parseMaterial()),
+
     // ENDER PORTAL
 	ENDPORTAL("ender portal blocks", XMaterial.END_PORTAL.parseMaterial()),
 
