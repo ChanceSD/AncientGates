@@ -106,9 +106,9 @@ public class Conf {
 		// Check gateMaxArea
 		if (gateMaxArea > 500)
 			Plugin.log(Level.WARNING, "\"gateMaxArea\" high! May cause stack overflow.");
-		if (gateMaxArea > 1000) {
-			gateMaxArea = 1000;
-			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 1000.");
+		if (gateMaxArea > 1500) {
+			gateMaxArea = 1500;
+			Plugin.log(Level.WARNING, "\"gateMaxArea\" too high! Limited to 1500.");
 		}
 
 		// Check enum values
