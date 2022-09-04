@@ -44,7 +44,7 @@ public class Conf {
 	private static int gateCooldownPeriod = 1000;
 
 	// BungeeCord settings
-	public static boolean bungeeCordSupport = false;
+	public static boolean bungeeCordSupport = true;
 	public static TeleportType bungeeTeleportDefault = TeleportType.LOCATION;
 	public static boolean useBungeeMessages = true;
 	public static String bungeeJoinMessage = "&e%p came from %s server";

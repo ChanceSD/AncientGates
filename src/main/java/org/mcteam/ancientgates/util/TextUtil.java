@@ -69,7 +69,7 @@ public class TextUtil {
 		return implode(list, " ");
 	}
 
-	public static ArrayList<String> concatenate(final List<String> list1, final List<String> list2, final List<String> list3) {
+	public static List<String> concatenate(final List<String> list1, final List<String> list2, final List<String> list3) {
 		final ArrayList<String> ret = new ArrayList<>();
 		for (int i = 0; i < list1.size(); i++) {
 			ret.add(list1.get(i) + " " + Conf.colorChrome + "(" + list2.get(i) + " - " + list3.get(i) + Conf.colorChrome + ")");
@@ -77,7 +77,7 @@ public class TextUtil {
 		return ret;
 	}
 
-	public static ArrayList<String> concatenate(final List<String> list1, final List<String> list2) {
+	public static List<String> concatenate(final List<String> list1, final List<String> list2) {
 		final ArrayList<String> ret = new ArrayList<>();
 		for (int i = 0; i < list1.size(); i++) {
 			ret.add(list1.get(i) + Conf.colorChrome + "(" + list2.get(i) + Conf.colorChrome + ")");
@@ -113,11 +113,11 @@ public class TextUtil {
 		return true;
 	}
 
-	public static ArrayList<String> getPage(final List<String> lines, final int pageHumanBased, final String title, final CommandSender sender) {
+	public static List<String> getPage(final List<String> lines, final int pageHumanBased, final String title, final CommandSender sender) {
 		return getPage(lines, pageHumanBased, title, sender instanceof Player ? PAGEHEIGHT_PLAYER : PAGEHEIGHT_CONSOLE);
 	}
 
-	public static ArrayList<String> getPage(final List<String> lines, final int pageHumanBased, final String title, final int pageheight) {
+	public static List<String> getPage(final List<String> lines, final int pageHumanBased, final String title, final int pageheight) {
 		final ArrayList<String> ret = new ArrayList<>();
 		final int pageZeroBased = pageHumanBased - 1;
 		final int pagecount = (int) Math.ceil((double) lines.size() / pageheight);

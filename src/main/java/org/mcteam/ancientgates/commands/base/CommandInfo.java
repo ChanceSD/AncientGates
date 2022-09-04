@@ -40,7 +40,7 @@ public class CommandInfo extends BaseCommand {
 	public void perform() {
 		// Check if optional parameter exists
 		String id = null;
-		if (parameters.size() > 0) {
+		if (!parameters.isEmpty()) {
 			id = parameters.get(0);
 		}
 		Location nearestFrom = null;
@@ -106,9 +106,9 @@ public class CommandInfo extends BaseCommand {
 			for (final Map<String, String> bungeeto : gate.getBungeeTos()) {
 				if (bungeeto != null) {
 					if (gate.getBungeeType() == TeleportType.LOCATION) {
-						sendMessage("to:    " + Conf.colorChrome + new WorldCoord(bungeeto).toString() + " on " + bungeeto.get(SERVER));
+						sendMessage("to:    " + Conf.colorChrome + new WorldCoord(bungeeto).toString() + " on server: " + bungeeto.get(SERVER));
 					} else {
-						sendMessage("to:    " + Conf.colorChrome + bungeeto.get(SERVER));
+						sendMessage("to server:    " + Conf.colorChrome + bungeeto.get(SERVER));
 					}
 				}
 			}
