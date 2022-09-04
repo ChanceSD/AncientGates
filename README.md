@@ -18,7 +18,7 @@ Developers
 <dependency>
     <groupId>org.mcteam.ancientgates</groupId>
     <artifactId>ancientgates</artifactId>
-    <version>2.4</version>
+    <version>2.6</version>
     <scope>provided</scope>
 </dependency>
  ```
