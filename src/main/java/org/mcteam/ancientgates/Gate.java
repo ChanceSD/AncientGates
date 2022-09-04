@@ -354,19 +354,23 @@ public class Gate {
 		for (final Gate gate : Gate.getAll()) {
 			if (gate.material == null) {
 				gate.material = GateMaterial.PORTAL;
-				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"material\" } is invalid. Valid materials are: " + TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"material\" } is invalid. Valid materials are: "
+						+ TextUtil.implode(Arrays.asList(GateMaterial.names), ", ") + ".");
 			}
 			if (gate.inventory == null) {
 				gate.inventory = InvBoolean.TRUE;
-				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"inventory\" } is invalid. Valid options are: " + TextUtil.implode(Arrays.asList(InvBoolean.names), ", ") + ".");
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"inventory\" } is invalid. Valid options are: "
+						+ TextUtil.implode(Arrays.asList(InvBoolean.names), ", ") + ".");
 			}
 			if (gate.bungeetos != null && gate.bungeetype == null) {
 				gate.bungeetype = TeleportType.LOCATION;
-				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"bungeetype\" } is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(TeleportType.names), ", ") + ".");
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"bungeetype\" } is invalid. Valid types are: "
+						+ TextUtil.implode(Arrays.asList(TeleportType.names), ", ") + ".");
 			}
 			if (gate.command != null && gate.commandtype == null) {
 				gate.commandtype = CommandType.PLAYER;
-				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"commandtype\" } is invalid. Valid types are: " + TextUtil.implode(Arrays.asList(CommandType.names), ", ") + ".");
+				Plugin.log(Level.WARNING, "Gate \"" + gate.getId() + "\" { \"commandtype\" } is invalid. Valid types are: "
+						+ TextUtil.implode(Arrays.asList(CommandType.names), ", ") + ".");
 			}
 		}
 

@@ -55,7 +55,8 @@ public class TeleportUtil {
 	private static final Cache<Integer, Entity> entityCache = CacheBuilder.newBuilder().softValues().expireAfterWrite(10, TimeUnit.SECONDS).build();
 
 	// Normal player teleport & BungeeCord player teleport in
-	public static void teleportPlayer(final Player player, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
+	public static void teleportPlayer(final Player player, final Location location, final Boolean teleportEntities,
+			final InvBoolean teleportInventory) {
 		checkChunkLoad(location.getBlock());
 
 		// Handle player inventory
@@ -95,7 +96,9 @@ public class TeleportUtil {
 	}
 
 	// BungeeCord player teleport out
-	public static void teleportPlayer(final Player player, final Map<String, String> location, final TeleportType tpType, final Boolean teleportEntities, final InvBoolean teleportInventory, final Boolean fullHeight, String tpCmd, final CommandType tpCmdType, String tpMsg) {
+	public static void teleportPlayer(final Player player, final Map<String, String> location, final TeleportType tpType,
+			final Boolean teleportEntities, final InvBoolean teleportInventory, final Boolean fullHeight, String tpCmd, final CommandType tpCmdType,
+			String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			// Check bungeeServerName found
 			if (Plugin.bungeeServerName == null) {
@@ -286,7 +289,8 @@ public class TeleportUtil {
 	}
 
 	// Normal vehicle teleport
-	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities, final InvBoolean teleportInventory) {
+	public static void teleportVehicle(final Vehicle vehicle, final Location location, final Boolean teleportEntities,
+			final InvBoolean teleportInventory) {
 		final Location destination = GeometryUtil.addHeightToLocation(location.clone(), 0.5); // Fix vehicle spawn glitch
 		final double velocity = vehicle.getVelocity().length();
 		checkChunkLoad(destination.getBlock());
@@ -370,7 +374,9 @@ public class TeleportUtil {
 	}
 
 	// BungeeCord vehicle teleport out
-	public static void teleportVehicle(final Vehicle vehicle, final Map<String, String> location, final TeleportType tpType, final Boolean teleportEntities, final InvBoolean teleportInventory, final Boolean fullHeight, String tpCmd, final CommandType tpCmdType, String tpMsg) {
+	public static void teleportVehicle(final Vehicle vehicle, final Map<String, String> location, final TeleportType tpType,
+			final Boolean teleportEntities, final InvBoolean teleportInventory, final Boolean fullHeight, String tpCmd, final CommandType tpCmdType,
+			String tpMsg) {
 		if (Conf.bungeeCordSupport) {
 			final double velocity = vehicle.getVelocity().length();
 			final Entity passenger = vehicle.getPassenger();

@@ -38,10 +38,12 @@ public class Packet {
 		// Build the arguments, format is
 		// <entityId>,<entityWorld>,<entityTypeName>,<entityTypeData>,<location>
 		if (entityType.equals(EntityType.DROPPED_ITEM)) {
-			this.args = new String[] { String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(), ItemStackUtil.itemStackToString(((Item) entity).getItemStack()), TeleportUtil.locationToString(destination) }; // Dropped
-			                                                                                                                                                                                                                                // ItemStack
+			this.args = new String[] { String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(),
+					ItemStackUtil.itemStackToString(((Item) entity).getItemStack()), TeleportUtil.locationToString(destination) }; // Dropped
+																																	// ItemStack
 		} else {
-			this.args = new String[] { String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(), EntityUtil.getEntityTypeData(entity), TeleportUtil.locationToString(destination) }; // Entity
+			this.args = new String[] { String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(),
+					EntityUtil.getEntityTypeData(entity), TeleportUtil.locationToString(destination) }; // Entity
 		}
 	}
 
@@ -50,7 +52,8 @@ public class Packet {
 		this.command = "spawnvehicle";
 		// Build the arguments, format is
 		// <vehicleId>,<vehicleWorld>,<vehicleTypeName>,<velocity>,<location>[,<entityId>,<entityTypeName>,<entityTypeData>]
-		this.args = new String[] { String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), vehicle.getType().name(), String.valueOf(velocity), TeleportUtil.locationToString(destination), null, null, null };
+		this.args = new String[] { String.valueOf(vehicle.getEntityId()), vehicle.getWorld().getName(), vehicle.getType().name(),
+				String.valueOf(velocity), TeleportUtil.locationToString(destination), null, null, null };
 	}
 
 	// ----------------------------------------------//

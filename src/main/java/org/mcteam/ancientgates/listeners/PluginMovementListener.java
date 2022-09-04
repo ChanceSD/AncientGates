@@ -54,11 +54,13 @@ public class PluginMovementListener implements Listener {
 			final Long now = Calendar.getInstance().getTimeInMillis();
 
 			// Check player has passed cooldown period
-			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
+			if (Plugin.lastTeleportTime.containsKey(player.getName())
+					&& Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
 				return;
 
 			// Check player has permission to enter the gate.
-			if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*") && Conf.enforceAccess) {
+			if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*")
+					&& Conf.enforceAccess) {
 				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage("You lack the permissions to enter this gate.");
 					Plugin.lastMessageTime.put(player.getName(), now);
@@ -106,7 +108,9 @@ public class PluginMovementListener implements Listener {
 
 				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(), nearestGate.getMessage());
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(),
+						nearestGate.getTeleportInventory(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(),
+						nearestGate.getCommandType(), nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 				Plugin.lastTeleportTime.put(player.getName(), now);
@@ -141,11 +145,13 @@ public class PluginMovementListener implements Listener {
 				now = Calendar.getInstance().getTimeInMillis();
 
 				// Check player has passed cooldown period
-				if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
+				if (Plugin.lastTeleportTime.containsKey(player.getName())
+						&& Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
 					return;
 
 				// Check player has permission to enter the gate.
-				if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*") && Conf.enforceAccess) {
+				if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*")
+						&& Conf.enforceAccess) {
 					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage("You lack the permissions to enter this gate.");
 						Plugin.lastMessageTime.put(player.getName(), now);
@@ -200,8 +206,10 @@ public class PluginMovementListener implements Listener {
 						Plugin.lastMessageTime.put(((Player) passenger).getName(), now);
 					}
 				} else if (nearestGate.getBungeeTo() != null) {
-					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(), nearestGate.getCommandType(),
-					        nearestGate.getMessage());
+					TeleportUtil.teleportVehicle(vehicle, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(),
+							nearestGate.getTeleportInventory(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(),
+							nearestGate.getCommandType(),
+							nearestGate.getMessage());
 				} else if (passenger instanceof Player) {
 					ExecuteUtil.execCommand(vehicle, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 					if (passenger instanceof Player) {

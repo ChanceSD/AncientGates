@@ -20,7 +20,8 @@ public class BlockUtil {
 	private static final Map<Material, Boolean> standableMaterials;
 
 	static {
-		standableGateMaterials = EnumSet.copyOf(Arrays.asList(GateMaterial.values()).stream().map(GateMaterial::getMaterial).collect(Collectors.toSet()));
+		standableGateMaterials = EnumSet
+				.copyOf(Arrays.asList(GateMaterial.values()).stream().map(GateMaterial::getMaterial).collect(Collectors.toSet()));
 	}
 
 	static {

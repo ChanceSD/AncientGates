@@ -172,11 +172,13 @@ public class PluginPlayerListener implements Listener {
 			final Long now = Calendar.getInstance().getTimeInMillis();
 
 			// Check player has passed cooldown period
-			if (Plugin.lastTeleportTime.containsKey(player.getName()) && Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
+			if (Plugin.lastTeleportTime.containsKey(player.getName())
+					&& Plugin.lastTeleportTime.get(player.getName()) > now - Conf.getGateCooldownMillis())
 				return;
 
 			// Check player has permission to enter the gate.
-			if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*") && Conf.enforceAccess) {
+			if (!Plugin.hasPermManage(player, "ancientgates.use." + nearestGate.getId()) && !Plugin.hasPermManage(player, "ancientgates.use.*")
+					&& Conf.enforceAccess) {
 				player.sendMessage("You lack the permissions to enter this gate.");
 				return;
 			}
@@ -208,7 +210,8 @@ public class PluginPlayerListener implements Listener {
 
 				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else if (nearestGate.getBungeeTo() != null) {
-				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(), nearestGate.getTeleportInventory(), false, nearestGate.getCommand(), nearestGate.getCommandType(),
+				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(),
+						nearestGate.getTeleportInventory(), false, nearestGate.getCommand(), nearestGate.getCommandType(),
 						nearestGate.getMessage());
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);

@@ -93,7 +93,8 @@ public class Plugin extends JavaPlugin {
 	private PluginMessageListener pluginMessengerListener = null;
 	private String baseCommand;
 
-	public final static Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE).registerTypeAdapter(Location.class, new LocationTypeAdapter()).create();
+	public final static Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
+			.registerTypeAdapter(Location.class, new LocationTypeAdapter()).create();
 
 	// HashMap of incoming BungeeCord players & passengers
 	public static Map<String, BungeeQueue> bungeeCordInQueue = new HashMap<>();
@@ -160,7 +161,8 @@ public class Plugin extends JavaPlugin {
 					final Updater updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK);
 					if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
 						Bukkit.broadcast("§e[§7AncientGates§e] Update Available: §6" + updater.getLatestName(), "ancientgates.setconf");
-						Bukkit.broadcast("§e[§7AncientGates§e] Spigot Link: §7https://www.spigotmc.org/resources/ancient-gates.6583/", "ancientgates.setconf");
+						Bukkit.broadcast("§e[§7AncientGates§e] Spigot Link: §7https://www.spigotmc.org/resources/ancient-gates.6583/",
+								"ancientgates.setconf");
 					}
 				}
 			}.runTaskTimerAsynchronously(this, 0, 360000);
@@ -319,7 +321,8 @@ public class Plugin extends JavaPlugin {
 	}
 
 	private boolean setupPermissions() {
-		final RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+		final RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager()
+				.getRegistration(net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null) {
 			perms = permissionProvider.getProvider();
 		}
@@ -327,7 +330,8 @@ public class Plugin extends JavaPlugin {
 	}
 
 	private boolean setupEconomy() {
-		final RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		final RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager()
+				.getRegistration(net.milkbowl.vault.economy.Economy.class);
 		if (economyProvider != null) {
 			econ = economyProvider.getProvider();
 		}
@@ -423,7 +427,8 @@ public class Plugin extends JavaPlugin {
 			}
 		}
 
-		sender.sendMessage(Conf.colorSystem + "Unknown gate-command \"" + commandName + "\". Try " + Conf.colorCommand + "/" + getBaseCommand() + " help");
+		sender.sendMessage(
+				Conf.colorSystem + "Unknown gate-command \"" + commandName + "\". Try " + Conf.colorCommand + "/" + getBaseCommand() + " help");
 	}
 
 	@Override
@@ -443,7 +448,8 @@ public class Plugin extends JavaPlugin {
 			}
 		}
 
-		return StringUtil.copyPartialMatches(commandName, commands.stream().map(c -> c.getAliases().get(0)).collect(Collectors.toList()), new ArrayList<String>());
+		return StringUtil.copyPartialMatches(commandName, commands.stream().map(c -> c.getAliases().get(0)).collect(Collectors.toList()),
+				new ArrayList<String>());
 	}
 
 	// -------------------------------------------- //

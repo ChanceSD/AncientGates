@@ -119,7 +119,7 @@
 		</repository>
 		<repository>
 			<id>vault-repo</id>
-			<url>http://nexus.hc.to/content/repositories/pub_releases</url>
+			<url>https://nexus.hc.to/content/repositories/pub_releases</url>
 		</repository>
 		<repository>
 			<id>CodeMC</id>
@@ -132,7 +132,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.18.1-R0.1-SNAPSHOT</version>
+			<version>1.19.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>

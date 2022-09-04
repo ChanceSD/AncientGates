@@ -3,8 +3,9 @@ version: '${project.version}'
 description: '${project.description}'
 main: 'org.mcteam.ancientgates.Plugin'
 load: postworld
-author: 'NoChanceSD'
+author: 'ChanceSD'
 api-version: 1.13
+website: https://www.spigotmc.org/resources/ancient-gates.6583/
 softdepend:
     - Vault
     - Multiverse-Core

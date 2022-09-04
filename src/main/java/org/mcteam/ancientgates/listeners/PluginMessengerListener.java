@@ -75,7 +75,8 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Check if the player is online, if so, teleport, otherwise, queue
 			final Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpCmd, tpCmdType, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(),
+						new BungeeQueue(playerName, entityTypeName, entityTypeData, fromServer, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
 				// Get current time
 				final Long now = Calendar.getInstance().getTimeInMillis();
@@ -125,7 +126,8 @@ public class PluginMessengerListener implements PluginMessageListener {
 			// Check if the player is online, if so, teleport, otherwise, queue
 			final Player player = Bukkit.getPlayer(playerName);
 			if (player == null) {
-				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(), new BungeeQueue(playerName, fromServer, vehicleTypeName, velocity, destination, tpCmd, tpCmdType, tpMsg));
+				Plugin.bungeeCordInQueue.put(playerName.toLowerCase(),
+						new BungeeQueue(playerName, fromServer, vehicleTypeName, velocity, destination, tpCmd, tpCmdType, tpMsg));
 			} else {
 				// Teleport incoming BungeeCord player
 				if (!destination.equals("null")) {

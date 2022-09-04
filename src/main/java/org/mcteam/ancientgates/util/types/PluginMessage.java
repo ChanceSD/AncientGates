@@ -153,9 +153,11 @@ public class PluginMessage {
 				// Format is
 				// <player>#@#<destination>#@#<fromServer>#@#<command>#@#<commandType>#@#<message>[#@#<entityTypeName>#@#<entityTypeData>]
 				if (this.entityTypeName != null) {
-					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.command + "#@#" + this.commandType + "#@#" + this.message + "#@#" + this.entityTypeName + "#@#" + this.entityTypeData;
+					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.command + "#@#" + this.commandType
+							+ "#@#" + this.message + "#@#" + this.entityTypeName + "#@#" + this.entityTypeData;
 				} else {
-					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.command + "#@#" + this.commandType + "#@#" + this.message;
+					msg = this.playerName + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.command + "#@#" + this.commandType
+							+ "#@#" + this.message;
 				}
 			} else if (this.channel == BungeeChannel.AGBungeeSpawn) {
 				// Format is <entityTypeName>#@#<entityTypeData>#@#<destination>
@@ -163,12 +165,14 @@ public class PluginMessage {
 			} else if (this.channel == BungeeChannel.AGBungeeVehicleTele) {
 				// Format is
 				// <player>#@#<vehicleTypeName>#@#<velocity>#@#<destination>#@#<fromServerName>#@#<command>#@#<commandType>#@#<message>
-				msg = this.playerName + "#@#" + this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.fromServer + "#@#" + this.command + "#@#" + this.commandType + "#@#" + this.message;
+				msg = this.playerName + "#@#" + this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.fromServer
+						+ "#@#" + this.command + "#@#" + this.commandType + "#@#" + this.message;
 			} else if (this.channel == BungeeChannel.AGBungeeVehicleSpawn) {
 				// Format is
 				// <vehicleTypeName>#@#<velocity>#@#<destination>[#@#<entityTypeName>#@#<entityTypeData>|#@#<itemStack>]
 				if (this.entityTypeName != null) {
-					msg = this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.entityTypeName + "#@#" + this.entityTypeData;
+					msg = this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.entityTypeName + "#@#"
+							+ this.entityTypeData;
 				} else if (this.itemStack != null) {
 					msg = this.vehicleTypeName + "#@#" + this.velocity + "#@#" + this.destination + "#@#" + this.itemStack;
 				} else {

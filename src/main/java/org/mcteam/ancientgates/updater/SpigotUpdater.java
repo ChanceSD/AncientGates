@@ -9,7 +9,6 @@ import java.util.logging.Level;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcteam.ancientgates.Plugin;
 
-
 public class SpigotUpdater extends Updater {
 
 	public SpigotUpdater(final JavaPlugin plugin, final int id, final UpdateType type) {
@@ -20,7 +19,7 @@ public class SpigotUpdater extends Updater {
 	@Override
 	protected boolean read() {
 		try (InputStream inputStream = new URL("https://api.spigotmc.org/legacy/update.php?resource=" + this.getId()).openStream();
-		        Scanner scanner = new Scanner(inputStream)) {
+				Scanner scanner = new Scanner(inputStream)) {
 			if (scanner.hasNext()) {
 				this.versionName = scanner.next();
 			}

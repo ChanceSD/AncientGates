@@ -61,8 +61,13 @@ public class CommandServerList extends BaseCommand {
 				// Create list of SocketComms servers
 				final List<String> servers = new ArrayList<>();
 				for (final Server server1 : Server.getAll()) {
-					servers.add(Conf.colorValue + server1.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: " + (Plugin.bungeeServerList.contains(server1.getName()) ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorSystem + ", SC: "
-							+ Conf.colorParameter + (server1.getState() == ConnectionState.CONNECTED ? Conf.colorCommand + "connected" : Conf.colorParameter + "disconnected") + Conf.colorChrome + ")");
+					servers.add(Conf.colorValue + server1.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: "
+							+ (Plugin.bungeeServerList.contains(server1.getName()) ? Conf.colorCommand + "connected"
+									: Conf.colorParameter + "disconnected")
+							+ Conf.colorSystem + ", SC: "
+							+ Conf.colorParameter + (server1.getState() == ConnectionState.CONNECTED ? Conf.colorCommand + "connected"
+									: Conf.colorParameter + "disconnected")
+							+ Conf.colorChrome + ")");
 				}
 
 				if (servers.size() == 0) {

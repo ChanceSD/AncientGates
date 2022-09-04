@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcteam.ancientgates.Plugin;
 
-
 public abstract class Updater {
 
 	public enum UpdateType {

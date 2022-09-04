@@ -8,28 +8,29 @@ import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 
 public enum GateMaterial {
-    // AIR
+	// AIR
 	AIR("pseudo air blocks", XMaterial.MOVING_PISTON.parseMaterial()),
 
-    // END GATEWAY
-	ENDGATEWAY("end gateway blocks", XMaterial.END_GATEWAY.parseMaterial() != null ? XMaterial.END_GATEWAY.parseMaterial() : XMaterial.END_PORTAL.parseMaterial()),
+	// END GATEWAY
+	ENDGATEWAY("end gateway blocks",
+			XMaterial.END_GATEWAY.parseMaterial() != null ? XMaterial.END_GATEWAY.parseMaterial() : XMaterial.END_PORTAL.parseMaterial()),
 
-    // ENDER PORTAL
+	// ENDER PORTAL
 	ENDPORTAL("ender portal blocks", XMaterial.END_PORTAL.parseMaterial()),
 
-    // LAVA
+	// LAVA
 	LAVA("stationary lava blocks", XMaterial.isNewVersion() ? Material.LAVA : Material.getMaterial("STATIONARY_LAVA")),
 
-    // NETHER
+	// NETHER
 	PORTAL("nether blocks", XMaterial.NETHER_PORTAL.parseMaterial()),
 
-    // SUGARCANE
+	// SUGARCANE
 	SUGARCANE("sugarcane blocks", XMaterial.SUGAR_CANE.parseMaterial()),
 
-    // WATER
+	// WATER
 	WATER("stationary water blocks", XMaterial.isNewVersion() ? Material.WATER : Material.getMaterial("STATIONARY_WATER")),
 
-    // WEB
+	// WEB
 	WEB("spiders web blocks", XMaterial.COBWEB.parseMaterial());
 
 	private static final Map<String, GateMaterial> nameToMaterial = new HashMap<>();

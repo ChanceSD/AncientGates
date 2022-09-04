@@ -105,7 +105,8 @@ public class WorldCoord {
 			return false;
 
 		final WorldCoord that = (WorldCoord) obj;
-		return this.x == that.x && this.y == that.y && this.z == that.z && (this.worldName == null ? that.worldName == null : this.worldName.equals(that.worldName));
+		return this.x == that.x && this.y == that.y && this.z == that.z
+				&& (this.worldName == null ? that.worldName == null : this.worldName.equals(that.worldName));
 	}
 
 }

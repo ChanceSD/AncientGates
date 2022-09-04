@@ -65,7 +65,8 @@ public class CommandAddTo extends BaseCommand {
 			// Send command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Build the message, format is <command>#@#<player>#@#<server>#@#<gateid>#@#<data>
-				final String[] args = new String[] { parameters.get(0), TeleportUtil.locationToString(player.getLocation()), Plugin.bungeeServerName };
+				final String[] args = new String[] { parameters.get(0), TeleportUtil.locationToString(player.getLocation()),
+						Plugin.bungeeServerName };
 				final PluginMessage msg = new PluginMessage("addto", player, serverName, args);
 
 				// Send over the AGBungeeCom BungeeCord channel
@@ -84,7 +85,8 @@ public class CommandAddTo extends BaseCommand {
 				final Server server1 = Server.get(serverName);
 
 				// Build the packet, format is <player>,<server>,<gateid>,<data>,<fromserver>
-				final String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0), TeleportUtil.locationToString(player.getLocation()), serverName };
+				final String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0),
+						TeleportUtil.locationToString(player.getLocation()), serverName };
 				final Packet packet = new Packet("addto", args);
 
 				// Setup socket client and listener

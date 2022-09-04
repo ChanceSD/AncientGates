@@ -98,7 +98,8 @@ public class CommandSetConf extends BaseCommand {
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final List<String> parameters) {
 		if (parameters.size() == 1)
-			return Lists.newArrayList(Conf.class.getDeclaredFields()).stream().filter(f -> Modifier.isPublic(f.getModifiers())).map(Field::getName).collect(Collectors.toList());
+			return Lists.newArrayList(Conf.class.getDeclaredFields()).stream().filter(f -> Modifier.isPublic(f.getModifiers())).map(Field::getName)
+					.collect(Collectors.toList());
 		return super.onTabComplete(sender, parameters);
 	}
 

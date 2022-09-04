@@ -71,7 +71,7 @@ public class MetricsStarter {
 			}
 		}));
 
-		//Plot update checking
+		// Plot update checking
 		metrics.addCustomChart(new SimplePie("update_check", new Callable<String>() {
 			@Override
 			public String call() throws Exception {
