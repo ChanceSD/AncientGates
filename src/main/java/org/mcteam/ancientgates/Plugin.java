@@ -96,6 +96,8 @@ public class Plugin extends JavaPlugin {
 	public final static Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithModifiers(Modifier.TRANSIENT, Modifier.VOLATILE)
 			.registerTypeAdapter(Location.class, new LocationTypeAdapter()).create();
 
+	public static final String BUNGEECHANNEL = "BungeeCord";
+
 	// HashMap of incoming BungeeCord players & passengers
 	public static Map<String, BungeeQueue> bungeeCordInQueue = new HashMap<>();
 
@@ -270,8 +272,8 @@ public class Plugin extends JavaPlugin {
 		// Enable required plugin channels
 		Plugin.log("Enabling bungeecord channels");
 		pluginMessengerListener = new PluginMessengerListener();
-		Bukkit.getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		Bukkit.getMessenger().registerIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
+		Bukkit.getMessenger().registerOutgoingPluginChannel(this, BUNGEECHANNEL);
+		Bukkit.getMessenger().registerIncomingPluginChannel(this, BUNGEECHANNEL, pluginMessengerListener);
 
 		if (!Conf.useSocketComms) {
 			Plugin.log("Socket comms disabled. Using generic BungeeCord messaging.");
@@ -307,8 +309,8 @@ public class Plugin extends JavaPlugin {
 	private void takedownBungeeCord() {
 		// Disable required plugin channels
 		Plugin.log("Disabling bungeecord channels");
-		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, "BungeeCord");
-		Bukkit.getMessenger().unregisterIncomingPluginChannel(this, "BungeeCord", pluginMessengerListener);
+		Bukkit.getMessenger().unregisterOutgoingPluginChannel(this, BUNGEECHANNEL);
+		Bukkit.getMessenger().unregisterIncomingPluginChannel(this, BUNGEECHANNEL, pluginMessengerListener);
 		pluginMessengerListener = null;
 	}
 

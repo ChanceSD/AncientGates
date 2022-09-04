@@ -38,7 +38,7 @@ public class CommandAddTo extends BaseCommand {
 
 		// Local 'addto' command
 		if (serverName == null || !Conf.bungeeCordSupport) {
-			if ((gate.getTos() == null) || (gate.getTos().size() < 1)) {
+			if (gate.getTos() == null || gate.getTos().size() < 1) {
 				sendMessage("This gate needs an initial \"to\" location. Use:");
 				sendMessage(new CommandSetTo().getUsageTemplate(true, true));
 				return;
@@ -60,12 +60,12 @@ public class CommandAddTo extends BaseCommand {
 			// Send command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Build the message, format is <command>#@#<player>#@#<server>#@#<gateid>#@#<data>
-				final String[] args = new String[] { parameters.get(0), TeleportUtil.locationToString(player.getLocation()),
+				final String[] args = { parameters.get(0), TeleportUtil.locationToString(player.getLocation()),
 						Plugin.bungeeServerName };
 				final PluginMessage msg = new PluginMessage("addto", player, serverName, args);
 
 				// Send over the AGBungeeCom BungeeCord channel
-				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
+				player.sendPluginMessage(Plugin.instance, Plugin.BUNGEECHANNEL, msg.toByteArray());
 				sendMessage("Another \"to\" location for gate \"" + parameters.get(0) + "\" on server \"" + serverName + "\" has been sent.");
 
 				// Send command packet via client socket
@@ -80,7 +80,7 @@ public class CommandAddTo extends BaseCommand {
 				final Server server1 = Server.get(serverName);
 
 				// Build the packet, format is <player>,<server>,<gateid>,<data>,<fromserver>
-				final String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0),
+				final String[] args = { player.getName(), Plugin.bungeeServerName, parameters.get(0),
 						TeleportUtil.locationToString(player.getLocation()), serverName };
 				final Packet packet = new Packet("addto", args);
 

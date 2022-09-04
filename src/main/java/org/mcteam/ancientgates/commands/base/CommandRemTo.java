@@ -71,12 +71,12 @@ public class CommandRemTo extends BaseCommand {
 			// Send command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Build the message, format is <command>#@#<player>#@#<server>#@#<gateid>#@#<data>
-				final String[] args = new String[] { parameters.get(0), TeleportUtil.locationToString(player.getLocation()),
+				final String[] args = { parameters.get(0), TeleportUtil.locationToString(player.getLocation()),
 						Plugin.bungeeServerName };
 				final PluginMessage msg = new PluginMessage("remto", player, serverName, args);
 
 				// Send over the AGBungeeCom BungeeCord channel
-				player.sendPluginMessage(Plugin.instance, "BungeeCord", msg.toByteArray());
+				player.sendPluginMessage(Plugin.instance, Plugin.BUNGEECHANNEL, msg.toByteArray());
 				sendMessage("To location has been sent for removal from gate \"" + parameters.get(0) + "\" on server \"" + serverName + "\".");
 
 				// Send command packet via client socket
@@ -91,7 +91,7 @@ public class CommandRemTo extends BaseCommand {
 				final Server server = Server.get(serverName);
 
 				// Build the packet, format is <player>,<server>,<gateid>,<data>,<fromserver>
-				final String[] args = new String[] { player.getName(), Plugin.bungeeServerName, parameters.get(0),
+				final String[] args = { player.getName(), Plugin.bungeeServerName, parameters.get(0),
 						TeleportUtil.locationToString(player.getLocation()), serverName };
 				final Packet packet = new Packet("remto", args);
 

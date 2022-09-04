@@ -17,12 +17,12 @@ public class BungeeServerName extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if ((Plugin.bungeeServerName != null) || (plugin.getServer().getOnlinePlayers().size() == 0))
+		if (Plugin.bungeeServerName != null || plugin.getServer().getOnlinePlayers().size() == 0)
 			return;
 
 		// Send BungeeCord "GetServer" command
 		final PluginMessage msg = new PluginMessage("GetServer");
-		Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(plugin, "BungeeCord", msg.toByteArray());
+		Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(plugin, Plugin.BUNGEECHANNEL, msg.toByteArray());
 
 		// Re-schedule task to check bungeeServerName set
 		if (Plugin.bungeeServerName == null)

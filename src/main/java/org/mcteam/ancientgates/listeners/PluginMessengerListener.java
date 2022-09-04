@@ -1,6 +1,7 @@
 package org.mcteam.ancientgates.listeners;
 
 import java.util.Calendar;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -31,24 +32,38 @@ import org.mcteam.ancientgates.util.types.InvBoolean;
 import org.mcteam.ancientgates.util.types.PluginMessage;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
 public class PluginMessengerListener implements PluginMessageListener {
 
+	private static final ImmutableSet<String> SUBCHANNELS = ImmutableSet.<String>builder().add("AGBungeeTele", "AGBungeeVehicleTele", "AGBungeeSpawn",
+			"AGBungeeVehicleSpawn", "AGBungeeCom", "GetServer", "GetServers").build();
+
 	@Override
 	public void onPluginMessageReceived(final String channel, final Player unused, final byte[] message) {
 		if (!Conf.bungeeCordSupport || !channel.equals("BungeeCord")) {
 			return;
 		}
-
 		// Get data from message
-		final ByteArrayDataInput in = ByteStreams.newDataInput(message);
-		final String inChannel = in.readUTF();
-		final short len = in.readShort();
-		final byte[] data = new byte[len];
-		in.readFully(data);
+		String inChannel = null;
+		byte[] data;
+		try {
+			final ByteArrayDataInput in = ByteStreams.newDataInput(message);
+			inChannel = in.readUTF();
+			// Discard messages not for us
+			if (!SUBCHANNELS.contains(inChannel))
+				return;
+
+			final short len = in.readShort();
+			data = new byte[len];
+			in.readFully(data);
+		} catch (final Exception e) {
+			Plugin.log(Level.SEVERE, "Error receiving BungeeCord message for subchannel " + inChannel);
+			return;
+		}
 
 		// Parse BungeeCord teleport packet
 		if (inChannel.equals("AGBungeeTele")) {
@@ -330,7 +345,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				if (Plugin.instance.getServer().getOnlinePlayers().size() == 0) {
 					Plugin.bungeeMsgQueue.add(rMsg);
 				} else {
-					Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, "BungeeCord", rMsg.toByteArray());
+					Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(Plugin.instance, Plugin.BUNGEECHANNEL, rMsg.toByteArray());
 				}
 			}
 			// Parse BungeeCord server name packet
@@ -344,8 +359,6 @@ public class PluginMessengerListener implements PluginMessageListener {
 			if (Conf.debug)
 				Plugin.log("Getting BungeeCord server list");
 			Plugin.bungeeServerList = TextUtil.split(new String(data), ", ");
-		} else {
-			return;
 		}
 	}
 

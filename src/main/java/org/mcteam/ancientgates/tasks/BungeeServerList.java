@@ -22,7 +22,7 @@ public class BungeeServerList extends BukkitRunnable {
 
 		// Send BungeeCord "GetServers" command
 		final PluginMessage msg = new PluginMessage("GetServers");
-		Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(plugin, "BungeeCord", msg.toByteArray());
+		Iterables.getFirst(Bukkit.getOnlinePlayers(), null).sendPluginMessage(plugin, Plugin.BUNGEECHANNEL, msg.toByteArray());
 	}
 
 }
