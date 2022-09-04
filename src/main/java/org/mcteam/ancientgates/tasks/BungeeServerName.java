@@ -17,9 +17,7 @@ public class BungeeServerName extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if (Plugin.bungeeServerName != null)
-			return;
-		if (plugin.getServer().getOnlinePlayers().size() == 0)
+		if ((Plugin.bungeeServerName != null) || (plugin.getServer().getOnlinePlayers().size() == 0))
 			return;
 
 		// Send BungeeCord "GetServer" command

@@ -24,12 +24,7 @@ public class CommandAddFrom extends BaseCommand {
 
 	@Override
 	public void perform() {
-		if (gate.getFroms() == null) {
-			sendMessage("This gate needs an initial \"from\" location. Use:");
-			sendMessage(new CommandSetFrom().getUsageTemplate(true, true));
-			return;
-		}
-		if (gate.getFroms().size() < 1) {
+		if ((gate.getFroms() == null) || (gate.getFroms().size() < 1)) {
 			sendMessage("This gate needs an initial \"from\" location. Use:");
 			sendMessage(new CommandSetFrom().getUsageTemplate(true, true));
 			return;

@@ -2,6 +2,7 @@ package org.mcteam.ancientgates.commands.base;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;

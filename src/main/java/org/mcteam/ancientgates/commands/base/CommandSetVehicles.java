@@ -5,8 +5,9 @@ import java.util.List;
 import org.bukkit.command.CommandSender;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.commands.BaseCommand;
-import com.google.common.collect.Lists;
 import org.mcteam.ancientgates.util.TextUtil;
+
+import com.google.common.collect.Lists;
 
 public class CommandSetVehicles extends BaseCommand {
 

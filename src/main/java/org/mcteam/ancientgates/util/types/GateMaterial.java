@@ -3,9 +3,10 @@ package org.mcteam.ancientgates.util.types;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import com.cryptomorin.xseries.XMaterial;
 
 import org.bukkit.Material;
+
+import com.cryptomorin.xseries.XMaterial;
 
 public enum GateMaterial {
 	// AIR

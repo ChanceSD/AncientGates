@@ -161,11 +161,8 @@ public class PluginPlayerListener implements Listener {
 			event.setCancelled(true);
 
 			// Check teleportation method
-			if (!Conf.useVanillaPortals)
-				return;
-
 			// Check player is not carrying a passenger
-			if (player.getPassenger() != null)
+			if (!Conf.useVanillaPortals || (player.getPassenger() != null))
 				return;
 
 			// Get current time
@@ -190,7 +187,7 @@ public class PluginPlayerListener implements Listener {
 			}
 
 			// Handle BungeeCord gates (BungeeCord support disabled)
-			if (nearestGate.getBungeeTo() != null && Conf.bungeeCordSupport == false) {
+			if (nearestGate.getBungeeTo() != null && !Conf.bungeeCordSupport) {
 				player.sendMessage(String.format("BungeeCord support not enabled."));
 				return;
 			}

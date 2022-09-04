@@ -61,7 +61,7 @@ public class ItemStackUtil {
 			}
 
 			ItemStack is = new ItemStack(Material.AIR);
-			Boolean createdItemStack = false;
+			boolean createdItemStack = false;
 
 			final String[] serializedItemStack = serializedBlock[1].split(":");
 			for (final String itemInfo : serializedItemStack) {

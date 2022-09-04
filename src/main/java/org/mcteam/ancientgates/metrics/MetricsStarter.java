@@ -3,16 +3,14 @@ package org.mcteam.ancientgates.metrics;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
 import org.bstats.charts.SimplePie;
-import org.bukkit.Material;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.types.GateMaterial;
-
-import com.cryptomorin.xseries.XMaterial;
 
 public class MetricsStarter {
 

@@ -15,9 +15,7 @@ public class FloodUtil {
 
 	// Base air flood block algorithm
 	public static Set<Block> getFloodBlocks(final Block startBlock, Set<Block> foundBlocks, final FloodOrientation orientation, final int limit) {
-		if (foundBlocks == null)
-			return null;
-		if (foundBlocks.size() > limit)
+		if ((foundBlocks == null) || (foundBlocks.size() > limit))
 			return null;
 		if (foundBlocks.contains(startBlock))
 			return foundBlocks;

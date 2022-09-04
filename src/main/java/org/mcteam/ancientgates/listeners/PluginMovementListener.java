@@ -78,7 +78,7 @@ public class PluginMovementListener implements Listener {
 			}
 
 			// Handle BungeeCord gates (BungeeCord support disabled)
-			if (nearestGate.getBungeeTo() != null && Conf.bungeeCordSupport == false) {
+			if (nearestGate.getBungeeTo() != null && !Conf.bungeeCordSupport) {
 				if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 					player.sendMessage(String.format("BungeeCord support not enabled."));
 					Plugin.lastMessageTime.put(player.getName(), now);
@@ -169,7 +169,7 @@ public class PluginMovementListener implements Listener {
 				}
 
 				// Handle BungeeCord gates (BungeeCord support disabled)
-				if (nearestGate.getBungeeTo() != null && Conf.bungeeCordSupport == false) {
+				if (nearestGate.getBungeeTo() != null && !Conf.bungeeCordSupport) {
 					if (!Plugin.lastMessageTime.containsKey(player.getName()) || Plugin.lastMessageTime.get(player.getName()) < now - 10000L) {
 						player.sendMessage(String.format("BungeeCord support not enabled."));
 						Plugin.lastMessageTime.put(player.getName(), now);
