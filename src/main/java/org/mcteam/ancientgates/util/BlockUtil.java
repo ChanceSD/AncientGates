@@ -28,7 +28,7 @@ public class BlockUtil {
 		standableMaterials = new EnumMap<>(Material.class);
 		try {
 			Arrays.asList(GateMaterial.values()).stream().forEach(x -> standableMaterials.put(x.getMaterial(), true));
-			standableMaterials.put(Material.AIR, true); // 0 Air
+			standableMaterials.put(XMaterial.AIR.parseMaterial(), true); // 0 Air
 			standableMaterials.put(XMaterial.OAK_SAPLING.parseMaterial(), true); // 6 Saplings
 			standableMaterials.put(Material.WATER, true); // 8 Water - leave even though its in gate materials for stationary
 			standableMaterials.put(Material.LAVA, true); // 10 Lava - leave even though its in gate materials for stationary
