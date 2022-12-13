@@ -127,7 +127,7 @@ public class Gates {
 				coord.getBlock().setBiome(Biome.FOREST);
 			}
 			if (orientation == FloodOrientation.VERTICAL1 && material == GateMaterial.PORTAL) {
-				if (XMaterial.isNewVersion()) {
+				if (XMaterial.supports(13)) {
 					final BlockData orientable = coord.getBlock().getBlockData();
 					((Orientable) orientable).setAxis(Axis.Z);
 					coord.getBlock().setBlockData(orientable);
