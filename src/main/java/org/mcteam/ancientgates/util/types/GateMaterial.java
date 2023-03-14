@@ -20,7 +20,7 @@ public enum GateMaterial {
 	ENDPORTAL("ender portal blocks", XMaterial.END_PORTAL.parseMaterial()),
 
 	// LAVA
-	LAVA("stationary lava blocks", XMaterial.isNewVersion() ? Material.LAVA : Material.getMaterial("STATIONARY_LAVA")),
+	LAVA("stationary lava blocks", XMaterial.supports(13) ? Material.LAVA : Material.getMaterial("STATIONARY_LAVA")),
 
 	// NETHER
 	PORTAL("nether blocks", XMaterial.NETHER_PORTAL.parseMaterial()),
@@ -29,7 +29,7 @@ public enum GateMaterial {
 	SUGARCANE("sugarcane blocks", XMaterial.SUGAR_CANE.parseMaterial()),
 
 	// WATER
-	WATER("stationary water blocks", XMaterial.isNewVersion() ? Material.WATER : Material.getMaterial("STATIONARY_WATER")),
+	WATER("stationary water blocks", XMaterial.supports(13) ? Material.WATER : Material.getMaterial("STATIONARY_WATER")),
 
 	// WEB
 	WEB("spiders web blocks", XMaterial.COBWEB.parseMaterial());
