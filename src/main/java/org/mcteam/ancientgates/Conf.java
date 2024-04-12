@@ -35,7 +35,7 @@ public class Conf {
 	public static InvBoolean teleportInventoryDefault = InvBoolean.TRUE;
 
 	// Maximum gate fill area
-	private static int gateMaxArea = 70;
+	private static int gateMaxArea = 100;
 
 	// Default gate material
 	public static GateMaterial gateMaterialDefault = GateMaterial.PORTAL;
