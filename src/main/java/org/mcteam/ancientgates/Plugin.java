@@ -65,15 +65,17 @@ import org.mcteam.ancientgates.listeners.PluginSocketListener;
 import org.mcteam.ancientgates.metrics.MetricsStarter;
 import org.mcteam.ancientgates.queue.BungeeQueue;
 import org.mcteam.ancientgates.sockets.SocketServer;
-import org.mcteam.ancientgates.updater.SpigotUpdater;
-import org.mcteam.ancientgates.updater.Updater;
-import org.mcteam.ancientgates.updater.Updater.UpdateResult;
-import org.mcteam.ancientgates.updater.Updater.UpdateType;
 import org.mcteam.ancientgates.util.types.PluginMessage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import me.chancesd.sdutils.updater.BukkitUpdater;
+import me.chancesd.sdutils.updater.SpigotUpdater;
+import me.chancesd.sdutils.updater.Updater;
+import me.chancesd.sdutils.updater.Updater.UpdateResult;
+import me.chancesd.sdutils.updater.Updater.UpdateType;
+import me.chancesd.sdutils.utils.Log;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import net.milkbowl.vault.permission.Permission;
@@ -160,11 +162,16 @@ public class Plugin extends JavaPlugin {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					final Updater updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK);
+					Updater updater = new BukkitUpdater(Plugin.this, 51406, UpdateType.VERSION_CHECK).check();
+					if (updater.getResult() != UpdateResult.UPDATE_AVAILABLE) {
+						updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK).check();
+					}
 					if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
-						Bukkit.broadcast("§e[§7AncientGates§e] Update Available: §6" + updater.getLatestName(), "ancientgates.setconf");
-						Bukkit.broadcast("§e[§7AncientGates§e] Spigot Link: §7https://www.spigotmc.org/resources/ancient-gates.6583/",
-								"ancientgates.setconf");
+						Bukkit.broadcast("§e[§7AncientGates§e] Update available: §6" + updater.getLatestName(), "ancientgates.setconf");
+						if (Conf.autoUpdate) {
+							downloadUpdate(updater);
+						}
+						Bukkit.broadcast("§e[§7AncientGates§e] Link: §7" + updater.getUpdateLink(), "ancientgates.setconf");
 					}
 				}
 			}.runTaskTimerAsynchronously(this, 0, 360000);
@@ -184,16 +191,23 @@ public class Plugin extends JavaPlugin {
 		metrics.setupMetrics();
 
 		// Load gates from disc (1 tick ensures worlds are loaded)
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
-			@Override
-			public void run() {
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
 				final long startload = System.currentTimeMillis();
 				Gates.load();
 				log("Finished loading gates - " + (System.currentTimeMillis() - startload) + " ms");
-			}
 		}, 1);
 
 		log("Enabled (" + (System.currentTimeMillis() - start) + " ms)");
+	}
+
+	private void downloadUpdate(final Updater updater) {
+		if (updater.downloadFile()) {
+			Bukkit.broadcast(
+					"§e[§7AncientGates§e] §aUpdate downloaded to your update folder, it will be applied automatically on the next server restart",
+					"pvpmanager.admin");
+			return;
+		}
+		Log.info("Could not download latest update. Please update manually from one of the links below.");
 	}
 
 	// -------------------------------------------- //

@@ -58,6 +58,7 @@ public class Conf {
 
 	// Enable auto-update
 	public static boolean updateCheck = true;
+	public static boolean autoUpdate = true;
 
 	// Enable debug msgs
 	public static boolean debug = false;
