@@ -162,16 +162,16 @@ public class Plugin extends JavaPlugin {
 			new BukkitRunnable() {
 				@Override
 				public void run() {
-					Updater updater = new BukkitUpdater(Plugin.this, 51406, UpdateType.VERSION_CHECK).check();
+					Updater updater = new BukkitUpdater(Plugin.this, 51406, UpdateType.VERSION_CHECK, "ancient-gates").check();
 					if (updater.getResult() != UpdateResult.UPDATE_AVAILABLE) {
 						updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK).check();
 					}
 					if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
-						Bukkit.broadcast("§e[§7AncientGates§e] Update available: §6" + updater.getLatestName(), "ancientgates.setconf");
+						Bukkit.broadcast("§e[§7AncientGates§e] §aUpdate available: §c" + updater.getLatestName(), "ancientgates.setconf");
 						if (Conf.autoUpdate) {
 							downloadUpdate(updater);
 						}
-						Bukkit.broadcast("§e[§7AncientGates§e] Link: §7" + updater.getUpdateLink(), "ancientgates.setconf");
+						Bukkit.broadcast("§e[§7AncientGates§e] §aLink: §6" + updater.getUpdateLink(), "ancientgates.setconf");
 					}
 				}
 			}.runTaskTimerAsynchronously(this, 0, 360000);
@@ -202,8 +202,7 @@ public class Plugin extends JavaPlugin {
 
 	private void downloadUpdate(final Updater updater) {
 		if (updater.downloadFile()) {
-			Bukkit.broadcast(
-					"§e[§7AncientGates§e] §aUpdate downloaded to your update folder, it will be applied automatically on the next server restart",
+			Bukkit.broadcast("§e[§7AncientGates§e] §aUpdate downloaded to update folder, it will be applied automatically on the next restart",
 					"pvpmanager.admin");
 			return;
 		}
