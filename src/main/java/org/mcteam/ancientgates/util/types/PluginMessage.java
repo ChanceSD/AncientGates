@@ -90,7 +90,7 @@ public class PluginMessage {
 		this.toServer = destination.get(SERVER);
 		this.destination = TeleportUtil.locationToString(destination);
 		this.entityTypeName = entityType.name();
-		if (entityType.equals(EntityType.DROPPED_ITEM)) {
+		if (EntityUtil.isDroppedItem(entityType)) {
 			this.entityTypeData = ItemStackUtil.itemStackToString(((Item) entity).getItemStack()); // Dropped
 			// ItemStack
 		} else {

@@ -37,7 +37,7 @@ public class Packet {
 		this.command = "spawnentity";
 		// Build the arguments, format is
 		// <entityId>,<entityWorld>,<entityTypeName>,<entityTypeData>,<location>
-		if (entityType.equals(EntityType.DROPPED_ITEM)) {
+		if (EntityUtil.isDroppedItem(entityType)) {
 			this.args = new String[] { String.valueOf(entity.getEntityId()), entity.getWorld().getName(), entityType.name(),
 					ItemStackUtil.itemStackToString(((Item) entity).getItemStack()), TeleportUtil.locationToString(destination) }; // Dropped
 																																	// ItemStack

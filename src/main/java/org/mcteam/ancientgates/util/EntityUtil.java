@@ -27,6 +27,8 @@ import org.mcteam.ancientgates.Plugin;
 
 import com.cryptomorin.xseries.XMaterial;
 
+import me.chancesd.sdutils.utils.MCVersion;
+
 public class EntityUtil {
 
 	public static Map<String, EntityType> entityTypes;
@@ -227,6 +229,14 @@ public class EntityUtil {
 
 	public static EntityType entityType(final String name) {
 		return entityTypes.get(name);
+	}
+
+	public static boolean isDroppedItem(final EntityType type) {
+		if (MCVersion.isAtLeast(MCVersion.V1_20_5)) {
+			return type == EntityType.ITEM;
+		} else {
+			return type == EntityType.valueOf("DROPPED_ITEM");
+		}
 	}
 
 	@SuppressWarnings("deprecation")

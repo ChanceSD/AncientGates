@@ -188,7 +188,7 @@ public class TeleportUtil {
 
 		if (entity.getType().isSpawnable()) {
 			entity.teleport(location);
-		} else if (entity.getType() == EntityType.DROPPED_ITEM) {
+		} else if (EntityUtil.isDroppedItem(entity.getType())) {
 			entity.remove();
 			location.getWorld().dropItemNaturally(location, ((Item) entity).getItemStack());
 		}
@@ -197,7 +197,7 @@ public class TeleportUtil {
 
 	// BungeeCord entity spawn out
 	public static void teleportEntity(final EntityPortalEvent event, final Map<String, String> location) {
-		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() || event.getEntityType() == EntityType.DROPPED_ITEM)) {
+		if (Conf.bungeeCordSupport && (event.getEntityType().isSpawnable() || EntityUtil.isDroppedItem(event.getEntityType()))) {
 			// Send spawn command packet via BungeeCord
 			if (!Conf.useSocketComms || Plugin.serv == null) {
 				// Send AGBungeeSpawn packet
@@ -277,7 +277,7 @@ public class TeleportUtil {
 				final Entity entity = world.spawnEntity(destination, queue.getEntityType()); // Entity
 				EntityUtil.setEntityTypeData(entity, queue.getEntityTypeData());
 				entity.teleport(destination);
-			} else if (queue.getEntityType() == EntityType.DROPPED_ITEM) {
+			} else if (EntityUtil.isDroppedItem(queue.getEntityType())) {
 				final Item item = world.dropItemNaturally(destination, ItemStackUtil.stringToItemStack(queue.getEntityTypeData())[0]); // Dropped
 				// ItemStack
 				item.teleport(destination);

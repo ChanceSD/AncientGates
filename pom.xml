@@ -5,7 +5,7 @@
 
 	<groupId>org.mcteam.ancientgates</groupId>
 	<artifactId>ancientgates</artifactId>
-	<version>2.6.3</version>
+	<version>2.7</version>
 	<packaging>jar</packaging>
 
 	<name>AncientGates</name>
@@ -128,7 +128,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.20.4-R0.1-SNAPSHOT</version>
+			<version>1.20.6-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 			<exclusions>
 				<exclusion>
@@ -174,7 +174,7 @@
 		<dependency>
 			<groupId>me.chancesd.sdutils</groupId>
 			<artifactId>sdutils</artifactId>
-			<version>1.1-SNAPSHOT</version>
+			<version>1.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

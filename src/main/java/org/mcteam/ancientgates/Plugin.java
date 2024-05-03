@@ -159,6 +159,7 @@ public class Plugin extends JavaPlugin {
 
 		// Check for updates
 		if (Conf.updateCheck) {
+			Log.setup(this);
 			new BukkitRunnable() {
 				@Override
 				public void run() {

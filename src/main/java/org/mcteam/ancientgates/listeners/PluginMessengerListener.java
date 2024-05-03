@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
@@ -173,7 +172,7 @@ public class PluginMessengerListener implements PluginMessageListener {
 				final Entity entity = world.spawnEntity(location, EntityUtil.entityType(entityTypeName)); // Entity
 				EntityUtil.setEntityTypeData(entity, entityTypeData);
 				entity.teleport(location);
-			} else if (EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
+			} else if (EntityUtil.isDroppedItem(EntityUtil.entityType(entityTypeName))) {
 				final Item item = world.dropItemNaturally(location, ItemStackUtil.stringToItemStack(entityTypeData)[0]); // Dropped
 				// ItemStack
 				item.teleport(location);

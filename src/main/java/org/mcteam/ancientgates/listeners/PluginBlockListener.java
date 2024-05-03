@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,6 +31,7 @@ import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Gates;
 import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.BlockUtil;
+import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
@@ -276,7 +276,7 @@ public class PluginBlockListener implements Listener {
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onItemSpawn(final ItemSpawnEvent event) {
 		final Entity item = event.getEntity();
-		if (item.getType() != EntityType.DROPPED_ITEM || ((Item) item).getItemStack().getType() != Material.SUGAR_CANE)
+		if (EntityUtil.isDroppedItem(item.getType()) || ((Item) item).getItemStack().getType() != Material.SUGAR_CANE)
 			return;
 
 		// Stop sugarcane block from decaying (workaround for lack of 1.7.2-R0.1 physics support)

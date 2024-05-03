@@ -1,6 +1,5 @@
 package org.mcteam.ancientgates.listeners;
 
-import org.bukkit.entity.EntityType;
 import org.mcteam.ancientgates.Conf;
 import org.mcteam.ancientgates.Gate;
 import org.mcteam.ancientgates.Plugin;
@@ -185,7 +184,7 @@ public class PluginSocketListener implements SocketServerEventListener {
 			final String[] args = { entityWorld, entityId };
 			final Packet packet = new Packet("removeentity", "spawnentity", args);
 
-			if (EntityUtil.entityType(entityTypeName).isSpawnable() || EntityUtil.entityType(entityTypeName) == EntityType.DROPPED_ITEM) {
+			if (EntityUtil.entityType(entityTypeName).isSpawnable() || EntityUtil.isDroppedItem(EntityUtil.entityType(entityTypeName))) {
 				// Add entity to spawn queue
 				Plugin.bungeeCordEntityInQueue.add(new BungeeQueue(entityTypeName, entityTypeData, destination));
 
