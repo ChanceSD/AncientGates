@@ -3,7 +3,6 @@ Ancient Gates Reloaded
 - Bukkit Page: https://dev.bukkit.org/projects/ancient-gates/
 - Spigot Page: https://www.spigotmc.org/resources/ancient-gates.6583/
 - Dev Builds: https://ci.codemc.io/job/ChanceSD/job/AncientGates/
-- Travis: [![Build Status](https://travis-ci.org/NoChanceSD/AncientGates.svg)](https://travis-ci.org/NoChanceSD/AncientGates)
 
 Developers
 ------
@@ -19,7 +18,7 @@ Developers
 <dependency>
     <groupId>org.mcteam.ancientgates</groupId>
     <artifactId>ancientgates</artifactId>
-    <version>2.6.1</version>
+    <version>2.7.1</version>
     <scope>provided</scope>
 </dependency>
  ```
