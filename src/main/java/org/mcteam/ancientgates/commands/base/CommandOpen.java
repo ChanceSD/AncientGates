@@ -2,6 +2,7 @@ package org.mcteam.ancientgates.commands.base;
 
 import java.util.List;
 
+import com.cryptomorin.xseries.XBlock;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -39,7 +40,7 @@ public class CommandOpen extends BaseCommand {
 		}
 
 		for (final Location from : gate.getFroms()) {
-			if (from.getBlock().getType() != Material.AIR && !BlockUtil.isStandableGateMaterial(from.getBlock().getType())) {
+			if (!XBlock.isAir(from.getBlock().getType()) && !BlockUtil.isStandableGateMaterial(from.getBlock().getType())) {
 				sendMessage("The gate could not open. The from location is not air.");
 				return;
 			}
