@@ -5,6 +5,7 @@ main: 'org.mcteam.ancientgates.Plugin'
 load: postworld
 author: 'ChanceSD'
 api-version: 1.13
+folia-supported: true
 website: https://www.spigotmc.org/resources/ancient-gates.6583/
 softdepend:
     - Vault

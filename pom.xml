@@ -98,6 +98,10 @@
 							<pattern>com.cryptomorin.xseries</pattern>
 							<shadedPattern>org.mcteam.ancientgates.util</shadedPattern>
 						</relocation>
+						<relocation>
+							<pattern>me.chancesd.sdutils</pattern>
+							<shadedPattern>me.chancesd.ancientgates.sdutils</shadedPattern>
+						</relocation>
 					</relocations>
 				</configuration>
 				<executions>

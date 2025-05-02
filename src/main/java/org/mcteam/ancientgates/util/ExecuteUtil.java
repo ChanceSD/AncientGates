@@ -6,8 +6,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
-import org.mcteam.ancientgates.Plugin;
 import org.mcteam.ancientgates.util.types.CommandType;
+
+import me.chancesd.sdutils.scheduler.ScheduleUtils;
 
 public class ExecuteUtil {
 
@@ -75,21 +76,11 @@ public class ExecuteUtil {
 			vehicle.remove();
 			passenger.teleport(position);
 			passenger.setFireTicks(0); // Cancel lava fire
-			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-				@Override
-				public void run() {
-					v.setPassenger(passenger);
-				}
-			}, 2);
+			ScheduleUtils.runPlatformTaskLater(() -> v.setPassenger(passenger), v, 2);
 		}
 
 		// Execute command as player or console
-		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-			@Override
-			public void run() {
-				execCommand((Player) passenger, command, commandType);
-			}
-		}, 3);
+		ScheduleUtils.runPlatformTaskLater(() -> execCommand((Player) passenger, command, commandType), passenger, 3);
 	}
 
 }

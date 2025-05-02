@@ -3,6 +3,7 @@ package org.mcteam.ancientgates.listeners;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -34,6 +35,8 @@ import org.mcteam.ancientgates.util.BlockUtil;
 import org.mcteam.ancientgates.util.EntityUtil;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
+
+import me.chancesd.sdutils.scheduler.ScheduleUtils;
 
 public class PluginBlockListener implements Listener {
 
@@ -288,12 +291,11 @@ public class PluginBlockListener implements Listener {
 				return;
 
 			event.getEntity().remove();
-			plugin.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-				@Override
-				public void run() {
-					coord.getBlock().setType(GateMaterial.SUGARCANE.getMaterial());
-				}
-			}, 1);
+			Chunk chunk = coord.getLocation().getChunk();
+			ScheduleUtils.runPlatformTask(() -> {
+				coord.getBlock().setType(GateMaterial.SUGARCANE.getMaterial());
+				return null;
+			}, coord.getWorld(), chunk.getX(), chunk.getZ());
 		}
 	}
 

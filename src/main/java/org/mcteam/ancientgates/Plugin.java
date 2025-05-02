@@ -21,7 +21,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.PluginMessageListener;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.StringUtil;
 import org.mcteam.ancientgates.commands.BaseCommand;
 import org.mcteam.ancientgates.commands.base.CommandAddFrom;
@@ -70,6 +69,7 @@ import org.mcteam.ancientgates.util.types.PluginMessage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import me.chancesd.sdutils.scheduler.ScheduleUtils;
 import me.chancesd.sdutils.updater.BukkitUpdater;
 import me.chancesd.sdutils.updater.SpigotUpdater;
 import me.chancesd.sdutils.updater.Updater;
@@ -139,6 +139,7 @@ public class Plugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		final long start = System.currentTimeMillis();
+		ScheduleUtils.setupExecutor(this);
 		// Enable permissions and economy
 		if (getServer().getPluginManager().getPlugin("Vault") != null) {
 			if (!setupPermissions()) {
@@ -160,22 +161,19 @@ public class Plugin extends JavaPlugin {
 		// Check for updates
 		if (Conf.updateCheck) {
 			Log.setup(this);
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					Updater updater = new BukkitUpdater(Plugin.this, 51406, UpdateType.VERSION_CHECK, "ancient-gates").check();
-					if (updater.getResult() != UpdateResult.UPDATE_AVAILABLE) {
-						updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK).check();
-					}
-					if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
-						Bukkit.broadcast("§e[§7AncientGates§e] §aUpdate available: §c" + updater.getLatestName(), "ancientgates.setconf");
-						if (Conf.autoUpdate) {
-							downloadUpdate(updater);
-						}
-						Bukkit.broadcast("§e[§7AncientGates§e] §aLink: §6" + updater.getUpdateLink(), "ancientgates.setconf");
-					}
+			ScheduleUtils.runPlatformAsyncTimer(() -> {
+				Updater updater = new BukkitUpdater(Plugin.this, 51406, UpdateType.VERSION_CHECK, "ancient-gates").check();
+				if (updater.getResult() != UpdateResult.UPDATE_AVAILABLE) {
+					updater = new SpigotUpdater(Plugin.this, 6583, UpdateType.VERSION_CHECK).check();
 				}
-			}.runTaskTimerAsynchronously(this, 0, 360000);
+				if (updater.getResult() == UpdateResult.UPDATE_AVAILABLE) {
+					Bukkit.broadcast("§e[§7AncientGates§e] §aUpdate available: §c" + updater.getLatestName(), "ancientgates.setconf");
+					if (Conf.autoUpdate) {
+						downloadUpdate(updater);
+					}
+					Bukkit.broadcast("§e[§7AncientGates§e] §aLink: §6" + updater.getUpdateLink(), "ancientgates.setconf");
+				}
+			}, 0, 360000);
 		}
 
 		// Register events
@@ -192,11 +190,11 @@ public class Plugin extends JavaPlugin {
 		metrics.setupMetrics();
 
 		// Load gates from disc (1 tick ensures worlds are loaded)
-		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
-				final long startload = System.currentTimeMillis();
-				Gates.load();
-				log("Finished loading gates - " + (System.currentTimeMillis() - startload) + " ms");
-		}, 1);
+		ScheduleUtils.runPlatformTask(() -> {
+			final long startload = System.currentTimeMillis();
+			Gates.load();
+			log("Finished loading gates - " + (System.currentTimeMillis() - startload) + " ms");
+		});
 
 		log("Enabled (" + (System.currentTimeMillis() - start) + " ms)");
 	}

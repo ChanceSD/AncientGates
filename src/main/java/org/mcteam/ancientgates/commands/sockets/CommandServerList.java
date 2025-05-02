@@ -12,6 +12,8 @@ import org.mcteam.ancientgates.tasks.BungeeServerList;
 import org.mcteam.ancientgates.tasks.PingSocketServers;
 import org.mcteam.ancientgates.util.TextUtil;
 
+import me.chancesd.sdutils.scheduler.ScheduleUtils;
+
 public class CommandServerList extends BaseCommand {
 
 	public CommandServerList() {
@@ -55,29 +57,26 @@ public class CommandServerList extends BaseCommand {
 
 		// Send waiting message (delay output by 1s)
 		sendMessage("Checking servers...");
-		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-			@Override
-			public void run() {
-				// Create list of SocketComms servers
-				final List<String> servers = new ArrayList<>();
-				for (final Server server1 : Server.getAll()) {
-					servers.add(Conf.colorValue + server1.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: "
-							+ (Plugin.bungeeServerList.contains(server1.getName()) ? Conf.colorCommand + "connected"
-									: Conf.colorParameter + "disconnected")
-							+ Conf.colorSystem + ", SC: "
-							+ Conf.colorParameter + (server1.getState() == ConnectionState.CONNECTED ? Conf.colorCommand + "connected"
-									: Conf.colorParameter + "disconnected")
-							+ Conf.colorChrome + ")");
-				}
-
-				if (servers.size() == 0) {
-					sendMessage("There are no known servers yet.");
-					return;
-				}
-
-				// Send list as readable pages
-				sendMessage(TextUtil.getPage(servers, page, "Server List - " + servers.size() + " server(s) -", sender));
+		ScheduleUtils.runPlatformTaskLater(() -> {
+			// Create list of SocketComms servers
+			final List<String> servers = new ArrayList<>();
+			for (final Server server1 : Server.getAll()) {
+				servers.add(Conf.colorValue + server1.getName() + Conf.colorChrome + " (" + Conf.colorSystem + "BC: "
+						+ (Plugin.bungeeServerList.contains(server1.getName()) ? Conf.colorCommand + "connected"
+								: Conf.colorParameter + "disconnected")
+						+ Conf.colorSystem + ", SC: "
+						+ Conf.colorParameter + (server1.getState() == ConnectionState.CONNECTED ? Conf.colorCommand + "connected"
+								: Conf.colorParameter + "disconnected")
+						+ Conf.colorChrome + ")");
 			}
+
+			if (servers.size() == 0) {
+				sendMessage("There are no known servers yet.");
+				return;
+			}
+
+			// Send list as readable pages
+			sendMessage(TextUtil.getPage(servers, page, "Server List - " + servers.size() + " server(s) -", sender));
 		}, 20L);
 	}
 

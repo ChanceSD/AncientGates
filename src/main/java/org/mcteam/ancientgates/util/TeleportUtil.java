@@ -15,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -42,6 +41,8 @@ import org.mcteam.ancientgates.util.types.TeleportType;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.Iterables;
+
+import me.chancesd.sdutils.scheduler.ScheduleUtils;
 
 public class TeleportUtil {
 
@@ -80,13 +81,7 @@ public class TeleportUtil {
 			if (teleportEntities && !(entity instanceof Player)) {
 				entity.teleport(location);
 				entity.setFireTicks(0);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-					@Override
-					public void run() {
-						entity.setPassenger(player);
-					}
-				}, 2);
-
+				ScheduleUtils.runPlatformTaskLater(() -> entity.setPassenger(player), entity, 2);
 			}
 		} else {
 			player.teleport(location);
@@ -313,7 +308,7 @@ public class TeleportUtil {
 					if (teleportInventory.equals(InvBoolean.FALSE)) {
 						for (final ItemStack itemStack : contents) {
 							if (itemStack != null) {
-								((Player) passenger).getWorld().dropItemNaturally(((Player) passenger).getLocation(), itemStack);
+								passenger.getWorld().dropItemNaturally(((Player) passenger).getLocation(), itemStack);
 							}
 						}
 					}
@@ -322,20 +317,14 @@ public class TeleportUtil {
 			final Vehicle v = destination.getWorld().spawn(destination, vehicle.getClass());
 			vehicle.eject();
 			vehicle.remove();
-			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-				@Override
-				public void run() {
-					passenger.teleport(destination);
-					passenger.setFireTicks(0); // Cancel lava fire
-				}
-			}, 0);
-			Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-				@Override
-				public void run() {
-					v.setPassenger(passenger);
-					v.setVelocity(newVelocity);
-				}
-			}, 2);
+			ScheduleUtils.runPlatformTask(() -> {
+				passenger.teleport(destination);
+				passenger.setFireTicks(0); // Cancel lava fire
+			}, passenger);
+			ScheduleUtils.runPlatformTaskLater(() -> {
+				v.setPassenger(passenger);
+				v.setVelocity(newVelocity);
+			}, v, 2);
 		} else {
 			ItemStack[] contents;
 			final Vehicle mc = destination.getWorld().spawn(destination, vehicle.getClass());
@@ -612,13 +601,10 @@ public class TeleportUtil {
 
 		final Vehicle v = (Vehicle) location.getWorld().spawnEntity(location, EntityUtil.entityType(vehicleTypeName));
 		player.teleport(location);
-		Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-			@Override
-			public void run() {
-				v.setPassenger(player);
-				v.setVelocity(newVelocity);
-			}
-		}, 2);
+		ScheduleUtils.runPlatformTaskLater(() -> {
+			v.setPassenger(player);
+			v.setVelocity(newVelocity);
+		}, v, 2);
 	}
 
 	// BungeeCord vehicle spawn in
@@ -656,13 +642,10 @@ public class TeleportUtil {
 
 			if (passenger != null) {
 				final Vehicle v = (Vehicle) world.spawnEntity(destination, queue.getVehicleType());
-				Plugin.instance.getServer().getScheduler().scheduleSyncDelayedTask(Plugin.instance, new Runnable() {
-					@Override
-					public void run() {
-						v.setPassenger(passenger);
-						v.setVelocity(newVelocity);
-					}
-				}, 2);
+				ScheduleUtils.runPlatformTaskLater(() -> {
+					v.setPassenger(passenger);
+					v.setVelocity(newVelocity);
+				}, v, 2);
 			} else {
 				final Vehicle mc = (Vehicle) world.spawnEntity(destination, queue.getVehicleType());
 				if (mc instanceof StorageMinecart && entityItemStack != null) {
