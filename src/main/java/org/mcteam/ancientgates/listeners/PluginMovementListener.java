@@ -111,6 +111,7 @@ public class PluginMovementListener implements Listener {
 				TeleportUtil.teleportPlayer(player, nearestGate.getBungeeTo(), nearestGate.getBungeeType(), nearestGate.getTeleportEntities(),
 						nearestGate.getTeleportInventory(), from.getBlockY() == to.getBlockY(), nearestGate.getCommand(),
 						nearestGate.getCommandType(), nearestGate.getMessage());
+				Plugin.lastTeleportTime.put(player.getName(), now);
 			} else {
 				ExecuteUtil.execCommand(player, nearestGate.getCommand(), nearestGate.getCommandType(), true);
 				Plugin.lastTeleportTime.put(player.getName(), now);
