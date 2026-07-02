@@ -14,7 +14,7 @@ import org.mcteam.ancientgates.util.types.FloodOrientation;
 import org.mcteam.ancientgates.util.types.GateMaterial;
 import org.mcteam.ancientgates.util.types.WorldCoord;
 
-import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.reflection.XReflection;
 
 public class Gates {
 
@@ -127,7 +127,7 @@ public class Gates {
 				coord.getBlock().setBiome(Biome.FOREST);
 			}
 			if (orientation == FloodOrientation.VERTICAL1 && material == GateMaterial.PORTAL) {
-				if (XMaterial.supports(13)) {
+				if (XReflection.supports(13)) {
 					final BlockData orientable = coord.getBlock().getBlockData();
 					((Orientable) orientable).setAxis(Axis.Z);
 					coord.getBlock().setBlockData(orientable);
